@@ -1,0 +1,54 @@
+%#BIBTEX pbibtex paper
+
+%%% for platex
+\documentclass[dvipdfmx,a4paper,12pt]{jbook}
+%%% for lualatex
+%\documentclass[a4paper,12pt]{ltjbook}
+
+\usepackage{bachelor}
+\input{macro} % 自分用のマクロ
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\school{情報工学コース}
+\bookname{卒業研究報告}
+\title{解集合プログラミングを用いた\\配電網問題の解法に関する考察}
+\date{2020年2月}
+\author{山田 健太郎}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 本体
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+\input{abstract}    % 概要
+
+\tableofcontents    % 目次
+%\listoffigures      % 図の目次
+%\listoftables       % 表の目次
+%\lstlistoflistings  % コードの目次
+
+% ここから「本文」
+\input{introduction}
+\input{dnet}
+\input{asp}
+\input{proposal}
+\input{experiment}
+\input{transition}
+\input{conclusion}
+% ここまで
+
+\input{ack}         % 謝辞
+
+\bibliographystyle{jplain} % 参考文献スタイル
+\bibliography{bachelor,aisat}    % 参考文献リスト
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
