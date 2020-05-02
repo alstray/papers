@@ -1,0 +1,459 @@
+\documentclass[dvipdfmx,11pt]{beamer}
+
+%全体設定
+%\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+
+\usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{pxjahyper}
+\usepackage{minijs}
+\usepackage{otf}
+\usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usepackage{listings}
+\usepackage{plistings}
+\def\lstlistingname{コード}
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+%%\usetheme{Frankfurt}
+\usetheme{Warsaw}
+\setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
+\setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
+
+\title{解集合プログラミングを用いた\\配電網問題の解法に関する考察}
+\author{山田 健太郎}
+\date{卒業研究発表会\\2020年2月20日}
+\institute{番原研究室}
+
+%% テンプレ 
+\begin{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{}
+\end{frame}
+
+\end{comment}
+
+%###########################################################
+%# 本文 ####################################################
+%###########################################################
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% タイトル 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 配電網
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{配電網問題}
+ \begin{alertblock}{}
+  \centering
+  求解困難な組合せ最適化問題の一種
+ \end{alertblock}
+
+ \begin{itemize}
+  \item  \alert{配電網}とは，変電所と，家庭や工場などから構成される
+		 電力供給経路のネットワークである．
+  \item  配電網の構成技術はスマートグリッドや，災害時の障害箇所の迂回構成などを支える
+		 重要な基盤技術として期待されている．
+  \item  \alert{配電網問題}とは，
+		 \begin{itemize}
+		  \item \structure{トポロジ制約}と\structure{電気制約}から構成．
+		  \item 損失電力を最小にするスイッチの開閉状態を求めることが目的．
+		 \end{itemize}
+  \item フロンティア法を用いた解法が提案されている[井上ほか '12]． 
+		\begin{itemize}
+		 \item ERATO湊離散構造処理系プロジェクトの成果．
+		 \item 実用規模の配電網問題(\structure{\textbf{スイッチ数468個}})の最適解を発見．
+		\end{itemize}
+ \end{itemize}
+
+ \vspace{-0.25cm}
+ \pause
+ \begin{alertblock}{}
+  トポロジ制約のみの配電網問題は，グラフと根と呼ばれる特別なノードから，
+  \alert{根付き全域森}を求める部分グラフ探索問題に帰着できる．
+ \end{alertblock}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 根付き全域森
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{根付き全域森(Spanning Rooted Forest)}
+
+ \begin{block}{根付き全域森~~[川原$\cdot$湊 '12]}
+  グラフ$G=(V,E)$と，
+  \alert{根}と呼ばれる$V$上のノードが与えられたとき，
+  $G$上の根付き全域森とは，以下の条件を満たす$G$の部分グラフ$G'=(V,E'),\ E' \subseteq E$である．
+  \begin{enumerate}
+   \item $G'$はサイクルを持たない． (\alert{非閉路制約})
+   \item $G'$の各連結成分は，ちょうど1つの根を含む． (\alert{根付き連結制約})
+  \end{enumerate}
+ \end{block}
+
+ \begin{exampleblock}{根付き全域森の例}
+  \begin{columns}
+   \begin{column}{0.45\textwidth}
+	\centering
+	\input{tikz/tikz-input}
+   \end{column}
+   \begin{column}{0.45\textwidth}
+	\centering
+	\input{tikz/tikz-out}
+   \end{column}
+  \end{columns}
+
+
+ \end{exampleblock}
+ 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{解集合プログラミング(Answer Set Programming; ASP)}
+ \begin{itemize}
+  \item \structure{ASP言語}は一階論理に基づく知識表現言語の一種である．
+  \item \structure{ASPシステム}は論理プログラムから安定モデル意味論[Gelfond and Lifschitz '88]に
+		基づく解集合を計算するシステムである．
+  \item 近年ではSAT技術を応用した高速ASPシステムが実現され，システム検証，プランニング，
+		システム生物学など様々な分野への応用が拡大している．
+ \end{itemize}
+
+ \begin{alertblock}{ASP技術を組合せ最適化問題に用いる利点}
+   \begin{itemize}
+	\item ASP言語の高い表現力を活かし，記号的な制約を簡潔に記述可能．
+	\item ASPMT技術を用いて，様々な背景理論ソルバーと連携可能．
+	\item 充足不能コアを用いた効率的な最適値探索が利用可能．
+%	\item ASPシステムの持つ高い拡張性により，新たな制約の追加が容易．
+   \end{itemize}
+ \end{alertblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 研究目的
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{研究目的}
+ \begin{alertblock}{目的}
+  % \centering
+  ASP技術を活用して，大規模な配電網問題を効率良く解くシステムの\\構築を目指す．
+ \end{alertblock}
+
+ \begin{block}{研究内容}
+  \begin{enumerate}
+   \item \structure{根付き全域森問題を解く，2種類のASP符号化を考案した．}
+   % \begin{itemize}
+   % 	\item 上限，下限に基づく符号化．
+   % 	\item ASP言語の表現性を利用した符号化．
+	 % \end{itemize}
+   \item \structure{実用規模の問題，及び，より大規模な問題を用いた評価実験．}
+   % \begin{itemize}
+   % 	\item 問題の規模に関する比較評価．
+   % 	\item 生成される制約の数の比較評価．
+   % \end{itemize
+   \item 遷移問題へ拡張し，その符号化を考案した．
+   \begin{itemize}
+	\item ある配電網の構成(初期状態)から，目的とする配電網の構成(目的状態)を得るための，
+		  スイッチの切替手順を求める問題．
+   \end{itemize}
+  \end{enumerate}
+  
+ \end{block}
+ 
+\end{frame}
+
+\begin{frame}\frametitle{ASPを用いた根付き全域森問題の解法}
+ 
+ \begin{figure}[htbp]
+  \centering
+  \input{tikz/tikz-asp}
+ \end{figure}
+
+ \vspace{-0.5cm}
+ \begin{exampleblock}{}
+  \begin{enumerate}
+   \item 与えられた問題インスタンスをASPのファクト形式に変換する．
+   \item 変換した問題と，根付き全域森問題を解くASP符号化を結合し，
+		 ASPシステムを用いて解を求める．
+  \end{enumerate}
+ \end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 提案手法
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{提案するASP符号化}
+ 
+\begin{itemize}
+ \item  根付き全域森問題に対する，2種類のASP符号化を考案した．
+ \item $|V|$はグラフのノード数，$|R|$は根ノード数をそれぞれ表す．
+\end{itemize}
+ 
+\begin{table}[t]
+ \centering
+ \input{table/proposal}
+\end{table}
+
+ \begin{itemize}
+  \item 提案符号化2は，提案符号化1よりも基礎化後のルール数が少なくなるため，
+ 		大規模な問題への有効性が期待できる．
+ \end{itemize}
+ 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験内容
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験概要}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\setcounter{footnote}{1}
+提案符号化の有効性を評価するために，以下の実験を行った．
+
+\begin{itemize}
+ \item \structure{比較するASP符号化:}
+	   \begin{itemize}
+		\item 提案符号化1
+		\item 提案符号化2
+	   \end{itemize}
+ \item \structure{ベンチマーク問題:} 全85問
+	   \begin{itemize}
+		\item DNET\footnote{https://github.com/takemaru/dnet}%
+			  で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数: 16個，36個，468個)
+		\item \textit{Graph Coloring and its Generalizations}
+			  \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
+			  グラフ彩色問題をベースに，独自に生成した 82問 
+			  \footnote{各問題に対し，全ノードのうち1/5個をランダムに根として与えた．}\\
+			  ($20 \leq (\textbf{辺の数}) \leq 49,629$)
+	   \end{itemize}
+ \item \structure{ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+ \item \structure{制限時間:} 3600秒/問
+ \item \structure{実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% カクタスプロット
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験結果(1/2) : カクタスプロット}
+% カクタスプロットによる比較
+ \begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.38]{fig/cactus.png}
+ \end{figure}
+
+\begin{itemize}
+ \item 提案符号化2は，提案符号化1と比較して，より多くの問題を高速に解いている．
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 辺の数の表
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験結果(2/2) : 解けた問題数による比較} % 表による比較
+
+\begin{table}[t]
+ \centering
+ \input{table/table}
+\end{table}
+
+\begin{itemize}
+ \item 大規模な問題に対する提案符号化2の有効性が確認できた．
+ \item 提案符号化2は，辺の数が40,000を超える問題も解いた．
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% まとめ
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{まとめと今後の課題}
+ % 自分が伝えたいことをメインに書く
+ \begin{block}{まとめ}
+  \begin{enumerate}
+   \item \structure{根付き全域森問題を解く，2種類のASP符号化を考案した．}
+   \begin{itemize}
+	\item ASP言語の表現力を用いて，根付き全域森の制約を簡潔に表現できること
+		  が確認できた．(ASPのルールで5つ程度)
+   \end{itemize}
+   \item \structure{実用規模の問題，及び，より大規模な問題を用いた評価実験．}
+   \begin{itemize}
+	%	\item 提案符号化2は，提案符号化1よりも多くの問題を高速に解いた．
+	\item 提案符号化2は，辺の数が40,000を超えるような問題も解くことが
+		  でき，大規模な問題に対する有効性が確認できた．
+   \end{itemize}
+   \item 遷移問題へ拡張し，その符号化を考案した． (本発表では省略)
+  \end{enumerate}
+ \end{block}
+ 
+ \begin{alertblock}{今後の課題}
+  \begin{itemize}
+   \item 電気制約への対応．
+		 \begin{itemize}
+		  \item ASPMT技術を用いた実装．
+		 \end{itemize}
+   \item 遷移問題へ拡張した符号化の評価実験．
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+
+%###########################################################
+%##### 補助スライド ########################################
+%###########################################################
+\begin{frame}{~}
+ \centering
+ - 補足用 -
+\end{frame} 
+
+\begin{frame}{補足 : スマートグリッド}
+ \begin{itemize}
+  \item \structure{スマートグリッド}とは，電力の供給側，需要側において双方向の
+		やり取りを可能にする次世代の\structure{賢い}電力網である．
+  \item 従来と違い，通信技術の発達により，使用状況などを
+		リアルタイムに把握することが可能となった．
+  \item その時に応じた最適な配電網を構成し，制御するといったことが考えられている．
+		\begin{itemize}
+		 \item 電力需要の変化による，配電ロスの少ない構成．
+		 \item 自然エネルギーによる発電量の変動を補う構成．
+		\end{itemize}
+  \item ASP言語の表現力や拡張性が，こうした条件の追加に活用できる可能性がある．
+ \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 電気制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : 電気制約}
+ \begin{itemize}
+  \item \alert{電気制約}は，送電する電流$\cdot$電圧の適正範囲を保証する制約．
+  \begin{itemize}
+   \item 供給経路の各区間で許容電流を超えない．
+   \item 電気抵抗による電圧降下が許容範囲を超えない．
+   \item etc.
+  \end{itemize}
+  \item 電流と電圧が影響し合う\structure{実数ドメイン上の制約}によって表される．
+		% \begin{itemize}
+		%  		 \item 送電システム上の条件など．
+		% \end{itemize}
+  \item 実数ドメイン上の制約は，純粋なASPのみで扱うのは\alert{困難}．
+		\begin{itemize}
+		 \item 緩和問題として，変電所から供給できる家庭の数に上限をつける．
+		 \item ASPMT技術により，ASPで得られた解について，
+			   背景理論ソルバーと連携して実数ドメイン上の制約を調べる．
+		\end{itemize}
+ \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 基礎化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : ASPシステム}
+ 
+ \vspace{-0.5cm}
+
+ \begin{figure}[htbp]
+  \centering
+  \input{tikz/tikz-grounding}
+ \end{figure}
+
+ \vspace{-0.5cm}
+
+ \begin{exampleblock}{}
+  \begin{enumerate}
+   \item 一階ASPプログラムを基礎化ソルバーによって，
+		 命題ASPプログラムに\alert{基礎化}する．
+   \item 命題ASPプログラムについて，SAT技術を応用した解集合ソルバーが解集合を探索する．
+  \end{enumerate}
+ \end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 遷移問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : 遷移問題}
+ \begin{block}{}
+   根付き全域森の制約を満たしたまま，各遷移時に変化できる\\
+  辺の数は2つ以下として，遷移を求める．
+ \end{block}
+ \vspace{-0.15cm}
+ \begin{exampleblock}{}
+  \begin{figure}[htbp]
+   \begin{tabular}[tb]{cc}
+	\begin{minipage}{0.5\hsize}
+	 \centering
+	 \input{tikz/tikz-trans-1}
+	 $t=0$ (初期状態)
+	\end{minipage}
+	& 
+	\hspace{-0.5cm}
+	\begin{minipage}{0.5\hsize}
+	 \centering
+	 \input{tikz/tikz-trans-2}
+	 $t=1$
+	\end{minipage} 
+   \end{tabular}\\
+   \vspace{0.25cm}
+   \begin{tabular}[tb]{cc}
+	\begin{minipage}{0.5\hsize}
+	 \centering
+	 \input{tikz/tikz-trans-3}
+	 $t=2$
+	\end{minipage}
+	&
+	\hspace{-0.5cm}
+	\begin{minipage}{0.5\hsize}
+	\centering
+	 \input{tikz/tikz-trans-4}
+	 $t=3$ (目的状態)
+	\end{minipage}
+   \end{tabular}
+  \end{figure}
+ \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPのコード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{補足 : 提案符号化1のASPプログラム}
+ \begin{exampleblock}{}
+  \begin{center}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \lstinputlisting[numbers=left,%
+   basicstyle=\ttfamily\tiny]{code/srf1.lp}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+  \end{center}
+ \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{補足 : 提案符号化2のASPプログラム}
+
+ \begin{exampleblock}{}
+  \begin{center}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \lstinputlisting[numbers=left,%
+   basicstyle=\ttfamily\tiny]{code/srf2.lp}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+  \end{center}
+ \end{exampleblock}
+
+\end{frame}
+
+
+\end{document}
