@@ -1,0 +1,107 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\chapter{カリキュラムベース・コース時間割問題に対するLNPSの適用}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+近年, カリキュラムベース・コース時間割問題に対する ASP を用いた解法が提案され, 
+成功を収めている
+\cite{%
+ banbara17:ramp}. 
+ASP は系統的探索であることを活かして, 
+未解決問題の最適値を決定するなど優れた性能を示している. 
+しかし, その一方で, ソフト制約が多く含まれるような問題集において, 
+局所的探索を用いた解法より性能が劣っている場合が見られる. 
+この問題を解決するために, 系統的探索と局所的探索法を組み合わせた 
+LNPS (Large Neighborhood Prioritized Search) 
+\cite{%
+ hayama19:kobe}
+ が提案されている. 
+
+\section{LNPS ( Large Neighborhood Prioritized Serrch )}
+
+プランニングやスケジューリングといった問題に対して, 
+系統的探索と局所的探索を組み合わせた 
+LNS (Large Neighborhood Search) が有効であることが知られている. 
+LNS をベースに系統的探索と局所的探索を組み合わせた手法で ASP に適したものとして 
+LNPS (Large Neighborhood Prioritized Search) が提案され, 
+応用事例の蓄積が行われている. 
+LNS では解に含まれる変数の値割り当ての一部をランダムに選んで取り消し, 
+その変数に対してのみ再割り当てを行い解を再構築するが, 
+LNPS では解の再構築を, 
+値割り当てをなるべく維持したままでの再探索に置き換えることで, 
+取り消されていなかった変数への再割り当てを許している. 
+ASP を用いた LNPS の利点は, 解の再構築を系統的探索で行え, 値割り当てを
+なるべく維持したままでの再構築が自然に実現できることである. 
+
+\cite{%
+ hayama19:kobe}
+ から引用した LNPS のアルゴリズムを, アルゴリズム 4.1に示す.
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+\centering
+\begin{tabular}{l}\hline
+\textbf{アルゴリズム 4.1} Large neighborhood prioritized search 
+\cite{%
+ hayama19:kobe}\\ \hline
+%\begin{tabbing}
+ ~1: input: a feasible solution $x$ \\
+ ~2: $x^b$ = $x$; \\
+ ~3: \bf{repeat} \\
+ ~4: \quad \quad $x^t$ = re-search($d(x)$); \\
+ ~5: \quad \quad \textbf{if} accept($x^t$,$x$) \textbf{then} \\
+ ~6: \quad \quad \quad \quad $x$ = $x^t$; \\
+ ~7: \quad \quad \textbf{end if} \\
+ ~8: \quad \quad \textbf{if} $c(x^t)$ \verb|<| $c(x^b)$ \textbf{then} \\
+ ~9: \quad \quad \quad \quad $x^b$ = $x^t$; \\
+10: \quad \quad \textbf{end if} \\
+11: \textbf{until} stop criterion is met \\
+12: \textbf{return} $x^b$ \\ \hline
+%\end{tabbing}
+\end{tabular}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+１〜３行目では, 初期解を $x$ と置き, 最良解 $x^b$ = $x$ としてループに入る. 
+４行目では, 以下の destroy と re-search で $x$ から得られた解を $x^t$ とする. 
+destroy は $x$ から一定の割合でランダムに値割り当てを選択し, $x'$ とする. 
+re-search は $x'$ の値割り当てをなるべく維持したまま再探索する. 
+５〜７行目では, $x^t$ を受理する条件を満たしていたら $x$ = $x^t$ とする. 
+受理条件では, 例として「$x^t$ が $x$ より改善された解なら」などの条件を用いる. 
+８〜10 行目では, $x^t$ が最良解 $x^b$ より改善された解なら, $x^b$ = $x^t$ としている. 
+11 行目では, 終了条件が満たされていればループを抜け出す. 
+満たされていなければ４行目に戻り, ループに入る. 
+終了条件には, 制限時間や繰り返し回数などを用いる. 
+12 行目で最良解 $x^b$ を返して終了する. 
+
+\section{destroy 演算の開発}
+
+LNPS の性能は, 
+暫定解の一部をランダムに選んで取り消す destroy 演算子に依存するが, 
+十分な研究がなされてない. 
+そこで CB-CTT に対する既存研究
+\cite{%
+ kiefer16:patat}
+ を応用して, 
+３種類の destroy 演算子 (random, day-period, day-room) を実装した. 
+
+\newpage
+
+\begin{enumerate}
+ \item{\textbf{random (Random $n$\% destruction)}}\\
+ $n$を任意の数として, 暫定解の値割り当ての中から, ランダムに$n$\% を選んで取り消す. 今回の実験では$n$として０, 10, 20 を採用した. $n$ として０を選んだ場合, 解を取り消さずに暫定解の全ての値割り当てに対して優先度を上げる. そのため, 暫定解の値割り当てに近い値割り当ての解への探索を促進させることを狙いとしている.  値割り当てを10, 20\% 取り消す場合は, ある程度暫定解の近辺を探索しながら, 局所的最適解に陥らないようにさせることを狙いとしている.
+
+ \item{\textbf{day-period (Random day-period destruction)}}\\
+ ランダムに曜日と時限をそれぞれ一つ選択し, 選択した曜日の選択した時限に割り当てられている値割り当てを全て取り消す. この時, 取り消す値割り当てが存在しなければ, 再び曜日と時限をランダムに選択し, 同様の操作を何らかの値割り当てを取り消すまで繰り返す. この destroy 演算は, 割り当てられる教室の変更を促進させ, 教室に関するソフト制約へのペナルティを改善することを狙いとしている.
+ 
+ \item{\textbf{day-room (Random day-room destruction)}}\\
+ ランダムに曜日と教室をそれぞれ一つ選択し, 選択した曜日の選択した教室に割り当てられている値割り当てを全て取り消す. この時, 取り消す値割り当てが存在しなければ, 再び曜日と教室をランダムに選択し, 同様の操作を何らかの値割り当てを取り消すまで繰り返す. この destroy 演算は, 割り当てられる時限の変更を促進させ, 時限に関する制約へのペナルティを改善することを狙いとしている.
+ 
+ \end{enumerate}
+ 
+ LNPS の実装は, ３章の最後に説明した, \#\textit{heuristic}ルールを用いて行った. 各種 destroy 演算を行い, 値割り当ての一部が取り消された暫定解の内, 残りの全ての割り当てに対して優先的に真を割り当てるようにして実装した. 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
