@@ -26,12 +26,12 @@ Corresponding author: yes
 presenter: no
 
 Author3
-First name: 
-Last name：
-Email: 
+First name: 真一
+Last name：湊
+Email: minato@i.kyoto-u.ac.jp
 country: 日本/japan
-Organization: 
-Web page: 
+Organization: 京都大学大学院情報学研究科
+Web page: http://www.lab2.kuis.kyoto-u.ac.jp/minato/index-j.html
 Corresponding author: yes
 presenter: no
 
