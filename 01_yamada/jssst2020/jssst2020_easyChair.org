@@ -16,6 +16,16 @@ Corresponding author: yes
 presenter: yes
 
 Author2
+First name: 真一
+Last name：湊
+Email: minato@i.kyoto-u.ac.jp
+country: 日本/japan
+Organization: 京都大学大学院情報学研究科
+Web page: http://www.lab2.kuis.kyoto-u.ac.jp/minato/index-j.html
+Corresponding author: no
+presenter: no
+
+Author3
 First name: 睦則
 Last name：番原
 Email: banbara@nagoya-u.jp
@@ -25,15 +35,6 @@ Web page: http://kaminari.cspsat.css.i.nagoya-u.ac.jp/banbara-jp.html
 Corresponding author: yes
 presenter: no
 
-Author3
-First name: 真一
-Last name：湊
-Email: minato@i.kyoto-u.ac.jp
-country: 日本/japan
-Organization: 京都大学大学院情報学研究科
-Web page: http://www.lab2.kuis.kyoto-u.ac.jp/minato/index-j.html
-Corresponding author: yes
-presenter: no
 
 ** Title and Abstract
 
