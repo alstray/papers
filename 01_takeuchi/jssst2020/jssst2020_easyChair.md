@@ -11,16 +11,6 @@ corresponding author: yes
 presenter: yes
 
 ## Author2
-First name: 睦則
-Last name: 番原
-Email: banbara@nagoya-u.jp
-Country/region: Japan  
-Organization: 名古屋大学 大学院情報学研究科
-Web page: http://kaminari.cspsat.css.i.nagoya-u.ac.jp/banbara-jp.html
-corresponding author: yes
-presenter: no
-
-## Author3
 First name: 直之
 Last name: 田村
 Email: tamura@kobe-u.ac.jp
@@ -30,6 +20,17 @@ Web page: http://bach.istc.kobe-u.ac.jp/tamura-jp.html
 corresponding author: yes
 presenter: no
 
+## Author3
+First name: 睦則
+Last name: 番原
+Email: banbara@nagoya-u.jp
+Country/region: Japan  
+Organization: 名古屋大学 大学院情報学研究科
+Web page: http://kaminari.cspsat.css.i.nagoya-u.ac.jp/banbara-jp.html
+corresponding author: yes
+presenter: no
+
+
 ## Title and Abstruct
 Title:  
 車両装備仕様問題に対する解集合プログラミングの適用
@@ -37,8 +38,8 @@ Title:
 
 Abstruct(200-400字程度):  
 
-車両装備仕様問題の目的は，与えられた装備タイプ(エンジンやトランスミッ
-ションなど)の集合と各装備タイプに付随する装備オプション(4気筒やCVTなど)の
+車両装備仕様問題の目的は，与えられた装備タイプ(エンジンやトランスミッシ
+ョンなど)の集合と各装備タイプに付随する装備オプション(4気筒やCVTなど)の
 集合から，装備および燃費に関する制約を満たしつつ，販売台数を最大化する
 装備タイプと装備オプションの組合せを求めることである．
 
