@@ -1,0 +1,72 @@
+\newcommand{\nodeVP}[3]{
+  \coordinate[#2] (#1);
+  \draw[fill=cyan!30] (#1)--+(-1,0)--+(0,1)--+(1,0)--cycle;
+  \draw (#1)node[above]{\tiny{#3}};
+  \draw[fill=black] (#1) +(-0.5,0.5)--+(0.5,0.5)--+(0,1)--cycle;
+  \node[rectangle,above=0.5cm of #1,white](vp){\tiny{VP}};
+  \coordinate[below=0.5cm of #1] (via_#1);
+  \draw (via_#1)node[above right]{\tiny{[1..1]}};
+  \draw (via_#1) +(170:0.2) arc (170:370:0.2);
+  \draw (#1)--(via_#1);
+
+}
+\newcommand{\nodeTrans}[3]{
+  \coordinate[#2] (#1);
+  \draw[fill=cyan!30] (#1)--+(-1,0)--+(0,1)--+(1,0)--cycle;
+  \draw (#1)node[above]{\tiny{#3}};
+  \draw[fill=black] (#1) +(-0.5,0.5)--+(0.5,0.5)--+(0,1)--cycle;
+  \node[rectangle,above=0.5cm of #1,white](vp){\tiny{VP}};
+  \coordinate[below=1.7cm of #1] (via_#1);
+  \draw (via_#1)node[below=0.2cm]{\tiny{[1..1]}};
+  \draw (via_#1) +(135:0.2) arc (135:405:0.2);
+  \draw (#1)--(via_#1);
+
+}
+
+\newcommand{\nodeVPdashed}[3]{
+  \coordinate[#2] (#1);
+  \draw[fill=cyan!30,dashed] (#1)--+(-1,0)--+(0,1)--+(1,0)--cycle;
+  \draw (#1)node[above]{\tiny{#3}};
+  \fill[black] (#1) +(-0.5,0.5)--+(0.5,0.5)-- +(0,1)--cycle;
+  \node[rectangle,above=0.5cm of #1,white](vp){\tiny{VP}};
+  \coordinate[below=0.5cm of #1] (via_#1);
+  \draw (via_#1)node[above right]{\tiny{[1..1]}};
+  \draw (via_#1) +(-0.2,0) arc (180:360:0.2);
+  \draw (#1)--(via_#1);
+
+}
+
+\newcommand{\nodeV}[4]{
+  \node [draw,inner xsep=2pt,#2,fill=black!10,font=\tiny] (#1){
+      \begin{tabular}{l}
+       #3\\
+       #4\\
+      \end{tabular}
+  };
+  \fill [black] (#1.north west)--++(0,-2mm)--++(1mm,0)--++(1mm,0)--++(0,2mm); 
+  \draw (#1.north west) ++(1mm,-1mm) node[white]{\tiny{v}};
+}
+
+\newcommand{\nodeVchoiced}[4]{
+  \node [draw,inner xsep=2pt,#2,fill=red!50,font=\tiny] (#1){
+      \begin{tabular}{l}
+       #3\\
+       #4\\
+      \end{tabular}
+  };
+  \fill [black] (#1.north west)--++(0,-2mm)--++(1mm,0)--++(1mm,0)--++(0,2mm); 
+  \draw (#1.north west) ++(1mm,-1mm) node[white]{\tiny{v}};
+
+}
+\newcommand{\nodeVlb}[4]{
+  \node [draw,inner xsep=2pt,#2,fill=blue!30,font=\tiny] (#1){
+      \begin{tabular}{l}
+       #3\\
+       #4\\
+      \end{tabular}
+  };
+  \fill [black] (#1.north west)--++(0,-2mm)--++(1mm,0)--++(1mm,0)--++(0,2mm); 
+  \draw (#1.north west) ++(1mm,-1mm) node[white]{\tiny{v}};
+
+}
+

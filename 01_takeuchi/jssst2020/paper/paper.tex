@@ -1,3 +1,4 @@
+%#BIBTEX pbibtex paper
 % 以下の3行は変更しないこと．
 \documentclass[T]{compsoft}
 \taikai{2020}
@@ -7,9 +8,19 @@
 
 % ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
 % 再定義は原則として避けること．
+\usepackage{multicol}
+\newcommand{\bhline}{\noalign{\hrule height 1.5pt}}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,calc,intersections}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+
+\input{images/ovm_macro}
 % ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
 % 再定義は原則として避けること．
+
+
 
 \begin{document}
 
@@ -62,6 +73,9 @@ ASPソルバーを用いて解を求める．提案方法の評価として，�
 \input{experiment}
 \input{conclusion}
 % ここまで
+
+\bibliographystyle {jssst}
+\bibliography {jssst2020}
 
 
 
