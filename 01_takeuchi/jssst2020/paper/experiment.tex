@@ -1,1 +1,59 @@
 \section{実験}
+\begin{table}[tb]
+ \caption{CAFE問題のインスタンス}
+ \centering
+ \begin{tabular}{crrrr} \bhline
+  インスタンス & VP	& V	& require & exclude	\\\hline
+  small	    & 8		& 21	& 4	  & 0	        \\
+  medium    & 86	& 229	& 147	  & 0	        \\
+  big	    & 315	& 1,337	& 0	  & 0        	\\\hline
+ \end{tabular}
+ \label{tab:instance}
+\end{table}
+
+\begin{table}[tb]
+ \caption{実験結果}
+ \centering
+ \begin{tabular}{c|r|rr} \bhline
+  インス & CAFE & \multicolumn{2}{c}{販売台数} \\ \cline{3-4}
+  タンス & 基準値                & 基本符号化 & 改良符号化 \\\hline    
+  small & 8.5   & \textbf{6,021*}       & \textbf{6,021*}       \\
+   & 9.0   & \textbf{5,007*}       & \textbf{5,007*}       \\
+   & 9.5   & \textbf{2,688*}       & \textbf{2,688*}       \\
+   & 10.0  & \textbf{1,318*}       & \textbf{1,318*}       \\
+   & 10.5  & \textbf{UNSAT*}       & \textbf{UNSAT*}       \\ \hline
+  medium & 8.5  & 6,010        & \textbf{6,021}        \\
+   & 9.0  & \textbf{5,595}        & \textbf{5,595}        \\
+   & 9.5  & \textbf{3,447}        & 3,430        \\
+   & 10.0 & 2,245        & \textbf{2,250}        \\
+   & 10.5 & 1,690        & \textbf{1,845}        \\ \hline
+  big & 8.5     & UNKNOWN     & \textbf{3,877}        \\
+   & 9.0     & 1,038        & \textbf{4,623}        \\
+   & 9.5     & 688         & \textbf{3,121}        \\
+   & 10.0    & 1,634        & \textbf{2,064}        \\
+   & 10.5    & 538         & \textbf{904}         \\ \hline \hline
+  \multicolumn{2}{c}{最良値の数} & 6 & 13         \\ \hline
+ \end{tabular}
+ \label{tab:result}
+\end{table}
+本ソルバーの性能評価のために，前節で述べた基本符号化と改良符号化を用いて実験を行った．
+インスタンスには，表\ref{tab:instance}に示す企業から提供されたCAFE問題のインスタンス
+3問を用いた．特に，インスタンスmediumは現実的な問題のサイズとなっている．また，この実験で
+用いたインスタンスでは排除制約は考慮しない．各インスタンスでCAFE基準値8.5,9.0,9.5,10.0,10.5km/L
+の5通りに対して，3種類の装備仕様による解を求めた．
+
+ASPシステムには，広く普及している高速ASPソルバーclingo-5.4.0を使用し，タイムアウトは
+7200秒(2時間)とした．実験環境は，Mac mini(3.2GHz, 64GBメモリ)である．
+
+表\ref{tab:result}に，各インスタンスとCAFE基準値に対して，基本符号化と改良符号化で
+得られた装備仕様の予想販売台数を示す．* 付きの値は最適解であることを示し，太字の値は2つの
+符号化の間で販売台数が最良値であることを意味する．また，UNSATは，制約を充足する解が一つも
+存在しないことを意味し，UNKNOWNは制限時間内に解を見つけることができなかったことを意味する．
+
+
+小規模なインスタンスsmallについては，基本符号化，改良符号化ともに5問すべてに対して最適解，
+あるいはUNSATを得ることに成功した．
+最良値を得た問題数は，基本符号化が6問，改良符号化が13問で，改良符号化の方が多くの問題に
+対して優れた解を得たことがわかる．特に，大規模なインスタンスbigについては，改良符号化が
+5問すべてに対して基本符号化よりも優れた解を得ており，ASPのルール数を削減することが規模の大きい問題
+に対して有効であることがわかった．

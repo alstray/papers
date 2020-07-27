@@ -1,6 +1,6 @@
 %#BIBTEX pbibtex paper
 % 以下の3行は変更しないこと．
-\documentclass[T]{compsoft}
+\documentclass[T,dvipdfmx]{compsoft}
 \taikai{2020}
 \pagestyle {empty}
 
@@ -17,8 +17,31 @@
 \usetikzlibrary{fit}
 
 \input{images/ovm_macro}
+
+\usepackage{listings}
+\usepackage{plistings}
+\def\lstlistingname{コード}
+
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+
+% \lstset{
+%  basicstyle=\ttfamily\tiny\color{black},
+%  keepspaces=true,
+%  columns=[l]{fullflexible},
+%  escapechar=|,
+%  commentstyle={\color{red}},
+%  stringstyle={\color{blue}},
+% }
 % ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
 % 再定義は原則として避けること．
+
+%%% figureテンプレ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[tb]
+%  \centerline {\includegraphics {images/XX.eps}}
+%  \caption{}
+%  \label{fig:}
+% \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
