@@ -9,3 +9,6 @@ exclude_v_v("V4","10AT").
 
 group(1..3).
 
+:- not v("STD", 1).
+:- not v("DX", 2).
+:- not v("LX", 3).
