@@ -38,8 +38,36 @@ IWRはそれぞれ\code{125}, \code{200}であることを表している．
 8行目はオプション\code{V4}がオプション\code{10AT}を排除することを意味する．
 11行目で3つの装備仕様を求めるように指定している．
 
+装備仕様の燃費と販売台数を示すテーブルも，ASPのファクトとして表現できる．
+コード\ref{code:tableFE.lp}, \ref{code:tableSV.lp}にて，各テーブルの一部を示す．
+ファクト\code{fe\_map(S,FE)}, \code{sv\_map(S,SV)}は，
+装備仕様のIWR値の和がSであるとき，燃費と販売台数がFEとSVであることを示している．
+例えば，コード\ref{code:tableFE.lp}の1行目は，装備仕様のIWR値の和が900であるとき，
+燃費は11.1km/Lであることを表し，コード\ref{code:tableSV.lp}の1行目は，
+予想される販売台数が97台であることを表している．ASPでは整数しか扱えないため，
+燃費の値は10倍にして記述している．
+また，本発表で扱う販売台数のテーブルはIWR値の和が5の倍数であるもののみで
+構成されているため，販売台数を求めるときにIWR値の和の端数を丸める必要がある．
 
+\lstinputlisting[float=tb,caption={%
+燃費を算出するテーブルのASPファクト表現},%
+captionpos=b,frame=single,label=code:tableFE.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=0zw,% 
+xleftmargin=3zw,% 
+basicstyle=\ttfamily\scriptsize]{codes/tableFE.lp} 
 
+\lstinputlisting[float=tb,caption={%
+販売台数を算出するテーブルのASPファクト表現},%
+captionpos=b,frame=single,label=code:tableSV.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=0zw,% 
+xleftmargin=3zw,% 
+basicstyle=\ttfamily\scriptsize]{codes/tableSV.lp} 
 
 \subsection{基本符号化}
 \lstinputlisting[float=tb,caption={%
@@ -138,6 +166,6 @@ basicstyle=\ttfamily\scriptsize]{codes/basic2.lp}
 オプションの個数制約を考慮しておらず，一つもオプションを選択しない場合や，
 すべてのオプションを選択した場合など，明らかに成立しないオプションの選択の仕方による
 IWRの和まで候補として生成してしまう．そこで，IWRの和の上下限をより厳密にした改良符号化の
-一部をコード\ref{code:basic2.lp}に示す．
+一部をコード\ref{code:basic2.lp}に示す．改良符号化は，コード\ref{code:basic1.lp}に対して，コード\ref{code:basic2.lp}の2〜5行目を追加し，コード\ref{code:basic1.lp}の9行目をコード\ref{code:basic2.lp}の8行目に置き換えたものである．
 
 改良符号化では，前処理としてIWRの和の上下限の計算を行う．上限をすべてのタイプでIWRが最大のオプションを選択した場合の和，下限を必須であるタイプのみでIWRが最小のオプションを選択した場合の和としている．この上下限の値でIWRの和の候補を求める範囲を制限している．
