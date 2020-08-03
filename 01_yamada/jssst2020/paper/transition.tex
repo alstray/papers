@@ -1,0 +1,77 @@
+\section{遷移問題への拡張}
+
+
+\subsection{遷移問題の概要}
+根付き全域森の遷移問題への拡張について，新たに
+\textbf{初期状態}と\textbf{目的状態}を定義する．初期状態と
+目的状態は，それぞれ対象となるグラフの根付き全域森の実行
+可能解である．
+
+根付き全域森の遷移問題は，入力として初期状態と目的状態が
+与えられ，各状態で根付き全域森の制約を満たしながら，
+状態が遷移する際に変化する辺の数は$d$個以下である．という
+\textbf{遷移制約}を新たに設定する．
+
+\ref{fig:trans}は，遷移制約を$d=2$とした場合での遷移問題の例である．
+
+\begin{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[htbp]
+ \centering
+ \begin{subfigure}{}
+  \centering
+  \input{tikz/tikz-trans-1}
+  \caption{$t=0$ (初期状態)}
+ \end{subfigure}
+ \hspace{1cm}
+ \begin{subfigure}{}
+  \centering
+  \input{tikz/tikz-trans-2}
+  \caption{$t=1$}
+ \end{subfigure}
+ %\\ \vspace{0.1cm}
+ \begin{subfigure}{}
+  \centering
+  \input{tikz/tikz-trans-4}
+  \caption{$t=3$ (目的状態)}
+ \end{subfigure}
+ \hspace{1cm}
+ \begin{subfigure}{}
+  \centering
+  \input{tikz/tikz-trans-3}
+  \caption{$t=2$}
+ \end{subfigure}
+ %
+ \caption{実行例(コード\ref{code:transition.log})のグラフ表現}
+ \label{fig:result-trans}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\end{comment}
+
+\subsection{ASP符号化}
+今回考案した符号化は，外部プログラムによるループを用いたインクリメンタル探索を
+行うものと，ASPソルバー{\clingo}のインクリメンタル探索ライブラリを使用した2種類の
+符号化である．
+
+外部プログラムを用いる符号化をコード\ref{code:roop}に示す．遷移問題への拡張について
+基本的には，コード\ref{code:srf2}に出現する各アトムに，状態数を表す引数\code{T}を
+追加する．これにより各状態\code{T}における根付き全域森を探索する．1行目のファクト
+\code{t(0..t)}は，0から$t$までの各状態数を定義している．なお，$t$は外部プログラムに
+よって与えられる変数($t \geq 0$)である．この状態数を増やしていくことでインクリメンタル
+探索を行う．
+
+4行目のルールは，与えられる初期状態と状態0における根付き全域森が一致する
+ことを表す制約である．アトム\code{init_Forest(X,Y)}は初期状態での根付き全域森に含まれる
+辺を表す．
+同様に7行目のルールで，与えられる終了状態と状態$t$における根付き全域森が一致することを
+表す．アトム\code{goal_Forest(X,Y)}は終了状態での根付き全域森に含まれる辺を表す．
+10〜21行目までは，先に述べたように根付き全域森の各制約に状態数\code{T}を追加したルール
+である．
+
+24行目から26行目までは，遷移制約を表すルールであり，24,25行目は，状態\code{T-1}で森に
+含まれていない辺が状態\code{T}で森に含まれる辺となった場合，あるいはその逆
+をアトム\code{dist(X,Y,T)}として生成する．26行目で各状態\code{T}について変化した辺の数
+である\code{dist(X,Y,T)}の数が$d$以下であることを一貫性制約で表している．
+
+次に，ライブラリを用いたインクリメンタル探索を行う符号化をコード\ref{code:incmode}に示す．
+
