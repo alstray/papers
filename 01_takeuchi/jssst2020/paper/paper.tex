@@ -1,0 +1,116 @@
+%#BIBTEX pbibtex paper
+% 以下の3行は変更しないこと．
+\documentclass[T,dvipdfmx]{compsoft}
+\taikai{2020}
+\pagestyle {empty}
+
+\usepackage [dvipdfmx] {graphicx}
+
+% ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
+% 再定義は原則として避けること．
+\usepackage{multicol}
+\newcommand{\bhline}{\noalign{\hrule height 1.5pt}}
+\newcommand{\gringo}{\textit{gringo}}
+\newcommand{\clingo}{\textit{clingo}}
+\newcommand{\clasp}{\textit{clasp}}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,calc,intersections}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+
+%\input{images/ovm_macro}
+
+\usepackage{listings}
+\usepackage{plistings}
+\def\lstlistingname{コード}
+
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+
+% \lstset{
+%  basicstyle=\ttfamily\tiny\color{black},
+%  keepspaces=true,
+%  columns=[l]{fullflexible},
+%  escapechar=|,
+%  commentstyle={\color{red}},
+%  stringstyle={\color{blue}},
+% }
+% ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
+% 再定義は原則として避けること．
+
+%%% figureテンプレ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[tb]
+%  \centerline {\includegraphics {images/XX.eps}}
+%  \caption{}
+%  \label{fig:}
+% \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{document}
+
+% 論文のタイトル
+\title{車両装備仕様問題に対する解集合プログラミングの適用}
+
+% 著者
+% 和文論文の場合，姓と名の間には半角スペースを入れ，
+% 複数の著者の間は全角スペースで区切る
+%
+\author{竹内 頼人　田村 直之　番原 睦則
+%
+% ここにタイトル英訳 (英文の場合は和訳) を書く．
+%
+\ejtitle{Applying Answer Set Programming to Vehicle Equipment Specification Problem}
+%
+% ここに著者英文表記 (英文の場合は和文表記) および
+% 所属 (和文および英文) を書く．
+% 複数著者の所属はまとめてよい．
+%
+\shozoku{Raito Takeuchi, Mutsunori Banbara}{名古屋大学 大学院情報学研究科}%
+{Graduate School of Informatics, Nagoya University}
+\shozoku{Naoyuki Tamura}{神戸大学 情報基盤センター}%
+{Information Science and Technology Center, Kobe University}}
+
+
+% 和文アブストラクト
+\Jabstract{%
+車両装備仕様問題の目的は，与えられた装備タイプ(エンジンやトランスミッシ
+ョンなど)の集合と各装備タイプに付随する装備オプション(4気筒やCVTなど)の
+集合から，装備および燃費に関する制約を満たしつつ，販売台数を最大化する
+装備タイプと装備オプションの組合せを求めることである．
+
+本発表では，CAFE方式と呼ばれる燃費基準に基づく車両装備仕様問題に対して，
+解集合プログラミング(Answer Set Programing; ASP)を用いたアプローチにつ
+いて述べる．開発したプログラムは，可変性モデルで表現された車両装備仕様
+問題をASPのファクト形式に変換した後，考案したASP符号化と結合し，高速
+ASPソルバーを用いて解を求める．提案方法の評価として，実用規模のベンチ
+マークを含む問題集を用いた実験結果について述べる．%
+}
+
+\maketitle \thispagestyle {empty}
+
+
+% ここから「本文」
+\input{introduction}
+\input{background}
+\input{asp}
+\input{proposal}
+\input{experiment}
+\input{conclusion}
+% ここまで
+
+\bibliographystyle {jssst}
+\bibliography {jssst2020}
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
