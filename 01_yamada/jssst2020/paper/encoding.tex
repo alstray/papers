@@ -1,12 +1,12 @@
 \section{根付き全域森問題のASP符号化}
 
-\subsection{ASPファクト形式}\label{sec:encode:graph}
+\subsection{ASPファクト形式}
 入力として与えられるグラフはASPのファクトで表される．図\ref{fig:dnetgraph}
 をファクト形式で表現したものをコード\ref{code:graph.lp}に示す．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=h,caption={%
-図\ref{fig:dnetgraph}のファクト形式 (\code{graph.lp})},%
+図\ref{fig:dnetgraph}のファクト形式},%
 captionpos=b,frame=single,label=code:graph.lp,%
 xrightmargin=1zw,numbersep=5pt,
 numbers=left,%
@@ -16,24 +16,22 @@ basicstyle=\ttfamily\scriptsize]{code/graph.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \code{node}は各ノードを表しており，2行目で1から6までの
-ノードを定義している．アトム\code{root(X)}はノード\code{X}が
+ノードを定義している．\code{root(X)}はノード\code{X}が
 根であることを意味しており，5行目で1と3のノードが根であることを
-定義している．アトム\code{edge(X,Y)}はノード\code{X}と\code{Y}
+定義している．\code{edge(X,Y)}はノード\code{X}と\code{Y}
 が辺で結ばれていることを意味し，8～9行目で7つの各辺を定義している．
 例として，図\ref{fig:dnetgraph}における辺$s_{1}$は，\code{edge(1,2)}
 のように表される．
 
-\subsection{ASP符号化}\label{sec:encode:prog}
+\subsection{ASP符号化}
 根付き全域森の各制約は複数のルールの集合として簡潔に記述できる．
 本研究では，与えられたグラフから根付き全域森問題を解く2種類のASP
-符号化を考案した．
-%%コードに名前つけたい
-考案した\code{srf1}符号化をコード\ref{code:srf1.lp}に，
-\code{srf2}符号化をコード\ref{code:srf2.lp}にそれぞれ示す．
+符号化を考案した．考案した2つの符号化をコード\ref{code:srf1.lp}，
+コード\ref{code:srf2.lp}にそれぞれ示す．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-根付き全域木の論理プログラム (\code{srf1.lp})},%
+符号化1},%
 captionpos=b,frame=single,label=code:srf1.lp,%
 xleftmargin=0zw,numbersep=5pt,
 numbers=left,%
@@ -44,7 +42,7 @@ basicstyle=\ttfamily\scriptsize]{code/srf1.lp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-根付き全域木の論理プログラム (\code{srf2.lp})},%
+符号化2},%
 captionpos=b,frame=single,label=code:srf2.lp,%
 xleftmargin=0zw,numbersep=5pt,
 numbers=left,%
@@ -53,17 +51,17 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/srf2.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% srf1符号化
-\code{srf1}符号化は，全部で7つのルールで根付き全域森の
+% 符号化1
+符号化1は，全部で7つのルールで根付き全域森の
 制約を表している．それぞれのルールの意味について説明していく．
 
 2行目のルールは，選択子を使って各辺は解となる森に含まれるか
 含まれないかのどちらかであるという制約を表している．
-アトム\code{inForest(X,Y)}は，辺\code{edge(X,Y)}が解となる森に
+\code{inForest(X,Y)}は，辺\code{edge(X,Y)}が解となる森に
 含まれることを意味する．
 
 5～7行目は，各連結成分のノードの集合を生成するルールである．
-アトム\code{reached(X,R)}，はノード\code{X}が根\code{R}から
+\code{reached(X,R)}，はノード\code{X}が根\code{R}から
 到達可能であることを意味する．5行目のルールは，各根は
 自分自身から到達可能であるという制約を表している．
 6～7行目のルールは，すでに到達可能である各ノードについて，
@@ -79,27 +77,26 @@ basicstyle=\ttfamily\scriptsize]{code/srf2.lp}
 
 13～14行目は，根付き全域森の根付き連結制約を表すルールである．
 13行目のルールは，一貫性制約を使って各ノードは少なくとも
-1つの根から到達可能であるというat-least-one制約を表している．
+1つの根から到達可能であるという\textit{at-least-one}制約を表している．
 14行目のルールは，一貫性制約を使って各ノードは高々1つの根
-から到達可能であるというat-most-one制約を表している．
+から到達可能であるという\textit{at-most-one}制約を表している．
 この2つの制約が各根に対する到達可能な根の数の上下限を表すことで
 根付き連結制約を表している．
 
-%srf2符号化
-\code{srf2}符号化は，全部で6つのルールで根付き全域森の制約を表している．
-2～10行目までの各ルールは\code{srf1}符号化と同様にして制約を表している．
+%符号化2
+符号化2は，全部で6つのルールで根付き全域森の制約を表している．
+2～10行目までの各ルールは符号化1と同様にして制約を表している．
 
 13行目は，根付き連結制約を表すルールである．
 ここで，ASPの拡張構文である個数制約を用いた一貫性制約により
 各ノードはちょうど1つの根から到達可能であることを直接表している．
 
-この根付き連結制約の表現方法を変えることで，
-\code{srf2}符号化は\code{srf1}符号化と比べて，問題に符号化を適用した際に
-生成される制約数を少なく抑えられることが特長である．
-具体的な例として，ノードの数が$n$個，根の数が$r$個の問題について，
+この根付き連結制約の表現方法を変えることで，符号化2は符号化1と比べて，
+問題に符号化を適用した際に生成される制約数を少なく抑えられることが特長
+である．具体的な例として，ノードの数が$n$個，根の数が$r$個の問題について，
 各符号化の根付き連結制約を表すルールが生成する制約数について説明する．
-\code{srf1}符号化では，13行目のルールによって各ノードに対して符号化した
-$n$個と，14行目のルールで，各ノードについて2つの根を選択することにより
-符号化した$n\times{}_rC_2$個であり，全部で$n(1+{}_rC_2)$個である．
-一方，\code{srf2}符号化は，13行目のルールで各ノードに対してのみ符号化するので，
-全部で$n$個と生成される制約数が少なくなっていることがわかる．
+符号化1では，13行目のルールによって各ノードに対して符号化した$n$個と，
+14行目のルールで，各ノードについて2つの根を選択することにより符号化した
+$n\times{}_rC_2$個であり，全部で$n(1+{}_rC_2)$個である．一方，符号化2は，
+13行目のルールで各ノードに対してのみ符号化するので，全部で$n$個と生成される
+制約数が少なくなっていることがわかる．
