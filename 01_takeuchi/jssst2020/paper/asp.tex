@@ -1,1 +1,100 @@
-\section{解集合プログラミング}
+\section{解集合プログラミング}\label{sec:asp}
+
+解集合プログラミング(Answer Set Programming;ASP \cite{%
+  Baral03:cambridge,%
+  Gelfond88:iclp,%
+  Inoue08:jssst})
+は論理プログラミングから派生した宣言的論理パラダイムである．
+\textbf{ASPシステム}は，与えられた論理プログラムから，
+安定モデル意味論~\cite{Gelfond88:iclp}
+に基づく解集合を計算するシステムである．
+近年，SATソルバー技術を応用した高速ASPシステムが実現され，ロボット工学，システム生物学，
+システム検証，制約充足問題，プランニングなど様々な分野への
+実用的応用が急速に拡大している\cite{Gelfond16:aim}．
+
+ASP言語は一階論理に基づく知識表現言語の一種であり，
+一般拡張選言プログラムをベースとしている． 
+本発表では説明の簡略化のため，そのサブクラスである
+標準論理プログラムについて説明する．
+以降，標準論理プログラムを単に論理プログラムと呼ぶ．
+
+\textbf{論理プログラム}は，以下の形式の\textbf{ルール}の有限集合である．
+\begin{equation}
+  \label{eq:rule}
+  a_0\leftarrow a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}
+\end{equation}
+このルールの直観的な意味は，
+「$a_1,\ldots,a_m$がすべて成り立ち，$a_{m+1},\ldots,a_n$のそれぞれが成
+り立たないならば，$a_0$が成り立つ」である．
+ここで，
+$0\leq m\leq n$ であり，
+各$a_i$はアトム，
+$\naf{}$は\textbf{デフォルトの否定}
+\footnote{\textbf{失敗による否定}とも呼ばれる．述語論理で定義される否定($\neg$)とは意味が異なる．}，
+``$,$''は連言を表す．
+$\leftarrow$の左側を\textbf{ヘッド}，右側を\textbf{ボディ}と呼ぶ．
+ボディが空のルール(すなわち\(a_0\leftarrow\))を\textbf{ファクト}と呼び，
+$\leftarrow$を省略してよい．
+
+ヘッドが空のルールを\textbf{一貫性制約}と呼び，以下のように表す．
+\begin{equation}
+  \label{eq:constr}
+  \leftarrow a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}
+\end{equation}
+例えば，一貫性制約
+``\(\leftarrow a_1,a_2\)''は，「$a_1$と$a_2$が両方同時に成り立つことはない」を意味し，
+``\(\leftarrow a_1, \naf{a_{2}}\)''は，「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
+
+
+
+ASP言語には，組合せ問題を簡潔に記述するために，
+\textbf{アグリゲート}(aggregate)と呼ばれる拡張構文がいくつか用意されている．
+例えば，\textbf{選択子}``$\{a_1;...;a_n\}$.''は，
+集合\(\{a_1;...;a_n\}\)の任意の部分集合を解集合に含めることを意味する．
+\textbf{個数制約}は選択子の両端に選択可能な個数の上下限を付けたものである．
+例えば，``\(lb\ \{a_1;\dots;a_n\}\ ub \leftarrow Body\)''と書くと，
+「$Body$が成り立つならば，$a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下
+が成り立つ」を意味する．
+\textbf{重み付き個数制約}``\#sum\(\{w_1,a_1;...;w_n,a_n\}\) = c.''は，
+$a_1,\dots,a_n$のうち真となるアトムの重み和が整数定数cに等しくなることを意味する．
+重み$w_i$は整数定数であり，演算子としては``="以外にも``$<$",``$>$"などを使用できる．
+さらに，重み付き個数制約の``\#sum''を，``\#max''や``\#min''に書き換えると，重み和ではなく，
+真となるアトムの重みの最大値や最小値を求めることができる．
+また，組合せ最適化問題を解くために，最小化関数
+(\code{#minimize})・最大化関数(\code{#maximize})等も用意されている．
+
+
+
+近年，
+{\clingo}~\footnote{\url{https://potassco.org/}}，
+{\dlv}~\footnote{\url{http://www.dlvsystem.com/dlv/}}，
+{\wasp}~\footnote{\url{https://www.mat.unical.it/ricca/wasp/}}
+など，SATソルバー技術を応用した高速なASPシステムが開発されている．
+なかでも{\clingo}は，高性能かつ高機能なASPシステムとして世界中で広く使われている．
+これらの高速ASPシステムは，一階ASPプログラムを命題ASPプログラムに変換(\textbf{基礎化})
+したのち，ASPソルバーを用いて解集合を計算する．
+本論文で使用するASPシステム{\clingo}は，基礎化のためのグラウンダー{\gringo}とASPソルバー
+{\clasp}をシームレスに結合したものである．
+
+\begin{table}[tb]
+  \centering
+  \caption{論理プログラムとソースコードの対応}
+  \begin{tabular}{l|*{4}{p{5mm}}}
+    論理プログラム &   $\leftarrow$ & $,$        & $;$        & $\sim$       \\\hline
+    ソースコード   &   \texttt{:-}  & \texttt{,} & \texttt{;} & \texttt{not}
+  \end{tabular}
+  \label{tbl:map}
+\end{table}
+
+解集合プログラミングを用いた問題解法プロセスは，3つのステップからなる．
+まず最初に，解きたい問題を論理プログラムとして表現する．
+つぎに，ASP システムを用いて，論理プログラムの解集合を計算する．
+最後に，解集合を解釈して元の問題の解を得る．
+以降の節で示す論理プログラムのソースコードはすべて{\gringo}言語で書かれて
+おり，表記上の対応については表~\ref{tbl:map}の通りである．
+
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
