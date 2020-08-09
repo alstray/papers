@@ -99,8 +99,11 @@ Graph Coloring and its Generalization\footnote{\url{http://mat.tepper.cmu.edu/CO
 実験を行った結果を表\ref{table:trans}に示す．なお，表中の比率は，外部プログラム
 での探索時間を1としたときのライブラリによる探索時間を示す．今回行った実験では，
 すべての問題についてライブラリによる探索のほうが高速に解いていることがわかる．
-また，比率について平均をとると$32.8\%$となり，$67.2\%$もの探索時間の短縮ができて
-いることが確認できる．
+また，今回行った実験では探索回数が11回，すなわち遷移回数が10回の問題についても
+解を求めることにも成功している．比率について平均をとると$32.8\%$となり，$67.2\%$
+もの探索時間の短縮ができていることが確認できる．したがって\clingo のライブラリを
+利用することでオーバヘッドの短縮及び部分的な学習節の利用が有効に働いていると
+いえる．
 
 \begin{table*}[htbp]
  \centering
@@ -109,5 +112,3 @@ Graph Coloring and its Generalization\footnote{\url{http://mat.tepper.cmu.edu/CO
  \input{table/trans_experiment}
 \end{table*}
 
-また，今回行った実験では探索回数が11回，すなわち遷移回数が10回の問題についても
-解を求めることにも成功している．
