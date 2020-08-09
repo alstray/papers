@@ -1,7 +1,7 @@
 \section{遷移問題への拡張}
 
-
 \subsection{遷移問題の概要}
+
 根付き全域森の遷移問題への拡張について，新たに
 \textbf{初期状態}と\textbf{目的状態}を定義する．初期状態と
 目的状態は，それぞれ対象となるグラフの根付き全域森の実行
@@ -12,66 +12,98 @@
 状態が遷移する際に変化する辺の数は$d$個以下である．という
 \textbf{遷移制約}を新たに設定する．
 
-\ref{fig:trans}は，遷移制約を$d=2$とした場合での遷移問題の例である．
-
-\begin{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[htbp]
- \centering
- \begin{subfigure}{}
-  \centering
-  \input{tikz/tikz-trans-1}
-  \caption{$t=0$ (初期状態)}
- \end{subfigure}
- \hspace{1cm}
- \begin{subfigure}{}
-  \centering
-  \input{tikz/tikz-trans-2}
-  \caption{$t=1$}
- \end{subfigure}
- %\\ \vspace{0.1cm}
- \begin{subfigure}{}
-  \centering
-  \input{tikz/tikz-trans-4}
-  \caption{$t=3$ (目的状態)}
- \end{subfigure}
- \hspace{1cm}
- \begin{subfigure}{}
-  \centering
-  \input{tikz/tikz-trans-3}
-  \caption{$t=2$}
- \end{subfigure}
- %
- \caption{実行例(コード\ref{code:transition.log})のグラフ表現}
- \label{fig:result-trans}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\end{comment}
+図\ref{fig:trans}は，遷移制約を$d=2$とした場合での遷移問題の例である．
 
 \subsection{ASP符号化}
-今回考案した符号化は，外部プログラムによるループを用いたインクリメンタル探索を
-行うものと，ASPソルバー{\clingo}のインクリメンタル探索ライブラリを使用した2種類の
-符号化である．
+今回考案した符号化は，外部プログラムによるループを用いた
+インクリメンタル探索を行うものと，ASPソルバー{\clingo}の
+インクリメンタル探索ライブラリを使用した2種類の符号化である．
 
-外部プログラムを用いる符号化をコード\ref{code:roop}に示す．遷移問題への拡張について
-基本的には，コード\ref{code:srf2}に出現する各アトムに，状態数を表す引数\code{T}を
-追加する．これにより各状態\code{T}における根付き全域森を探索する．1行目のファクト
-\code{t(0..t)}は，0から$t$までの各状態数を定義している．なお，$t$は外部プログラムに
-よって与えられる変数($t \geq 0$)である．この状態数を増やしていくことでインクリメンタル
-探索を行う．
+外部プログラムを用いる符号化をコード\ref{code:roop}に示す．
+遷移問題への拡張について基本的には，コード\ref{code:srf2.lp}に
+出現する各アトムに，状態数を表す引数\code{T}を追加する．これ
+により各状態\code{T}における根付き全域森を探索する．1行目の
+\code{t(0..t)}は，0から$t$までの各状態数を定義している．なお，
+$t$は外部プログラムによって与えられる変数($t \geq 0$)である．
+この状態数を増やして解が得られるまで実行することでインクリ
+メンタル探索を行う．
 
-4行目のルールは，与えられる初期状態と状態0における根付き全域森が一致する
-ことを表す制約である．アトム\code{init_Forest(X,Y)}は初期状態での根付き全域森に含まれる
-辺を表す．
-同様に7行目のルールで，与えられる終了状態と状態$t$における根付き全域森が一致することを
-表す．アトム\code{goal_Forest(X,Y)}は終了状態での根付き全域森に含まれる辺を表す．
-10〜21行目までは，先に述べたように根付き全域森の各制約に状態数\code{T}を追加したルール
-である．
+4行目のルールは，初期条件として，与えられる初期状態と状態0における
+根付き全域森が一致することを表す制約である．\code{init_Forest(X,Y)}
+は初期状態での根付き全域森に含まれる辺を表す．同様に7行目のルールで，
+終了条件として，与えられる目的状態と状態$t$における根付き全域森が一致
+することを表す．\code{goal_Forest(X,Y)}は目的状態での根付き全域森に含ま
+れる辺を表す．10〜21行目までは，先に述べたように根付き全域森の各制約に
+状態数\code{T}を追加したルールである．
 
-24行目から26行目までは，遷移制約を表すルールであり，24,25行目は，状態\code{T-1}で森に
-含まれていない辺が状態\code{T}で森に含まれる辺となった場合，あるいはその逆
-をアトム\code{dist(X,Y,T)}として生成する．26行目で各状態\code{T}について変化した辺の数
-である\code{dist(X,Y,T)}の数が$d$以下であることを一貫性制約で表している．
+24行目から26行目までは，遷移制約を表すルールであり，24,25行目は，
+状態\code{T-1}で森に含まれていない辺が状態\code{T}で森に含まれる
+辺となった場合，あるいはその逆を\code{dist(X,Y,T)}として生成する．
+26行目で各状態\code{T}について変化した辺の数である\code{dist(X,Y,T)}
+の数が$d$以下であることを一貫性制約で表している．
 
-次に，ライブラリを用いたインクリメンタル探索を行う符号化をコード\ref{code:incmode}に示す．
+次に，ライブラリを用いたインクリメンタル探索を行う符号化をコード
+\ref{code:incmode}に示す．
 
+1行目はSATが出力されるまで求解を行うことを表し，２行目は$t=0$から
+探索を行うことを示している．ライブラリを用いるASPのコードは，
+\code{base}部分，\code{step}部分，\code{check}部分に分けられる．
+
+\code{base}部分は，最初の1回目の探索時にのみ符号化を行うルールであり，
+ここでは初期条件を9行目に記述している．
+
+15〜34行目の\code{step}部分は，探索回数を増やす度に毎回符号化を行う
+ルールであり，ここでは根付き全域森の制約と遷移制約を記述している．
+
+最後に，\code{check}部分では終了条件を記述しており，ある状態$t$で
+このルールが成り立つとき，そこで探索を終えることを意味している．
+
+ライブラリを用いることで，ソルバーを起動する毎に発生するオーバヘッドの
+減少や，前に実行した探索で得られた学習節を利用することができるので，
+外部プログラムによって繰り返し探索するよりも，高速に解が得られると考えられる．
+
+\onecolumn
+\begin{figure}[ht]
+ \begin{center}
+  \begin{tabular}{cc}
+   \subfigure[$t=0$ (初期状態)]{
+   \input{tikz/tikz-trans-1}
+   \label{trans-1} \hspace{1cm}
+   } &
+	   \subfigure[$t=1$]{
+	   \input{tikz/tikz-trans-2} 
+	   \label{trans-2}   
+	   } \\ \vspace{0.3cm}
+   \subfigure[$t=3$ (目的状態)]{
+   \input{tikz/tikz-trans-4}
+   \label{trans-4}  \hspace{1cm} 
+   } &
+	   \subfigure[$t=2$]{
+	   \input{tikz/tikz-trans-3}
+	   \label{trans-3}
+	   } \\
+  \end{tabular}
+  \caption{遷移問題の例}
+  \label{fig:trans}
+ \end{center}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=h,caption={%
+外部プログラムを用いるASP符号化},%
+captionpos=b,frame=single,label=code:roop,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/trans-const.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=h,caption={%
+ライブラリを用いるASP符号化},%
+captionpos=b,frame=single,label=code:incmode,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/dnet-trans.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\twocolumn
