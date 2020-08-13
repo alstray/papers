@@ -74,8 +74,7 @@ CAFE問題の制約は以下の通りである．
 \end{figure}
 %-------------------------------------------------------
 
-CAFE問題の例を図~\ref{fig:ovm_example}に示す\comment{図中: requireを
-  requiresに修正，excludeも同様}．
+CAFE問題の例を図~\ref{fig:ovm_example}に示す．
 この例は，ソフトウェアプロダクトライン開発の分野で用いられる
 \textbf{可変性モデル} (Orthogonal Variability Model; OVM\cite{Pohl05:sple})
 によって記述されている．
@@ -111,20 +110,20 @@ CAFE問題の例を図~\ref{fig:ovm_example}に示す\comment{図中: requireを
 \begin{table}[t]
   \centering
   \caption{CAFE問題(図~\ref{fig:ovm_example})の解}
-  \begin{tabular}{l|c|c|c} \bhline
-    \multicolumn{1}{c|}{装備}   & \multicolumn{3}{c}{装備仕様} \\ \cline{2-4}
-                          & 1	& 2 	 & 3	\\  \hline
-    \textsf{Grade}        & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
-    \textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \textsf{2WD}\\
-    \textsf{Engine}	  & \textsf{V4}     & \textsf{V6}     & \textsf{V6}\\
-    \textsf{Tire}	  & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
-    \textsf{Transmission} & \textsf{5MT}    & \textsf{6MT}    & \textsf{10AT}\\
-    \textsf{Sun\_Roof}    & -               & \textsf{Normal} & -  \\ \hline
-    IWR 値の総和          & 983  & 1,125   & 1,180 \\ %\hline
-    燃費(km/L)      & 10.2  & 8.9     & 8.5 \\ %\hline
-    予想販売台数    & 745   & 1,988   & 1,171  \\ \hline
-    平均燃費(km/L)  & \multicolumn{3}{c}{9.0} \\ 
-    予想販売台数(合計)  & \multicolumn{3}{c}{3,904} \\ \hline
+  \begin{tabular}{l|l|c|c|c} \bhline
+    %\multicolumn{1}{c|}{装備}   & \multicolumn{3}{c}{装備仕様} \\ \cline{2-4}
+    \multicolumn{2}{l|}{装備仕様}               & 1	& 2 	 & 3	\\  \hline
+    装備 & \textsf{Grade}        & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
+    &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \textsf{2WD}\\
+    &\textsf{Engine}	  & \textsf{V4}     & \textsf{V6}     & \textsf{V6}\\
+    &\textsf{Tire}	  & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
+    &\textsf{Transmission} & \textsf{5MT}    & \textsf{6MT}    & \textsf{10AT}\\
+    &\textsf{Sun\_Roof}    & -               & \textsf{Normal} & -  \\ \hline
+    \multicolumn{2}{l|}{IWR 値の総和}           & 983  & 1,125   & 1,180 \\ %\hline
+    \multicolumn{2}{l|}{燃費(km/L)}      & 10.2  & 8.9     & 8.5 \\ %\hline
+    \multicolumn{2}{l|}{予想販売台数}    & 745   & 1,988   & 1,171  \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{9.0} \\ 
+    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{3,904} \\ \hline
  \end{tabular}
  \label{tab:ovm_ans}
 \end{table}

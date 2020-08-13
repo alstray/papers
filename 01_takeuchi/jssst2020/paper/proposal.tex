@@ -43,7 +43,7 @@ CAFE 問題の例(図~\ref{fig:ovm_example})
 \code{vp_def/1}, 
 \code{v_def/3},
 \code{require_v_v/2},
-\code{exclude_v_v}
+\code{exclude_v_v/2}\comment{exclude\_v\_v $\rightarrow$ exclude\_v\_v/2}
 に対応していることがわかる．
 例えば，バリアント\textsf{V4}は，ファクト
 \code{v_def("V4", "Engine", 120).}に対応している．
@@ -100,7 +100,7 @@ CAFE問題の制約と目的関数を表す論理プログラムをコード\ref
 
 燃費制約は8〜13行目のルールで表される．
 8行目の\code{iwr(S,G)}は，装備仕様\code{G}のIWR値の総和が\code{S}であ
-ることを表す．9〜10行目の
+ることを表す．11〜12行目の
 \code{fe(FE,G)}と\code{sv(SV,G)}は，それぞれ，
 装備仕様\code{G}の燃費\code{FE}と予想販売台数\code{SV}を表す．
 13行目のルールは，第~\ref{sec:background}節で示した
@@ -199,20 +199,21 @@ basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp}
 %  \small
   %\renewcommand{\arraystretch}{0.9}
   \tabcolsep = 0.9mm
-  \begin{tabular}{l|c|c|c||c|c|c||c|c|c} \bhline
-    装備 & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c}{\bf{解3}}\\ \cline{2-10}
-         & STD	& DX 	 & LX	   & STD & DX  & LX    & STD & DX  & LX       \\  \hline
-    Drive\_Type  & 4WD  & 2WD    & 4WD     & 2WD & 2WD & 4WD   & 2WD & 2WD & 4WD     \\
-    Engine	 & V4	& V6	 & V6	   & V6  & V6  & V6    & V6  & V6  & V6      \\ 
-    Tire	 & 16	& 17	 & 18	   & 16  & 17  & 18    & 16  & 17  & 18     \\
-    Transmission & 5MT	& HEV    & 10AT	   & CVT & HEV & 10AT  & 6AT & HEV & 10AT     \\
-    Sun\_Roof    & Panorama& -   & -       & Nomal& -  & -     & -   & -   & -       \\ \hline
-    IWR          & 1128 & 1130   & 1255    & 1130 & 1130&1255  & 1130& 1130& 1255     \\ %\hline
-    燃費(km/L)    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
-    予想販売台数  & 2007  & 2007   & 1511   & 2007 & 2007 & 1511 & 2007& 2007& 1511       \\ \hline
-    平均燃費(km/L) & \multicolumn{3}{c||}{\bf{8.6}} & \multicolumn{3}{c||}{\bf{8.5}} & \multicolumn{3}{c}{\bf{8.5}}\\ 
-    合計販売台数  & \multicolumn{3}{c||}{\bf{5525}} & \multicolumn{3}{c||}{\bf{5525}}  &\multicolumn{3}{c}{\bf{5525}}\\
-    オプション数  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{12}\\ \hline
+  \begin{tabular}{l|l|c|c|c||c|c|c||c|c|c} \bhline
+    \multicolumn{2}{l|}{} & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c}{\bf{解3}}\\ \hline
+    \multicolumn{2}{l|}{装備仕様} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 \\ \hline
+    装備 & \textsf{Grade}        & \textsf{STD}& \textsf{DX} & \textsf{LX}& \textsf{STD} & \textsf{DX}  & \textsf{LX}    & \textsf{STD} & \textsf{DX}  & \textsf{LX}       \\
+        & \textsf{Drive\_Type}  & \textsf{4WD}  & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD}  \\
+        & \textsf{Engine} & \textsf{V4} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6}      \\ 
+        & \textsf{Tire} & \textsf{16}	& \textsf{17} & \textsf{18} & \textsf{16}  & \textsf{17}  & \textsf{18} & \textsf{16} & \textsf{17} & \textsf{18} \\
+        & \textsf{Transmission} & \textsf{5MT} & \textsf{HEV} & \textsf{10AT} & \textsf{CVT} & \textsf{HEV} & \textsf{10AT}  & \textsf{6AT} & \textsf{HEV} & \textsf{10AT}     \\
+        & \textsf{Sun\_Roof} & \textsf{Panorama} & -   & -       & \textsf{Nomal} & -  & -     & -   & -   & -       \\ \hline
+    \multicolumn{2}{l|}{IWR}  & 1128 & 1130   & 1255    & 1130 & 1130&1255  & 1130& 1130& 1255     \\ %\hline
+    \multicolumn{2}{l|}{燃費(km/L)}    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
+    \multicolumn{2}{l|}{予想販売台数}  & 2007  & 2007   & 1511   & 2007 & 2007 & 1511 & 2007& 2007& 1511       \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)} & \multicolumn{3}{c||}{\bf{8.6}} & \multicolumn{3}{c||}{\bf{8.5}} & \multicolumn{3}{c}{\bf{8.5}}\\ 
+    \multicolumn{2}{l|}{合計販売台数}  & \multicolumn{3}{c||}{\bf{5525}} & \multicolumn{3}{c||}{\bf{5525}}  &\multicolumn{3}{c}{\bf{5525}}\\
+    \multicolumn{2}{l|}{オプション数}  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{12}\\ \hline
   \end{tabular}
   \label{tab:optN}
 \end{table*}
@@ -223,7 +224,7 @@ basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp}
 オプション数の最小化も可能なように拡張する．
 コード~\ref{code:obj_op.lp}に拡張のための論理プログラムを示す．
 
-予想販売台数の最大化(2行目の)については，これまでと同じである．
+予想販売台数の最大化(2行目)\comment{2行目の $\rightarrow$ 2行目}については，これまでと同じである．
 5行目の\code{used_v(V)}は，
 オプション\code{V}がいづれかの装備仕様において実装されたことを意味する．
 オプション数の最小化は，\code{used_v(V)}が成り立つ\code{V}の数を最小化
@@ -235,9 +236,7 @@ basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp}
 拡張符号化と呼ぶ．
 
 図~\ref{fig:ovm_example}のCAFE問題に対して，最適解の全列挙をした結果を
-表~\ref{tab:optN}\comment{表~\ref{tab:ovm_ans}のフォーマットに合わせる．
-  フォントなど}
-に示す．
+表~\ref{tab:optN}に示す．
 CAFE基準値が8.5km/Lのとき，予想販売台数が5,525台である最適解が，
 改良符号化では(解1,解2,解3)の3つ存在した．
 一方で，オプション数の最小化を加えた拡張符号化では，
