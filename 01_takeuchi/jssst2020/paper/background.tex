@@ -9,12 +9,11 @@
 \end{figure*}
 %-------------------------------------------------------
 
-\comment{2節．大きな修正多数．チェックお願い}
-CAFE問題とは，ある車種に関する下記の入力から，
-装備および燃費に関する制約を満たしつつ，
-予想販売台数を最大化する(複数の)装備仕様を求める問題である．
-以降，装備タイプと装備オプションを，
-それぞれタイプとオプションと簡単に書くことにする．
+CAFE問題の入力は以下の通りである．
+以降，
+装備タイプをタイプ，
+装備オプションをオプション
+と簡単に書くことにする．
 \begin{enumerate}
 \item タイプの集合\label{input:vp}
 \item オプションの集合\label{input:v}
@@ -24,20 +23,22 @@ CAFE問題とは，ある車種に関する下記の入力から，
   \label{input:dependency}
 \item 各オプションに付加された IWR 値\label{input:iwr}
 %%%
-\item CAFE 基準値\label{input:cafe}
 \item 求めたい装備仕様の個数\label{input:g}
+\item 各装備仕様とタイプ(あるいはオプション)間の依存関係\label{input:init}
 \item 各装備仕様に含まれるオプションの IWR 値の総和と燃費との対応表\label{input:fe}
 \item 各装備仕様に含まれるオプションの IWR 値の総和と予想販売台数との対応表\label{input:sv}
-\item 各装備仕様とタイプ(あるいはオプション)間の依存関係\label{input:init}
+\item CAFE 基準値\label{input:cafe}
 \end{enumerate}
-入力~\ref{input:iwr}の IWR は Inertial Working Rating の略であり，
+入力~\ref{input:iwr}の IWR は Inertial Working Rating の略で，
 直観的には各オプションの重量を表す．
 入力~\ref{input:g}の個数は，求めたい派生車両の数と考えるとわかりやすい．
+CAFE問題は，上記の入力から，
+装備および燃費に関する制約を満たしつつ，
+予想販売台数を最大化する車両装備仕様を求める問題である．
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CAFE問題の制約は以下の通りである．
 \begin{description}
-\item[個数制約]: 各装備仕様について，各タイプで選択されるオプション数は，
+\item[範囲制約]: 各装備仕様について，各タイプで選択されるオプション数は，
   入力~\ref{input:ublb}で与えられた上下限値の範囲内でなければならない．
 \item[依存制約]: 各装備仕様について，入力~\ref{input:dependency}で与
   えられた依存関係を満たさなければならない．
@@ -73,7 +74,8 @@ CAFE問題の制約は以下の通りである．
 \end{figure}
 %-------------------------------------------------------
 
-CAFE問題の例を図~\ref{fig:ovm_example}に示す．
+CAFE問題の例を図~\ref{fig:ovm_example}に示す\comment{図中: requireを
+  requiresに修正，excludeも同様}．
 この例は，ソフトウェアプロダクトライン開発の分野で用いられる
 \textbf{可変性モデル} (Orthogonal Variability Model; OVM\cite{Pohl05:sple})
 によって記述されている．
@@ -128,15 +130,15 @@ CAFE問題の例を図~\ref{fig:ovm_example}に示す．
 \end{table}
 %-------------------------------------------------------
 
-最後に，図~\ref{fig:ovm_example}の問題に対する解の例を表\ref{tab:ovm_ans}に示す．
+図~\ref{fig:ovm_example}の問題に対する解の例を表\ref{tab:ovm_ans}に示す．
 この解は，
 CAFE 基準値に9.0km/L，
-求めたい装備仕様の個数に3，
+求めたい装備仕様の個数に3を与え，
 装備仕様とオプションの依存関係として，
 (装備仕様1, \textsf{STD}),
 (装備仕様2, \textsf{DX}),
 (装備仕様3, \textsf{LX})
-を与えて得られたものである．
+を要求して得られたものである．
 各装備仕様の燃費(km/L)は，左から順に 10.2, 8.9, 8.5 と
 個々には CAFE 基準値を満たしていないが，
 3台の平均燃費は 9.028km/L となり，CAFE 規制を満たしている．

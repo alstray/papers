@@ -1,209 +1,265 @@
 \section{ASPに基づくCAFE問題ソルバー}
 
-開発したCAFE問題ソルバーの構成を図\ref{fig:system}に示す．
-CAFE問題ソルバーでは，OVMで表現されたCAFE問題のインスタンスを
-ASPファクト形式に変換した後，CAFE問題の制約のASP符号化と結合し，
-高速ASPソルバーを用いて解を求める．
+提案するCAFE問題ソルバーは，与えられた問題インスタンスをASPの
+ファクト形式に変換した後，それらファクトとCAFE問題を解くためのASP符号
+化(論理プログラム)を結合した上で，高速ASPシステム{\clingo}を用いて解
+を求める(図~\ref{fig:arch}参照)．
+本節では，CAFE問題の入力と制約を論理プログラムとして表現する方法に
+ついて述べる．
 
-本節では，インスタンスのASPファクト形式による表現方法を説明し，
-制約の基本的なASP符号化と，その問題点を改良した符号化を提案する．
-さらに，優先度付きの目的関数の追加を行うことで，
-CAFE問題ソルバーの拡張性の高さを紹介する．
-%以降では前者を基本符号化，後者を改良符号化と呼ぶ．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{ASPファクト形式}
 
-\begin{figure}[tb]
- \includegraphics [width=\linewidth]{images/system.eps}
- \caption{CAFE問題ソルバーのシステム概要}
- \label{fig:system}
-\end{figure}
-
-\subsection{インスタンスのASPファクト形式}
-\lstinputlisting[float=tb,caption={%
-インスタンスのASPファクト表現(一部)},%
-captionpos=b,frame=single,label=code:ovm2.lp,%
-numbers=left,%
+%----------------------------------------
+\lstinputlisting[float=htbp,caption={%
+  CAFE問題の例(図~\ref{fig:ovm_example})のファクト表現．
+  装備仕様の個数:3，
+  装備仕様とオプションの依存関係:
+  (装備仕様1, \textsf{STD}),
+  (装備仕様2, \textsf{DX}),
+  (装備仕様3, \textsf{LX})},%
+captionpos=b,frame=single,label=code:ovm.lp,%
+numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-xrightmargin=0zw,% 
-xleftmargin=3zw,% 
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
 basicstyle=\ttfamily\scriptsize]{codes/ovm.lp} 
+%----------------------------------------
 
-コード\ref{code:ovm2.lp}は，図\ref{fig:ovm_example}のCAFE問題の
-インスタンスの一部をASPファクト形式で表現したものである．
+CAFE 問題の入力は，CAFE 基準値(入力~\ref{input:cafe})
+を除いて，ASP のファクトで表される．
+CAFE 基準値は ASP の定数\code{t}で表すものとし，
+実行時に{\clingo}のオプションから値を指定する．
 
-1行目ではタイプ\code{Drive\_Type}を定義している．
-2, 3行目ではオプション\code{2WD}と\code{4WD}を定義しており，
-どちらもタイプ\code{Drive\_Type}に付随するオプションで，
-IWRはそれぞれ\code{125}, \code{200}であることを表している．
-5行目ではタイプ\code{Drive_Type}が必須であることを表している．
-7行目はオプション\code{STD}がオプション\code{16_inch_Tire}を要求することを，
-8行目はオプション\code{V4}がオプション\code{10AT}を排除することを意味する．
-このインスタンスでは10行目で装備仕様のグループを3種類求めるように指定しており，
-12〜14行目でそれぞれのグループでタイプ\code{Grade}が
-\code{STD, DX, LX}に分かれるように初期設定をしている．
+CAFE 問題の例(図~\ref{fig:ovm_example})
+をファクトで表現したものをコード~\ref{code:ovm.lp}に示す．
+この2つを見比べると，可変性モデルの
+可変点，
+バリアント，
+制約依存性(要求)，
+制約依存性(排除)が，
+それぞれファクト
+\code{vp_def/1}, 
+\code{v_def/3},
+\code{require_v_v/2},
+\code{exclude_v_v}
+に対応していることがわかる．
+例えば，バリアント\textsf{V4}は，ファクト
+\code{v_def("V4", "Engine", 120).}に対応している．
+%
+可変性モデルは CAFE 問題の入力~\ref{input:vp}〜\ref{input:iwr}を含んでいる．
+%
+この他，
+\code{require_vp/1}は必須タイプ，
+\code{group/1}は装備仕様の識別子(入力~\ref{input:g})，
+\code{require_g_v/2}は
+各装備仕様とオプション間の依存関係を表している(入力~\ref{input:init})．
+例えば，\code{require_g_v(1, "STD").}は，装備仕様~\code{1}が
+オプション\code{STD}を要求することを表す．
 
-装備仕様の燃費と販売台数を示すテーブルも，ASPのファクトとして表現できる．
-コード\ref{code:tableFE.lp}, \ref{code:tableSV.lp}にて，各テーブルの一部を示す．
-ファクト\code{fe\_map(S,FE)}, \code{sv\_map(S,SV)}は，
-装備仕様のIWRの和がSであるとき，燃費と販売台数がFEとSVであることを示している．
-例えば，装備仕様のIWRの和が900であるとき，コード\ref{code:tableFE.lp}の1行目は
-燃費は11.1km/Lであることを表し，コード\ref{code:tableSV.lp}の1行目は
-予想される販売台数が97台であることを表している．ASPでは整数しか扱えないため，
-燃費の値は10倍にして記述している．
-また，本発表で扱う販売台数のテーブルはIWRの和が5の倍数であるもののみで
-構成されているため，販売台数を求めるときにIWRの和の端数を丸める必要がある．
+IWR 値の総和と燃費の対応表(入力~\ref{input:fe})は，
+ファクト\texttt{fe\_map($S$,$FE$)}の有限集合で表される．
+ここで，$S$はIWR 値の総和，$FE$は燃費を表す．
+同様にして，
+IWR 値の総和と予想販売台数の対応表(入力~\ref{input:sv})は，
+ファクト\texttt{sv\_map($S$,$SV$)}の有限集合で表される．
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{CAFE問題の ASP 符号化}
+
+%----------------------------------------
 \lstinputlisting[float=tb,caption={%
-燃費を算出するテーブルのASPファクト表現},%
-captionpos=b,frame=single,label=code:tableFE.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-xrightmargin=0zw,% 
-xleftmargin=3zw,% 
-basicstyle=\ttfamily\scriptsize]{codes/tableFE.lp} 
-
-\lstinputlisting[float=tb,caption={%
-販売台数を算出するテーブルのASPファクト表現},%
-captionpos=b,frame=single,label=code:tableSV.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-xrightmargin=0zw,% 
-xleftmargin=3zw,% 
-basicstyle=\ttfamily\scriptsize]{codes/tableSV.lp} 
-
-\subsection{基本符号化}
-\lstinputlisting[float=tb,caption={%
-CAFE問題のASP符号化},%
+  基本符号化},%
 captionpos=b,frame=single,label=code:basic1.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-xrightmargin=0zw,% 
-xleftmargin=3zw,% 
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
 basicstyle=\ttfamily\scriptsize]{codes/basic1.lp} 
+%----------------------------------------
 
-コード\ref{code:basic1.lp}にCAFE問題の制約のASP符号化(基本符号化)を示す．
-2行目は，CAFE基準値として変数\code{t}に整数90を代入している．変数\code{t}の値は
-ソルバー使用時にオプションを加えることで，任意の値に変更することができる．
+CAFE問題の各制約は，ASP の個数制約および一貫性制約を使って簡潔に表現される．
+CAFE問題の制約と目的関数を表す論理プログラムをコード\ref{code:basic1.lp}に示す．
+装備仕様\code{G}がタイプ\code{VP}を装備することを意味するアトム\code{vp(VP,G)}を導入する．
+また，
+装備仕様\code{G}がオプション\code{V}を実装することを意味するアトム
+\code{v(V,G)}も併せて導入する．
 
-アトム\code{vp(VP,G)}, \code{v(V,G)}は，グループ\code{G}で
-それぞれタイプ\code{VP}，オプション\code{V}が装備されることを意味する．
+1行目のルールは，
+各装備仕様\code{G}，各タイプ\code{VP}に対して，
+\code{vp(VP,G)}の候補を生成する．
+2行目のルールは，各装備仕様\code{G}に対して，
+\code{VP}が必須タイプならば，
+\code{G}は\code{VP}を装備しなければならないことを表す．
+
+範囲制約は5行目のルールで表される．
+このルールは，タイプ\code{VP}を装備する装備仕様\code{G}に対して，
+\code{VP}のオプションからちょうど1個を実装することを表す．
+
+燃費制約は8〜13行目のルールで表される．
+8行目の\code{iwr(S,G)}は，装備仕様\code{G}のIWR値の総和が\code{S}であ
+ることを表す．9〜10行目の
+\code{fe(FE,G)}と\code{sv(SV,G)}は，それぞれ，
+装備仕様\code{G}の燃費\code{FE}と予想販売台数\code{SV}を表す．
+13行目のルールは，第~\ref{sec:background}節で示した
+CAFE 規制の式を以下のように変形し，ASPの重み付き個数制約で表している．
+\begin{center}
+\(\sum_{i=1}^{n} (FE_{i}-t)\cdot SV_{i} \geq 0\)  
+\end{center}
+
+要求制約は16〜19行目のルールで表される．
+例えば，
+16行目のルールは，装備仕様\code{G}がオプション\code{V1}
+を実装し，かつ，\code{V1}が\code{V2}を要求するならば，
+\code{G}は\code{V2}を実装しなければならないことを表す．
+他の要求制約，排除制約，初期制約も同様に，一貫性制約を用いて
+簡潔に表現できる．
+
+CAFE 問題の目的は，予想販売台数を最大化することである．
+この目的関数は，31行目の最大化関数\code{#maximize}によって表される．
 %
-4行目は，任意のタイプ\code{VP}，任意のグループ\code{G}に対してタイプの解候補となる
-\code{vp(VP,G)}を導入し，個数制約を用いてグループ\code{G}がタイプ\code{VP}を
-装備するか否かの選択をするということを表している．
-%
-5行目は，一貫性制約を用いて必須であるタイプはすべてのグループで
-必ず装備しなければならないという制約を表している．
-%
-6行目は，グループ\code{G}でタイプ\code{VP}が装備されるとき，
-オプションの解候補となる\code{v(V,G)}を導入し，
-個数制約を用いてタイプ\code{VP}に付随するオプションの中で
-装備するオプションの数をちょうど1つに制限している．
+本節で述べた論理プログラム(コード\ref{code:basic1.lp})を
+基本符号化と呼ぶ．
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{符号化の改良}
 
-9〜12行目は燃費制約を表している．
-9行目は重み付き個数制約を用いて，任意のグループ\code{G}に対して，
-装備されるオプション\code{V}の\code{IWR}の和を変数\code{S}に代入し
-アトム\code{iwr(S,G)}を生成する．このアトム\code{iwr(S,G)}は，
-グループ\code{G}の装備仕様のIWRの和が\code{S}であることを表している．
-%
-10行目は，任意のグループ\code{G}と任意のIWRの和\code{S}，任意の燃費\code{FE}に対して，
-\code{iwr(S,G)}かつ\code{fe\_map(S,FE)}ならばアトム\code{fe(FE,G)}を生成する．
-このアトム\code{fe(FE,G)}は，グループ\code{G}の装備仕様の燃費が値\code{FE}
-であることを表している．
-%
-11行目は，同様にしてグループ\code{G}の装備仕様の予想販売台数が\code{SV}であることを
-表すアトム\code{sv(SV,G)}を生成する．ただし，本研究で扱う販売台数のテーブルは
-IWRの和が5の倍数であるもののみで構成されているため，
-グループ\code{G}のIWRの和\code{S}に最も近い5の倍数の値\code{S1}を
-求める計算を加えている．
-%
-12行目は，「販売台数を加味した全体の平均燃費が基準値\code{t}以上でなければならない」
-という燃費制約を表している．第2節の燃費制約の式を変形すると，以下のようになる．
-\\
-\begin{displaymath}
- (FE_{1} - t) \times SV_{1} + (FE_{2} - t) \times SV_{2} + (FE_{3} - t)
- \times SV_{3} \geq 0
-\end{displaymath}
-\\
-つまり，すべてのグループの\code{(FE - t)*SV}の和が0以上でなければならないという制約を，
-一貫性制約と重み付き個数制約を用いて燃費制約を表現している．
-
-15〜18行目は一貫性制約を用いて要求制約を表している．
-15行目は，任意のオプション\code{V}，任意のグループ\code{G}に対して，
-\code{require\_v\_v(V1,V2)}かつ\code{v(V1,G)}ならば，アトム\code{v(V2,G)}は
-真であることを意味する．
-16〜18行目は，同様にして，タイプによるオプションの要求，オプションによるタイプの要求，
-タイプによるタイプの要求を記述している．OVMの定義にはVPによるVの要求は含まれないが，
-CAFE問題では追加して扱うものとする．
-21〜24行目は同様にして排除制約を表している．
-
-27行目は一貫性制約を用いて，グループ\code{G}で初期設定として装備することが決められている
-\code{V}が選択されなければならないことを表している．
-
-30行目は，目的関数である全体の販売台数の最大化を行っている．
-
-
-
-\subsection{ASP符号化の改良}
+%----------------------------------------
 \lstinputlisting[float=tb,caption={%
-改良符号化の一部},%
+  基本符号化(コード\ref{code:basic1.lp}の8〜10行目)の改良},%
 captionpos=b,frame=single,label=code:basic2.lp,%
-numbers=left,%
+numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-xrightmargin=0zw,% 
-xleftmargin=3zw,% 
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
 basicstyle=\ttfamily\scriptsize]{codes/basic2.lp} 
+%----------------------------------------
 
-コード\ref{code:basic1.lp}の基本符号化では，9行目のIWRの和の候補の生成時に
-オプションの個数制約を考慮しておらず，ASPソルバーでの基礎化の際に，
-一つもオプションを選択しない場合やすべてのオプションを選択した場合など，
-明らかに成立しないオプションの選択の仕方によるIWRの和まで解の候補として生成してしまう．
-そこで，IWRの和の上下限をより厳密に制限することで基礎化によって生成される
-ルール数を減らし，探索空間の削減を行う改良符号化を考案した．
-改良符号化では，IWRの和の上限をすべてのタイプでIWRが最大のオプションを選択した場合の和，
-下限を必須であるタイプのみでIWRが最小のオプションを選択した場合の和とする．
-改良符号化の一部をコード\ref{code:basic2.lp}に示す．
-改良符号化は，コード\ref{code:basic1.lp}の9行目を
-コード\ref{code:basic2.lp}に置き換えたものである．
+前節で述べた基本符号化はCAFE問題の制約を簡潔に表現できるが，
+改良できる点も残っている．
+本節では，説明の簡単化のため，
+各タイプが選択可能なオプション数の上下限値を1とする．
 
-コード\ref{code:basic2.lp}の2〜5行目で前処理としてIWRの和の上下限の計算を行う．
-2行目では，すべてのタイプ\code{VP}についてそれに付随するオプションの中で最大の
-IWRを\code{UB}として，アトム\code{ub_vp(UB,VP)}を生成する．
-3行目では，すべてのタイプの\code{UB}の和を求め，IWRの和の上限を表すアトム
-\code{ub_iwr(S)}を生成している．
-4行目では同様に，すべてのタイプについて最小のIWRを\code{LB}として，
-アトム\code{lb_vp(LB,VP)}を生成する．
-5行目では，必須であるタイプのみの\code{LB}の和を求め，IWRの和の下限を表すアトム
-\code{lb_iwr(S)}を生成している．
-8行目では，この上下限の値でIWRの和の候補を求める範囲を制限している．
+タイプの集合を$VP$，
+必須タイプの集合を$VP^{*}$，
+オプションの集合を$V$，
+タイプ$i\in VP$が実装可能なオプションの集合を$V_{i}$，
+オプション$j\in V$のIWR値を$w_{j}$とする．
+このとき，
+基本符号化(コード\ref{code:basic1.lp})の8〜10行目のルールで生成され
+るアトム\code{iwr(S,G)}について，
+IWR値の総和を表す\code{S}の上下限は，
+\begin{center}
+\(0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}\)
+\end{center}
+である．
+しかし，これは自明な上下限であり，
+各タイプが選択可能なオプション数の上下限値，および，
+必須かどうかの別を考慮することで，
+\begin{center}
+\(
+\sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
+\leq \texttt{S} \leq
+\sum_{i\in VP}\max_{j\in V_{i}}w_{j}
+\)
+\end{center}
+のように\code{S}の上下限をより厳密に計算することができる．
+下限値は，各必須タイプが選択可能なオプションのIWR値の最小値の総和である．
+上限値は，各タイプが選択可能なオプションのIWR値の最大値の総和である．
+このアイデアを元にした論理プログラムをコード~\ref{code:basic2.lp}に示す．
+基本符号化(コード\ref{code:basic1.lp})の8〜10行目を，
+コード~\ref{code:basic2.lp}で置き換えた符号化を，
+改良符号化と呼ぶ．
+改良符号化は，基本符号化と比較して，
+\code{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることができる．
+そのため，大規模な問題への有効性が期待できる．
 
-\subsection{ASP符号化の拡張}
-CAFE問題ソルバーでは，販売台数の等しい解が複数存在するとき，
-目的関数を追加することで解に優劣をつけることができる．
-新たな目的関数として，オプション数の最小化を考える．
-これは，製造ラインの削減や大量生産を可能にして製造の効率化を狙うためである．
-コード\ref{code:basic1.lp}の30行目をコード\ref{code:obj_op.lp}に置き換えることで
-オプション数最小化を実現可能である．
-コード\ref{code:obj_op.lp}の5行目では，いずれかのグループで選択された
-オプション\code{V}を\code{used_v(V)}で表し，6行目でこのアトムの数を
-最小化することでオプション数最小化を表現している．
-優先度は販売台数最大化，オプション数最小化の順で，
-販売台数の等しい複数の解候補が存在するとき最もオプション数が少ないものを解とする．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{符号化の拡張}
 
-このように，ASPを用いたCAFE問題ソルバーでは容易に問題を拡張できる．
-
-
+%----------------------------------------
 \lstinputlisting[float=tb,caption={%
-オプション数最小化},%
+  オプション数の最小化},%
 captionpos=b,frame=single,label=code:obj_op.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-xrightmargin=0zw,% 
-xleftmargin=3zw,% 
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
 basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp} 
+%----------------------------------------
+
+%-----------------------------------------------------------
+\begin{table*}[htbp]
+  \caption{CAFE問題(図~\ref{fig:ovm_example})の最適解全列挙．CAFE基準値: 8.5km/L}
+  \centering
+%  \small
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 0.9mm
+  \begin{tabular}{l|c|c|c||c|c|c||c|c|c} \bhline
+    装備 & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c}{\bf{解3}}\\ \cline{2-10}
+         & STD	& DX 	 & LX	   & STD & DX  & LX    & STD & DX  & LX       \\  \hline
+    Drive\_Type  & 4WD  & 2WD    & 4WD     & 2WD & 2WD & 4WD   & 2WD & 2WD & 4WD     \\
+    Engine	 & V4	& V6	 & V6	   & V6  & V6  & V6    & V6  & V6  & V6      \\ 
+    Tire	 & 16	& 17	 & 18	   & 16  & 17  & 18    & 16  & 17  & 18     \\
+    Transmission & 5MT	& HEV    & 10AT	   & CVT & HEV & 10AT  & 6AT & HEV & 10AT     \\
+    Sun\_Roof    & Panorama& -   & -       & Nomal& -  & -     & -   & -   & -       \\ \hline
+    IWR          & 1128 & 1130   & 1255    & 1130 & 1130&1255  & 1130& 1130& 1255     \\ %\hline
+    燃費(km/L)    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
+    予想販売台数  & 2007  & 2007   & 1511   & 2007 & 2007 & 1511 & 2007& 2007& 1511       \\ \hline
+    平均燃費(km/L) & \multicolumn{3}{c||}{\bf{8.6}} & \multicolumn{3}{c||}{\bf{8.5}} & \multicolumn{3}{c}{\bf{8.5}}\\ 
+    合計販売台数  & \multicolumn{3}{c||}{\bf{5525}} & \multicolumn{3}{c||}{\bf{5525}}  &\multicolumn{3}{c}{\bf{5525}}\\
+    オプション数  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{12}\\ \hline
+  \end{tabular}
+  \label{tab:optN}
+\end{table*}
+%-----------------------------------------------------------
+
+製造ラインの削減や大量生産を促進することを狙いとして，
+予想販売台数の最大化に加えて，
+オプション数の最小化も可能なように拡張する．
+コード~\ref{code:obj_op.lp}に拡張のための論理プログラムを示す．
+
+予想販売台数の最大化(2行目の)については，これまでと同じである．
+5行目の\code{used_v(V)}は，
+オプション\code{V}がいづれかの装備仕様において実装されたことを意味する．
+オプション数の最小化は，\code{used_v(V)}が成り立つ\code{V}の数を最小化
+することにより，容易に実現される(6行目)．
+目的関数中の\code{@}の右側はその優先度を表しており，今回の拡張例では，
+予想販売台数の最大化(優先度2)，オプション数の最小化(優先度1)の順に最適
+化される．
+改良符号化の目的関数を，コード~\ref{code:obj_op.lp}で置き換えた符号化を
+拡張符号化と呼ぶ．
+
+図~\ref{fig:ovm_example}のCAFE問題に対して，最適解の全列挙をした結果を
+表~\ref{tab:optN}\comment{表~\ref{tab:ovm_ans}のフォーマットに合わせる．
+  フォントなど}
+に示す．
+CAFE基準値が8.5km/Lのとき，予想販売台数が5,525台である最適解が，
+改良符号化では(解1,解2,解3)の3つ存在した．
+一方で，オプション数の最小化を加えた拡張符号化では，
+最適解は(解3)のただ1つだけとなる．
+このように，ASPに基づくCAFE問題ソルバーでは，ユーザの選好にあわせて目
+的関数を柔軟に追加することにより，複数ある最適解に対して優劣をつけるこ
+とができる．
+
+% \begin{table}[tb]
+%  \caption{最適解の個数の比較}
+%  \centering
+%   \begin{tabular}{r|r|c|c} \bhline
+%     \small{CAFE} & \small{販売台数} & \multicolumn{2}{c}{\small{最適解の個数}} \\ \cline{3-4}
+%     \small{基準値} &     & \small{改良符号化} & \small{拡張符号化}\\ \hline        
+%     8.5       & 5,525   & 3 & \textbf{1}\\ 
+%     9.0       & 3,904   & 2 & 2 \\
+%     9.5       & 1,699   & 1 & 1 \\ \hline
+%   \end{tabular}
+%  \label{tab:option}
+% \end{table}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
