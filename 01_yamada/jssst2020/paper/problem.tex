@@ -1,43 +1,41 @@
-\section{根付き全域森問題}\label{chap:problem}
+﻿\section{根付き全域森問題}\label{chap:problem}
 
-前節で述べたように，供給経路に関するトポロジ制約を満たす
-配電網構成は，変電所を根とする根付き全域森に対応する．
-この根付き全域森を探索するグラフ問題を\textbf{根付き全域森問題}と呼ぶ．
+\theoremstyle{definition}
+\newtheorem*{definition*}{定義}
 
-根付き全域森は以下のように定義される．\cite{Minato:dnet:netuki}
-\newline
-\textbf{定義}~~グラフ$G=(V,E)$と根$R$が入力として与えられたとする．
-このとき，$G$上の根付き全域森とは，以下の2つの制約を満たす$G$の部分グラフ
-$G'=(V,E'), E' \subseteq E$ である．
-\begin{enumerate}
- \item $G'$はサイクルを持たない．\textbf{(非閉路制約)}
- \item $G'$の各連結成分は，ちょうど1つの根を含む．\textbf{(根付き連結制約)}
-\end{enumerate}
-図\ref{fig:dnetgraph}における根付き全域森の例を図\ref{fig:netuki}に示す．
+根付き全域森は以下のように定義される~\cite{Minato:dnet:netuki}．
+\begin{definition*}
+  グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
+  このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
+  $G'=(V,E'), E' \subseteq E$ である．
+  \begin{enumerate}
+  \item $G'$はサイクルを持たない．(非閉路制約)
+  \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
+  \end{enumerate}
+本稿では，与えられたグラフ$G$から，根付き全域森
+$G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}と呼ぶ．
+\end{definition*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[htbp]
- %
- %\begin{minipage}{0.5\hsize}
   \centering
-  \scalebox{0.8}{\input{tikz/tikz-netuki}}
- %\end{minipage}
- %
-% \begin{minipage}{0.5\hsize}
- \mbox{}\\ \mbox{}\\
-  \centering
+  \scalebox{0.8}{\input{tikz/tikz-netuki}}\\[1em]
   \scalebox{0.8}{\input{tikz/tikz-netuki2}}
-% \end{minipage}
- %
- \caption{根付き全域森の例}
- \label{fig:netuki}
+  \caption{根付き全域森の例 (2つ)}
+  \label{fig:netuki}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-% グラフの説明
-図\ref{fig:netuki}のように根付き全域森は1つの入力グラフに対し，
-複数存在する．根付き全域森は，各連結成分が必ずちょうど1つの根を
-持つ木構造を形成することで，非閉路制約と根付き連結制約を満たす．
-図\ref{fig:netuki}(上)は，図\ref{fig:dnetgraph}で表した実行可能解を
-グラフ表現に置き換えたものである．また，解の一部には図\ref{fig:netuki}
-(下)のように，ある連結成分が根のみとなる場合も存在する．
+根付き全域森の例を図\ref{fig:netuki}に示す．
+根付き全域森は，各連結成分が必ずちょうど1つの根をもつ木構造を
+形成することで，非閉路制約と根付き連結制約を満たす．
+図~\ref{fig:netuki}の上側は，図~\ref{fig:dnetgraph}の配電網問題の解に
+対応している．
+根付き全域森問題には解が複数存在し得る．
+例えば，図~\ref{fig:netuki}の下側は，
+ある連結成分が根のみとなる場合を表している．
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
