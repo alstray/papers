@@ -1,20 +1,13 @@
-\section{解集合プログラミング}\label{chap:asp}
+﻿\section{解集合プログラミング}\label{chap:asp}
 
-本章では，解集合プログラミングについて述べる．
-解集合プログラミング(ASP; \cite{%
-  Baral03:cambridge,%
-  Gelfond88:iclp,%
-  Niemela99:amai,%
-  Inoue08:jssst})
-の言語は，一般拡張選言プログラムをベースとしている．
-本論文では説明の簡略化のため，そのサブクラスである
-標準論理プログラムについて説明する．
-以降，標準論理プログラムを単に論理プログラムと呼ぶ．
+ASPの言語は，一般拡張選言プログラムをベースとしている~\cite{Inoue08:jssst}．
+本稿では，説明の簡略化のため，そのサブクラスである標準論理プログラムに
+ついて説明する．以降，標準論理プログラムを単に論理プログラムと呼ぶ．
 
 \textbf{論理プログラム}は，以下の形式の\textbf{ルール}の有限集合である．
 \begin{equation}
- \label{eq:rule}
-  a_0 ~\mcode{:-}~ a_1 \mcode{,} \dots \mcode{,} a_m \mcode{,} %
+ \label{eq:rule}\nonumber
+  a_0 ~\mcode{:-}~ a_1 \mcode{,} \dots \mcode{,} a_m \mcode{,}~%
   \naf{a_{m+1}} \mcode{,} \dots \mcode{,} \naf{a_n}\mcode{.}
 \end{equation}
 ここで，
@@ -33,53 +26,50 @@ $\naf{}$は\textbf{デフォルトの否定}
 
 ヘッドが空のルールを\textbf{一貫性制約}と呼ぶ．
 \begin{equation}
-  \label{eq:constr}
-  \mcode{:-}~ a_1 \mcode{,} \dots \mcode{,} a_m \mcode{,} %
+  \label{eq:constr}\nonumber
+  \mcode{:-}~ a_1 \mcode{,} \dots \mcode{,} a_m \mcode{,}~%
   \naf{a_{m+1}} \mcode{,} \dots \mcode{,} \naf{a_n}\mcode{.}
 \end{equation}
 例えば，一貫性制約
 ``\(\mcode{:-}~ a_1 \mcode{,} a_2 \mcode{.}\)''は，
 $a_1$と$a_2$が両方同時に成り立つことはないを意味し，
-``\(\mcode{:-}~ a_1 \mcode{,} \naf{a_{2}} \mcode{.}\)''は，
+``\(\mcode{:-}~ a_1 \mcode{,}~\naf{a_{2}} \mcode{.}\)''は，
 $a_1$が成り立つならば，$a_2$も成り立つを意味する．
 
 ASP言語には，組合せ問題を解くために便利な拡張構文が用意されている．
 その代表的なものが\textbf{選択子}と\textbf{個数制約}である．
 例えば，選択子
-``\(\{a_1~\mcode{;}~\dots~\mcode{;}~a_n\}\mcode{.}\)''
+``\(\mcode{\{}a_1\mcode{;}\dots\mcode{;}a_n\mcode{\}.}\)''
 をファクトとして書くと，
 アトム集合\(\{a_1,\dots,a_n\}\)の任意の部分集合が成り立つを意味する．
 個数制約は選択子の両端に選択可能な個数の上下限を付けたものである．
 例えば，
-``\(lb\ \{a_1~\mcode{;}~\dots~\mcode{;}~a_n\}\ ub ~\mcode{:-}~ Body\mcode{.}\)''
+``\(\mcode{:-}~a_{0}\mcode{,}~\naf{lb\ \mcode{\{}a_1\mcode{;}\dots\mcode{;}a_n\mcode{\}}\ ub\mcode{.}}\)''
 と書くと，
-$Body$が成り立つならば，$a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下
+$a_{0}$が成り立つならば，$a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下
 が成り立つを意味する．
 また，\textbf{重み付き個数制約}(\code{#sum})も用意されている．
 例えば，
-``\(\mcode{:-}~ \naf{lb\ \mcode{\#sum} %
-\{1\mcode{:}a~\mcode{;}~2\mcode{:}b~\mcode{;}~3\mcode{:}c\}\ ub}\mcode{.}\)''と書くと，
-$a$が成り立つとき重み1，$b$が成り立つとき重み2，$c$が成り立つとき重み3とし，
-その和が$lb$以上$ub$以下になるように部分集合が成り立つを意味する．
-また，組合せ最適化問題を解くために，最小化関数
-(\code{#minimize})・最大化関数(\code{#maximize})等も用意されている．
+``\(\mcode{:-}~a_{0}\mcode{,}~\naf{lb\ \mcode{\#sum}~%
+\mcode{\{}w_{1}\mcode{:}a_{1}\mcode{;} \dots \mcode{;}w_{n}\mcode{:}a_{n}\mcode{\}}\ ub}\mcode{.}\)''と書くと，
+$a_{0}$が成り立つならば，
+$a_1,\dots,a_n$のうち真となるアトムの重み和が$lb$個以上$ub$個以下
+となることを意味する．項$w_{i}$は重みを表す．
 
 \textbf{ASPシステム}は，与えられた論理プログラムから，
 安定モデル意味論~\cite{Gelfond88:iclp}
 に基づく解集合を計算するシステムである．
-近年，
-{\clingo}~\footnote{\url{https://potassco.org/}}，
-{\dlv}~\footnote{\url{http://www.dlvsystem.com/dlv/}}，
-{\wasp}~\footnote{\url{https://www.mat.unical.it/ricca/wasp/}}
-など，SATソルバー技術を応用した高速なASPシステムが開発されている．
-なかでも{\clingo}は，高性能かつ高機能なASPシステムとして世界中で広く使
-われている．
+本稿では，高性能かつ高機能なASPシステムとして世界中で広く使われている
+{\clingo}~\footnote{\url{https://potassco.org/}}を使用する．
+{\clingo}を含め最新の高速ASPシステムは，グラウンダーを用いて変数を含
+む論理プログラムを変数を含まない論理プログラムに変換(\textbf{基礎化})
+したのち，ASPソルバーを用いて解集合を計算する方式が主流となっている．
 
-解集合プログラミングを用いた問題解法プロセスは，3つのステップからなる．
-まず最初に，与えられた問題インスタンスをASPのファクト形式に変換する．
-次に，ファクト形式のインスタンスと，解きたい問題の制約を表現したASP符号化を
-結合し，ASP システムを用いて論理プログラムの解集合を計算する．
-最後に，解集合を解釈して元の問題の解を得る．
+% 解集合プログラミングを用いた問題解法プロセスは，3つのステップからなる．
+% まず最初に，与えられた問題インスタンスをASPのファクト形式に変換する．
+% 次に，ファクト形式のインスタンスと，解きたい問題の制約を表現したASP符号化を
+% 結合し，ASP システムを用いて論理プログラムの解集合を計算する．
+% 最後に，解集合を解釈して元の問題の解を得る．
 %
 % ここでは，グラフ彩色問題を例として，各ステップ毎に解法プロセスを説明する．
 % ASP システムとしては{\clingo}を用いる．
