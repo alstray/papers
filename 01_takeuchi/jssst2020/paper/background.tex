@@ -46,6 +46,7 @@ CAFE問題の制約は以下の通りである．
 \item[燃費制約]: 入力~\ref{input:cafe}の CAFE 基準値を$t$，
   入力~\ref{input:g}の装備仕様個数を$n$として，
   以下の CAFE 規制を満たさなければならない．
+  \begin{adjustvboxheight}
   \[
     \begin{array}{lcr}
       & & \\
@@ -57,6 +58,7 @@ CAFE問題の制約は以下の通りである．
       & & 
     \end{array}
   \]
+  \end{adjustvboxheight}
   不等式の左辺は$n$個の装備仕様の\textbf{平均燃費}を表している．
   $FE_{i}$と$SV_{i}$は，装備仕様$i$の燃費と予想販売台数を表しており，
   それぞれ，入力~\ref{input:fe}と\ref{input:sv}の対応表を元に計算される．
