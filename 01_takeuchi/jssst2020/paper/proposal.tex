@@ -43,7 +43,7 @@ CAFE 問題の例(図~\ref{fig:ovm_example})
 \code{vp_def/1}, 
 \code{v_def/3},
 \code{require_v_v/2},
-\code{exclude_v_v/2}\comment{exclude\_v\_v $\rightarrow$ exclude\_v\_v/2}
+\code{exclude_v_v/2}
 に対応していることがわかる．
 例えば，バリアント\textsf{V4}は，ファクト
 \code{v_def("V4", "Engine", 120).}に対応している．
@@ -208,11 +208,11 @@ basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp}
         & \textsf{Tire} & \textsf{16}	& \textsf{17} & \textsf{18} & \textsf{16}  & \textsf{17}  & \textsf{18} & \textsf{16} & \textsf{17} & \textsf{18} \\
         & \textsf{Transmission} & \textsf{5MT} & \textsf{HEV} & \textsf{10AT} & \textsf{CVT} & \textsf{HEV} & \textsf{10AT}  & \textsf{6AT} & \textsf{HEV} & \textsf{10AT}     \\
         & \textsf{Sun\_Roof} & \textsf{Panorama} & -   & -       & \textsf{Nomal} & -  & -     & -   & -   & -       \\ \hline
-    \multicolumn{2}{l|}{IWR}  & 1128 & 1130   & 1255    & 1130 & 1130&1255  & 1130& 1130& 1255     \\ %\hline
+    \multicolumn{2}{l|}{IWR値の総和}  & 1,128 & 1,130   & 1,255    & 1,130 & 1,130&1,255  & 1,130& 1,130& 1,255     \\ %\hline
     \multicolumn{2}{l|}{燃費(km/L)}    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
-    \multicolumn{2}{l|}{予想販売台数}  & 2007  & 2007   & 1511   & 2007 & 2007 & 1511 & 2007& 2007& 1511       \\ \hline
-    \multicolumn{2}{l|}{平均燃費(km/L)} & \multicolumn{3}{c||}{\bf{8.6}} & \multicolumn{3}{c||}{\bf{8.5}} & \multicolumn{3}{c}{\bf{8.5}}\\ 
-    \multicolumn{2}{l|}{合計販売台数}  & \multicolumn{3}{c||}{\bf{5525}} & \multicolumn{3}{c||}{\bf{5525}}  &\multicolumn{3}{c}{\bf{5525}}\\
+    \multicolumn{2}{l|}{予想販売台数}  & 2,007  & 2,007   & 1,511   & 2,007 & 2,007 & 1,511 & 2,007& 2,007& 1,511       \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)} & \multicolumn{3}{c||}{8.6} & \multicolumn{3}{c||}{8.5} & \multicolumn{3}{c}{8.5}\\ 
+    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c||}{5,525} & \multicolumn{3}{c||}{5,525}  &\multicolumn{3}{c}{5,525}\\
     \multicolumn{2}{l|}{オプション数}  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{12}\\ \hline
   \end{tabular}
   \label{tab:optN}
@@ -224,7 +224,7 @@ basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp}
 オプション数の最小化も可能なように拡張する．
 コード~\ref{code:obj_op.lp}に拡張のための論理プログラムを示す．
 
-予想販売台数の最大化(2行目)\comment{2行目の $\rightarrow$ 2行目}については，これまでと同じである．
+予想販売台数の最大化(2行目)ついては，これまでと同じである．
 5行目の\code{used_v(V)}は，
 オプション\code{V}がいづれかの装備仕様において実装されたことを意味する．
 オプション数の最小化は，\code{used_v(V)}が成り立つ\code{V}の数を最小化
