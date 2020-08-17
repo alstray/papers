@@ -1,25 +1,5 @@
 ﻿\section{根付き全域森問題}\label{chap:problem}
 
-配電網(図\ref{fig:dnet})を表すグラフを図\ref{fig:dnetgraph}に示す．
-なお，スイッチの開閉状態はここでは考慮しないものとする．
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[htbp]
- \centering
- \scalebox{0.8}{\input{tikz/tikz-graph}}
- \caption{配電網(図\ref{fig:dnet})を表すグラフ}
- \label{fig:dnetgraph}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%
-
-図\ref{fig:dnet}における需要家$\{c_1,\ldots,c_6\}$は，\textbf{ノード}に対応し，
-スイッチ$\{s_1,\ldots,s_7\}$は，\textbf{辺}に対応している．
-図中の色付きノード$\{c_1,c_3\}$は変電所と直接繋がっている需要家を意味しており，
-\textbf{根}を表している．
-また，根はノードの添字を用いて$\{r_1,r_3\}$のように表す．
-
-\comment{ここまで追加しました.}
-
 \theoremstyle{definition}
 \newtheorem*{definition*}{定義}
 
@@ -37,7 +17,23 @@ $G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}�
 \end{definition*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[htbp]
+\begin{figure}[tbp]
+ \centering
+ \scalebox{0.8}{\input{tikz/tikz-graph}}
+ \caption{根付き全域森問題の入力例}
+ \label{fig:dnetgraph}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+根付き全域森問題の入力例となるグラフを図\ref{fig:dnetgraph}に示す．
+図\ref{fig:dnetgraph}は，図\ref{fig:dnet}で示した配電網に対応しており，
+需要家$\{c_1,\ldots,c_6\}$は，\textbf{ノード}に対応し，
+スイッチ$\{s_1,\ldots,s_7\}$は，\textbf{辺}に対応する．
+また，図中の色付きノード$\{r_1,r_3\}$は変電所と直接繋がっている
+需要家を意味しており，\textbf{根}に対応している．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tbp]
   \centering
   \scalebox{0.8}{\input{tikz/tikz-netuki}}\\[1em]
   \scalebox{0.8}{\input{tikz/tikz-netuki2}}
@@ -51,7 +47,7 @@ $G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}�
 形成することで，非閉路制約と根付き連結制約を満たす．
 図~\ref{fig:netuki}の上側は，図~\ref{fig:dnet}の配電網問題の解に
 対応している．
-根付き全域森問題には解が複数存在し得る．
+また，根付き全域森問題には解が複数存在し得る．
 例えば，図~\ref{fig:netuki}の下側は，
 ある連結成分が根のみとなる場合を表している．
 

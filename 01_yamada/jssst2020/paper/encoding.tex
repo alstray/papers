@@ -5,7 +5,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
-  根付き全域森問題(図???)のファクト表現},%
+  根付き全域森問題(図~\ref{fig:dnetgraph})のファクト表現},%
 captionpos=b,frame=single,label=code:graph.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
@@ -48,6 +48,32 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/srf2.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 5節 遷移問題の解の例 (配置の関係でここに記述)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\newcommand{\lw}[1]{\smash{\lower-8.ex\hbox{#1}}}
+\begin{figure*}[tbp]
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 3mm  
+  \centering
+  \begin{tabular}{ccc}
+    $t=0$ (スタート状態) & & $t=1$\\
+    \scalebox{0.8}{\input{tikz/tikz-trans-1}}
+    & \lw{$\Rightarrow$} & 
+    \scalebox{0.8}{\input{tikz/tikz-trans-2}}\\
+    & & $\Downarrow$\\
+    & & \\
+    \scalebox{0.8}{\input{tikz/tikz-trans-4}}
+    & \lw{$\Leftarrow$} &
+    \scalebox{0.8}{\input{tikz/tikz-trans-3}}\\
+    $t=3$ (ゴール状態) & & $t=2$
+  \end{tabular}
+  \caption{根付き全域森遷移問題 (遷移制約$d=2$) の解の一例}
+  \label{fig:trans}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \textbf{基本符号化.}
 根付き全域森問題のASP符号化をコード\ref{code:srf1.lp}に示す．
 2行目のルールは，各辺(\code{X},\code{Y})に対して，
@@ -90,6 +116,7 @@ ASP の重み付き個数制約を使って表している．
 基本符号化が$n(1+{}_{r}C_{2})$個なのに対し，
 改良符号化は$n$個と少なく抑えることができる．
 これにより，大規模な問題に対する有効性が期待できる．
+
 
 %%% Local Variables:
 %%% mode: japanese-latex

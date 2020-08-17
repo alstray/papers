@@ -1,27 +1,9 @@
 ﻿\section{遷移問題への拡張}\label{chap:trans}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\newcommand{\lw}[1]{\smash{\lower-8.ex\hbox{#1}}}
-\begin{figure*}[htbp]
-  %\renewcommand{\arraystretch}{0.9}
-  \tabcolsep = 3mm  
-  \centering
-  \begin{tabular}{ccc}
-    $t=0$ (スタート状態) & & $t=1$\\
-    \scalebox{0.8}{\input{tikz/tikz-trans-1}}
-    & \lw{$\Rightarrow$} & 
-    \scalebox{0.8}{\input{tikz/tikz-trans-2}}\\
-    & & $\Downarrow$\\
-    & & \\
-    \scalebox{0.8}{\input{tikz/tikz-trans-4}}
-    & \lw{$\Leftarrow$} &
-    \scalebox{0.8}{\input{tikz/tikz-trans-3}}\\
-    $t=3$ (ゴール状態) & & $t=2$
-  \end{tabular}
-  \caption{根付き全域森遷移問題 (遷移制約$d=2$) の解の一例}
-  \label{fig:trans}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 遷移問題の解の図 fig:trans は 
+% 4節(encoding.tex)にあります．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \lstinputlisting[float=tb,caption={%
@@ -61,14 +43,15 @@ basicstyle=\ttfamily\scriptsize]{code/dnet-trans.lp}
 ``解の遷移問題''に帰着できる．
 各ステップ$t$で変更可能な辺の数を$d$個以下に制限し(\textbf{遷移制約})，
 最短ステップ長での変更手順を求めることが目的となる．
-この遷移問題を根付き全域森遷移問題と呼ぶことにする．
+この遷移問題を\textbf{根付き全域森遷移問題}と呼ぶことにする．
 
-図~\ref{fig:dnetgraph}の全域森問題とその2つの実行可能解から構成された
-全域森遷移問題の解の一例を図~\ref{fig:trans}に示す．
+図~\ref{fig:dnetgraph}の根付き全域森問題とその2つの実行可能解から構成された
+根付き全域森遷移問題の解の一例を図~\ref{fig:trans}に示す．
 各ステップ$t$で変更可能な辺の数を$d=2$以下に制限している．
 この解のステップ長は3であり，
 スタート状態($t=0$)からゴール状態($t=3$)まで，
 根付き全域森の制約を満たしながら遷移していることがわかる．
+
 
 \textbf{シングルショット符号化.}
 根付き全域森遷移問題のASP符号化をコード\ref{code:roop}に示す．
