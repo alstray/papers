@@ -196,7 +196,6 @@
 		 解集合を求めるシステムが主流
 	  \end{itemize}
     \item 解の最適性を保証でき，最適解の列挙も可能である．
-    \item 問題を容易に拡張できる．
    \end{itemize}
  \end{alertblock}
 \end{frame}
@@ -269,9 +268,13 @@
    \item 流れを
    \item 箇条書き
   \end{itemize}
-  % \begin{block}{}
-  %  CAFE問題ソルバーの特長を列挙
-  % \end{block}
+   \begin{block}{CAFE問題ソルバーの特長}
+    \begin{itemize}
+     \item 簡潔性
+     \item 柔軟性
+     \item 拡張性
+    \end{itemize}
+   \end{block}
  \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題のASPファクト表現}
@@ -291,6 +294,8 @@
    	タイプ\scode{VP}を装備することを意味
   \item アトム\scode{v(V,G)}は装備仕様\scode{G}が
 	オプション\scode{V}を装備することを意味
+  \item (1)より，各装備仕様\scode{G}，各タイプ\scode{VP}に対して，
+	\scode{vp(VP,G)}の候補を生成
   \item (2)より，各装備仕様\scode{G}に対して，
 	\scode{VP}が必須タイプならば，\scode{G}は\scode{VP}を
 	装備しなければならない．
@@ -299,15 +304,40 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基本符号化：要求・排他制約}
+\begin{frame}[fragile]{基本符号化：要求・排他制約}
+ \begin{exampleblock}{}
+  \begin{lstlisting}
+   (4) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
+   (5) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
+  \end{lstlisting}
+ \end{exampleblock}
+
+ 同様にコードを説明．
+
+ VP間やVP,V間でも同様．
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{基本符号化：燃費制約}
+ \begin{exampleblock}{}
+  \small
+  \begin{lstlisting}
+   (6) iwr(S,G) :- 
+           S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) }, group(G).
+   (7) fe(FE,G) :- iwr(S,G), fe_map(S,FE).
+   (8) sv(SV,G) :- iwr(S,G), sv_map(S,SV).
+   (9) :- not 0 #sum { (FE-t)*SV,FE,SV,G : fe(FE,G), sv(SV,G) }.
+  \end{lstlisting}
+ \end{exampleblock}
  同様にコードを説明．
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基本符号化：燃費制約}
- 同様にコードを説明．
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基本符号化：初期制約，目的関数}
+\begin{frame}[fragile]{基本符号化：初期制約，目的関数}
+ \begin{exampleblock}{}
+  \begin{lstlisting}
+   (10) :- not v(V,G), require_g_v(G,V).
+   (11) #maximize { SV,G : sv(SV,G) }.
+  \end{lstlisting}
+ \end{exampleblock}
  同様にコードを説明．
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -336,8 +366,27 @@
  \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{改良符号化}
- コードを説明．
+\begin{frame}[fragile]{改良符号化}
+ 基本符号化の(6)を以下のコードで置き換える．
+\begin{exampleblock}{}
+ \footnotesize
+ \begin{lstlisting}
+  ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+  lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+
+  ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+  lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+
+  iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
+      LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
+ \end{lstlisting}
+\end{exampleblock}
+ \begin{itemize}
+  \item コードを説明．
+ \end{itemize}
+ \begin{block}{}
+  \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能
+ \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験}

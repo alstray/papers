@@ -1,19 +1,21 @@
-\frametitle{基本符号化：解候補の生成，範囲制約}
+\frametitle{改良符号化}
+基本符号化の(6)を以下のコードで置き換える．
 \begin{exampleblock}{}
-  \begin{lstlisting}
-   (1) { vp(VP,G) } :- vp_def(VP), group(G).
-   (2) :- not vp(VP,G), require_vp(VP), group(G).
-   (3) 1 { v(V,G) : v_def(V,VP,_) } 1 :- vp(VP,G).
-  \end{lstlisting}
- \end{exampleblock}
+ \footnotesize
+ \begin{lstlisting}
+  ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+  lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+
+  ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+  lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+
+  iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
+      LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
+ \end{lstlisting}
+\end{exampleblock}
  \begin{itemize}
-  \item アトム\scode{vp(VP,G)}は装備仕様\scode{G}が
-   ^^Iタイプ\scode{VP}を装備することを意味
-  \item アトム\scode{v(V,G)}は装備仕様\scode{G}が
-^^Iオプション\scode{V}を装備することを意味
-  \item (2)より，各装備仕様\scode{G}に対して，
-^^I\scode{VP}が必須タイプならば，\scode{G}は\scode{VP}を
-^^I装備しなければならない．
-  \item (3)より，タイプ\scode{VP}を装備する装備仕様\scode{G}に対して，
-^^I\scode{VP}のオプションからちょうど1個を実装する．
-  \end{itemize}
+  \item コードを説明．
+ \end{itemize}
+ \begin{block}{}
+  \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能
+ \end{block}
