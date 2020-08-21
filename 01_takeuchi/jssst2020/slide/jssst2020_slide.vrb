@@ -1,0 +1,19 @@
+\frametitle{基本符号化：解候補の生成，範囲制約}
+\begin{exampleblock}{}
+  \begin{lstlisting}
+   (1) { vp(VP,G) } :- vp_def(VP), group(G).
+   (2) :- not vp(VP,G), require_vp(VP), group(G).
+   (3) 1 { v(V,G) : v_def(V,VP,_) } 1 :- vp(VP,G).
+  \end{lstlisting}
+ \end{exampleblock}
+ \begin{itemize}
+  \item アトム\scode{vp(VP,G)}は装備仕様\scode{G}が
+   ^^Iタイプ\scode{VP}を装備することを意味
+  \item アトム\scode{v(V,G)}は装備仕様\scode{G}が
+^^Iオプション\scode{V}を装備することを意味
+  \item (2)より，各装備仕様\scode{G}に対して，
+^^I\scode{VP}が必須タイプならば，\scode{G}は\scode{VP}を
+^^I装備しなければならない．
+  \item (3)より，タイプ\scode{VP}を装備する装備仕様\scode{G}に対して，
+^^I\scode{VP}のオプションからちょうど1個を実装する．
+  \end{itemize}
