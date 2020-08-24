@@ -14,7 +14,10 @@
  \end{lstlisting}
 \end{exampleblock}
  \begin{itemize}
-  \item コードを説明．
+  \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
+^^IのIWR値の最小値の総和であることを表す．
+  \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
+^^IのIWR値の最大値の総和であることを表す．
  \end{itemize}
  \begin{block}{}
   \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能

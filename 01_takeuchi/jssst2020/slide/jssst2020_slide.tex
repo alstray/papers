@@ -10,6 +10,7 @@
 % \usepackage{graphicx}
 % \usepackage{amsmath,amssymb,amsthm}
 % \usepackage{multirow}
+\usepackage{multicol}
 % \usepackage{url}
 \usepackage{tikz}
 \usetikzlibrary{arrows,shapes}
@@ -134,18 +135,35 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{燃費制約と目的関数}
  \begin{itemize}
-  \item FEとSVを定義
+  \item 装備仕様$i$の車両の燃費を$FE_i$，予想販売台数を$SV_i$とする．
  \end{itemize}
  \begin{block}{燃費制約}
   \begin{itemize}
-   \item 燃費制約にはCAFE方式
-   \item 式
+   \item CAFE基準値を$t$，装備仕様の個数を$n$とする．
   \end{itemize} 
+  \[
+  \begin{array}{lcr}
+   & & \\
+   \underbrace{\displaystyle\frac{\sum_{i=1}^{n} FE_{i}\cdot SV_{i}}{\sum_{i=1}^{n} SV_{i}}}_{\mbox{平均燃費}}
+    &
+    \geq 
+    &
+    t \\
+   & & 
+  \end{array}
+  \]
  \end{block}
  \begin{block}{目的関数}
   \begin{itemize}
-   \item 販売台数最大化
+   \item 全体の予想販売台数の和を最大化
   \end{itemize}
+  \[
+  \begin{array}{lcr}
+   & & \\
+   \sum_{i=1}^{n}{SV_{i}} & \longrightarrow & \mbox{最大} \\
+   & & 
+  \end{array}
+  \]
  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -201,32 +219,65 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPの記法}
+ \begin{alertblock}{}
+  ASP言語は論理プログラム\footnotemark
+  をベースとしている．
+ \end{alertblock}
  \begin{itemize}
-  \item 論理プログラムは以下のルールの有限集合である．
+  \item \structure{論理プログラム}とは，以下の\structure{ルール}の有限集合である．
+	\[
+	\underbrace{a_0}_{\mbox{ヘッド}} \leftarrow 
+	\underbrace{a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}}_{\mbox{ボディ}}
+	\]
+	$0 \leq m \leq n$ であり，各 $a_i$ はアトム，
+	$\naf{}$は\structure{デフォルトの否定}，\\
+	``$,$''は連言(AND)を表す．
+  \item \alert{直感的な意味}は，
+	「$a_1,\ldots,a_m$がすべて成り立ち，
+	$a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
+	$a_0$が成り立つ」である．
  \end{itemize}
- \begin{equation}
-  a_0\leftarrow a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}
- \end{equation}
- \begin{itemize}
-  \item 記号の説明．
-  \item 直感的な意味は
- \end{itemize}
+ \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPの記法}
  \begin{itemize}
-  \item ファクト
-  \item 一貫性制約
+  \item ボディが空のルールを\structure{ファクト}と呼び，``$\leftarrow$''は省略してよい．
+	\[
+	 \underbrace{a_0}_{\mbox{ヘッド}}
+	\]
+	$a_0$が成り立つことを表す．
+  \item ヘッドが空のルールを\structure{一貫性制約}と呼ぶ．
+	\[
+	 \leftarrow 
+	 \underbrace{a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}}_{\mbox{ボディ}}
+	\]
+	ボディのリテラル($a_i$あるいは$\naf{a_i}$)の連言が成り立たないことを表す．
  \end{itemize} 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの記法}
- 拡張構文
+\begin{frame}{ASPの記法(拡張構文)}
  \begin{itemize}
-  \item 選択子
-  \item 個数制約
-  \item 重み付き個数制約
+  \item \structure{選択子}
+	\[
+	 \{a_1;\dots;a_n\}
+	\]
+	アトム集合 $\{a_1,\dots,a_n\}$ の任意の部分集合が成り立つことを意味する．
+  \item \structure{個数制約}
+	\[
+	 lb\:\{ a_1;\dots;a_n \}\:ub
+	\]
+	$a_1,\dots,a_n$ のうち，
+	$lb$個以上，$ub$個以下が成り立つことを意味する．
+  \item \structure{重み付き個数制約}
+	\[
+	 t = \#sum \: \{ w_1:a_1;\dots;w_n:a_n \}
+	\]
+	$a_1,\dots,a_n$のうち，
+	成り立つアトムの重み和が項$t$に等しくなることを意味する．
  \end{itemize}
+ これら以外にも，組合せ最適化問題を解くための
+ \structure{最小化関数・最大化関数}なども用意されている．
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究目的}
@@ -263,22 +314,38 @@
   \centering
   \input{arch}
   }
-  \begin{itemize}
-   \item ソルバーの
-   \item 流れを
-   \item 箇条書き
-  \end{itemize}
+  % \begin{itemize}
+  %  \item ソルバーの
+  %  \item 流れを
+  %  \item 箇条書き
+  % \end{itemize}
    \begin{block}{CAFE問題ソルバーの特長}
     \begin{itemize}
-     \item 簡潔性
-     \item 柔軟性
-     \item 拡張性
+     \item {\bf 簡潔性}\\
+	   CAFE問題の制約をルール17個で簡潔に記述
+     %\item {\bf 柔軟性}\\
+     \item {\bf 拡張性}\\
+	   ルールを追加するだけで新しい制約を導入可能．
     \end{itemize}
    \end{block}
+  \begin{itemize}
+   \item 表記法
+  \end{itemize}
+  \begin{center}
+   %\tabcolsep = 2mm
+  \begin{tabular}{l|ccccc}\small
+     論理プログラム &  $\leftarrow$ & $,$      & $;$      & $\sim$    & $\#sum$ \\\hline
+     ソースコード   & \code{:-}     & \code{,} & \code{;} & \code{not} & \code{\#sum}
+  \end{tabular}
+  \end{center}
+
  \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題のASPファクト表現}
- learning exampleのファクトを全て載せる or 一部を載せて解説をつける
+  \begin{multicols}{2}
+   \scriptsize
+   \lstinputlisting{codes/ovm.lp}
+  \end{multicols}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{基本符号化：解候補の生成，範囲制約}
@@ -290,17 +357,17 @@
   \end{lstlisting}
  \end{exampleblock}
  \begin{itemize}
-  \item アトム\scode{vp(VP,G)}は装備仕様\scode{G}が
-   	タイプ\scode{VP}を装備することを意味
-  \item アトム\scode{v(V,G)}は装備仕様\scode{G}が
-	オプション\scode{V}を装備することを意味
-  \item (1)より，各装備仕様\scode{G}，各タイプ\scode{VP}に対して，
-	\scode{vp(VP,G)}の候補を生成
-  \item (2)より，各装備仕様\scode{G}に対して，
-	\scode{VP}が必須タイプならば，\scode{G}は\scode{VP}を
-	装備しなければならない．
-  \item (3)より，タイプ\scode{VP}を装備する装備仕様\scode{G}に対して，
-	\scode{VP}のオプションからちょうど1個を実装する．
+  \item アトム\scode{vp(VP,G)}は装備仕様\code{G}が
+   	タイプ\code{VP}を装備することを意味
+  \item アトム\scode{v(V,G)}は装備仕様\code{G}が
+	オプション\code{V}を装備することを意味
+  \item (1)より，各装備仕様\code{G}，各タイプ\code{VP}に対して，
+	\code{vp(VP,G)}の候補を生成
+  \item (2)は，各装備仕様\code{G}に対して，
+	\code{VP}が必須タイプならば，\code{G}は\code{VP}を
+	装備しなければならないことを表す．
+  \item (3)は，タイプ\code{VP}を装備する装備仕様\code{G}に対して，
+	\code{VP}のオプションからちょうど1個を実装することを表す．
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -311,10 +378,15 @@
    (5) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
   \end{lstlisting}
  \end{exampleblock}
-
- 同様にコードを説明．
-
- VP間やVP,V間でも同様．
+ \begin{itemize}
+  \item (4)は，オプション\code{V1}, \code{V2}間に要求制約があるとき，
+	装備仕様\code{G}がオプション\code{V1}を実装するならば，
+	\code{G}は\code{V2}を実装しなければならないことを表す．
+  \item (5)は，オプション\code{V1}, \code{V2}間に排他制約があるとき，
+	装備仕様\code{G}が\code{V1}と\code{V2}を
+	同時に実装してはならないことを表す．
+  \item \code{VP}間や\code{VP},\code{V}間でも同様に記述できる．
+ \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{基本符号化：燃費制約}
@@ -328,7 +400,17 @@
    (9) :- not 0 #sum { (FE-t)*SV,FE,SV,G : fe(FE,G), sv(SV,G) }.
   \end{lstlisting}
  \end{exampleblock}
- 同様にコードを説明．
+ \begin{itemize}
+  \item \scode{iwr(S,G)}は，装備仕様\code{G}の
+	IWR値の総和が\code{S}であることを表す．
+  \item \scode{fe(FE,G)}と\scode{sv(SV,G)}は，
+	それぞれ装備仕様\code{G}の燃費\code{FE}と予想販売台数\code{SV}を表す．
+  \item (9)は，CAFE方式の燃費制約の式を以下のように変形し，
+	ASPの重み付き個数制約で表現している．
+	\[
+	 \sum_{i=1}^{n} (FE_{i}-t)\cdot SV_{i} \geq 0
+	\]
+ \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{基本符号化：初期制約，目的関数}
@@ -338,17 +420,22 @@
    (11) #maximize { SV,G : sv(SV,G) }.
   \end{lstlisting}
  \end{exampleblock}
- 同様にコードを説明．
+ \begin{itemize}
+  \item (10)は，装備仕様\code{G}がオプション\code{V}を実装しなければならない
+	という初期制約を表す．
+  \item (11)は，最大化関数\code{#maximize}によって目的関数である
+	予想販売台数の最大化を表す．
+ \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{基本符号化の改良点}
  \begin{block}{問題の入力}
   \begin{itemize}
-   \item $VP$ 
-   \item $VP*$
-   \item $V$
-   \item $V_i$
-   \item $w_j$
+   \item $VP$:\ タイプの集合
+   \item $VP*$:\ 必須なタイプの集合
+   \item $V$:\ オプションの集合
+   \item $V_i$:\ タイプ$i \in VP$ が実装可能なオプションの集合
+   \item $w_j$:\ オプション$j \in V$ のIWR値
   \end{itemize}
  \end{block}
  \begin{block}{IWR値の総和\code{S}の上下限}
@@ -382,7 +469,10 @@
  \end{lstlisting}
 \end{exampleblock}
  \begin{itemize}
-  \item コードを説明．
+  \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
+	のIWR値の最小値の総和であることを表す．
+  \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
+	のIWR値の最大値の総和であることを表す．
  \end{itemize}
  \begin{block}{}
   \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能
@@ -438,7 +528,7 @@
    \multicolumn{2}{l}{最適値・最良値の数} & \multicolumn{1}{r}{6} & \alert{13} \\
   \end{tabular}
  \end{exampleblock}
- \begin{itemize}
+ \begin{itemize}\small
   \item 改良符号化は，より多くの問題に対して優れた結果を示した．
   \item 大規模な問題に対する改良符号化の有効性が確認できた．
   \item 小規模な問題 small については両符号化ともに5問全てに対して最適解(あるいはUNSAT)を
