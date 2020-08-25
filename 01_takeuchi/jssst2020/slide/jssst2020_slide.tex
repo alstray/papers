@@ -323,7 +323,8 @@
     \begin{itemize}
      \item {\bf 簡潔性}\\
 	   CAFE問題の制約をルール17個で簡潔に記述
-     %\item {\bf 柔軟性}\\
+     \item {\bf 柔軟性}\\
+	   目的関数を自由に追加可能．
      \item {\bf 拡張性}\\
 	   ルールを追加するだけで新しい制約を導入可能．
     \end{itemize}
@@ -557,7 +558,30 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめ}
-
+ \begin{block}{研究内容}
+  \begin{enumerate}
+   \item \structure{\bf CAFE問題ソルバーを提案}
+	 \begin{itemize}
+	  \item \alert{\bf IWR値の和の上下限を厳密に計算する}改良符号化を考案
+	        % \item この改良により，基礎化後のルール数を少なく抑えることができ，
+		% 大規模な問題に対する有効性が期待できる．
+	  \item オプション数を最小化する拡張符号化を考案(ソルバーの拡張性を確認)
+	 \end{itemize}
+   \item 企業から提供された実データを用いた実験・評価
+	 \begin{itemize}
+	  \item 小規模な問題に対して，最適解を得ることができた．
+	  \item 大規模な問題に対して，改良符号化の有効性を確認できた．
+	 \end{itemize}
+  \end{enumerate}
+ \end{block}
+ \begin{alertblock}{今後の課題}
+  \begin{itemize}
+   \item CAFE問題ソルバーの拡張
+	 \begin{itemize}
+	  \item 様々な制約の調査・整理・実装
+	 \end{itemize}
+  \end{itemize}
+ \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
