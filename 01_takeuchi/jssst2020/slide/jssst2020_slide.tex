@@ -74,7 +74,9 @@
 \input{ovm_macro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{車両装備仕様問題に対する\\解集合プログラミングの適用}
-\author{竹内 頼人，番原 睦則，田村 直之}
+\author{竹内 頼人\inst{1} \and 田村 直之\inst{2} \and 番原 睦則\inst{1}}
+\institute{\inst{1}名古屋大学 \and \inst{2}神戸大学}
+
 \date{日本ソフトウェア科学会第37回大会(2020年度)}
 \begin{document}
 \begin{frame} {}
@@ -102,26 +104,51 @@
 	 (装備タイプと装備オプションの組合せ)を求めることが目的である．
   \end{itemize}
  \end{alertblock}
- \begin{itemize}
-  \item 本発表では，燃費制約として企業平均燃費
-	(Corporate Average Fuel Efficiency; \structure{\bf CAFE})方式を用いる．
- \end{itemize}
+ % \begin{itemize}
+ %  \item 本発表では，燃費制約として企業平均燃費
+ % 	(Corporate Average Fuel Efficiency; \structure{\bf CAFE})方式を用いる．
+ % \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CAFE方式}
- \begin{itemize}
-  \item 欧米で採用されており，日本でも2020年度から導入されている自動車の燃費規制
-  \item 車種別ではなくメーカー全体での出荷台数を加味した平均燃費を算出し，規制をかける方式
- \end{itemize}
- \begin{exampleblock}{}
-  \centering
-  ここにCAFE方式の装備仕様と燃費を表すグラフ
- \end{exampleblock}
- \begin{block}{CAFE方式の特長}
-  ある特定の車種では燃費基準を達成できなくても，他の車種の燃費を向上させることで
-  基準を達成できることが可能な点
+\begin{frame}{CAFE問題}
+本発表では，燃費制約として企業平均燃費
+(Corporate Average Fuel Efficiency; \structure{\bf CAFE})方式を用いる
+車両装備仕様問題(\structure{\bf CAFE問題})を扱う．
+ % \begin{exampleblock}{}
+ %  \centering
+ %  ここにCAFE方式の装備仕様と燃費を表すグラフ
+ % \end{exampleblock}
+ \begin{block}{CAFE方式}
+  \begin{itemize}
+   \item 欧米で採用されており，日本でも2020年度から導入されている自動車の燃費規制
+   \item 車種別ではなくメーカー全体での出荷台数を加味した平均燃費を算出し，規制をかける方式
+	 \[
+	 \begin{array}{lcr}
+	  & & \\
+	  \underbrace{
+	   \displaystyle\frac{\sum_{i=1}^{n} FE_{i}\cdot SV_{i}}
+	   {\sum_{i=1}^{n} SV_{i}}}_{\mbox{平均燃費}
+	   }
+	   &
+	   \geq 
+	   &
+	   t \\
+	 \end{array}
+	 \]
+	 % CAFE基準値を$t$，装備仕様の個数を$n$とする．	 
+	 % 装備仕様$i$の車両の燃費を$FE_i$，予想販売台数を$SV_i$とする．
+
+  \end{itemize} 
  \end{block}
- 以降，CAFE方式に基づく車両装備仕様問題を\structure{CAFE問題}と呼ぶ．
+\begin{itemize}
+ \item ある特定の車種では燃費基準を達成できなくても，他の車種の燃費を向上させることで
+       基準を達成できることが可能
+\end{itemize}
+ % \begin{block}{CAFE方式の特長}
+ %  ある特定の車種では燃費基準を達成できなくても，他の車種の燃費を向上させることで
+ %  基準を達成できることが可能な点
+ % \end{block}
+ % 以降，CAFE方式に基づく車両装備仕様問題を\structure{CAFE問題}と呼ぶ．
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題の例}
@@ -133,39 +160,39 @@
  }
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{燃費制約と目的関数}
- \begin{itemize}
-  \item 装備仕様$i$の車両の燃費を$FE_i$，予想販売台数を$SV_i$とする．
- \end{itemize}
- \begin{block}{燃費制約}
-  \begin{itemize}
-   \item CAFE基準値を$t$，装備仕様の個数を$n$とする．
-  \end{itemize} 
-  \[
-  \begin{array}{lcr}
-   & & \\
-   \underbrace{\displaystyle\frac{\sum_{i=1}^{n} FE_{i}\cdot SV_{i}}{\sum_{i=1}^{n} SV_{i}}}_{\mbox{平均燃費}}
-    &
-    \geq 
-    &
-    t \\
-   & & 
-  \end{array}
-  \]
- \end{block}
- \begin{block}{目的関数}
-  \begin{itemize}
-   \item 全体の予想販売台数の和を最大化
-  \end{itemize}
-  \[
-  \begin{array}{lcr}
-   & & \\
-   \sum_{i=1}^{n}{SV_{i}} & \longrightarrow & \mbox{最大} \\
-   & & 
-  \end{array}
-  \]
- \end{block}
-\end{frame}
+% \begin{frame}{燃費制約と目的関数}
+%  \begin{itemize}
+%   \item 装備仕様$i$の車両の燃費を$FE_i$，予想販売台数を$SV_i$とする．
+%  \end{itemize}
+%  \begin{block}{燃費制約}
+%   \begin{itemize}
+%    \item CAFE基準値を$t$，装備仕様の個数を$n$とする．
+%   \end{itemize} 
+%   \[
+%   \begin{array}{lcr}
+%    & & \\
+%    \underbrace{\displaystyle\frac{\sum_{i=1}^{n} FE_{i}\cdot SV_{i}}{\sum_{i=1}^{n} SV_{i}}}_{\mbox{平均燃費}}
+%     &
+%     \geq 
+%     &
+%     t \\
+%    & & 
+%   \end{array}
+%   \]
+%  \end{block}
+%  \begin{block}{目的関数}
+%   \begin{itemize}
+%    \item 全体の予想販売台数の和を最大化
+%   \end{itemize}
+%   \[
+%   \begin{array}{lcr}
+%    & & \\
+%    \sum_{i=1}^{n}{SV_{i}} & \longrightarrow & \mbox{最大} \\
+%    & & 
+%   \end{array}
+%   \]
+%  \end{block}
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題の解}
  \begin{itemize}
@@ -191,6 +218,60 @@
     \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{3,904} \\ 
   \end{tabular}
  \end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CAFE問題の解}
+ \begin{itemize}
+  \item CAFE基準値：8.5km/L
+  \item 装備仕様の数：3
+  \item 初期制約：(装備仕様1, STD), (装備仕様2, DX), (装備仕様3, LX)
+ \end{itemize}
+ \begin{exampleblock}{}
+  \centering
+  \begin{tabular}{l|l|c|c|c} 
+    %\multicolumn{1}{c|}{装備}   & \multicolumn{3}{c}{装備仕様} \\ \cline{2-4}
+    \multicolumn{2}{l|}{装備仕様}               & 1	& 2 	 & 3	\\  \hline
+    装備 & \textsf{Grade}        & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
+    &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \alert{4WD}\\
+    &\textsf{Engine}	  & \alert{V6}     & \textsf{V6}     & \textsf{V6}\\
+    &\textsf{Tire}	  & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
+    &\textsf{Transmission} & \alert{6AT}    & \alert{HEV}    & \textsf{10AT}\\
+    &\textsf{Sun\_Roof}    & -               & \alert{-} & -  \\ \hline
+    \multicolumn{2}{l|}{IWR 値の総和}           & 1,130  & 1,130   & 1,255 \\ %\hline
+    \multicolumn{2}{l|}{燃費(km/L)}      & 8.8  & 8.8     & 8.0 \\ %\hline
+    \multicolumn{2}{l|}{予想販売台数}    & 2,007   & 2,007   & 1,511  \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{8.5} \\ 
+    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{5,525} \\ 
+  \end{tabular}
+ \end{exampleblock}
+ \footnotetext{CAFE基準値9.0km/Lの装備仕様との相違点を赤字で示す．}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CAFE問題の解}
+ \begin{itemize}
+  \item CAFE基準値：9.5km/L
+  \item 装備仕様の数：3
+  \item 初期制約：(装備仕様1, STD), (装備仕様2, DX), (装備仕様3, LX)
+ \end{itemize}
+ \begin{exampleblock}{}
+  \centering
+  \begin{tabular}{l|l|c|c|c} 
+    %\multicolumn{1}{c|}{装備}   & \multicolumn{3}{c}{装備仕様} \\ \cline{2-4}
+    \multicolumn{2}{l|}{装備仕様}               & 1	& 2 	 & 3	\\  \hline
+    装備 & \textsf{Grade}        & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
+    &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \alert{4WD}\\
+    &\textsf{Engine}	  & \textsf{V4}     & \alert{V4}     & \textsf{V6}\\
+    &\textsf{Tire}	  & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
+    &\textsf{Transmission} & \textsf{5MT}    & \alert{5MT}    & \textsf{10AT}\\
+    &\textsf{Sun\_Roof}    & -               & \alert{-} & \alert{Panorama}  \\ \hline
+    \multicolumn{2}{l|}{IWR 値の総和}           & 983  & 1,003   & 1,325 \\ %\hline
+    \multicolumn{2}{l|}{燃費(km/L)}      & 10.2  & 10.0     & 7.5 \\ %\hline
+    \multicolumn{2}{l|}{予想販売台数}    & 745   & 630   & 324  \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{9.6} \\ 
+    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{1699} \\ 
+  \end{tabular}
+ \end{exampleblock}
+ \footnotetext{CAFE基準値9.0km/Lの装備仕様との相違点を赤字で示す．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
@@ -225,54 +306,61 @@
  \end{alertblock}
  \begin{itemize}
   \item \structure{論理プログラム}とは，以下の\structure{ルール}の有限集合である．
-	\[
-	\underbrace{a_0}_{\mbox{ヘッド}} \leftarrow 
-	\underbrace{a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}}_{\mbox{ボディ}}
-	\]
-	$0 \leq m \leq n$ であり，各 $a_i$ はアトム，
-	$\naf{}$は\structure{デフォルトの否定}，\\
-	``$,$''は連言(AND)を表す．
+	\begin{center}
+	 $a_0$ \code{:-} $a_1$\code{,...,}$a_m$\code{,not} $a_{m+1}$\code{,...,} $a_n$\code{.}
+	\end{center}
+  	% \[
+  	% \underbrace{a_0}_{\mbox{ヘッド}} \leftarrow 
+  	% \underbrace{a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}}_{\mbox{ボディ}}
+  	% \]
+  	$0 \leq m \leq n$ であり，各 $a_i$ はアトム，
+  	\code{not}は\structure{デフォルトの否定}，\\
+  	``\code{,}''は連言(AND)を表す．
   \item \alert{直感的な意味}は，
-	「$a_1,\ldots,a_m$がすべて成り立ち，
-	$a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
-	$a_0$が成り立つ」である．
+  	「$a_1$\code{,...,}$a_m$がすべて成り立ち，
+  	$a_{m+1}$\code{,...,}$a_n$のそれぞれが成り立たないならば，
+  	$a_0$が成り立つ」である．
+  \item ボディが空のルールを\structure{ファクト}と呼び，``\code{:-}''は省略できる．
+  \item ヘッドが空のルールを\structure{一貫性制約}と呼び，
+	ボディのリテラルの連言が成り立たないことを表す．
  \end{itemize}
  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの記法}
- \begin{itemize}
-  \item ボディが空のルールを\structure{ファクト}と呼び，``$\leftarrow$''は省略してよい．
-	\[
-	 \underbrace{a_0}_{\mbox{ヘッド}}
-	\]
-	$a_0$が成り立つことを表す．
-  \item ヘッドが空のルールを\structure{一貫性制約}と呼ぶ．
-	\[
-	 \leftarrow 
-	 \underbrace{a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}}_{\mbox{ボディ}}
-	\]
-	ボディのリテラル($a_i$あるいは$\naf{a_i}$)の連言が成り立たないことを表す．
- \end{itemize} 
-\end{frame}
+% \begin{frame}{ASPの記法}
+%  \begin{itemize}
+%   \item ボディが空のルールを\structure{ファクト}と呼び，``$\leftarrow$''は省略してよい．
+% 	\[
+% 	 \underbrace{a_0}_{\mbox{ヘッド}}
+% 	\]
+% 	$a_0$が成り立つことを表す．
+%   \item ヘッドが空のルールを\structure{一貫性制約}と呼ぶ．
+% 	\[
+% 	 \leftarrow 
+% 	 \underbrace{a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}}_{\mbox{ボディ}}
+% 	\]
+% 	ボディのリテラル($a_i$あるいは$\naf{a_i}$)の連言が成り立たないことを表す．
+%  \end{itemize} 
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPの記法(拡張構文)}
  \begin{itemize}
   \item \structure{選択子}
-	\[
-	 \{a_1;\dots;a_n\}
-	\]
-	アトム集合 $\{a_1,\dots,a_n\}$ の任意の部分集合が成り立つことを意味する．
+	\begin{center}
+	 \code{\{}$a_1$\code{;...;}$a_n$\code{\}}
+	\end{center}
+	アトム集合 $\{a_1,\dots,a_n\}$
+	の任意の部分集合が成り立つことを意味する．
   \item \structure{個数制約}
-	\[
-	 lb\:\{ a_1;\dots;a_n \}\:ub
-	\]
+	\begin{center}
+	 $lb$\ \code{\{}$a_1$\code{;...;}$a_n$\code{\}}\ $ub$
+	\end{center}
 	$a_1,\dots,a_n$ のうち，
 	$lb$個以上，$ub$個以下が成り立つことを意味する．
   \item \structure{重み付き個数制約}
-	\[
-	 t = \#sum \: \{ w_1:a_1;\dots;w_n:a_n \}
-	\]
+	\begin{center}
+	 $t$ \code{= \#sum} \code{\{} $w_1$\code{:}$a_1$\code{;...;}$w_n$\code{:}$a_n$ \code{\}}
+	\end{center}
 	$a_1,\dots,a_n$のうち，
 	成り立つアトムの重み和が項$t$に等しくなることを意味する．
  \end{itemize}
@@ -319,26 +407,47 @@
   %  \item 流れを
   %  \item 箇条書き
   % \end{itemize}
-   \begin{block}{CAFE問題ソルバーの特長}
-    \begin{itemize}
-     \item {\bf 簡潔性}\\
-	   CAFE問題の制約をルール17個で簡潔に記述
-     \item {\bf 柔軟性}\\
-	   目的関数を自由に追加可能．
-     \item {\bf 拡張性}\\
-	   ルールを追加するだけで新しい制約を導入可能．
-    \end{itemize}
-   \end{block}
-  \begin{itemize}
-   \item 表記法
-  \end{itemize}
-  \begin{center}
-   %\tabcolsep = 2mm
-  \begin{tabular}{l|ccccc}\small
-     論理プログラム &  $\leftarrow$ & $,$      & $;$      & $\sim$    & $\#sum$ \\\hline
-     ソースコード   & \code{:-}     & \code{,} & \code{;} & \code{not} & \code{\#sum}
-  \end{tabular}
-  \end{center}
+  \begin{block}{ASP符号化}
+   \begin{itemize}
+    \item \structure{\bf 基本符号化}
+	  \begin{itemize}
+	   \item ルール17個で記述可能
+	   \item ソルバーの簡潔性を確認
+	  \end{itemize}
+    \item \structure{\bf 改良符号化}
+	  \begin{itemize}
+	   \item IWR値の上下限を基本符号化より厳密に計算
+	   \item ルール数を少なく抑えることが可能
+	  \end{itemize}
+    \item \structure{\bf 拡張符号化}
+	  \begin{itemize}
+	   \item オプション数を最小化する目的関数を追加
+	   \item ソルバーの拡張性を確認
+	  \end{itemize}
+
+	  
+   \end{itemize}
+  \end{block}
+   % \begin{block}{CAFE問題ソルバーの特長}
+   %  \begin{itemize}
+   %   \item {\bf 簡潔性}\\
+   % 	   CAFE問題の制約をルール17個で簡潔に記述
+   %   \item {\bf 柔軟性}\\
+   % 	   目的関数を自由に追加可能．
+   %   \item {\bf 拡張性}\\
+   % 	   ルールを追加するだけで新しい制約を導入可能．
+   %  \end{itemize}
+   % \end{block}
+  % \begin{itemize}
+  %  \item 表記法
+  % \end{itemize}
+  % \begin{center}
+  %  %\tabcolsep = 2mm
+  % \begin{tabular}{l|ccccc}\small
+  %    論理プログラム &  $\leftarrow$ & $,$      & $;$      & $\sim$    & $\#sum$ \\\hline
+  %    ソースコード   & \code{:-}     & \code{,} & \code{;} & \code{not} & \code{\#sum}
+  % \end{tabular}
+  % \end{center}
 
  \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -557,22 +666,18 @@
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめ}
- \begin{block}{研究内容}
-  \begin{enumerate}
-   \item \structure{\bf CAFE問題ソルバーを提案}
+\begin{frame}{まとめと今後の課題}
+ \begin{block}{まとめ}
+  \begin{itemize}
+   \item CAFE問題に対して解集合プログラミングを初めて適用した．
 	 \begin{itemize}
-	  \item \alert{\bf IWR値の和の上下限を厳密に計算する}改良符号化を考案
-	        % \item この改良により，基礎化後のルール数を少なく抑えることができ，
-		% 大規模な問題に対する有効性が期待できる．
-	  \item オプション数を最小化する拡張符号化を考案(ソルバーの拡張性を確認)
+	  \item 記述性の高さ，柔軟な最適解探索などの利点を確認できた．
 	 \end{itemize}
-   \item 企業から提供された実データを用いた実験・評価
+   \item 企業から提供された問題集を用いた実験を行った．
 	 \begin{itemize}
-	  \item 小規模な問題に対して，最適解を得ることができた．
-	  \item 大規模な問題に対して，改良符号化の有効性を確認できた．
+	  \item 実用規模の問題に対して適用可能であることを確認できた．
 	 \end{itemize}
-  \end{enumerate}
+  \end{itemize}
  \end{block}
  \begin{alertblock}{今後の課題}
   \begin{itemize}
