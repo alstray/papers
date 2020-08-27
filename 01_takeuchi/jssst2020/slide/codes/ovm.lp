@@ -42,7 +42,3 @@ require_vp("Tire").
 require_vp("Transmission").
 
 group(1). group(2). group(3).
-
-require_g_v(1, "STD").
-require_g_v(2, "DX").
-require_g_v(3, "LX").
