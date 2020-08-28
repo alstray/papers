@@ -54,6 +54,15 @@
 \setbeamertemplate{items}[ball]
 % \setbeamertemplate{enumerate items}[default]
 % \setbeamerfont{alerted text}{series=\bfseries}
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+\renewcommand{\thefootnote}{\dag} % フットノート番号をダガーにする
 
 %%%% Code %%%%%%%%%
 \lstset{
@@ -182,7 +191,7 @@
  \begin{itemize}
  \item 車種2と車種3はCAFE基準値を下回っているが，
    平均燃費は 9.028km/L となり，燃費制約を満たしている．
- \item オプションの選択を誤ると，販売台数\alert{???}まで大幅に減少する．
+ \item オプションの選択を誤ると，販売台数1156まで大幅に減少する．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -288,8 +297,64 @@
  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- \begin{frame}{CAFE問題ソルバーの構成 (提案)}
+ % \begin{frame}{CAFE問題ソルバーの構成 (提案)}
+ %  \begin{columns}
+ %   \begin{column}{0.4\textwidth}
+ %    \scalebox{0.9}{\centering\input{arch2}}
+ %   \end{column}
+ %   \begin{column}{0.6\textwidth}
+ %   \begin{block}{3種類のASP符号化を考案}
+ %     \begin{itemize}
+ %     \item \alert{\bf 基本符号化}
+ %       \begin{itemize}
+ %       \item CAFE問題の制約を，ASPのルール17個で簡潔に記述
+ %       \end{itemize}
+ %     \item \alert{\bf 改良符号化}
+ %       \begin{itemize}
+ %       \item 各車種の燃費や予想販売台数を算出するために必要なIWR値の総
+ %         和の上下限を厳密に計算することにより，基礎化後のルール数を少
+ %         なく抑えるよう工夫
+ %       \item これにより，改良符号化は大規模なCAFE問題への有効性が期待
+ %       \end{itemize}
+ %     \item \structure{\bf 拡張符号化}
+ %       \begin{itemize}
+ %         \item 製造ラインの削減や大量生産を促進することを狙いとし，
+ %           予想販売台数の最大化に加えて，装備オプション数の最小化も行
+ %           えるように拡張
+ %       \end{itemize}
+ %     \end{itemize}
+ %   \end{block}
+ %   \end{column}
+ %  \end{columns}
+ % \end{frame}
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ \begin{frame}{CAFE問題ソルバーの構成 (提案)\alert{(A案)}}
    \scalebox{0.9}{\centering\input{arch}}
+   \begin{block}{3種類のASP符号化を考案}
+     \begin{itemize}
+     \item \alert{\bf 基本符号化}
+       \begin{itemize}\footnotesize
+       \item CAFE問題の制約を，ASPのルール17個で簡潔に記述
+       \end{itemize}
+     \item \alert{\bf 改良符号化}
+       \begin{itemize}\footnotesize
+       \item 各車種の燃費や予想販売台数を算出するために必要なIWR値の総
+         和の上下限を厳密に計算することにより，基礎化後のルール数を少
+         なく抑えるよう工夫
+       %\item これにより，改良符号化は大規模なCAFE問題への有効性が期待
+       \end{itemize}
+     \item \structure{\bf 拡張符号化}
+       \begin{itemize}\footnotesize
+         \item 製造ラインの削減や大量生産を促進することを狙いとし，
+           予想販売台数の最大化に加えて，装備オプション数の最小化も行
+           えるように拡張
+       \end{itemize}
+     \end{itemize}
+   \end{block}
+ \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ \begin{frame}{CAFE問題ソルバーの構成 (提案) \alert{(B案)}}
+   \scalebox{0.9}{\centering\input{arch2}}
    \begin{block}{3種類のASP符号化を考案}
      \begin{itemize}
      \item \alert{\bf 基本符号化}
@@ -315,7 +380,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{ASPの構文}
   \begin{alertblock}{}\centering
-    ASPの言語は論理プログラムをベースとしている~\footnotemark[1]．
+    ASPの言語は論理プログラムをベースとしている~\footnotemark．
   \end{alertblock}
   \begin{itemize}
   \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
@@ -339,7 +404,7 @@
     ``\code{:-} $a_1$\code{,} \code{not}~$a_{2}$''は，
     「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
   \end{itemize}
-  \footnotetext[1]{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
+  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPの拡張構文}
@@ -379,7 +444,17 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{基本符号化: 範囲制約}
-\alert{OVM の絵を貼る???}
+ % Drive_Type
+ \begin{center} 
+  \begin{tikzpicture}
+   \nodeVP{drivetype}{at={(0,0)}}{Drive\_Type};
+   \nodeV{2wd}{below left=0.3cm of via_drivetype}{2WD}{= 125};
+   \draw [dashed](via_drivetype)--(2wd.north);
+   \nodeV{4wd}{below right=0.3cm of via_drivetype}{4WD}{= 200};
+   \draw [dashed](via_drivetype)--(4wd.north);
+  \end{tikzpicture}
+ \end{center}
+
 \vfill
 \begin{exampleblock}{}
 \begin{lstlisting}
@@ -399,29 +474,6 @@
   \code{G}が\code{VP}のオプション\code{V}を装備することを意味する
   アトム\code{v(V,G)}を導入し，そのうちの
   ちょうど1個を装備することを強制する．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{基本符号化: 依存制約(要求・排他)}
-\alert{OVM の絵を貼る???}
-\alert{appendix に置く???}
-\vfill
-\begin{exampleblock}{}
-\begin{lstlisting}
-  (?) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
-  (?) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
-\end{lstlisting}
-\end{exampleblock}
-\vfill
-\begin{itemize}
-\item (?)
-  要求関係\code{require_v_v(V1,V2)}が与えられたとき，
-  車種\code{G}がオプション\code{V1}を実装するならば，
-  \code{G}は\code{V2}も実装しなければならない．
-\item (?)
-  排他関係\code{exclude_v_v(V1,V2)}が与えられたとき，
-  車種\code{G}が\code{V1}と\code{V2}を
-  同時に実装することはない．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -452,55 +504,79 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基本符号化の改良点 (\alert{??? TODO})}
+\begin{frame}{基本符号化の改良点}
  \begin{block}{問題の入力}
+  \begin{multicols}{2}
   \begin{itemize}
+   \item $V$:\ オプションの集合
+   \item $w_j$:\ オプション$j \in V$ のIWR値
+   \uncover<2>{
    \item $VP$:\ タイプの集合
    \item $VP*$:\ 必須なタイプの集合
-   \item $V$:\ オプションの集合
    \item $V_i$:\ タイプ$i \in VP$ が実装可能なオプションの集合
-   \item $w_j$:\ オプション$j \in V$ のIWR値
+   }
   \end{itemize}
+  \end{multicols}
  \end{block}
- \begin{block}{IWR値の総和\code{S}の上下限}
-  \[
-   0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}
-  \]
- \end{block}
- \alert{各タイプが選択可能なオプション数の上下限，必須かどうかの別を考慮}
- \begin{alertblock}{}
-  \[
-   \sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
-   \leq \texttt{S} \leq
-   \sum_{i\in VP}\max_{j\in V_{i}}w_{j}
-  \]
- \end{alertblock}
+ \begin{itemize}
+  \item IWR値の総和の範囲(イメージ)
+ \end{itemize}
+ \begin{center}
+  \input{comp_encode} 
+ \end{center}
+ \vspace{-3ex}
+ \uncover<2>{
+  \begin{itemize}
+   \item 範囲制約及び装備タイプが必須かどうかの別を考慮することで，
+	 IWR値の総和の上下限を厳密にする．
+  \end{itemize}
+ }
+
+ % \begin{block}{IWR値の総和\code{S}の上下限}
+ %  \[
+ %   0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}
+ %  \]
+ % \end{block}
+ % \alert{各タイプが選択可能なオプション数の上下限，必須かどうかの別を考慮}
+ % \begin{alertblock}{}
+ %  \[
+ %   \sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
+ %   \leq \texttt{S} \leq
+ %   \sum_{i\in VP}\max_{j\in V_{i}}w_{j}
+ %  \]
+ % \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{改良符号化  (\alert{??? TODO})}
- 基本符号化の(6)を以下のコードで置き換える．
+\begin{frame}[fragile]{改良符号化}
+ \begin{itemize}
+  \item 基本符号化の(3)を(3')に置き換える．
+ \end{itemize}
 \begin{exampleblock}{}
  \footnotesize
  \begin{lstlisting}
-  ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
-  lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+  (3)  iwr(S,G) :- 
+          S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) }, group(G).
 
-  ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
-  lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
-
-  iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
-      LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
+  (3') iwr(S,G) :- 
+          S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
+          LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
  \end{lstlisting}
 \end{exampleblock}
  \begin{itemize}
-  \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
-	のIWR値の最小値の総和であることを表す．
-  \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
-	のIWR値の最大値の総和であることを表す．
+  \item アトム\scode{lb_iwr(LB)}, \scode{ub_iwr(UB)}\footnotemark[2]は，
+	IWR値の下限が\code{LB}，上限が\code{UB}であることを表す．
+  % \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
+  % 	のIWR値の最小値の総和が\code{LB}であることを表す．
+  % \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
+  % 	のIWR値の最大値の総和が\code{UB}であることを表す．
  \end{itemize}
  \begin{block}{}
   \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能
+  \begin{itemize}
+   \item \alert{大規模なCAFE問題への有効性が期待できる．}
+  \end{itemize}
  \end{block}
+ \footnotetext[2]{アトム\code{lb_iwr(LB), ub_iwr(UB)}はそれぞれルール2個で求めることができる．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実行実験}
@@ -585,25 +661,25 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめと今後の課題 (\alert{??? TODO})}
+\begin{frame}{まとめと今後の課題}
  \begin{block}{まとめ}
   \begin{itemize}
    \item CAFE問題に対して解集合プログラミングを初めて適用した．
 	 \begin{itemize}
+	  \item 3種類のASP符号化によるCAFE問題ソルバーを考案
 	  \item 記述性の高さ，柔軟な最適解探索などの利点を確認できた．
 	 \end{itemize}
-   \item 企業から提供された問題集を用いた実験を行った．
+   \item 企業から提供された実データを用いた評価実験を行った．
 	 \begin{itemize}
 	  \item 実用規模の問題に対して適用可能であることを確認できた．
+	  \item 大規模な問題に対する改良符号化の優位性を確認できた．
 	 \end{itemize}
   \end{itemize}
  \end{block}
  \begin{alertblock}{今後の課題}
   \begin{itemize}
-   \item CAFE問題ソルバーの拡張
-	 \begin{itemize}
-	  \item 様々な制約の調査・整理・実装
-	 \end{itemize}
+   \item 様々な制約の調査・整理・実装をすることで，CAFE問題ソルバーの拡張をする．
+   \item より一般的な，可変性モデルで記述できる問題へのASPの適用
   \end{itemize}
  \end{alertblock}
 \end{frame}
@@ -616,17 +692,196 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \appendix
+\backupbegin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{todo}
-  \begin{itemize}
-  \item 拡張符号化
-  \item 制約の数
-  \item $g > 3$の結果
-  \item ???
-  \end{itemize}
+\begin{frame}[fragile]{基本符号化: 依存制約(要求・排他)}
+ \begin{center} 
+ \begin{tikzpicture}
+ % Grade
+  \nodeVP{grade}{at={(0,0)}}{Grade};
+  \nodeV{dx}{below=0.3cm of via_grade}{DX}{= 580};
+  \draw[dashed](via_grade)--(dx.north);
+  \nodeV{std}{left=0.3cm of dx}{STD}{= 580};
+  \draw[dashed](via_grade)--(std.north);
+  \nodeV{lx}{right=0.3cm of dx}{LX}{= 580};
+  \draw[dashed](via_grade)--(lx.north);
+
+  % Tire
+  \nodeVP{tire}{right=6cm of grade}{Tire};
+  \nodeV{16inch}{below left=0.4cm of via_tire}{16inch}{= 110};
+  \nodeV{17inch}{below right=0.4cm of via_tire}{17inch}{= 130};
+  \nodeV{15inch}{left=0.3cm of 16inch}{15inch}{= 90};
+  \nodeV{18inch}{right=0.3cm of 17inch}{18inch}{= 150};
+  \draw [dashed](via_tire)--(15inch.north);
+  \draw [dashed](via_tire)--(16inch.north);
+  \draw [dashed](via_tire)--(17inch.north);
+  \draw [dashed](via_tire)--(18inch.north);
+
+  % require
+  \draw[->] (std.south)--++(0,-0.2) node[below=-1mm] {\tiny{requires\_v\_v}} -|(16inch.south);
+  \draw[white,line width=4pt](dx.south) ++(0,-0.1)--++(0,-0.5);
+  \draw[->] (dx.south)--++(0,-0.5) node[below=-1mm] {\tiny{requires\_v\_v}} -|(17inch.south);
+  \draw[white,line width=4pt] (lx.south) ++(0,-0.1)--++(0,-0.8);
+  \draw[->] (lx.south)--++(0,-0.8) node[below=-1mm] {\tiny{requires\_v\_v}} -|(18inch.south);
+ \end{tikzpicture}
+ \end{center}
+
+\vfill
+\begin{exampleblock}{}
+\begin{lstlisting}
+  (a) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
+  (b) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item (a)
+  要求関係\code{require_v_v(V1,V2)}が与えられたとき，
+  車種\code{G}がオプション\code{V1}を実装するならば，
+  \code{G}は\code{V2}も実装しなければならない．
+\item (b)
+  排他関係\code{exclude_v_v(V1,V2)}が与えられたとき，
+  車種\code{G}が\code{V1}と\code{V2}を
+  同時に実装することはない．
+\end{itemize}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{IWR値の上下限}
+ \begin{exampleblock}{}
+  \footnotesize
+  \begin{lstlisting}
+   ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+   lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
 
-
+   ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+   lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+  \end{lstlisting}
+ \end{exampleblock}
+ \begin{itemize}
+  \item アトム\scode{ub_vp(UB,VP)}, \scode{lb_vp(LB,VP)}は，
+	タイプ\code{VP}に属するオプションの中で最大のIWR値が\code{UB}，
+	最小のIWR値が\code{LB}であることを表す．
+  \item アトム\scode{ub_iwr(S)}は，すべての\code{VP}についての
+	\code{UB}の和が\code{S}であることを表す．
+  \item アトム\scode{lb_iwr(S)}は，必須タイプである\code{VP}についての
+	\code{LB}の和が\code{S}であることを表す．
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{拡張符号化}
+ \begin{block}{拡張符号化}
+  予想販売台数の最大化に加えて，オプション数の最小化も可能にする．
+  \begin{itemize}
+   \item 製造ラインの削減や大量生産を促進することが狙い
+  \end{itemize}
+ \end{block}
+ 目的関数を以下のコードに書き換える．
+ \begin{exampleblock}{}
+  \begin{lstlisting}
+   #maximize { SV@2,G : sv(SV,G) }.
+   #minimize { 1@1,V : used_v(V) }.
+  \end{lstlisting}
+ \end{exampleblock}
+ \begin{itemize}
+  \item アトム\scode{used_v(V)}は，オプション\code{V}がいずれかの装備仕様において
+	実装されたことを意味する．
+  \item 目的関数中の\code{@}の右側は優先度で，予想販売台数の最大化(優先度2)，オプション数最小化(優先度1)
+	の順に最適化される．
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{最適解の全列挙 {\normalsize (CAFE基準値: 8.5km/L)}}
+ \begin{exampleblock}{}
+  \tiny
+  \centering
+    \begin{tabular}{l|l|c|c|c||c|c|c||c|c|c} 
+    \multicolumn{2}{l|}{} & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c}{\bf{解3}}\\ \hline
+    \multicolumn{2}{l|}{装備仕様} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 \\ \hline
+    装備 & \textsf{Grade}        & \textsf{STD}& \textsf{DX} & \textsf{LX}& \textsf{STD} & \textsf{DX}  & \textsf{LX}    & \textsf{STD} & \textsf{DX}  & \textsf{LX}       \\
+        & \textsf{Drive\_Type}  & \textsf{4WD}  & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD}  \\
+        & \textsf{Engine} & \textsf{V4} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6}      \\ 
+        & \textsf{Tire} & \textsf{16}	& \textsf{17} & \textsf{18} & \textsf{16}  & \textsf{17}  & \textsf{18} & \textsf{16} & \textsf{17} & \textsf{18} \\
+        & \textsf{Transmission} & \textsf{5MT} & \textsf{HEV} & \textsf{10AT} & \textsf{CVT} & \textsf{HEV} & \textsf{10AT}  & \textsf{6AT} & \textsf{HEV} & \textsf{10AT}     \\
+        & \textsf{Sun\_Roof} & \textsf{Panorama} & -   & -       & \textsf{Nomal} & -  & -     & -   & -   & -       \\ \hline
+    \multicolumn{2}{l|}{IWR値の総和}  & 1,128 & 1,130   & 1,255    & 1,130 & 1,130&1,255  & 1,130& 1,130& 1,255     \\ %\hline
+    \multicolumn{2}{l|}{燃費(km/L)}    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
+    \multicolumn{2}{l|}{予想販売台数}  & 2,007  & 2,007   & 1,511   & 2,007 & 2,007 & 1,511 & 2,007& 2,007& 1,511       \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)} & \multicolumn{3}{c||}{8.6} & \multicolumn{3}{c||}{8.5} & \multicolumn{3}{c}{8.5}\\ 
+    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c||}{5,525} & \multicolumn{3}{c||}{5,525}  &\multicolumn{3}{c}{5,525}\\
+    \multicolumn{2}{l|}{オプション数}  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{\alert{12}}\\ 
+  \end{tabular}
+ \end{exampleblock}
+ \begin{itemize}
+  \item 改良符号化では，予想販売台数が5,525台である最適解が(解1，解2，解3)の3つ存在する．
+  \item 拡張符号化では，最適解はオプション数が最も小さい(解3)のただ1つだけとなる．
+ \end{itemize}
+ \begin{alertblock}{}
+  CAFE問題ソルバーでは，目的関数を柔軟に追加することにより，複数ある最適解に対して
+  優劣をつけることができる．
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{基礎化後のルール数}
+ \begin{exampleblock}{}\centering 
+  \renewcommand{\arraystretch}{1.2}
+  \tabcolsep = 4mm
+  \begin{tabular}{crr} 
+   問題名    & 基本符号化       & 改良符号化    \\ \hline
+   small    &  83,520 (1.00)  & 32,855 (0.39) \\ 
+   medium   &  93,017 (1.00)  & 56,940 (0.61) \\
+   big	    & 155,654 (1.00)  & 42,190 (0.27) \\ 
+  \end{tabular}
+ \end{exampleblock}
+ \begin{itemize}
+  \item 改良符号化は，基本符号化と比較して，基礎化後のルール数を
+	少なく抑えられている．
+  \item 特にbigでは，70\%以上のルール数の削減に成功している．
+ \end{itemize}
+ \begin{alertblock}{}
+  このルール数の削減が，改良符号化の大規模問題に対する優位性につながっていると考えられる．
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{車種の数を増やした実験}
+ \begin{exampleblock}{}\centering 
+  \renewcommand{\arraystretch}{1.1}
+  \tabcolsep = 4mm
+  \scriptsize
+  \begin{tabular}{cr|c|rr}
+    \lw{車種の数($n$)} & CAFE  & \lw{結果} & \multicolumn{2}{c}{CPU時間(秒)} \\ \cline{4-5}
+                      & 基準値 &          &  基本符号化      & 改良符号化 \\\hline
+   3 & 8.5   & \alert{OPT}       & 48.126          & 34.442          \\
+   3 & 9.0   & \alert{OPT}       & 25.648          & 12.837          \\
+   3 & 9.5   & \alert{OPT}       & 26.223          & 49.161          \\
+   3 & 10.0  & \alert{OPT}       & 447.674         & 0.394           \\
+   3 & 10.5  & \alert{UNSAT}     & 1103.135        & 0.085           \\\hline 
+   6 & 8.5   & SAT       & TO        & TO        \\
+   6 & 9.0   & \alert{OPT}       & 1386.491        & 1509.845        \\
+   6 & 9.5   & \alert{OPT}       & 532.665         & TO        \\
+   6 & 10.0  & \alert{UNSAT}     & TO        & 1.670           \\
+   6 & 10.5  & \alert{UNSAT}     & 599.330         & 0.134           \\\hline
+   12 & 8.5  & SAT       & TO        & TO        \\
+   12 & 9.0  & SAT       & TO        & TO        \\
+   12 & 9.5  & \alert{UNSAT}     & 1540.594        & 519.988         \\
+   12 & 10.0 & \alert{UNSAT}     & 641.738         & 33.014          \\
+   12 & 10.5 & \alert{UNSAT}     & 6.117           & 0.483           \\
+  \end{tabular}
+ \end{exampleblock}
+ \begin{itemize}
+  \scriptsize
+  \item $n=3$では5問すべて，$n=6$では5問中4問について、最適解あるいはUNSATを求めることができた．
+  \item $n=12$では5問中3問はUNSATで，残り2問いついては実行可能解は得られたが，
+	その最適性を証明するには至らなかった．
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{todo}
+%   \begin{itemize}
+%   \item ???
+%   \end{itemize}
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backupend
 \end{document}
 %%% Local Variables:
 %%% mode: japanese-latex
