@@ -769,17 +769,19 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{拡張符号化}
- \begin{block}{拡張符号化}
-  予想販売台数の最大化に加えて，オプション数の最小化も可能にする．
-  \begin{itemize}
-   \item 製造ラインの削減や大量生産を促進することが狙い
-  \end{itemize}
- \end{block}
- 目的関数を以下のコードに書き換える．
+ % \begin{block}{拡張符号化}
+ %  予想販売台数の最大化に加えて，オプション数の最小化も可能にする．
+ %  \begin{itemize}
+ %   \item 製造ラインの削減や大量生産を促進することが狙い
+ %  \end{itemize}  
+ % \end{block}
+ 改良符号化の目的関数(x)を(x'-y')に置き換える．
  \begin{exampleblock}{}
   \begin{lstlisting}
-   #maximize { SV@2,G : sv(SV,G) }.
-   #minimize { 1@1,V : used_v(V) }.
+   (x) #maximize { SV,G : sv(SV,G) }.
+
+   (x') #maximize { SV@2,G : sv(SV,G) }.
+   (y') #minimize { 1@1,V : used_v(V) }.
   \end{lstlisting}
  \end{exampleblock}
  \begin{itemize}
