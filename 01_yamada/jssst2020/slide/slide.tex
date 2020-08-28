@@ -30,8 +30,8 @@
 
 \title{解集合プログラミングを用いた\\配電網問題の解法に関する一考察}
 \author[山田 健太郎，湊 真一，番原 睦則]{山田 健太郎$^1$，湊 真一$^2$，番原 睦則$^1$}
-\date{日本ソフトウェア科学会 第37回\\2020年9月XX日}
-\institute{1.名古屋大学$\qquad$ 2.京都大学}
+\date{日本ソフトウェア科学会第37回大会\\2020年9月XX日}
+\institute{1.名古屋大学 大学院情報学研究科 \\ 2.京都大学 大学院情報学研究科}
 
 %% テンプレ 
 \begin{comment}
@@ -39,7 +39,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% タイトル
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{}
+\begin{frame}{}
 \end{frame}
 
 \end{comment}
@@ -52,14 +52,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% タイトル 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{}
+\begin{frame}{}
   \titlepage
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 配電網
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{配電網問題}
+\begin{frame}{配電網問題}
  \begin{alertblock}{}
   \centering
   求解困難な組合せ最適化問題の一種
@@ -94,7 +94,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 根付き全域森
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{根付き全域森(Spanning Rooted Forest)}
+\begin{frame}{根付き全域森(Spanning Rooted Forest)}
 
  \begin{block}{根付き全域森~~[川原$\cdot$湊 '12]}
   グラフ$G=(V,E)$と，
@@ -126,7 +126,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{解集合プログラミング(Answer Set Programming; ASP)}
+\begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
  \begin{itemize}
   \item \structure{ASP言語}は一階論理に基づく知識表現言語の一種である．
   \item \structure{ASPシステム}は論理プログラムから安定モデル意味論[Gelfond and Lifschitz '88]に
@@ -148,7 +148,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 研究目的
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{研究目的}
+\begin{frame}{研究目的}
  \begin{alertblock}{目的}
   ASP技術を活用して，大規模な配電網問題を効率良く解くシステムの\\ 構築を目指す．
  \end{alertblock}
@@ -169,7 +169,7 @@
  
 \end{frame}
 
-\begin{frame}\frametitle{ASPを用いた根付き全域森問題の解法}
+\begin{frame}{ASPを用いた根付き全域森問題の解法}
  
  \begin{figure}[htbp]
   \centering
@@ -188,7 +188,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案手法
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{提案するASP符号化}
+\begin{frame}{提案するASP符号化}
  
 \begin{itemize}
  \item  根付き全域森問題に対する，2種類のASP符号化を考案した．
@@ -210,7 +210,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASPのシンタックスの説明 その1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{ASPの基本構文}
+\begin{frame}{ASPの基本構文}
 \begin{itemize}
  \item ASPのプログラムは，以下の形式の\structure{ルール}の有限集合である．
 \begin{block}{}
@@ -231,14 +231,15 @@
  \centering
  $ \text{:-} ~a_1, ~{\tt not}~ a_2.$
 \end{block}
-	上のルールは，「$a_1$が成り立つならば，$a_2$も成り立つ」ことを意味する．
+	上のルールは，「$a_1$が成り立ち，$a_2$が成り立たないことは``ない''」\\
+	   つまり，「$a_1$と$a_2$は両方同時に成り立つ」ことを意味する．
 \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASPのシンタックスの説明 その2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{ASPの拡張構文}
+\begin{frame}{ASPの拡張構文}
 \begin{itemize}
  \item ASP言語には，組合せ問題を解くための便利な拡張構文が用意されている．
 \end{itemize}
@@ -262,9 +263,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 改良符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{根付き全域森の改良符号化}
+\begin{frame}{根付き全域森の改良符号化}
  \begin{exampleblock}{}
- \texttt{ \{inForest(X,Y)\} :- edge(X,Y).} {\Large\}}\alert{解の候補}\\
+ \texttt{ \{ inForest(X,Y) \} :- edge(X,Y).} ~{\Large\}}\alert{解の候補}\\
  \vskip 1em
  $
  \left.
@@ -285,14 +286,14 @@
   \texttt{~~~~~~~~~~~~~~~~~~~~~reached(X,R), reached(Y,R) }\\
   \texttt{~~~~~~~~~~~~~\} 1.}\\
  \end{tabular}
- \right\} 
+ \right\} \!\!
  \begin{array}{c}
   \alert{\text{非閉路}}\\
   \alert{\text{制約}} 
  \end{array}
  $ \mbox{}\\
  \vskip 1em
- ~~\texttt{:- node(X), not 1 \{reached(X,R)\} 1.} {\Large\}}\alert{根付き連結制約}
+ ~~\texttt{:- node(X), not 1 \{ reached(X,R) \} 1.} ~{\Large\}}\alert{根付き連結制約}
  \end{exampleblock}
  \begin{itemize}
   \item 全部で\structure{6つ}のルールで記述可能．
@@ -302,7 +303,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験内容
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験概要}
+\begin{frame}{実験概要}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \setcounter{footnote}{1}
 提案符号化の有効性を評価するために，以下の実験を行った．
@@ -333,7 +334,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% カクタスプロット
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験結果(1/2) : カクタスプロット}
+\begin{frame}{実験結果(1/2) : カクタスプロット}
  \begin{figure}[h]
   \centering
   \includegraphics[scale=0.38]{fig/cactus.png}
@@ -347,7 +348,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 辺の数の表
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験結果(2/2) : 解けた問題数による比較}
+\begin{frame}{実験結果(2/2) : 解けた問題数による比較}
 
 \begin{table}[t]
  \centering
@@ -419,7 +420,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案アプローチ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{根付き全域森遷移問題の解法}
+\begin{frame}{根付き全域森遷移問題の解法}
  \vskip -1ex
  \begin{exampleblock}{シングルショット符号化}
   \begin{itemize}
@@ -429,8 +430,8 @@
    \item スタート状態，ゴール状態，遷移制約に関するルールを追加．
    \end{itemize}
    %\item 解が存在するまでステップ長$t$を増やしながら，繰り返し解く．
-   \item 各問題中の制約の大部分は共通であるため，同一の探索空間を何度も調べることになり，
-		 \alert{求解効率が低下する}という問題点がある．
+   \item 各問題中の制約の大部分は共通であるため，\alert{同一の探索空間を何度も調べる}ことになり，
+		 求解効率が低下するという問題点がある．
   \end{itemize}
  \end{exampleblock}
 
@@ -443,14 +444,14 @@
   \end{itemize}
  \end{alertblock}
 \begin{itemize}
- \item マルチショットASP解法は，解の遷移問題に対して，求解性能の向上が期待できる．
+ \item マルチショットASP解法を用いることで，解の遷移問題に対して，求解性能の向上が期待できる．
 \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験内容--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験概要}
+\begin{frame}{実験概要}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \setcounter{footnote}{1}
 提案するアプローチの有効性を評価するために，以下の実験を行った．
@@ -478,12 +479,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験結果--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験結果(1/2)}
+\begin{frame}{実験結果：CPU時間の比較(1/2)}
  \centering
  \scalebox{0.8}{\input{table/trans_experiment-1}}
 \end{frame}
 
-\begin{frame}{実験結果(2/2)}
+\begin{frame}{実験結果：CPU時間の比較(2/2)}
  \centering
  \vskip -2ex
  \scalebox{0.8}{\input{table/trans_experiment-2}}
@@ -501,7 +502,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{まとめと今後の課題}
+\begin{frame}{まとめと今後の課題}
  % 自分が伝えたいことをメインに書く
  \begin{block}{まとめ}
   \begin{enumerate}
