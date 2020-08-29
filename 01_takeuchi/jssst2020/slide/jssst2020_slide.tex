@@ -504,79 +504,55 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基本符号化の改良点}
+\begin{frame}{基本符号化の改良点 (\alert{??? TODO})}
  \begin{block}{問題の入力}
-  \begin{multicols}{2}
   \begin{itemize}
-   \item $V$:\ オプションの集合
-   \item $w_j$:\ オプション$j \in V$ のIWR値
-   \uncover<2>{
    \item $VP$:\ タイプの集合
    \item $VP*$:\ 必須なタイプの集合
+   \item $V$:\ オプションの集合
    \item $V_i$:\ タイプ$i \in VP$ が実装可能なオプションの集合
-   }
+   \item $w_j$:\ オプション$j \in V$ のIWR値
   \end{itemize}
-  \end{multicols}
  \end{block}
- \begin{itemize}
-  \item IWR値の総和の範囲(イメージ)
- \end{itemize}
- \begin{center}
-  \input{comp_encode} 
- \end{center}
- \vspace{-3ex}
- \uncover<2>{
-  \begin{itemize}
-   \item 範囲制約及び装備タイプが必須かどうかの別を考慮することで，
-	 IWR値の総和の上下限を厳密にする．
-  \end{itemize}
- }
-
- % \begin{block}{IWR値の総和\code{S}の上下限}
- %  \[
- %   0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}
- %  \]
- % \end{block}
- % \alert{各タイプが選択可能なオプション数の上下限，必須かどうかの別を考慮}
- % \begin{alertblock}{}
- %  \[
- %   \sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
- %   \leq \texttt{S} \leq
- %   \sum_{i\in VP}\max_{j\in V_{i}}w_{j}
- %  \]
- % \end{alertblock}
+ \begin{block}{IWR値の総和\code{S}の上下限}
+  \[
+   0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}
+  \]
+ \end{block}
+ \alert{各タイプが選択可能なオプション数の上下限，必須かどうかの別を考慮}
+ \begin{alertblock}{}
+  \[
+   \sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
+   \leq \texttt{S} \leq
+   \sum_{i\in VP}\max_{j\in V_{i}}w_{j}
+  \]
+ \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{改良符号化}
- \begin{itemize}
-  \item 基本符号化の(3)を(3')に置き換える．
- \end{itemize}
+\begin{frame}[fragile]{改良符号化  (\alert{??? TODO})}
+ 基本符号化の(6)を以下のコードで置き換える．
 \begin{exampleblock}{}
  \footnotesize
  \begin{lstlisting}
-  (3)  iwr(S,G) :- 
-          S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) }, group(G).
+  ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+  lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
 
-  (3') iwr(S,G) :- 
-          S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
-          LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
+  ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+  lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+
+  iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
+      LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
  \end{lstlisting}
 \end{exampleblock}
  \begin{itemize}
-  \item アトム\scode{lb_iwr(LB)}, \scode{ub_iwr(UB)}\footnotemark[2]は，
-	IWR値の下限が\code{LB}，上限が\code{UB}であることを表す．
-  % \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
-  % 	のIWR値の最小値の総和が\code{LB}であることを表す．
-  % \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
-  % 	のIWR値の最大値の総和が\code{UB}であることを表す．
+  \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
+	のIWR値の最小値の総和であることを表す．
+  \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
+	のIWR値の最大値の総和であることを表す．
  \end{itemize}
  \begin{block}{}
   \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能
-  \begin{itemize}
-   \item \alert{大規模なCAFE問題への有効性が期待できる．}
-  \end{itemize}
  \end{block}
- \footnotetext[2]{アトム\code{lb_iwr(LB), ub_iwr(UB)}はそれぞれルール2個で求めることができる．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実行実験}
