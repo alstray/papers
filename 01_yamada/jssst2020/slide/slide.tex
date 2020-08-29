@@ -27,6 +27,16 @@
 \usetheme{Warsaw}
 \setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
 \setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
+\setbeamertemplate{footline}[frame number]
+
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
 
 \title{解集合プログラミングを用いた\\配電網問題の解法に関する一考察}
 \author[山田 健太郎，湊 真一，番原 睦則]{山田 健太郎$^1$，湊 真一$^2$，番原 睦則$^1$}
@@ -211,29 +221,30 @@
 %% ASPのシンタックスの説明 その1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPの基本構文}
-\begin{itemize}
- \item ASPのプログラムは，以下の形式の\structure{ルール}の有限集合である．
-\begin{block}{}
- \centering
- $a_0 ~\text{:-}~ a_1, \dots, a_m, ~\text{\tt not}~ a_{m+1}, \ldots, \text{\tt not}~ a_n.$
-\end{block}
- ここで，$0 \leq m \leq n$ であり，各$a_i$はアトム，{\tt not}は\structure{デフォルトの否定}，
- “$,$”は連言を表す.“:-”の左側を\structure{ヘッド}，
-	   右側を\structure{ボディ}と呼ぶ．“.”はルールの終わりを表す終端記号である．
-	   \vskip 1ex
-	   直感的な意味は，「\redunderline{$a_1,\ldots,a_m$がすべて成り立ち，$a_{m+1},\ldots,a_n$の}\\
-	   \redunderline{それぞれが成り立たないならば，$a_0$が成り立つ}」である．
+ \begin{itemize}
+  \item ASPのプログラムは，以下の形式の\structure{ルール}の有限集合である．
+ \begin{block}{}
+  \centering
+  $a_0 ~\text{:-}~ a_1, \dots, a_m, ~\text{\tt not}~ a_{m+1}, \ldots, \text{\tt not}~ a_n.$
+ \end{block}
+		ここで，$0 \leq m \leq n$ であり，各$a_i$はアトム，{\tt not}は\structure{デフォルトの否定}，
+		“$,$”は連言を表す.“:-”の左側を\structure{ヘッド}，
+		右側を\structure{ボディ}と呼ぶ．“.”はルールの終わりを表す終端記号である．
+		\vskip 1ex
+		直感的な意味は，「\redunderline{$a_1,\ldots,a_m$がすべて成り立ち，$a_{m+1},\ldots,a_n$の}\\
+		\redunderline{それぞれが成り立たないならば，$a_0$が成り立つ}」である．
+		
+		\vskip 2ex
 
-	   \vskip 2ex
-
- \item ヘッドが空のルールを\structure{一貫性制約}と呼ぶ．
-\begin{block}{}
- \centering
- $ \text{:-} ~a_1, ~{\tt not}~ a_2.$
-\end{block}
-	上のルールは，「$a_1$が成り立ち，$a_2$が成り立たないことは``ない''」\\
-	   つまり，「$a_1$と$a_2$は両方同時に成り立つ」ことを意味する．
-\end{itemize}
+  \item ヘッドが空のルールを\structure{一貫性制約}と呼ぶ．
+		\begin{block}{}
+		 \centering
+		 $ \text{:-} ~a_1, ~{\tt not}~ a_2.$
+		\end{block}
+		上のルールは，「$a_1$が成り立ち，$a_2$が成り立たないことは``ない''」\\
+		つまり，「$a_1$と$a_2$は両方同時に成り立つ」ことを意味する．
+  \item ヘッドのみのルールを\structure{ファクト}と呼ぶ．
+ \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
