@@ -86,16 +86,17 @@
 		  \item \structure{トポロジ制約}と\structure{電気制約}から構成．
 		  \item 損失電力を最小にするスイッチの開閉状態を求めることが目的．
 		 \end{itemize}
-  \item フロンティア法を用いた解法が提案されている[井上ほか '12]． 
+  \item これまで，メタヒューリスティクス等の解法が提案されている．
+  \item 厳密解法として，フロンティア法を用いた解法が提案されている．
 		\begin{itemize}
-		 \item ERATO湊離散構造処理系プロジェクトの成果．
-		 \item 実用規模の配電網問題(\structure{\textbf{スイッチ数468個}})の最適解を発見．
+		 \item 実用規模の配電網問題(\structure{\textbf{スイッチ数468個}})の網羅的な列挙・
+			   索引化に世界で初めて成功[井上ほか '12]．
 		\end{itemize}
  \end{itemize}
 
  \vspace{-0.25cm}
  \pause
- \begin{alertblock}{}
+ \begin{alertblock}{根付き全域森問題}
   トポロジ制約のみの配電網問題は，グラフと根と呼ばれる特別なノードから，
   \alert{根付き全域森}を求める部分グラフ探索問題に帰着できる．
  \end{alertblock}
@@ -117,7 +118,7 @@
   \end{enumerate}
  \end{block}
 
- \begin{exampleblock}{根付き全域森の例}
+ \begin{exampleblock}{根付き全域森問題の例}
   \begin{columns}
    \begin{column}{0.45\textwidth}
 	\centering
@@ -128,7 +129,6 @@
 	\input{tikz/tikz-out}
    \end{column}
   \end{columns}
-
 
  \end{exampleblock}
  
@@ -146,11 +146,12 @@
 		システム生物学など様々な分野への応用が拡大している．
  \end{itemize}
 
- \begin{alertblock}{ASP技術を組合せ最適化問題に用いる利点}
+ \begin{alertblock}{ASP技術を根付き全域森問題に用いる利点}
    \begin{itemize}
-	\item ASP言語の高い表現力を活かし，記号的な制約を簡潔に記述可能．
-	\item ASPMT技術を用いて，様々な背景理論ソルバーと連携可能．
-	\item 充足不能コアを用いた効率的な最適値探索が利用可能．
+	\item ASP言語の高い表現力を活かし，根付き全域森問題の制約を簡潔に記述可能．
+	\item 
+%	\item ASPMT技術を用いて，様々な背景理論ソルバーと連携可能．
+%	\item 充足不能コアを用いた効率的な最適値探索が利用可能．
    \end{itemize}
  \end{alertblock}
 
