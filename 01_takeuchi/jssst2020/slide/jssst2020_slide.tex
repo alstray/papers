@@ -191,7 +191,7 @@
  \begin{itemize}
  \item 車種2と車種3はCAFE基準値を下回っているが，
    平均燃費は 9.028km/L となり，燃費制約を満たしている．
- \item オプションの選択を誤ると，販売台数1156まで大幅に減少する．
+ \item オプションの選択を誤ると，販売台数1,156まで大幅に減少する．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -328,55 +328,58 @@
  %  \end{columns}
  % \end{frame}
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
- \begin{frame}{CAFE問題ソルバーの構成 (提案)\alert{(A案)}}
+ \begin{frame}{CAFE問題ソルバーの構成 (提案)}
    \scalebox{0.9}{\centering\input{arch}}
    \begin{block}{3種類のASP符号化を考案}
      \begin{itemize}
      \item \alert{\bf 基本符号化}
        \begin{itemize}\footnotesize
-       \item CAFE問題の制約を，ASPのルール17個で簡潔に記述
+       \item CAFE問題の制約を，\textbf{ASPのルール17個}で簡潔に記述
        \end{itemize}
      \item \alert{\bf 改良符号化}
        \begin{itemize}\footnotesize
+       \item ASPシステムは，変数を含む論理プログラムを，変数を含まない
+         論理プログラムに\textbf{基礎化}したのち解集合を計算する．
        \item 各車種の燃費や予想販売台数を算出するために必要なIWR値の総
-         和の上下限を厳密に計算することにより，基礎化後のルール数を少
-         なく抑えるよう工夫
-       %\item これにより，改良符号化は大規模なCAFE問題への有効性が期待
-       \end{itemize}
-     \item \structure{\bf 拡張符号化}
-       \begin{itemize}\footnotesize
-         \item 製造ラインの削減や大量生産を促進することを狙いとし，
-           予想販売台数の最大化に加えて，装備オプション数の最小化も行
-           えるように拡張
-       \end{itemize}
-     \end{itemize}
-   \end{block}
- \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
- \begin{frame}{CAFE問題ソルバーの構成 (提案) \alert{(B案)}}
-   \scalebox{0.9}{\centering\input{arch2}}
-   \begin{block}{3種類のASP符号化を考案}
-     \begin{itemize}
-     \item \alert{\bf 基本符号化}
-       \begin{itemize}
-       \item CAFE問題の制約を，ASPのルール17個で簡潔に記述
-       \end{itemize}
-     \item \alert{\bf 改良符号化}
-       \begin{itemize}
-       \item 各車種の燃費や予想販売台数を算出するために必要なIWR値の総
-         和の上下限を厳密に計算することにより，基礎化後のルール数を少
-         なく抑えるよう工夫
+         和の上下限を厳密に計算することにより，
+         \textbf{基礎化後のルール数を少なく}抑えるよう工夫
        \item これにより，改良符号化は大規模なCAFE問題への有効性が期待
        \end{itemize}
      \item \structure{\bf 拡張符号化}
-       \begin{itemize}
+       \begin{itemize}\footnotesize
          \item 製造ラインの削減や大量生産を促進することを狙いとし，
-           予想販売台数の最大化に加えて，装備オプション数の最小化も行
-           えるように拡張
+           予想販売台数の最大化に加えて，
+           \textbf{装備オプション数の最小化}
+           も行えるように拡張
        \end{itemize}
      \end{itemize}
    \end{block}
  \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%  \begin{frame}{CAFE問題ソルバーの構成 (提案) \alert{(B案)}}
+%    \scalebox{0.9}{\centering\input{arch2}}
+%    \begin{block}{3種類のASP符号化を考案}
+%      \begin{itemize}
+%      \item \alert{\bf 基本符号化}
+%        \begin{itemize}
+%        \item CAFE問題の制約を，ASPのルール17個で簡潔に記述
+%        \end{itemize}
+%      \item \alert{\bf 改良符号化}
+%        \begin{itemize}
+%        \item 各車種の燃費や予想販売台数を算出するために必要なIWR値の総
+%          和の上下限を厳密に計算することにより，基礎化後のルール数を少
+%          なく抑えるよう工夫
+%        \item これにより，改良符号化は大規模なCAFE問題への有効性が期待
+%        \end{itemize}
+%      \item \structure{\bf 拡張符号化}
+%        \begin{itemize}
+%          \item 製造ラインの削減や大量生産を促進することを狙いとし，
+%            予想販売台数の最大化に加えて，装備オプション数の最小化も行
+%            えるように拡張
+%        \end{itemize}
+%      \end{itemize}
+%    \end{block}
+%  \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{ASPの構文}
   \begin{alertblock}{}\centering
@@ -504,55 +507,69 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基本符号化の改良点 (\alert{??? TODO})}
- \begin{block}{問題の入力}
-  \begin{itemize}
-   \item $VP$:\ タイプの集合
-   \item $VP*$:\ 必須なタイプの集合
-   \item $V$:\ オプションの集合
-   \item $V_i$:\ タイプ$i \in VP$ が実装可能なオプションの集合
-   \item $w_j$:\ オプション$j \in V$ のIWR値
-  \end{itemize}
- \end{block}
- \begin{block}{IWR値の総和\code{S}の上下限}
-  \[
-   0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}
-  \]
- \end{block}
- \alert{各タイプが選択可能なオプション数の上下限，必須かどうかの別を考慮}
- \begin{alertblock}{}
-  \[
-   \sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
-   \leq \texttt{S} \leq
-   \sum_{i\in VP}\max_{j\in V_{i}}w_{j}
-  \]
- \end{alertblock}
+\begin{frame}[fragile]{基本符号化の問題点}
+
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+  (3) iwr(S,G) :- 
+         S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) }, group(G).
+\end{lstlisting}
+\end{exampleblock}
+\begin{itemize}
+\item \code{(3)}で，IWR値の総和を表す項\code{S}の上下限は，
+  \(
+    0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}
+  \)
+\item しかし，これは自明な上下限であり，各タイプが選択可能なオプション
+  数の上下限値(今回はどちらも1)，
+  および，必須タイプかどうかの別を考慮することで，
+  \alert{\bf \code{S}のドメインを縮小できる．}
+\end{itemize}
+
+\[
+  \sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
+  \leq \texttt{S} \leq
+  \sum_{i\in VP}\max_{j\in V_{i}}w_{j}
+\]
+
+\begin{columns}\footnotesize
+  \begin{column}{0.4\linewidth}
+    \begin{itemize}
+    \item $VP$:\ タイプの集合
+    \item $VP*$:\ 必須なタイプの集合
+    \item $V$:\ オプションの集合
+    \end{itemize}
+  \end{column}
+  \begin{column}{0.45\linewidth}
+    \begin{itemize}
+    \item $V_i$:\ タイプ$i \in VP$ が選択可能なオプションの集合
+    \item $w_j$:\ オプション$j \in V$ のIWR値
+    \end{itemize}
+  \end{column}
+\end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{改良符号化  (\alert{??? TODO})}
- 基本符号化の(6)を以下のコードで置き換える．
+\begin{frame}[fragile]{改良符号化}
 \begin{exampleblock}{}
- \footnotesize
- \begin{lstlisting}
-  ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
-  lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
-
-  ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
-  lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
-
-  iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
+\footnotesize
+\begin{lstlisting}
+  (3') iwr(S,G) :- 
+      S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
       LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
- \end{lstlisting}
+
+  (10) ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+  (11) lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+
+  (12) ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+  (13) lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+\end{lstlisting}
 \end{exampleblock}
  \begin{itemize}
-  \item アトム\scode{lb_iwr(LB)}は，下限値が各必須タイプが選択可能なオプション
-	のIWR値の最小値の総和であることを表す．
-  \item アトム\scode{ub_iwr(UB)}は，上限値が各タイプが選択可能なオプション
-	のIWR値の最大値の総和であることを表す．
+ \item (10--11) 各装備タイプ\code{VP}に対して，選択可能な装備オプショ
+   ンのIWR値の\structure{\bf 最大値\code{ub_vp(UB,VP)}}と\structure{\bf 最小値\code{lb_vp(LB,VP)}}を計算
+ \item (12--13) IWR値の総和の\structure{\bf 上限値\code{ub_iwr(S)}}と\structure{\bf 下限値\code{lb_iwr(S)}}を計算
+ \item この上下限を適用することで，基礎化後の(3')のルール数を抑えることができる．
  \end{itemize}
- \begin{block}{}
-  \scode{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることが可能
- \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実行実験}
@@ -564,7 +581,7 @@
   \begin{itemize}
   \item 企業から提供された問題(3問)に対して
   \item 5通りのCAFE基準値$t\in\{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$を適用
-  \item 車種の数$g = 3$
+  \item 車種の数$n = 3$
   \end{itemize}
   \begin{exampleblock}\small
     \centering
@@ -637,27 +654,34 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめと今後の課題}
- \begin{block}{まとめ}
-  \begin{itemize}
-   \item CAFE問題に対して解集合プログラミングを初めて適用した．
-	 \begin{itemize}
-	  \item 3種類のASP符号化によるCAFE問題ソルバーを考案
-	  \item 記述性の高さ，柔軟な最適解探索などの利点を確認できた．
-	 \end{itemize}
-   \item 企業から提供された実データを用いた評価実験を行った．
-	 \begin{itemize}
-	  \item 実用規模の問題に対して適用可能であることを確認できた．
-	  \item 大規模な問題に対する改良符号化の優位性を確認できた．
-	 \end{itemize}
-  \end{itemize}
- \end{block}
- \begin{alertblock}{今後の課題}
-  \begin{itemize}
-   \item 様々な制約の調査・整理・実装をすることで，CAFE問題ソルバーの拡張をする．
-   \item より一般的な，可変性モデルで記述できる問題へのASPの適用
-  \end{itemize}
- \end{alertblock}
+\begin{frame}{まとめ}
+\begin{alertblock}{}
+  CAFE方式と呼ばれる新しい燃費規制に基づく車両装備仕様問題(CAFE問題)
+  に対して，解集合プログラミング(ASP)をはじめて適用し，その有用性を
+  確認した．
+\end{alertblock}
+\begin{itemize}
+\item \structure{\bf 記述性: }
+  ASPの表現力の高さを活かし，CAFE問題の制約を簡潔に記述できることを確
+  認した．
+\item \structure{\bf 効率性: }
+  大規模な問題に対する改良符号化の優位性を確認できた．
+\item \structure{\bf 拡張性: }
+  装備オプション数の最小化など，ユーザの選好にあわせて目的関数を柔軟に
+  追加できることを確認した．
+\end{itemize}
+\vfill
+\begin{small}
+\begin{block}{}
+\begin{itemize}
+\item 装備に関する制約は，まず企画部門で設定され，開発部門，生産部門，
+  販売部門に受け渡され，各部門で制約が追加されながら徐々に成
+  熟していく．
+\item これら様々な制約を実装することにより，CAFE問題ソルバーを拡張する
+  こと\textbf{今後の課題}である．
+\end{itemize}
+\end{block}
+\end{small}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{}
@@ -721,28 +745,28 @@
   同時に実装することはない．
 \end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{IWR値の上下限}
- \begin{exampleblock}{}
-  \footnotesize
-  \begin{lstlisting}
-   ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
-   lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]{IWR値の上下限}
+%  \begin{exampleblock}{}
+%   \footnotesize
+%   \begin{lstlisting}
+%    ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+%    lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
 
-   ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
-   lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
-  \end{lstlisting}
- \end{exampleblock}
- \begin{itemize}
-  \item アトム\scode{ub_vp(UB,VP)}, \scode{lb_vp(LB,VP)}は，
-	タイプ\code{VP}に属するオプションの中で最大のIWR値が\code{UB}，
-	最小のIWR値が\code{LB}であることを表す．
-  \item アトム\scode{ub_iwr(S)}は，すべての\code{VP}についての
-	\code{UB}の和が\code{S}であることを表す．
-  \item アトム\scode{lb_iwr(S)}は，必須タイプである\code{VP}についての
-	\code{LB}の和が\code{S}であることを表す．
- \end{itemize}
-\end{frame}
+%    ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+%    lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+%   \end{lstlisting}
+%  \end{exampleblock}
+%  \begin{itemize}
+%   \item アトム\scode{ub_vp(UB,VP)}, \scode{lb_vp(LB,VP)}は，
+% 	タイプ\code{VP}に属するオプションの中で最大のIWR値が\code{UB}，
+% 	最小のIWR値が\code{LB}であることを表す．
+%   \item アトム\scode{ub_iwr(S)}は，すべての\code{VP}についての
+% 	\code{UB}の和が\code{S}であることを表す．
+%   \item アトム\scode{lb_iwr(S)}は，必須タイプである\code{VP}についての
+% 	\code{LB}の和が\code{S}であることを表す．
+%  \end{itemize}
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{拡張符号化}
  % \begin{block}{拡張符号化}
