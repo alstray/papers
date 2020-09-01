@@ -44,7 +44,7 @@
 
 \title{解集合プログラミングを用いた\\配電網問題の解法に関する一考察}
 \author[山田 健太郎，湊 真一，番原 睦則]{山田 健太郎$^1$，湊 真一$^2$，番原 睦則$^1$}
-\date{日本ソフトウェア科学会第37回大会}
+\date{NII 共同研究 第1回研究会合}
 \institute{1.名古屋大学 大学院情報学研究科 \\ 2.京都大学 大学院情報学研究科}
 
 %% テンプレ 
@@ -162,8 +162,24 @@
   \end{columns}
   \vfill
   \begin{itemize}
-  \item TODO 配電網問題との対応を書く
-  \item ...
+  \item \structure{\bf 配電網とグラフの対応} \\
+	 \begin{center}
+      \begin{minipage}[c]{0.6\textwidth}
+	   \begin{block}{}
+		\centering
+		\begin{tabular}{c|ccc}
+		配電網 & 家庭 & スイッチ & 変電所 \\
+		\hline
+		グラフ & ノード & 辺 & 根
+		\end{tabular}
+	   \end{block}
+      \end{minipage}
+	 \end{center}\vfill
+   \item \structure{\bf トポロジ制約}
+		 \begin{itemize}
+		  \item 停電(変電所と結ばれない家庭)
+		  \item 短絡(供給経路上のループ，複数の変電所と結ばれる家庭)
+		 \end{itemize}
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -213,18 +229,6 @@
        \end{itemize}
      \end{itemize}
    \end{block}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ルール数の比較
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基礎化後のルール数 (TODO appendixへ)}
-  \begin{itemize}
-  \item グラフのノード数を$|V|$，根ノードの数を$|R|$とする．
-  \end{itemize}
-  \begin{table}[t]
-    \centering
-    \input{table/proposal}
-  \end{table}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASPの構文
@@ -279,16 +283,20 @@
    $lb$個以上，$ub$個以下が成り立つことを意味する．
  \item \structure{\bf 重み付き個数制約}
    \begin{center}
-     $t$ \code{= \#sum} \code{\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}}
+     $lb$ \code{\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
    \end{center}
    $a_1,\dots,a_n$のうち，
-   成り立つアトムの重み和が項$t$に等しくなることを意味する．
+   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASPファクト表現
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{根付き全域森問題のASPファクト表現}
+ \begin{figure}
+  \centering
+  \input{tikz/tikz-input}
+ \end{figure}\vfill
   \begin{exampleblock}{}\centering
     \lstinputlisting{code/graph.lp}    
   \end{exampleblock}
@@ -325,7 +333,14 @@
 \begin{exampleblock}{}\small
 \begin{lstlisting}
 (1) { inForest(X,Y) } :- edge(X,Y).
-
+\end{lstlisting}
+\end{exampleblock}
+\begin{itemize}
+ \item (1) 各辺\code{(X,Y)について}，根付き全域森に含まれること意味する \\
+	  アトム\code{inForest(X,Y)}を導入する．
+\end{itemize}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
 (2) reached(R,R) :- root(R).
 (3) reached(X,R) :- reached(Y,R), inForest(Y,X).
 (4) reached(X,R) :- reached(Y,R), inForest(X,Y).
@@ -333,8 +348,10 @@
 \end{exampleblock}
 \vfill
 \begin{itemize}
-\item TODO 説明
-\item 
+\item アトム\code{reached(X,R)}は，ノード\code{X}が根ノード\code{R}から到達可能であることを意味する．
+\item (2) 各根ノード\code{R}について，自分自身から到達可能であることを表す．
+\item (3)(4) ノード\code{Y}が根ノード\code{R}から到達可能かつ，辺\code{(X,Y)}が解に含まれるならば，
+	  ノード\code{X}も\code{R}から到達可能であることを表す．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -348,14 +365,16 @@
 \end{exampleblock}
 \vfill
 \begin{itemize}
-\item TODO 説明
-\item 
+\item (5) 各ノード\code{X}について，ちょうど1つの根からのみ到達可能であることを意味する．
+\item ASPの拡張構文である個数制約を用いることにより，基本符号化よりも基礎化後のルール数を
+	  少なく抑えている．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 改良符号化 (非閉路制約)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{改良符号化: 非閉路制約}
+\begin{minipage}[c]{1.01\textwidth}
 \begin{exampleblock}{}\small
 \begin{lstlisting}
 (6) :- root(R),
@@ -364,10 +383,12 @@
                  } 1.
 \end{lstlisting}
 \end{exampleblock}
+\end{minipage}
 \vfill
 \begin{itemize}
-\item TODO 説明
-\item 
+\item (6) 各連結成分の\structure{\bf ノード数と辺数の差が1}になることを意味する．
+\item 各連結成分が\structure{\bf 木の性質}を満たすことにより，サイクルを持たない
+	  ことを保証する．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 

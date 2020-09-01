@@ -8,7 +8,9 @@ reached(X,R) :- reached(Y,R), inForest(X,Y).
 
 %% non-cycle constraint
 :- root(R),
-   not 1 #sum{ 1,X:reached(X,R) ; -1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R)} 1.
+   not 1 #sum{ 1,X:reached(X,R) ;
+               1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R)
+             } 1.
 
 %% rooted connection constraint
 :- node(X),  not reached(X,_).

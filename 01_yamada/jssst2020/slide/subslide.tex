@@ -55,19 +55,33 @@
 
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ルール数の比較
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{基礎化後のルール数}
+  \begin{itemize}
+  \item グラフのノード数を$|V|$，根ノードの数を$|R|$とする．
+  \end{itemize}
+  \begin{table}[t]
+    \centering
+    \input{table/proposal}
+  \end{table}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASPのコード
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{補足 : 根付き全域森 基本符号化}
- \begin{exampleblock}{}
-  \begin{center}
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \lstinputlisting[numbers=left,%
-   basicstyle=\ttfamily\tiny]{code/srf1.lp}
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-  \end{center}
- \end{exampleblock}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[frame=single,label=code:roop,%
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/srf1.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{frame}
 
 \begin{frame}[fragile]{補足 : 遷移問題 シングルショット符号化}
@@ -83,12 +97,11 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\tiny]{code/trans-const.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
 \end{multicols*}
 \end{frame}
 
 \begin{frame}[fragile]{補足 : 遷移問題 マルチショット符号化}
-
+\begin{multicols*}{2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[frame=single,label=code:incmode,% 
 xleftmargin=1zw,%
@@ -97,9 +110,9 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/dnet-trans.lp}
+basicstyle=\ttfamily\tiny]{code/dnet-trans.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-
+\end{multicols*}
 \end{frame}
 
 \backupend
