@@ -28,8 +28,9 @@
 
 %%%% Fonts %%%%%
 \renewcommand{\kanjifamilydefault}{\gtdefault}
-% \usepackage{otf} % otfパッケージ
-\usepackage[deluxe]{otf} 
+ \usepackage{otf} % otfパッケージ
+% \usepackage[deluxe,expert]{otf} 
+%\renewcommand{\kanjifamilydefault}{mg}
 \usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
 % \usepackage[T1]{fontenc} % 8bit フォント
 % \usepackage{minijs}
@@ -85,7 +86,8 @@
 \title{車両装備仕様問題に対する\\解集合プログラミングの適用}
 \author{竹内頼人\inst{1} \and 田村直之\inst{2} \and 番原睦則\inst{1}}
 \institute{\inst{1}名古屋大学 大学院情報学研究科 \and \inst{2}神戸大学 情報基盤センター}
-\date{日本ソフトウェア科学会第37回大会 (JSSST2020)}
+%\date{日本ソフトウェア科学会第37回大会 (JSSST2020)}
+\date{NII共同研究　第1回会合}
 \begin{document}
 \frame{\titlepage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -117,7 +119,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE基準 (企業別平均燃費基準)}
   \begin{alertblock}{CAFE 問題}\centering
-    CAFE 方式と呼ばれる燃費規制に基づく車両装備仕様問題
+    CAFE 方式と呼ばれる燃費規制に基づく車両装備仕様問題~\footnotemark
   \end{alertblock}
 
   \begin{itemize}
@@ -140,6 +142,7 @@
     向上させることで基準を達成することが可能
   \item 欧米で採用されており，日本でも2020年度から導入されている．
   \end{itemize}
+ \footnotetext{本研究では，CAFE方式の計算方法として，単純化された式を扱っている．}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題の例}
@@ -252,7 +255,7 @@
 \begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
  \begin{itemize}
  \item \structure{\bf ASPの言語}は，一階論理に基づく知識表現言語の一種である．
- \item \structure{\bf ASPのプログラム}は，ASPルールの有限集合である．
+ %\item \structure{\bf ASPのプログラム}は，ASPルールの有限集合である．
  \item \structure{\bf ASPシステム}は，安定モデル意味論~[Gelfond and Lifschitz '88]
    に基づく解集合を計算するシステムである．
  \item 近年，SAT技術を利用した高速なASPシステムが開発され，
@@ -390,7 +393,7 @@
     \begin{center}
       \begin{minipage}[c]{0.7\textwidth}
         \begin{block}{}\centering
-          $a_0$\quad\code{:-}\quad$a_1$\code{,}\ldots\code{,}$a_m$\code{,}
+          $a_0$\quad\code{:-} \quad$a_1$\code{,}\ldots\code{,}$a_m$\code{,}
           \ \code{not}~$a_{m+1}$\code{,}\ldots\code{,} \code{not}~$a_n$\code{.}
         \end{block}        
       \end{minipage}
@@ -498,7 +501,7 @@
   総和が\code{S}であることを表す．
 \item (4--5)
   \code{fe(FE,G)}と\code{sv(SV,G)}は，
-  それぞれ車種\code{G}の燃費が\code{FE}，予想販売台数\code{SV}
+  それぞれ車種\code{G}の燃費が\code{FE}，予想販売台数が\code{SV}
   であることを表す．
 \item (6)
   CAFE方式の制約式を以下のように変形し，
@@ -694,58 +697,6 @@
 \appendix
 \backupbegin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{基本符号化: 依存制約(要求・排他)}
- \begin{center} 
- \begin{tikzpicture}
- % Grade
-  \nodeVP{grade}{at={(0,0)}}{Grade};
-  \nodeV{dx}{below=0.3cm of via_grade}{DX}{= 580};
-  \draw[dashed](via_grade)--(dx.north);
-  \nodeV{std}{left=0.3cm of dx}{STD}{= 580};
-  \draw[dashed](via_grade)--(std.north);
-  \nodeV{lx}{right=0.3cm of dx}{LX}{= 580};
-  \draw[dashed](via_grade)--(lx.north);
-
-  % Tire
-  \nodeVP{tire}{right=6cm of grade}{Tire};
-  \nodeV{16inch}{below left=0.4cm of via_tire}{16inch}{= 110};
-  \nodeV{17inch}{below right=0.4cm of via_tire}{17inch}{= 130};
-  \nodeV{15inch}{left=0.3cm of 16inch}{15inch}{= 90};
-  \nodeV{18inch}{right=0.3cm of 17inch}{18inch}{= 150};
-  \draw [dashed](via_tire)--(15inch.north);
-  \draw [dashed](via_tire)--(16inch.north);
-  \draw [dashed](via_tire)--(17inch.north);
-  \draw [dashed](via_tire)--(18inch.north);
-
-  % require
-  \draw[->] (std.south)--++(0,-0.2) node[below=-1mm] {\tiny{requires\_v\_v}} -|(16inch.south);
-  \draw[white,line width=4pt](dx.south) ++(0,-0.1)--++(0,-0.5);
-  \draw[->] (dx.south)--++(0,-0.5) node[below=-1mm] {\tiny{requires\_v\_v}} -|(17inch.south);
-  \draw[white,line width=4pt] (lx.south) ++(0,-0.1)--++(0,-0.8);
-  \draw[->] (lx.south)--++(0,-0.8) node[below=-1mm] {\tiny{requires\_v\_v}} -|(18inch.south);
- \end{tikzpicture}
- \end{center}
-
-\vfill
-\begin{exampleblock}{}
-\begin{lstlisting}
-  (a) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
-  (b) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
-\end{lstlisting}
-\end{exampleblock}
-\vfill
-\begin{itemize}
-\item (a)
-  要求関係\code{require_v_v(V1,V2)}が与えられたとき，
-  車種\code{G}がオプション\code{V1}を実装するならば，
-  \code{G}は\code{V2}も実装しなければならない．
-\item (b)
-  排他関係\code{exclude_v_v(V1,V2)}が与えられたとき，
-  車種\code{G}が\code{V1}と\code{V2}を
-  同時に実装することはない．
-\end{itemize}
-\end{frame}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{frame}[fragile]{IWR値の上下限}
 %  \begin{exampleblock}{}
 %   \footnotesize
@@ -775,20 +726,23 @@
  %   \item 製造ラインの削減や大量生産を促進することが狙い
  %  \end{itemize}  
  % \end{block}
- 改良符号化の目的関数(x)を(x'-y')に置き換える．
+ \begin{itemize}
+  \item 製造ラインの削減や，大量生産を促進することを狙いとして，
+	予想販売台数の最大化に加えて，オプション数の最小化も可能なように拡張
+ \end{itemize}
  \begin{exampleblock}{}
   \begin{lstlisting}
-   (x) #maximize { SV,G : sv(SV,G) }.
+   (7') #maximize { SV@2,G : sv(SV,G) }.
 
-   (x') #maximize { SV@2,G : sv(SV,G) }.
-   (y') #minimize { 1@1,V : used_v(V) }.
+   (14) used_v(V) :- v(V,G).
+   (15) #minimize { 1@1,V : used_v(V) }.
   \end{lstlisting}
  \end{exampleblock}
  \begin{itemize}
   \item アトム\scode{used_v(V)}は，オプション\code{V}がいずれかの装備仕様において
 	実装されたことを意味する．
-  \item 目的関数中の\code{@}の右側は優先度で，予想販売台数の最大化(優先度2)，オプション数最小化(優先度1)
-	の順に最適化される．
+  \item 目的関数中の\code{@}の右側は優先度で，予想販売台数の最大化(優先度2)，
+	オプション数最小化(優先度1)の順に最適化される．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -810,17 +764,17 @@
     \multicolumn{2}{l|}{予想販売台数}  & 2,007  & 2,007   & 1,511   & 2,007 & 2,007 & 1,511 & 2,007& 2,007& 1,511       \\ \hline
     \multicolumn{2}{l|}{平均燃費(km/L)} & \multicolumn{3}{c||}{8.6} & \multicolumn{3}{c||}{8.5} & \multicolumn{3}{c}{8.5}\\ 
     \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c||}{5,525} & \multicolumn{3}{c||}{5,525}  &\multicolumn{3}{c}{5,525}\\
-    \multicolumn{2}{l|}{オプション数}  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{\alert{12}}\\ 
+    \multicolumn{2}{l|}{オプション数}  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{12}\\ 
   \end{tabular}
  \end{exampleblock}
  \begin{itemize}
   \item 改良符号化では，予想販売台数が5,525台である最適解が(解1，解2，解3)の3つ存在する．
   \item 拡張符号化では，最適解はオプション数が最も小さい(解3)のただ1つだけとなる．
  \end{itemize}
- \begin{alertblock}{}
-  CAFE問題ソルバーでは，目的関数を柔軟に追加することにより，複数ある最適解に対して
-  優劣をつけることができる．
- \end{alertblock}
+ % \begin{alertblock}{}
+ %  CAFE問題ソルバーでは，目的関数を柔軟に追加することにより，複数ある最適解に対して
+ %  優劣をつけることができる．
+ % \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{基礎化後のルール数}
@@ -839,9 +793,9 @@
 	少なく抑えられている．
   \item 特にbigでは，70\%以上のルール数の削減に成功している．
  \end{itemize}
- \begin{alertblock}{}
-  このルール数の削減が，改良符号化の大規模問題に対する優位性につながっていると考えられる．
- \end{alertblock}
+ % \begin{alertblock}{}
+ %  このルール数の削減が，改良符号化の大規模問題に対する優位性につながっていると考えられる．
+ % \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{車種の数を増やした実験}
@@ -877,14 +831,63 @@
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{todo}
-%   \begin{itemize}
-%   \item ???
-%   \end{itemize}
-% \end{frame}
+\begin{frame}[fragile]{基本符号化: 依存制約(要求・排他)}
+ \begin{center} 
+ \begin{tikzpicture}
+ % Grade
+  \nodeVP{grade}{at={(0,0)}}{Grade};
+  \nodeV{dx}{below=0.3cm of via_grade}{DX}{= 580};
+  \draw[dashed](via_grade)--(dx.north);
+  \nodeV{std}{left=0.3cm of dx}{STD}{= 580};
+  \draw[dashed](via_grade)--(std.north);
+  \nodeV{lx}{right=0.3cm of dx}{LX}{= 580};
+  \draw[dashed](via_grade)--(lx.north);
+
+  % Tire
+  \nodeVP{tire}{right=6cm of grade}{Tire};
+  \nodeV{16inch}{below left=0.4cm of via_tire}{16inch}{= 110};
+  \nodeV{17inch}{below right=0.4cm of via_tire}{17inch}{= 130};
+  \nodeV{15inch}{left=0.3cm of 16inch}{15inch}{= 90};
+  \nodeV{18inch}{right=0.3cm of 17inch}{18inch}{= 150};
+  \draw [dashed](via_tire)--(15inch.north);
+  \draw [dashed](via_tire)--(16inch.north);
+  \draw [dashed](via_tire)--(17inch.north);
+  \draw [dashed](via_tire)--(18inch.north);
+
+  % require
+  \draw[->] (std.south)--++(0,-0.2) node[below=-1mm] {\tiny{requires\_v\_v}} -|(16inch.south);
+  \draw[white,line width=4pt](dx.south) ++(0,-0.1)--++(0,-0.5);
+  \draw[->] (dx.south)--++(0,-0.5) node[below=-1mm] {\tiny{requires\_v\_v}} -|(17inch.south);
+  \draw[white,line width=4pt] (lx.south) ++(0,-0.1)--++(0,-0.8);
+  \draw[->] (lx.south)--++(0,-0.8) node[below=-1mm] {\tiny{requires\_v\_v}} -|(18inch.south);
+ \end{tikzpicture}
+ \end{center}
+
+\vfill
+\begin{exampleblock}{}
+\begin{lstlisting}
+  (8) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
+  (9) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item (8)
+  要求関係\code{require_v_v(V1,V2)}が与えられたとき，
+  車種\code{G}がオプション\code{V1}を実装するならば，
+  \code{G}は\code{V2}も実装しなければならない．
+\item (9)
+  排他関係\code{exclude_v_v(V1,V2)}が与えられたとき，
+  車種\code{G}が\code{V1}と\code{V2}を
+  同時に実装することはない．
+\end{itemize}
+\end{frame}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \backupend
 \end{document}
+
 %%% Local Variables:
 %%% mode: japanese-latex
 %%% TeX-master: t
