@@ -29,7 +29,7 @@
 %%%% Fonts %%%%%
 \renewcommand{\kanjifamilydefault}{\gtdefault}
  %\usepackage{otf} % otfパッケージ
- \usepackage[deluxe,expert]{otf} 
+ \usepackage[deluxe]{otf} 
 %\renewcommand{\kanjifamilydefault}{mg}
 \usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
 % \usepackage[T1]{fontenc} % 8bit フォント
@@ -86,8 +86,8 @@
 \title{車両装備仕様問題に対する\\解集合プログラミングの適用}
 \author{竹内頼人\inst{1} \and 田村直之\inst{2} \and 番原睦則\inst{1}}
 \institute{\inst{1}名古屋大学 大学院情報学研究科 \and \inst{2}神戸大学 情報基盤センター}
-%\date{日本ソフトウェア科学会第37回大会 (JSSST2020)}
-\date{NII共同研究　第1回会合}
+\date{日本ソフトウェア科学会第37回大会 (JSSST2020)}
+%\date{NII共同研究　第1回会合}
 \begin{document}
 \frame{\titlepage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -140,7 +140,7 @@
     \]
   \item ある特定の車種では燃費基準を達成できなくても，他の車種の燃費を
     向上させることで基準を達成することが可能
-  \item 欧米で採用されており，日本でも2020年度から導入されている．
+  \item 欧米で採用されており，日本でも2020年度の基準として初めて導入されている．
   \end{itemize}
  \footnotetext{本研究では，CAFE方式の計算方法として，単純化された式を扱っている．}
 \end{frame}
@@ -170,26 +170,35 @@
   \end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 9.0km/L)}}
- \begin{exampleblock}{}
+\begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 9.0km/L)}}\small
+ \begin{exampleblock}{解の例}
   \centering
-  %\renewcommand{\arraystretch}{1.1}
-  \tabcolsep = 5mm
-  \begin{tabular}{l|l|c|c|c} 
+  \renewcommand{\arraystretch}{0.9}
+  %\tabcolsep = 5mm
+  \begin{tabular}{p{10mm}|p{25mm}|p{15mm}|p{15mm}|p{15mm}} 
     \multicolumn{2}{l|}{装備仕様}  & 車種1 & 車種2 & 車種3 \\\hline
     装備 & \textsf{Grade}  & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
     &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \textsf{2WD}\\
     &\textsf{Engine}	   & \textsf{V4}     & \textsf{V6}     & \textsf{V6}\\
     &\textsf{Tire}	   & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
     &\textsf{Transmission} & \textsf{5MT}    & \textsf{6MT}    & \textsf{10AT}\\
-    &\textsf{Sun\_Roof}    & -               & \textsf{Normal} & -  \\ \hline
-    \multicolumn{2}{l|}{IWR 値の総和} & 983  & 1,125   & 1,180 \\ %\hline
-    \multicolumn{2}{l|}{燃費(km/L)}      & 10.2  & 8.9     & 8.5 \\ %\hline
-    \multicolumn{2}{l|}{予想販売台数}    & 745   & 1,988   & 1,171  \\ \hline
-    \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{9.0} \\ 
-    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{3,904} \\ 
+    &\textsf{Sun\_Roof}    & -               & \textsf{Normal} & -  
   \end{tabular}
  \end{exampleblock}
+ \pause
+ 
+ \begin{block}{}
+  \centering
+  \renewcommand{\arraystretch}{0.9}
+  %\tabcolsep = 5mm
+  \begin{tabular}{p{38mm}|p{15mm}|p{15mm}|p{15mm}} 
+     IWR 値の総和 & 983  & 1,125   & 1,180 \\ %\hline
+     燃費(km/L)      & 10.2  & 8.9     & 8.5 \\ %\hline
+     予想販売台数    & 745   & 1,988   & 1,171  \\ \hline
+     平均燃費(km/L)  & \multicolumn{3}{c}{9.0} \\ 
+     予想販売台数(合計)  & \multicolumn{3}{c}{3,904} \\ 
+  \end{tabular}
+  \end{block}
  \vfill
  \begin{itemize}
  \item 車種2と車種3はCAFE基準値を下回っているが，
@@ -197,6 +206,51 @@
  \item オプションの選択を誤ると，販売台数1,156まで大幅に減少する．
  \end{itemize}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 9.0km/L)}}
+%  \begin{exampleblock}{}
+%   \centering
+%   %\renewcommand{\arraystretch}{1.1}
+%   \tabcolsep = 5mm
+%   \begin{tabular}{l|l|c|c|c} 
+%     \multicolumn{2}{l|}{装備仕様}  & 車種1 & 車種2 & 車種3 \\\hline
+%     装備 & \textsf{Grade}  & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
+%     &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \textsf{2WD}\\
+%     &\textsf{Engine}	   & \textsf{V4}     & \textsf{V6}     & \textsf{V6}\\
+%     &\textsf{Tire}	   & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
+%     &\textsf{Transmission} & \textsf{5MT}    & \textsf{6MT}    & \textsf{10AT}\\
+%     &\textsf{Sun\_Roof}    & -               & \textsf{Normal} & - \\ \hline 
+%     % \multicolumn{2}{l|}{IWR 値の総和} & 983  & 1,125   & 1,180 \\ %\hline
+%     % \multicolumn{2}{l|}{燃費(km/L)}      & 10.2  & 8.9     & 8.5 \\ %\hline
+%     % \multicolumn{2}{l|}{予想販売台数}    & 745   & 1,988   & 1,171  \\ \hline
+%     % \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{9.0} \\ 
+%     % \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{3,904}
+%   \end{tabular}
+%   \begin{tabular}{l|l|c|c|c} 
+%     % \multicolumn{2}{l|}{装備仕様}  & 車種1 & 車種2 & 車種3 \\\hline
+%     % 装備 & \textsf{Grade}  & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
+%     % &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \textsf{2WD}\\
+%     % &\textsf{Engine}	   & \textsf{V4}     & \textsf{V6}     & \textsf{V6}\\
+%     % &\textsf{Tire}	   & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
+%     % &\textsf{Transmission} & \textsf{5MT}    & \textsf{6MT}    & \textsf{10AT}\\
+%     % &\textsf{Sun\_Roof}    & -               & \textsf{Normal} & - \\ \hline 
+%     \multicolumn{2}{l|}{IWR 値の総和} & 983  & 1,125   & 1,180 \\ %\hline
+%     \multicolumn{2}{l|}{燃費(km/L)}      & 10.2  & 8.9     & 8.5 \\ %\hline
+%     \multicolumn{2}{l|}{予想販売台数}    & 745   & 1,988   & 1,171  \\ \hline
+%     \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{9.0} \\ 
+%     \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{3,904}
+%   \end{tabular}
+
+%  \end{exampleblock}
+%  \vfill
+%  \onslide<2>{
+%  \begin{itemize}
+%  \item 車種2と車種3はCAFE基準値を下回っているが，
+%    平均燃費は 9.028km/L となり，燃費制約を満たしている．
+%  \item オプションの選択を誤ると，販売台数1,156まで大幅に減少する．
+%  \end{itemize}
+%  }
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 8.5km/L)}}
   \begin{exampleblock}{}
@@ -658,30 +712,28 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめ}
-\begin{alertblock}{}
-  CAFE方式と呼ばれる新しい燃費規制に基づく車両装備仕様問題(CAFE問題)
-  に対して，解集合プログラミング(ASP)をはじめて適用し，その有用性を
-  確認した．
-\end{alertblock}
-\begin{itemize}
-\item \structure{\bf 記述性: }
-  ASPの表現力の高さを活かし，CAFE問題の制約を簡潔に記述できることを確
-  認した．
-\item \structure{\bf 効率性: }
-  大規模な問題に対する改良符号化の優位性を確認できた．
-\item \structure{\bf 拡張性: }
-  装備オプション数の最小化など，ユーザの選好にあわせて目的関数を柔軟に
-  追加できることを確認した．
-\end{itemize}
+ 解集合プログラミング(ASP)を用いたCAFE問題ソルバーの設計・実装
+ について述べた．
+ \begin{alertblock}{開発したCAFE問題ソルバーの特長}
+  \begin{itemize}
+   \item \structure{\bf 記述性: }
+	 ASPの表現力の高さを活かし，CAFE問題の制約を簡潔に記述できる．
+   \item \structure{\bf 効率性: }
+	 改良符号化を用いることで，大規模な問題にも適用可能である．
+   \item \structure{\bf 拡張性: }
+	 装備オプション数の最小化など，ユーザの選好にあわせて目的関数を柔軟に
+	 追加できる．
+  \end{itemize}
+ \end{alertblock} 
 \vfill
 \begin{small}
-\begin{block}{}
+\begin{block}{今後の課題}
 \begin{itemize}
 \item 装備に関する制約は，まず企画部門で設定され，開発部門，生産部門，
   販売部門に受け渡され，各部門で制約が追加されながら徐々に成
   熟していく．
 \item これら様々な制約を実装することにより，CAFE問題ソルバーを拡張する
-  こと\textbf{今後の課題}である．
+  ことが今後の課題である．
 \end{itemize}
 \end{block}
 \end{small}
