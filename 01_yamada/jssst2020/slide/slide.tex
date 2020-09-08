@@ -1,12 +1,8 @@
 \documentclass[dvipdfmx,11pt]{beamer}
 
-%全体設定
-%\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
-
-\usepackage{bxdpx-beamer}% dvipdfmxなので必要
-\usepackage{pxjahyper}
-\usepackage{minijs}
-\usepackage{otf}
+\usepackage[deluxe]{otf} 
+\usepackage{txfonts}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
 \usepackage{amssymb,amsmath}
 \usepackage{hyperref}
 \usepackage[absolute,overlay]{textpos}
@@ -20,16 +16,32 @@
 \usepackage{plistings}
 \usepackage{multicol}
 \def\lstlistingname{コード}
-
-\renewcommand{\kanjifamilydefault}{\gtdefault}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
 \newcommand{\lw}[1]{\smash{\lower-5.ex\hbox{#1}}}
 \newcommand{\redunderline}[1]{\textcolor{red}{\underline{\textcolor{black}{#1}}}}
 %%\usetheme{Frankfurt}
 \usetheme{Warsaw}
 \setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
 \setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
-\setbeamertemplate{footline}[frame number]
 
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+    \textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatletter
+
+% exclude apprendix slides from framenumber %
 \newcommand{\backupbegin}{
    \newcounter{framenumberappendix}
    \setcounter{framenumberappendix}{\value{framenumber}}
@@ -39,21 +51,18 @@
    \addtocounter{framenumber}{\value{framenumberappendix}} 
 }
 
+\lstset{
+ basicstyle=\ttfamily\color{black},
+ keepspaces=true,
+ escapechar=|,
+ columns=[l]{fullflexible},
+ commentstyle={\color{red}},
+ stringstyle={\color{blue}}}
+
 \title{解集合プログラミングを用いた\\配電網問題の解法に関する一考察}
 \author[山田 健太郎，湊 真一，番原 睦則]{山田 健太郎$^1$，湊 真一$^2$，番原 睦則$^1$}
-\date{日本ソフトウェア科学会第37回大会\\2020年9月XX日}
+\date{日本ソフトウェア科学会第37回大会}
 \institute{1.名古屋大学 大学院情報学研究科 \\ 2.京都大学 大学院情報学研究科}
-
-%% テンプレ 
-\begin{comment}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% タイトル
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{}
-\end{frame}
-
-\end{comment}
 
 %#################################################
 %# 本文 ##########################################
@@ -71,279 +80,352 @@
 % 配電網
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{配電網問題}
- \begin{alertblock}{}
-  \centering
-  求解困難な組合せ最適化問題の一種
- \end{alertblock}
-
- \begin{itemize}
-  \item  \alert{配電網}とは，変電所と，家庭や工場などから構成される
-		 電力供給経路のネットワークである．
-  \item  配電網の構成技術はスマートグリッドや，災害時の障害箇所の迂回構成などを支える
-		 重要な基盤技術として期待されている．
-  \item  \alert{配電網問題}とは，
-		 \begin{itemize}
-		  \item \structure{トポロジ制約}と\structure{電気制約}から構成．
-		  \item 損失電力を最小にするスイッチの開閉状態を求めることが目的．
-		 \end{itemize}
+  \begin{alertblock}{}\centering
+    求解困難な組合せ最適化問題の一種
+  \end{alertblock}
+  \vfill
+  \begin{itemize}
+  \item \alert{\bf 配電網}とは，変電所と，一般家庭や工場を繋ぐ電力供給
+    経路のネットワークである．
+  \item  配電網の構成技術はスマートグリッドや，災害時の障害箇所の迂回
+    構成などを支える重要な基盤技術として期待されている．
+  \item \alert{\bf 配電網問題}とは，
+    \begin{itemize}
+    \item \structure{\bf トポロジ制約}と\structure{\bf 電気制約}を満たしつつ，
+    \item 損失電力を最小にするスイッチの開閉状態を求めることが目的．
+    \end{itemize}
   \item これまで，メタヒューリスティクス等の解法が提案されている．
-  \item 厳密解法として，フロンティア法を用いた解法が提案されている．
-		\begin{itemize}
-		 \item 実用規模の配電網問題(\structure{\textbf{スイッチ数468個}})の網羅的な列挙・
-			   索引化に世界で初めて成功[井上ほか '12]．
-		\end{itemize}
- \end{itemize}
-
- \vspace{-0.25cm}
- \pause
- \begin{alertblock}{根付き全域森問題}
-  トポロジ制約のみの配電網問題は，グラフと根と呼ばれる特別なノードから，
-  \alert{根付き全域森}を求める部分グラフ探索問題に帰着できる．
- \end{alertblock}
-  
+  \item 厳密解法としては，フロンティア法を用いた解法が提案されており
+    \begin{itemize}
+    \item 実用規模の配電網問題(\structure{\textbf{スイッチ数468個}})の
+      最適解を求めることに成功~[井上ほか '12]．
+    \end{itemize}
+  \end{itemize}
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 根付き全域森
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{根付き全域森(Spanning Rooted Forest)}
-
- \begin{block}{根付き全域森~~[川原$\cdot$湊 '12]}
-  グラフ$G=(V,E)$と，
-  \alert{根}と呼ばれる$V$上のノードが与えられたとき，
-  $G$上の根付き全域森とは，以下の条件を満たす$G$の部分グラフ$G'=(V,E'),\ E' \subseteq E$である．
-  \begin{enumerate}
-   \item $G'$はサイクルを持たない． (\alert{非閉路制約})
-   \item $G'$の各連結成分は，ちょうど1つの根を含む． (\alert{根付き連結制約})
-  \end{enumerate}
- \end{block}
-
- \begin{exampleblock}{根付き全域森問題の例}
-  \begin{columns}
-   \begin{column}{0.45\textwidth}
-	\centering
-	\input{tikz/tikz-input}
-   \end{column}
-   \begin{column}{0.45\textwidth}
-	\centering
-	\input{tikz/tikz-out}
-   \end{column}
-  \end{columns}
-
- \end{exampleblock}
- 
-\end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
- \begin{itemize}
-  \item \structure{ASP言語}は一階論理に基づく知識表現言語の一種である．
-  \item \structure{ASPシステム}は論理プログラムから安定モデル意味論[Gelfond and Lifschitz '88]に
-		基づく解集合を計算するシステムである．
-  \item 近年ではSAT技術を応用した高速ASPシステムが実現され，システム検証，プランニング，
-		システム生物学など様々な分野への応用が拡大している．
- \end{itemize}
-
- \begin{alertblock}{ASP技術を根付き全域森問題に用いる利点}
-   \begin{itemize}
-	\item ASP言語の高い表現力を活かし，根付き全域森問題の制約を簡潔に記述可能．
-	\item 
-%	\item ASPMT技術を用いて，様々な背景理論ソルバーと連携可能．
-%	\item 充足不能コアを用いた効率的な最適値探索が利用可能．
-   \end{itemize}
- \end{alertblock}
-
+  \begin{itemize}
+  \item \structure{\bf ASPの言語}は一階論理に基づく知識表現言語の一種である．
+  \item \structure{\bf ASPシステム}は論理プログラムから安定モデル意味
+    論~[Gelfond and Lifschitz '88]に基づく解集合を計算するシステムである．
+  \item 近年，SATソルバーの実装技術を応用した高速ASPシステムが実現され，
+    システム検証，プランニング，システム生物学など様々な分野への応用が
+    拡大している．
+  \end{itemize}
+  \vfill
+  \begin{alertblock}{配電網問題に対してASP技術を用いる利点}
+    \begin{itemize}
+    \item ASP言語の高い表現力を生かし，各種制約を\textbf{簡潔に記述可能}
+    \item マルチショットASP解法により，
+      ある配電網構成(スタート状態)から他の配電網構成(ゴール状態)
+      へのスイッチの切替手順を求める\textbf{遷移問題への拡張が容易}
+    \item 背景理論つきASPにより，様々な\textbf{背景理論ソルバーと連携可能}
+    \item 解の最適性を保証でき，最適解の列挙も可能
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% 根付き全域森問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森問題}
+  \begin{alertblock}{}
+    トポロジ制約のみの配電網問題は，グラフと根と呼ばれる特別なノードから，
+    \alert{\bf 根付き全域森}を求める部分グラフ探索問題に帰着できる．
+  \end{alertblock}
+  \vfill
+  \begin{block}{根付き全域森 (Spanning Rooted Forest) [川原・湊 '12]}
+    グラフ$G=(V,E)$と，
+    \textbf{根}と呼ばれる$V$上のノードが与えられたとき，
+    $G$上の根付き全域森とは，以下の条件を満たす$G$の部分グラフ$G'=(V,E'),\ E' \subseteq E$である．
+    \begin{enumerate}
+    \item $G'$はサイクルを持たない． (\alert{\bf 非閉路制約})
+    \item $G'$の各連結成分は，ちょうど1つの根を含む． (\alert{\bf 根付き連結制約})
+    \end{enumerate}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 根付き全域森問題の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森問題の例}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{入力例}
+	\centering
+	\input{tikz/tikz-input}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.05\textwidth}\centering
+      $\Rightarrow$
+    \end{column}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{解の例}
+        \centering
+        \input{tikz/tikz-out}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{itemize}
+  \item \structure{\bf 配電網とグラフの対応} \\
+	 \begin{center}
+      \begin{minipage}[c]{0.6\textwidth}
+	   \begin{block}{}
+		\centering
+		\begin{tabular}{c|ccc}
+		配電網 & 家庭 & スイッチ & 変電所 \\
+		\hline
+		グラフ & ノード & 辺 & 根
+		\end{tabular}
+	   \end{block}
+      \end{minipage}
+	 \end{center}\vfill
+   \item \structure{\bf 配電網問題のトポロジ制約}
+		 \begin{itemize}
+		  \item 停電(変電所と結ばれない家庭)
+		  \item 短絡(供給経路上のループ，複数の変電所と結ばれる家庭)
+		 \end{itemize}
+  \end{itemize}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 研究目的
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究目的}
- \begin{alertblock}{目的}
-  ASP技術を活用して，大規模な配電網問題を効率良く解くシステムの\\ 構築を目指す．
- \end{alertblock}
-
- \begin{block}{研究内容}
-  \begin{enumerate}
-   \item 根付き全域森問題を解く，2種類のASP符号化を考案．
-   \item 実用規模の問題，及び，より大規模な問題を用いた評価実験．
-   \item 遷移問題へ拡張し，マルチショットASP解法による実装を考案．
-   % \begin{itemize}
-   % 	\item ある配電網の構成(初期状態)から，目的とする配電網の構成(目的状態)を得るための，
-   % 		  スイッチの切替手順を求める問題．
-   % \end{itemize}
-   \item 実用規模の問題を基にした，遷移問題を用いた評価実験．
-  \end{enumerate}
-  
- \end{block}
- 
+  \begin{alertblock}{目的}\centering
+    ASP技術を活用して，大規模な配電網問題を効率良く解くシステムを構築
+    する．
+  \end{alertblock}
+  \vfill
+  \begin{block}{研究内容}
+    \begin{enumerate}
+    \item \structure{\bf 根付き全域森問題を解く2種類のASP符号化を考案}
+      \begin{itemize}
+      \item 基本符号化
+      \item 改良符号化
+      \end{itemize}
+    \item 根付き全域森問題のある解(スタート状態)から他の解(ゴール状態)
+      への辺の切替手順を求める\structure{\bf 解の遷移問題への拡張}
+      \begin{itemize}
+      \item シングルショット符号化
+      \item マルチショット符号化
+      \end{itemize}
+    \item \structure{\bf 実用規模の問題，および，より大規模な問題を用いて評価}
+    \end{enumerate}
+  \end{block}
 \end{frame}
-
-\begin{frame}{ASPを用いた根付き全域森問題の解法}
- 
- \begin{figure}[htbp]
-  \centering
-  \scalebox{0.8}{\input{tikz/tikz-asp}}
- \end{figure}
-
- \begin{exampleblock}{}
-  \begin{enumerate}
-   \item 与えられた問題インスタンスをASPのファクト形式に変換する．
-   \item 変換した問題と，根付き全域森問題を解くASP符号化を結合し，
-		 ASPシステムを用いて解を求める．
-  \end{enumerate}
- \end{exampleblock}
-\end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案手法
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{提案するASP符号化}
- 
-\begin{itemize}
- \item  根付き全域森問題に対する，2種類のASP符号化を考案した．
- \item $|V|$はグラフのノード数，$|R|$は根ノード数をそれぞれ表す．
-\end{itemize}
- 
-\begin{table}[t]
- \centering
- \input{table/proposal}
-\end{table}
-
- \begin{itemize}
-  \item 改良符号化は，基本符号化よりも基礎化後のルール数が少なくなるため，
- 		大規模な問題への有効性が期待できる．
- \end{itemize}
- 
+\begin{frame}{提案手法}
+   \scalebox{0.9}{\centering\input{arch}}
+   \begin{block}{2種類のASP符号化を考案}
+     \begin{itemize}
+     \item \alert{\bf 基本符号化}
+       \begin{itemize}
+       \item 根付き全域森問題の制約を，\textbf{ASPのルール7個}で簡潔に記述
+       \end{itemize}
+     \item \alert{\bf 改良符号化}
+       \begin{itemize}
+       \item ASPシステムは，変数を含む論理プログラムを，変数を含まない
+         論理プログラムに\textbf{基礎化}したのち解集合を計算する．
+       \item 根付き連結制約をASPの個数制約で表現することにより，
+         \textbf{基礎化後のルール数を少なく抑える}よう工夫されている．
+       \item これにより，改良符号化は大規模な問題への有効性が期待できる．
+       \end{itemize}
+     \end{itemize}
+   \end{block}
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASPのシンタックスの説明 その1
+%% ASPの構文
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの基本構文}
- \begin{itemize}
-  \item ASPのプログラムは，以下の形式の\structure{ルール}の有限集合である．
- \begin{block}{}
-  \centering
-  $a_0 ~\text{:-}~ a_1, \dots, a_m, ~\text{\tt not}~ a_{m+1}, \ldots, \text{\tt not}~ a_n.$
- \end{block}
-		ここで，$0 \leq m \leq n$ であり，各$a_i$はアトム，{\tt not}は\structure{デフォルトの否定}，
-		“$,$”は連言を表す.“:-”の左側を\structure{ヘッド}，
-		右側を\structure{ボディ}と呼ぶ．“.”はルールの終わりを表す終端記号である．
-		\vskip 1ex
-		直感的な意味は，「\redunderline{$a_1,\ldots,a_m$がすべて成り立ち，$a_{m+1},\ldots,a_n$の}\\
-		\redunderline{それぞれが成り立たないならば，$a_0$が成り立つ}」である．
-		
-		\vskip 2ex
-
-  \item ヘッドが空のルールを\structure{一貫性制約}と呼ぶ．
-		\begin{block}{}
-		 \centering
-		 $ \text{:-} ~a_1, ~{\tt not}~ a_2.$
-		\end{block}
-		上のルールは，「$a_1$が成り立ち，$a_2$が成り立たないことは``ない''」\\
-		つまり，「$a_1$と$a_2$は両方同時に成り立つ」ことを意味する．
-  \item ヘッドのみのルールを\structure{ファクト}と呼ぶ．
- \end{itemize}
+\begin{frame}{ASPの構文}
+  \begin{alertblock}{}\centering
+    ASPの言語は論理プログラムをベースとしている~\footnotemark．
+  \end{alertblock}
+  \begin{itemize}
+  \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
+    \begin{center}
+      \begin{minipage}[c]{0.7\textwidth}
+        \begin{block}{}\centering
+          $a_0$\quad\code{:-}\quad$a_1$\code{,}\ldots\code{,}$a_m$\code{,}
+          \ \code{not}~$a_{m+1}$\code{,}\ldots\code{,} \code{not}~$a_n$\code{.}
+        \end{block}        
+      \end{minipage}
+   \end{center}\vfill
+    $0 \leq m \leq n$ であり，各 $a_i$ はアトム，
+    \code{not}は\structure{\bf デフォルトの否定}，\\
+    ``\code{,}''は連言(AND)を表す．``\code{:-}''の左辺を\structure{\bf ヘッド}，
+		右辺を\structure{\bf ボディ}と呼ぶ．
+  \item \alert{\bf 直感的な意味}は，
+    「$a_1,\ldots,a_m$がすべて成り立ち，
+    $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
+    $a_0$が成り立つ」である．
+  \item ボディが空のルールを\structure{\bf ファクト}と呼び，``\code{:-}''は省略できる．
+  \item ヘッドが空のルールを\structure{\bf 一貫性制約}と呼ぶ．例えば，\hspace{-1ex}
+    ``\code{:-} $a_1$\code{,} \code{not}~$a_{2}$''は，
+    「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
+  \end{itemize}
+  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASPのシンタックスの説明 その2
+%% ASPの拡張構文
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPの拡張構文}
+\begin{alertblock}{}\centering
+  組合せ問題を解くための便利な構文が用意されている．
+\end{alertblock}
 \begin{itemize}
- \item ASP言語には，組合せ問題を解くための便利な拡張構文が用意されている．
+ \item \structure{\bf 選択子}
+   \begin{center}
+     \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}
+   \end{center}
+   アトム集合 $\{a_1,\dots,a_n\}$
+   の任意の部分集合が成り立つことを意味する．
+ \item \structure{\bf 個数制約}
+   \begin{center}
+     $lb$\ \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}\ $ub$
+   \end{center}
+   $a_1,\dots,a_n$ のうち，
+   $lb$個以上，$ub$個以下が成り立つことを意味する．
+ \item \structure{\bf 重み付き個数制約}
+   \begin{center}
+     $lb$ \code{\#sum\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
+   \end{center}
+   $a_1,\dots,a_n$のうち，
+   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
 \end{itemize}
- \begin{block}{選択子}
-  \[
-  \{ a_1 ; \ldots ; a_n \}
-  \]
-  アトム集合$\{a_1,\ldots,a_n\}$の任意の部分集合が成り立つことを意味する．
- \end{block}
-
- \begin{block}{個数制約}
-  \[
-  s~ \{ a_1 ; \ldots ; a_n \} ~k
-  \]
-  $a_1,\ldots,a_n$のうち，$s$個以上$k$個以下が成り立つことを意味する．\\
-  また，各アトムに重みを設定し，その重み和について上下限を制限する
-  \structure{重み付き個数制約}({\tt \#sum})も使用できる．
- \end{block}
 \end{frame}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPファクト表現
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森問題のASPファクト表現}
+ \begin{figure}
+  \centering
+  \input{tikz/tikz-input}
+ \end{figure}\vfill
+  \begin{exampleblock}{}\centering
+    \lstinputlisting{code/graph.lp}    
+  \end{exampleblock}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 改良符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{根付き全域森の改良符号化}
- \begin{exampleblock}{}
- \texttt{ \{ inForest(X,Y) \} :- edge(X,Y).} ~{\Large\}}\alert{解の候補}\\
- \vskip 1em
- $
- \left.
- \begin{tabular}{l}
-  \texttt{reached(R,R) :- root(R).} \\
-  \texttt{reached(X,R) :- reached(Y,R), inForest(Y,X).} \\
-  \texttt{reached(X,R) :- reached(Y,R), inForest(X,Y).}
- \end{tabular}
- \right\}
- $ \alert{到達可能性}\\
- \vskip 1em
- $
- \left.
- \begin{tabular}{l}
-  \texttt{:- root(R), } \\
-  \texttt{~~~not 1 \#sum\{ 1,X:reached(X,R) ;}\\
-  \texttt{~~~~~~~~~~~~~~-1,X,Y:inForest(X,Y),}\\
-  \texttt{~~~~~~~~~~~~~~~~~~~~~reached(X,R), reached(Y,R) }\\
-  \texttt{~~~~~~~~~~~~~\} 1.}\\
- \end{tabular}
- \right\} \!\!
- \begin{array}{c}
-  \alert{\text{非閉路}}\\
-  \alert{\text{制約}} 
- \end{array}
- $ \mbox{}\\
- \vskip 1em
- ~~\texttt{:- node(X), not 1 \{ reached(X,R) \} 1.} ~{\Large\}}\alert{根付き連結制約}
- \end{exampleblock}
- \begin{itemize}
-  \item 全部で\structure{6つ}のルールで記述可能．
- \end{itemize}
-\end{frame}
+\begin{frame}[fragile]{根付き全域森問題を解く改良符号化}
+\begin{itemize}
+  \item 根付き全域森問題の制約を，ASPのルール6個で記述
+\end{itemize}
+\begin{minipage}[c]{1.01\textwidth}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(1) { inForest(X,Y) } :- edge(X,Y).
 
+(2) reached(R,R) :- root(R).
+(3) reached(X,R) :- reached(Y,R), inForest(Y,X).
+(4) reached(X,R) :- reached(Y,R), inForest(X,Y).
+
+(5) :- node(X), not 1 { reached(X,R) } 1.
+
+(6) :- root(R),
+       not 1 #sum{ 1,X:reached(X,R) ;
+                  -1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R) 
+                 } 1.
+\end{lstlisting}
+\end{exampleblock}
+\end{minipage}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (到達可能性)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{改良符号化: 到達可能性}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(1) { inForest(X,Y) } :- edge(X,Y).
+\end{lstlisting}
+\end{exampleblock}
+\begin{itemize}
+ \item (1) 各辺\code{(X,Y)について}，根付き全域森に含まれること意味する \\
+	  アトム\code{inForest(X,Y)}を導入する．
+\end{itemize}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(2) reached(R,R) :- root(R).
+(3) reached(X,R) :- reached(Y,R), inForest(Y,X).
+(4) reached(X,R) :- reached(Y,R), inForest(X,Y).
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item アトム\code{reached(X,R)}は，ノード\code{X}が根ノード\code{R}から到達可能であることを意味する．
+\item (2) 各根ノード\code{R}について，自分自身から到達可能であることを表す．
+\item (3) ノード\code{Y}が根ノード\code{R}から到達可能かつ，辺\code{(Y,X)}が根付き全域森に含まれるならば，
+	  ノード\code{X}も同じ根ノード\code{R}から到達可能であることを表す．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (根付き連結制約)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{改良符号化: 根付き連結制約}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(5) :- node(X), not 1 { reached(X,R) } 1.
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item (5) 各ノード\code{X}について，ちょうど1つの根からのみ到達可能であることを意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (非閉路制約)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{改良符号化: 非閉路制約}
+\begin{minipage}[c]{1.01\textwidth}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(6) :- root(R),
+       not 1 #sum{ 1,X:reached(X,R) ;
+                  -1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R)
+                 } 1.
+\end{lstlisting}
+\end{exampleblock}
+\end{minipage}
+\vfill
+\begin{itemize}
+\item (6) 各連結成分の\structure{\bf ノード数と辺数の差が1}になることを意味する．
+\item 各連結成分が\structure{\bf 木の性質}を満たすことにより，サイクルを持たない
+	  ことを保証する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% 実験内容
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験概要}
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
-\setcounter{footnote}{1}
-提案符号化の有効性を評価するために，以下の実験を行った．
-
-\begin{itemize}
- \item \structure{比較するASP符号化:}
-	   \begin{itemize}
-		\item 基本符号化
-		\item 改良符号化
-	   \end{itemize}
- \item \structure{ベンチマーク問題:} 全85問
-	   \begin{itemize}
-		\item DNET\footnote{https://github.com/takemaru/dnet}%
-			  で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数: 16個，36個，468個)
-		\item \textit{Graph Coloring and its Generalizations}
-			  \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
-			  グラフ彩色問題をベースに，独自に生成した 82問 
-			  \footnote{各問題に対し，全ノードのうち1/5個をランダムに根として与えた．}\\
-			  ($20 \leq (\textbf{辺の数}) \leq 49,629$)
-	   \end{itemize}
- \item \structure{ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
- \item \structure{制限時間:} 3600秒/問
- \item \structure{実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
-\end{itemize}
-
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  提案手法の有効性を評価するために，以下の実験を行った．
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化:}
+    \begin{itemize}
+    \item 基本符号化
+    \item 改良符号化
+    \end{itemize}
+  \item \structure{\bf ベンチマーク問題:} 全85問
+    \begin{itemize}
+    \item DNET\footnote{https://github.com/takemaru/dnet}%
+      で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
+      16個，36個，\alert{\bf 468個})
+    \item \textit{Graph Coloring and its Generalizations}
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
+      グラフ彩色問題をベースに，独自に生成した 82問 
+      \footnote{各問題に対し，全ノードのうち1/5個をランダムに根として与えた．}\\
+      \alert{\bf (20 $\leq$ 辺数 $\leq$ 49,629)}
+    \end{itemize}
+  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+  \item \structure{\bf 制限時間:} 3600秒/問
+  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
+  \end{itemize}
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% カクタスプロット
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -351,7 +433,7 @@
  \begin{figure}[h]
   \centering
   \includegraphics[scale=0.38]{fig/cactus.png}
- \end{figure}
+ \end{figure}\vfill
 
 \begin{itemize}
  \item 改良符号化は，基本符号化と比較して，より多くの問題を高速に解いている．
@@ -366,48 +448,44 @@
 \begin{table}[t]
  \centering
  \input{table/table}
-\end{table}
+\end{table}\vfill
 
 \begin{itemize}
- \item 大規模な問題に対する改良符号化の有効性が確認できた．
- \item 改良符号化は，辺の数が40,000を超える問題も解いた．
+\item 辺の数が4,000を超える問題では，改良符号化がより多くの問題を解いている．
+\item 改良符号化は，辺の数が40,000を超える問題も解けている．
+\item 大規模な問題に対する改良符号化の優位性が確認できた．
 \end{itemize}
-
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 解の遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{解の遷移問題への拡張}
+\begin{frame}{遷移問題への拡張}
 
+\begin{alertblock}{根付き全域森遷移問題}
+  根付き全域森問題とその2つの実行可能解が与えられたとき，
+  ある解から他のもう一つの解へ根付き全域森の制約を満たしながら移る
+  ``解の遷移問題''．
+  \begin{itemize}
+  \item 各ステップ$t$で変更可能な辺の数を$d$個以下に制限し(\textbf{遷移制約})
+  \item 最短ステップ長での辺の変更手順を求めることが目的となる．
+  \end{itemize}
+\end{alertblock}
+\vfill  
 \begin{itemize}
- \item ある初期配電網構成(\structure{スタート状態})から，
-	   目的配電網構成(\structure{ゴール状態})へのスイッチの
-	   切替手順を求める問題へ拡張．
-	   \begin{itemize}
-		\item 各ステップ$t$で切替可能なスイッチの個数を$d$個以下に制限．
-		\item 最短ステップ長での切替手順を求めることが目的．
-	   \end{itemize}
-	   \vskip 1ex
- \item 配電網における障害時の復旧予測への応用が期待される．
-	   \vskip 2ex
- \item トポロジ制約のみの場合，\alert{根付き全域森遷移問題}に帰着できる．
-	   \begin{itemize}
-		\item スタート状態からゴール状態まで，根付き全域森の制約を満たす．
-		\item \structure{遷移制約}も満たしながら移る必要がある．
-	   \end{itemize}
-\begin{block}{遷移制約}
- 各ステップ$t$で変更可能な辺の数は$d$個以下でなければならない．
-\end{block}
+\item ある配電網構成(スタート状態)から，他の配電網構成(ゴール状態)への
+  スイッチの切替手順を求める問題に対応する．
+\item 配電網における障害時の復旧予測への応用が期待できる．
 \end{itemize} 
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{根付き全域森遷移問題の例}
-
-\begin{exampleblock}{根付き全域森遷移問題(遷移制約 $d=2$)での解の例}
+  \begin{itemize}
+  \item \structure{\bf 遷移制約}: 各ステップ$t$で変更可能な辺の数を
+    $d=2$個以下とする．
+  \end{itemize}
+\begin{exampleblock}{}
  \begin{figure}[h]
   %\renewcommand{\arraystretch}{0.9}
   \tabcolsep = 3mm  
@@ -422,73 +500,72 @@
    \onslide<1-> \scalebox{0.8}{\input{tikz/tikz-trans-4}}
    & \onslide<2> \lw{$\Leftarrow$} &
    \onslide<2> \scalebox{0.8}{\input{tikz/tikz-trans-3}}\\
-   \onslide<1->$t= \only<1>{\ ?} \only<2>{3} $ (ゴール状態) 
+   \onslide<1->$t= \only<1>{\ ?} \only<2>{\structure{\bf 3}} $ (ゴール状態) 
    & & \onslide<2> $t=2$
   \end{tabular}
  \end{figure}
 \end{exampleblock}
-
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案アプローチ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{根付き全域森遷移問題の解法}
- \vskip -1ex
- \begin{exampleblock}{シングルショット符号化}
+\begin{frame}{提案手法}
   \begin{itemize}
-   \item 改良符号化の自然な拡張．
-   \begin{itemize}
-   \item 各アトムにステップを表す項を引数に追加．
-   \item スタート状態，ゴール状態，遷移制約に関するルールを追加．
-   \end{itemize}
-   %\item 解が存在するまでステップ長$t$を増やしながら，繰り返し解く．
-   \item 各問題中の制約の大部分は共通であるため，\alert{同一の探索空間を何度も調べる}ことになり，
-		 求解効率が低下するという問題点がある．
+  \item 根付き全域森遷移問題のASP符号化を2種類考案した．
   \end{itemize}
- \end{exampleblock}
-
+  \begin{block}{シングルショット符号化 (改良符号化の自然な拡張)}
+    \begin{itemize}
+    \item 与えられたステップ長$t$の解が存在するかを判定する．
+      % \begin{itemize}
+      % \item 与えられたステップ長$t$の解が存在するかを判定する．
+      % \item 各アトムにステップ長を表す項\code{T}を追加．例) \code{inForest(X,Y,T)}
+      % \item スタート状態，ゴール状態，遷移制約に関するルールを追加．
+      % \end{itemize}
+    \item 解が見つかるまで，ステップ長$t$を増やしながら，複数の問題を
+      繰り返し解く必要がある．
+    \item 各問題中の制約の大部分は共通であるため，
+      \textbf{同一の探索空間を何度も調べる}ことになり，
+      \textbf{求解効率が低下}するという問題点がある．
+  \end{itemize}
+ \end{block}
+ \vfill
  \begin{alertblock}{マルチショット符号化}
-  \begin{itemize}
-   \item ASPシステム\textit{clingo}のマルチショットASP解法を用いて実装．
-   \item ASPシステムが同様の探索失敗を避けるために獲得した学習節を(部分的に)保持することができる．
-   \item 学習節によって，\alert{無駄な探索を行うことなく}，
-		 制約を追加した論理プログラムを連続的に解くことができる．
+   \begin{itemize}
+   \item ASPシステム\textit{clingo}のマルチショット解法ライブラリを使用．
+   \item 同様の探索失敗を避けるために獲得した学習節を保持することによって，
+		 \textbf{無駄な探索を行うことなく}，制約を追加した論理プログラムを
+		 連続的に解くことができる．
   \end{itemize}
  \end{alertblock}
-\begin{itemize}
- \item マルチショットASP解法を用いることで，解の遷移問題に対して，求解性能の向上が期待できる．
-\end{itemize}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験内容--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験概要}
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
-\setcounter{footnote}{1}
-提案するアプローチの有効性を評価するために，以下の実験を行った．
-
-\begin{itemize}
- \item \structure{比較するASP符号化:}
-	   \begin{itemize}
-		\item シングルショット符号化
-		\item マルチショット符号化
-	   \end{itemize}
- \item \structure{ベンチマーク問題:} 全30問
-	   \begin{itemize}
-		\item DNET\footnote{https://github.com/takemaru/dnet}
-			  で公開されている実用規模の配電網問題(\textsf{fukui-tepco}，
-			  ノード数 432，根ノード数 72)をベースにした．
-		\item その実行可能解からスタート状態を5つ，ゴール状態を6つをランダムに選び，
-			 それらを組み合わせて生成．
-	   \end{itemize}
- \item \structure{ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
- \item \structure{実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
-\end{itemize}
-
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  提案手法の有効性を評価するために，以下の実験を行った．
+  \vfill
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化:}
+    \begin{itemize}
+    \item シングルショット符号化
+    \item マルチショット符号化
+    \end{itemize}
+  \item \structure{\bf ベンチマーク問題:} 全30問
+    \begin{itemize}
+    \item DNET\footnote{https://github.com/takemaru/dnet}
+      で公開されている実用規模の配電網問題(\textsf{fukui-tepco}，
+      スイッチ数 468，変電所の数 72)をベース
+    \item 実行可能解の中から，スタート状態を5つ，ゴール状態を6つをラン
+      ダムに選択して使用
+    \end{itemize}
+  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
+  \end{itemize}
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験結果--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -504,50 +581,40 @@
  
  \vskip 1em
 \begin{itemize}
- \item マルチショット符号化は，シングルショット符号化と比較して，全問題をより高速に解いており，
-	   平均で3.3倍の高速化を実現している．
- \item ステップの長さが10の問題も解を求めることに成功した．
+ \item マルチショット符号化は，シングルショット符号化と比較して，全ての
+	   問題をより高速に解いており，\alert{\bf 平均で3.3倍の高速化}を実現している．
+ \item 最短ステップ長$t=10$の問題も解けることが確認できた．
 \end{itemize}
-
 \end{frame}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめと今後の課題}
- % 自分が伝えたいことをメインに書く
- \begin{block}{まとめ}
-  \begin{enumerate}
-   \item 根付き全域森問題を解く，2種類のASP符号化を考案．
-   \begin{itemize}
-	\item ASP言語の表現力を用いて，根付き全域森の制約を簡潔に表現できること
-		  が確認できた．(ASPのルールで6つ程度)
-   \end{itemize}
-   \item 実用規模の問題，及び，より大規模な問題を用いた評価実験．
-   \begin{itemize}
-	\item 改良符号化は，辺の数が40,000を超えるような問題も解くことが
-		  でき，大規模な問題に対する有効性が確認できた．
-   \end{itemize}
-   \item 遷移問題へ拡張し，マルチショットASP解法による実装を考案．
-   \item 実用規模の問題を基にした，遷移問題を用いた評価実験．
-   \begin{itemize}
-	\item 平均で3.3倍の高速化を実現し，マルチショットASP解法の優位性が確認できた．
-   \end{itemize}
-  \end{enumerate}
- \end{block}
- 
- \begin{alertblock}{今後の課題}
+\begin{frame}{まとめ}
+\begin{alertblock}{}
+  根付き全域森問題(トポロジ制約のみの配電網問題に対応)に対して，解集合
+  プログラミング(ASP)を用いた手法を提案し，その有用性を確認した．
+\end{alertblock}
+\begin{itemize}
+\item \structure{\bf 記述性: }
+  ASPの高い表現力により，根付き全域森問題の制約を簡潔に表現できること
+  を確認した(ASPのルールで6個)．
+\item \structure{\bf 効率性: }
+  辺の数が40,000を超えるような問題も解くことができ，
+  大規模な問題に対する改良符号化の優位性を確認できた．
+\item \structure{\bf 拡張性: }
+  遷移問題への拡張を行い，マルチショットASP解法の有効性を確認できた．
+\end{itemize}
+\vfill
+\begin{block}{今後の課題}
   \begin{itemize}
-   \item 電気制約への対応．
-		 \begin{itemize}
-		  \item ASPMT技術を用いた実装．
-		 \end{itemize}
+  \item 電気制約への対応．
+  \item 根付き全域森遷移問題の更なる性能改善
+    \begin{itemize}
+    \item ASPシステム\textit{clingo}の変数選択ヒューリスティクスの利用
+    \end{itemize}
   \end{itemize}
- \end{alertblock}
+ \end{block}
 \end{frame}
-
-
 %###########################################################
 %##### 補助スライド ########################################
 %###########################################################
@@ -555,3 +622,7 @@
 \input{subslide}
 
 \end{document}
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
