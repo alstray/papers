@@ -252,25 +252,35 @@
 %  }
 % \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 8.5km/L)}}
-  \begin{exampleblock}{}
-    \centering
-    \tabcolsep = 5mm
-    \begin{tabular}{l|l|c|c|c} 
-      \multicolumn{2}{l|}{装備仕様}  & 車種1 & 車種2  & 車種3 \\\hline
-      装備 & \textsf{Grade}  & \textsf{STD} & \textsf{DX}  & \textsf{LX}\\
-      &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \alert{4WD}\\
-      &\textsf{Engine}	     & \alert{V6}      & \textsf{V6}     & \textsf{V6}\\
-      &\textsf{Tire}	     & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
-      &\textsf{Transmission} & \alert{6AT}     & \alert{HEV}     & \textsf{10AT}\\
-      &\textsf{Sun\_Roof}    & -               & \alert{\bf -}   & -  \\ \hline
-      \multicolumn{2}{l|}{IWR 値の総和}           & 1,130  & 1,130   & 1,255 \\ %\hline
-      \multicolumn{2}{l|}{燃費(km/L)}      & 8.8  & 8.8     & 8.0 \\ %\hline
-      \multicolumn{2}{l|}{予想販売台数}    & 2,007   & 2,007   & 1,511  \\ \hline
-      \multicolumn{2}{l|}{平均燃費(km/L)}  & \multicolumn{3}{c}{8.5} \\ 
-      \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c}{5,525} \\ 
-    \end{tabular}
+\begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 8.5km/L)}}\small
+ \begin{exampleblock}{解の例}
+  \centering
+  \renewcommand{\arraystretch}{0.9}
+  %\tabcolsep = 5mm
+  \begin{tabular}{p{10mm}|p{25mm}|p{15mm}|p{15mm}|p{15mm}} 
+   \multicolumn{2}{l|}{装備仕様}  & 車種1 & 車種2 & 車種3 \\\hline
+   装備 & Grade  & \ STD & \ DX  & \ LX\\
+   &Drive\_Type  & \ 2WD    & \ 2WD    & \ \alert{4WD}\\
+   &Engine	     & \ \alert{V6}      & \ V6     & \ V6\\
+   &Tire	     & \ 16inch & \ 17inch & \ 18inch\\
+   &Transmission & \ \alert{6AT}     & \ \alert{HEV}     & \ 10AT\\
+   &Sun\_Roof    & \ -               & \ \alert{\bf -}   & \ -  
+  \end{tabular}
  \end{exampleblock}
+  
+ \begin{block}{}
+  \centering
+  \renewcommand{\arraystretch}{0.9}
+  %\tabcolsep = 5mm
+  \begin{tabular}{p{38mm}|p{15mm}|p{15mm}|p{15mm}} 
+   IWR 値の総和           & 1,130  & 1,130   & 1,255 \\ %\hline
+   燃費(km/L)      & 8.8  & 8.8     & 8.0 \\ %\hline
+   予想販売台数    & 2,007   & 2,007   & 1,511  \\ \hline
+   平均燃費(km/L)  & \multicolumn{3}{c}{8.5} \\ 
+   予想販売台数(合計)  & \multicolumn{3}{c}{5,525} 
+  \end{tabular}
+ \end{block}
+
  \vfill
  \begin{itemize}
  \item CAFE基準値を変えると，選択されるオプションが大きく変化する．
