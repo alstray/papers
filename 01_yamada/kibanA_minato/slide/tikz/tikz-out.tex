@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 根付き全域森の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}[scale=0.5]
+
+ % 設定
+ \tikzset{node/.style={circle,draw=black,fill=white}}
+
+ \definecolor{edge1}{RGB}{191,0,0}
+ \definecolor{node1}{RGB}{249,200,200}
+ \definecolor{edge3}{RGB}{38,38,134}
+ \definecolor{node3}{RGB}{200,200,249}
+
+ % 補助線
+ % \draw [help lines,blue] (0,0) grid (20,6);
+
+ % node %
+ \node[circle, ultra thick, draw=edge1, fill=node1](out1){1};
+ \node[node, fill=node1, right=of out1] (out2){2};
+ \node[circle, ultra thick, draw=edge3,fill=node3, right=of out2](out3){3};
+ \node[node, fill=node1, below=of out1] (out4){4};
+ \node[node, fill=node3, below=of out2] (out5){5};
+ \node[node, fill=node3, below=of out3] (out6){6};
+
+ \foreach \u / \v in {out1/out2,out1/out4}
+ \draw [very thick, edge1] (\u) -- (\v);
+
+ \foreach \u / \v in {out3/out6,out5/out6}
+ \draw [very thick, edge3](\u) -- (\v);
+
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: ``slide''
+%%% End:

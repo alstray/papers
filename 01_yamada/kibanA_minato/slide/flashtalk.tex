@@ -1,0 +1,142 @@
+\documentclass[dvipdfmx,11pt]{beamer}
+
+\usepackage[deluxe]{otf} 
+\usepackage{txfonts}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usepackage{listings}
+\usepackage{plistings}
+\usepackage{multicol}
+\def\lstlistingname{コード}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\lw}[1]{\smash{\lower-5.ex\hbox{#1}}}
+\newcommand{\redunderline}[1]{\textcolor{red}{\underline{\textcolor{black}{#1}}}}
+%%\usetheme{Frankfurt}
+\usetheme{Warsaw}
+\setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
+\setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
+
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+    \textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatletter
+
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+\lstset{
+ basicstyle=\ttfamily\color{black},
+ keepspaces=true,
+ escapechar=|,
+ columns=[l]{fullflexible},
+ commentstyle={\color{red}},
+ stringstyle={\color{blue}}}
+
+\title{解集合プログラミングを用いた\\配電網問題の解法}
+\author[山田 健太郎，湊 真一，番原 睦則]{山田 健太郎$^1$，湊 真一$^2$，番原 睦則$^1$}
+\date{\small 基盤(A)「離散構造処理系に基づく列挙と最適化の統合的技法の研究」\\
+2020.09 プロジェクト近況報告＆自由討論会}
+\institute{1.名古屋大学 大学院情報学研究科 \\ 2.京都大学 大学院情報学研究科}
+
+%#################################################
+%# 本文 ##########################################
+%#################################################
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% タイトル 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 配電網
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{概要}
+
+\begin{block}{配電網問題}
+\begin{itemize}
+ \item \structure{\bf 求解困難な組合せ最適化問題の一種}
+ %\item {\bf 配電網}とは，変電所と，一般家庭や工場を繋ぐ電力供給
+	   %   経路のネットワークである．
+ \item \structure{\bf トポロジ制約}と\structure{\bf 電気制約}を満たしつつ， \\
+	   損失電力を最小にするスイッチの開閉状態を求めることが目的．
+ \item フロンティア法を用いた解法が提案されており，
+	   現実的な規模の配電網構成(スイッチ数468個)の網羅的な列挙・索引
+	   化に世界で初めて成功~[井上ほか~2012]．
+\end{itemize} 
+\end{block}
+\vfill
+\begin{alertblock}{解集合プログラミング(ASP)}
+ \begin{itemize}
+%  \item {\bf ASPの言語}は一階論理に基づく知識表現言語の一種である．
+%  \item {\bf ASPシステム}は論理プログラムから安定モデル意味
+%		論~[Gelfond and Lifschitz '88]に基づく解集合を計算するシステムである．
+  \item ASPは，論理プログラミングから派生した宣言的プログラミングパラダイム．
+  \item 近年，SATソルバーの実装技術を応用した高速ASPシステムが実現され，
+    システム検証，プランニング，システム生物学など様々な分野への応用が
+    拡大している．
+ \end{itemize}
+\end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{研究概要}
+ \begin{alertblock}{目的}\centering
+  ASP技術を活用して，大規模な配電網問題を効率良く解くシステムを構築
+  する．
+ \end{alertblock}
+ \vfill
+  \begin{block}{進捗報告}
+    \begin{enumerate}
+    \item \structure{\bf 配電網問題}
+      \begin{itemize}
+      \item ASPの高い表現力により，トポロジ制約を簡潔に表現できる
+			ことを確認した (ASPのルールで 6 個).
+      \item トポロジ制約のみの場合，スイッチ数が40,000 を超える問題も解け
+        る可能性があることを確認．
+      \end{itemize}
+    \item \structure{\bf 配電網の遷移問題}
+      \begin{itemize}
+      \item 現実的な規模の問題(スイッチ数468個，トポロジ制約のみ)に
+        対して，ステップ長10の解を1分程度で求めることができ
+        る．
+      \end{itemize}
+    \end{enumerate}
+  \end{block}
+\end{frame} 
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
