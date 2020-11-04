@@ -1,0 +1,4 @@
+## LateX 中間生成ファイル(追加)
+*.fdb_latexmk
+*.fls
+*.gz
