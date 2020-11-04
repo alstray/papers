@@ -19,6 +19,7 @@
 \newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
 \newcommand{\lw}[1]{\smash{\lower-5.ex\hbox{#1}}}
 \newcommand{\redunderline}[1]{\textcolor{red}{\underline{\textcolor{black}{#1}}}}
+
 %%\usetheme{Frankfurt}
 \usetheme{Warsaw}
 \setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
@@ -59,9 +60,10 @@
  commentstyle={\color{red}},
  stringstyle={\color{blue}}}
 
-\title{解集合プログラミングを用いた\\配電網問題の解法に関する一考察}
+\title{解集合プログラミングを用いた\\配電網問題の解法}
 \author[山田 健太郎，湊 真一，番原 睦則]{山田 健太郎$^1$，湊 真一$^2$，番原 睦則$^1$}
-\date{日本ソフトウェア科学会第37回大会}
+\date{\small 基盤(A)「離散構造処理系に基づく列挙と最適化の統合的技法の研究」\\
+2020.09 プロジェクト近況報告＆自由討論会}
 \institute{1.名古屋大学 大学院情報学研究科 \\ 2.京都大学 大学院情報学研究科}
 
 %#################################################
@@ -237,66 +239,6 @@
    \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASPの構文
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの構文}
-  \begin{alertblock}{}\centering
-    ASPの言語は論理プログラムをベースとしている~\footnotemark．
-  \end{alertblock}
-  \begin{itemize}
-  \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
-    \begin{center}
-      \begin{minipage}[c]{0.7\textwidth}
-        \begin{block}{}\centering
-          $a_0$\quad\code{:-}\quad$a_1$\code{,}\ldots\code{,}$a_m$\code{,}
-          \ \code{not}~$a_{m+1}$\code{,}\ldots\code{,} \code{not}~$a_n$\code{.}
-        \end{block}        
-      \end{minipage}
-   \end{center}\vfill
-    $0 \leq m \leq n$ であり，各 $a_i$ はアトム，
-    \code{not}は\structure{\bf デフォルトの否定}，\\
-    ``\code{,}''は連言(AND)を表す．``\code{:-}''の左辺を\structure{\bf ヘッド}，
-		右辺を\structure{\bf ボディ}と呼ぶ．
-  \item \alert{\bf 直感的な意味}は，
-    「$a_1,\ldots,a_m$がすべて成り立ち，
-    $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
-    $a_0$が成り立つ」である．
-  \item ボディが空のルールを\structure{\bf ファクト}と呼び，``\code{:-}''は省略できる．
-  \item ヘッドが空のルールを\structure{\bf 一貫性制約}と呼ぶ．例えば，\hspace{-1ex}
-    ``\code{:-} $a_1$\code{,} \code{not}~$a_{2}$''は，
-    「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
-  \end{itemize}
-  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASPの拡張構文
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの拡張構文}
-\begin{alertblock}{}\centering
-  組合せ問題を解くための便利な構文が用意されている．
-\end{alertblock}
-\begin{itemize}
- \item \structure{\bf 選択子}
-   \begin{center}
-     \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}
-   \end{center}
-   アトム集合 $\{a_1,\dots,a_n\}$
-   の任意の部分集合が成り立つことを意味する．
- \item \structure{\bf 個数制約}
-   \begin{center}
-     $lb$\ \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}\ $ub$
-   \end{center}
-   $a_1,\dots,a_n$ のうち，
-   $lb$個以上，$ub$個以下が成り立つことを意味する．
- \item \structure{\bf 重み付き個数制約}
-   \begin{center}
-     $lb$ \code{\#sum\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
-   \end{center}
-   $a_1,\dots,a_n$のうち，
-   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASPファクト表現
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{根付き全域森問題のASPファクト表現}
@@ -304,7 +246,7 @@
   \centering
   \input{tikz/tikz-input}
  \end{figure}\vfill
-  \begin{exampleblock}{}\centering
+  \begin{exampleblock}{graph.lp}\centering\small
     \lstinputlisting{code/graph.lp}    
   \end{exampleblock}
 \end{frame}
@@ -316,7 +258,7 @@
   \item 根付き全域森問題の制約を，ASPのルール6個で記述
 \end{itemize}
 \begin{minipage}[c]{1.01\textwidth}
-\begin{exampleblock}{}\small
+\begin{exampleblock}{srf2.lp}\small
 \begin{lstlisting}
 (1) { inForest(X,Y) } :- edge(X,Y).
 
@@ -335,67 +277,48 @@
 \end{minipage}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 改良符号化 (到達可能性)
+%% 実行例
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{改良符号化: 到達可能性}
-\begin{exampleblock}{}\small
-\begin{lstlisting}
-(1) { inForest(X,Y) } :- edge(X,Y).
+\begin{frame}[fragile]{実行例}
+\tiny
+\begin{lstlisting}[escapechar=!]
+!\textbf{\$ clingo graph.lp srf2.lp -n 0 } !
+clingo version 5.4.0
+Reading from graph.lp ...
+Solving...
+Answer: 1
+node(1) ... edge(1,2) ... root(1) ... !\alert{inForest(1,2) inForest(3,6) inForest(4,5) inForest(5,6)}!  
+reached(1,1) reached(3,3) reached(6,3) reached(2,1) reached(5,3) reached(4,3)
+Answer: 2
+node(1) ... edge(1,2) ... root(1) ... !\alert{inForest(1,2) inForest(1,4) inForest(3,6) inForest(5,6)}!
+reached(1,1) reached(3,3) reached(6,3) reached(2,1) reached(4,1) reached(5,3)
+!$\quad\vdots$\vspace{1ex}!
+Answer: 20
+node(1) ... edge(1,2) ... root(1) ... !\alert{inForest(1,4) inForest(2,3) inForest(3,6) inForest(4,5)}!
+reached(1,1) reached(3,3) reached(6,3) reached(4,1) reached(2,3) reached(5,1)
+SATISFIABLE
+
+Models       : 20
+Calls        : 1
+Time         : 0.005s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.003s
 \end{lstlisting}
-\end{exampleblock}
-\begin{itemize}
- \item (1) 各辺\code{(X,Y)について}，根付き全域森に含まれること意味する \\
-	  アトム\code{inForest(X,Y)}を導入する．
-\end{itemize}
-\begin{exampleblock}{}\small
-\begin{lstlisting}
-(2) reached(R,R) :- root(R).
-(3) reached(X,R) :- reached(Y,R), inForest(Y,X).
-(4) reached(X,R) :- reached(Y,R), inForest(X,Y).
-\end{lstlisting}
-\end{exampleblock}
-\vfill
-\begin{itemize}
-\item アトム\code{reached(X,R)}は，ノード\code{X}が根ノード\code{R}から到達可能であることを意味する．
-\item (2) 各根ノード\code{R}について，自分自身から到達可能であることを表す．
-\item (3) ノード\code{Y}が根ノード\code{R}から到達可能かつ，辺\code{(Y,X)}が根付き全域森に含まれるならば，
-	  ノード\code{X}も同じ根ノード\code{R}から到達可能であることを表す．
-\end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 改良符号化 (根付き連結制約)
+%% 根付き全域森の例
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{改良符号化: 根付き連結制約}
-\begin{exampleblock}{}\small
-\begin{lstlisting}
-(5) :- node(X), not 1 { reached(X,R) } 1.
-\end{lstlisting}
-\end{exampleblock}
-\vfill
-\begin{itemize}
-\item (5) 各ノード\code{X}について，ちょうど1つの根からのみ到達可能であることを意味する．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 改良符号化 (非閉路制約)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{改良符号化: 非閉路制約}
-\begin{minipage}[c]{1.01\textwidth}
-\begin{exampleblock}{}\small
-\begin{lstlisting}
-(6) :- root(R),
-       not 1 #sum{ 1,X:reached(X,R) ;
-                  -1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R)
-                 } 1.
-\end{lstlisting}
-\end{exampleblock}
-\end{minipage}
-\vfill
-\begin{itemize}
-\item (6) 各連結成分の\structure{\bf ノード数と辺数の差が1}になることを意味する．
-\item 各連結成分が\structure{\bf 木の性質}を満たすことにより，サイクルを持たない
-	  ことを保証する．
-\end{itemize}
+\begin{frame}[fragile]{実行可能解}
+\begin{lstlisting}[escapechar=!]
+Answer: 2
+node(1) ... edge(1,2) ... root(1) ... 
+!\alert{inForest(1,2) inForest(1,4) \\ inForest(3,6) inForest(5,6)}!
+reached(1,1) reached(3,3) reached(6,3) 
+reached(2,1) reached(4,1) reached(5,3)
+\end{lstlisting}\vfill
+\begin{figure}
+ \centering \large
+ \input{tikz/tikz-out}
+\end{figure}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% 実験内容
@@ -539,7 +462,6 @@
  \end{alertblock}
 
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験内容--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -615,6 +537,12 @@
   \end{itemize}
  \end{block}
 \end{frame}
+%###########################################################
+%##### 補助スライド ########################################
+%###########################################################
+
+\input{demo.tex}
+
 %###########################################################
 %##### 補助スライド ########################################
 %###########################################################
