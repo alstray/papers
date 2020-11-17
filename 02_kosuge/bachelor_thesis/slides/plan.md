@@ -2,11 +2,11 @@
 
 ## 表紙
 + 題名
-+ 名前
-+ 所属
++ 名前(小菅脩司)
++ 所属(番原研究室)
 + 発表する回(番原研中間発表)
 
-## Satisfiable Modulo Theories(SMT)
+## 背景理論付きSAT(Satisfiable Modulo Theories:SMT)
 + SMT とは
 + SMTの特長(長所)
 
