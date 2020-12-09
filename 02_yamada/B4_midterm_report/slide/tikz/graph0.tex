@@ -7,19 +7,19 @@
   % 設定
   \tikzset{node/.style={circle,draw=black}}
  
-  \definecolor{col1}{RGB}{191,0,0}
-  \definecolor{col2}{RGB}{249,200,200}
-  \definecolor{col3}{RGB}{38,38,134}
-  \definecolor{col4}{RGB}{200,200,249}
+  \definecolor{col_r}{RGB}{255,0,0}
+  \definecolor{col_b}{RGB}{0,0,255}
+  \definecolor{col_y}{RGB}{255,255,0}
+  \definecolor{col_g}{RGB}{0,255,0}
  
   % 補助線
   % \draw [help lines,blue] (0,0) grid (20,6);
  
   % node %
-  \node[node, fill=](node1){1};
-  \node[node, fill=, right=of node1] (node2){2};
-  \node[node, fill=, below=of node1](node3){3};
-  \node[node, fill=, below=of node2 (node4){4};
+  \node[node, fill=col_r] (node1){1};
+  \node[node, fill=col_b, right=of node1] (node2){2};
+  \node[node, fill=col_y, below=of node1] (node3){3};
+  \node[node, fill=col_g, below=of node2] (node4){4};
  
   \foreach \u / \v in {node1/node2, node2/node3, node2/node4, node3/node4}
   \draw (\u) -- (\v);
