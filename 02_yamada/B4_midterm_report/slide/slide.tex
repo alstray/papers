@@ -16,20 +16,37 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shadows}
-\usepackage{listings}
-\usepackage{plistings}
+%\usepackage{listings}
+%\usepackage{plistings}
 \def\lstlistingname{コード}
-
-\renewcommand{\kanjifamilydefault}{\gtdefault}
-%\usetheme{Madrid}
 \usetheme{Copenhagen}
 \setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
 %\setbeamertemplate{footline}[short title]
 \setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
 
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode
+  \hbox{
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}
+    \usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+    \textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+  \end{beamercolorbox}}
+  \vskip0pt
+}
+\makeatletter
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+%\usetheme{Madrid}
+
 \title[ASPを用いた組合せ遷移問題の解法に関する考察]{解集合プログラミングを用いた\\組合せ遷移問題の解法に関する考察}
 \author{山田 悠也}
-\date{中間発表会\\2020年12月11日}
+\date{2020年度番原研中間発表会\\2020年12月11日}
 \institute{番原研究室}
 
 %% テンプレ 
@@ -61,18 +78,28 @@
 \begin{frame}\frametitle{組合せ遷移問題(Combinatorial Reconfiguration)}
 
   \begin{itemize}
-    \item \alert{組合せ遷移問題}とは, 決定問題の解空間グラフ上における初期状態から目標状態への経路の存在についての判定問題である.
+    \item \alert{組合せ遷移問題}とは, 組合せ判定問題の解空間グラフ上における初期状態から目標状態への経路の存在についての判定問題である.
     \item \alert{解空間グラフ}とは,
     \begin{itemize}
-      \item 頂点は, 決定問題の実行可能解となる.
+      \item 頂点は, 組合せ判定問題の実行可能解となる.
       \item 辺は, \structure{隣接関係}を満たす2つの頂点間に存在する.
     \end{itemize} 
-    \item 既存の決定問題の多くを, 組合せ遷移問題に拡張できる.
+    \item 既存の組合せ判定問題の多くを, 組合せ遷移問題に拡張できる.
     \begin{itemize}
       \item \structure{グラフ点彩色問題}, 充足可能性判定問題, 独立点集合問題など
     \end{itemize}
+    \item \structure{持続可能なシステム}へと応用することが可能.
+    \begin{itemize}
+      \item リスト点彩色問題は無線ネットワークの周波数割当てに応用可能.
+      \item これを遷移問題に拡張することで, 正常な動作を保ちながら別の割当てへと変化させることが可能となる.
+    \end{itemize}
     \item \structure{\textbf{PSPACE完全}}である問題も多数存在.
   \end{itemize}
+
+  \begin{alertblock}{}
+    \centering
+    グラフ点彩色問題を遷移問題へと拡張したものは,\\色数によってPSPACE完全であることが知られている.
+  \end{alertblock}
 
 \end{frame}
 
@@ -89,7 +116,7 @@
     \end{itemize}
   \end{block}
   
-  \begin{exampleblock}{点彩色遷移問題の例($k=4$)}
+  \begin{exampleblock}{グラフ点彩色問題の例($k=4$)}
     \begin{columns}
       \begin{column}{1.0\textwidth}
         \centering
@@ -105,28 +132,41 @@
 %% 点彩色遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{点彩色遷移問題(1/2)}
+\begin{frame}\frametitle{点彩色遷移問題の定義}
   \begin{itemize}
-    \item \alert{点彩色遷移問題}とは, グラフ点彩色問題を遷移問題に拡張したものである.
+    \item \alert{点彩色遷移問題}とは, グラフ点彩色問題を遷移問題に拡張したもの.
   \end{itemize}
 
-  \begin{block}{点彩色問題の定義}
+  \begin{block}{点彩色遷移問題の定義}
     \begin{itemize}
-      \item 問題の入力は, グラフ$G=(V, E)$, 色数$k$, 及びこれらのグラフ点彩色問題の2つの実行可能解$\alpha$(初期状態)と$\beta$(目標状態).
+      \item 問題の入力は, グラフ\structure{$G=(V, E)$}, 色数\structure{$k$}, 及び$G$の$k$-彩色の2つの実行可能解\structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態).
       \item 隣接関係は, ある1つの頂点のみ色が異なるような実行可能解.
-      \item $\alpha$から$\beta$への経路の存在についての判定問題.
+      \item \structure{$\alpha$から$\beta$への経路の存在についての判定問題.}
     \end{itemize}
   \end{block}
 
   \begin{exampleblock}{点彩色遷移問題の例}
     \begin{columns}
-      \begin{column}{0.45\textwidth}
+      \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph0.tex}
+        $\alpha$(ステップ0)
       \end{column}
-      \begin{column}{0.45\textwidth}
+      \begin{column}{0.05\textwidth}
+        \textbf{$\longrightarrow$}
+      \end{column}
+      \begin{column}[]{0.3\textwidth}
         \centering
-        \input{tikz/graph3.tex}
+        \input{tikz/graph1.tex}
+        (ステップ1)
+      \end{column}
+      \begin{column}{0.05\textwidth}
+        \textbf{$\longrightarrow$}
+      \end{column}
+      \begin{column}{0.3\textwidth}
+        \centering
+        \input{tikz/graph2.tex}
+        $\beta$(ステップ2)
       \end{column}
     \end{columns}
   \end{exampleblock}
@@ -137,14 +177,14 @@
 %% 点彩色遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{点彩色遷移問題(2/2)}
+\begin{frame}\frametitle{点彩色遷移問題の性質}
 
   \begin{itemize}
     \item 色数$k$によって問題の性質が異なることが知られている.
     \begin{itemize}
       \item \structure{$k=2$}のとき, グラフGは2部グラフであり\structure{自明}.
-      \item \structure{$k=3$}のとき, \structure{クラスP}に属する.[ L. Cerecedaほか '08]
-      \item \structure{$k \ge 4$}のとき, 一般に\structure{\textbf{PSPACE完全}}となる.[Paul Bonsmaほか '09]
+      \item \structure{$k=3$}のとき, \structure{クラスP}に属する.~[L. Cerecedaほか '08]
+      \item \structure{$k \ge 4$}のとき, 一般に\structure{\textbf{PSPACE完全}}となる.~[Paul Bonsmaほか '09]
     \end{itemize}
 
     \item グラフの形に制限を加えることにより, 多項式時間で解決可能となるものが存在することがわかっている.[Paul Bonsmaほか '09]
@@ -152,6 +192,8 @@
       \item 平面グラフであり, かつ$4 \le k \le 6$でないとき.
       \item 2部平面グラフであり, かつ$k=4$でないとき.
     \end{itemize}
+
+    \item 一方で, \alert{$k \ge 4$における汎用的かつ効率的なアルゴリズムは見つかっていない}.
 
   \end{itemize}
 
@@ -161,7 +203,20 @@
 %% ASP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{解集合プログラミング}
+\begin{frame}\frametitle{解集合プログラミング(Answer Set Programming; ASP)}
+
+  \begin{itemize}
+    \item ASP言語は一階論理に基づいた知識表現言語の一種である.
+    \item ASPシステムは安定モデル理論~[Gelfond and Lifschitz '88] に基づいた知識表現言語の一種である.
+    \item 近年, SAT技術の応用により高速なASPシステムが実現し, システム検証やプランニングなどの様々な分野での実用が拡大している.
+  \end{itemize}
+
+  \begin{alertblock}{組合せ遷移問題に対してASPを用いる利点}
+    \begin{itemize}
+      \item ASPの高い表現力により, 記号上の制約を簡潔に記述できる.
+      \item ASPシステムの1つである\textit{clingo}のインクリメンタルモードを用いることにより, 段階的な解の探索を効率よく実行できる.
+    \end{itemize}
+  \end{alertblock}
   
 \end{frame}
 
@@ -174,11 +229,12 @@
     ASPを利用し, PSPACE完全な問題の1つである$k \ge 4$の点彩色遷移問題を高速で解ける符号化を提案する.
   \end{alertblock}
 
-  \begin{block}{研究内容} % 予定も含む
+  \begin{block}{研究内容}
     \begin{enumerate}
       \item 点彩色遷移問題を解く, 3種類の符号化の提案.
-      \item 点彩色遷移問題のベンチマークの生成.
-      \item 作成したベンチマークを用いた, 各種符号化の評価実験.
+      \item 点彩色遷移問題のベンチマークの生成に使用可能なグラフの調査.
+      \item (ベンチマークの生成.)
+      \item (作成したベンチマークを用いた, 各種符号化の評価実験.)
     \end{enumerate}
   \end{block}
 
@@ -188,7 +244,46 @@
 %% 符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{符号化}
+\begin{frame}\frametitle{符号化(1/2)}
+
+  \begin{itemize}
+    \item グラフ$G$, 色数$k$, Gのk-彩色の2つの実行可能解$\alpha$, $\beta$に加え, \structure{ステップ数$t$}を与える.
+    \begin{itemize}
+      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更.
+      \item $t$を遷移回数の上限値まで大きくしていくことで, 最終的に経路の存在について判定可能. 
+    \end{itemize}
+    \item これに対し, \structure{隣接関係の制約に対する記述が異なる\textbf{3}種類}のASP符号化を提案した. 
+    \begin{itemize}
+      \item グラフ点彩色に関わる制約は同じものを用いている.
+      \item 各符号化で独自に追加するアトム\footnote{ASP上の正リテラルを指す.}以外は, 同じものを用いている.
+    \end{itemize}
+  \end{itemize}
+
+
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{符号化(2/2)}
+
+  \begin{itemize}
+    \item $|T|$をステップ数$t$, $|C|$を色数$k$, $|V|$をグラフの頂点数とする.
+    
+  \end{itemize}
+
+  \begin{table}[t]
+    \centering
+    \input{table/encoding.tex}
+  \end{table}
+
+  \begin{itemize}
+    \item \structure{changed(X, T)}は, ステップ$T-1$とステップ$T$において頂点Xの色が異なることを意味する.
+    \item \structure{unchanged(X, T)}は, ステップ$T-1$とステップ$T$において頂点Xの色が同じであることを意味する.
+    \item アトムを追加することにより, ルール数を削減することができた.
+  \end{itemize}
   
 \end{frame}
 
@@ -201,7 +296,7 @@
   \begin{itemize}
     \item 現時点で組合せ遷移問題は理論面の研究が主流であり, ベンチマークの整備が必要.
     \item 実験においてステップ$t$を与えるとき, その上限値が必要となる.
-    \item ステップ$t$の最大値は, グラフ$G$を$k$彩色するときの実行可能解の数と等しい.
+    \item ステップ$t$の上限値は, グラフ$G$を$k$彩色するときの実行可能解の数と等しい.
   \end{itemize}
 
   従って, 全解列挙が可能な($G, k$)からベンチマークを生成する必要がある.
@@ -212,14 +307,14 @@
 %% 実験環境
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{実験概要}
-  ベンチマークの生成に適したグラフを得るため, 以下の実験を行った.
+\begin{frame}\frametitle{グラフの調査}
+  全解列挙可能なグラフと色数の組合せを得るため, 以下の調査を行った.
   \begin{itemize}
     \item \structure{使用するグラフ}: 全44個
     \begin{itemize}
       \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されているグラフを使用.
-      \item \textit{Graph Coloring Instances}に属するグラフのうち, \structure{彩色数}が判明しているもの.[Tamuraほか '09]
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている, \textit{Graph Coloring Instances}に属するグラフを使用.
+      \item そのうち\structure{彩色数}が判明しているもの.[Tamuraほか '09]
     \end{itemize}
     \item \structure{色数}: 各グラフの彩色数
 
@@ -228,38 +323,41 @@
         \item \textit{configuration}は\textit{crafty, tweety}を使用.
       \end{itemize}
     \item \structure{制限時間}: 3600秒/問
-    \item \structure{実験環境}: Mac mini, 
+    \item \structure{環境}: Mac mini, 3.2GHz 6コア Intel Core i7, 64GB メモリ
   \end{itemize}
+
+
+  \begin{alertblock}{}
+    結果, 44個中\structure{\textbf{9}}個のグラフにおいて彩色数での全解列挙が可能であった.
+    \begin{itemize}
+      \item 最小で120個, 最大で約28億個の解を持つことが判明した.
+    \end{itemize}
+  \end{alertblock}
+  
   
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 実験結果
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\frametitle{実験結果}
-  44個のグラフのうち, \structure{9個}のグラフにおいて彩色数での全解列挙が可能であった.
-  
-  \begin{table}[t]
-    \centering
-    \input{table/result.tex}
-  \end{table}
-\end{frame}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ベンチマークの生成
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{ベンチマークの生成}
+\begin{frame}\frametitle{今後の方針}
 
-  \begin{itemize}
-    \item 実行可能解の総数が小さいグラフについては, \structure{全ての解}を出力.
-    \item 実行可能解の総数が100万個を超えるグラフについては, \structure{10万個の解のみ}を出力.
-    \item 出力された解からランダムで2つの解を抽出しベンチマークを生成.
-    \item 各グラフから5問ずつ, \structure{計45問}のベンチマークを生成.
-  \end{itemize}
+  \begin{enumerate}
+    \item ベンチマークの生成 
+    \begin{itemize}
+      \item 実行可能解の総数が小さいグラフについては, \structure{全ての解}を出力.
+      \item 実行可能解の総数が100万個を超えるグラフについては, \structure{10万個の解のみ}を出力.
+      \item 出力された解からランダムで2つの解を抽出しベンチマークを生成.
+      \item 各グラフから5問ずつ, \structure{計45問}のベンチマークを生成.
+    \end{itemize}
+
+    \item 符号化の評価実験
+    \begin{itemize}
+      \item 生成したベンチマークを用い, 3種の符号化の評価実験を行う.
+    \end{itemize}
+  \end{enumerate}
+  
 
 \end{frame}
 
@@ -272,23 +370,23 @@
   \begin{block}{まとめ}
     \begin{itemize}
       \item 点彩色遷移問題の隣接関係に対して, 3種類の符号化を提案した.
-      \item 符号化の評価実験に用いるベンチマークを作成した.
       \begin{itemize}
-        \item 頂点数, 辺数, 解空間グラフの大きさ(実行可能解の総数)が異なる9つのグラフを用いた.
+        \item アトムを追加することで, ルール数を大幅に削減することができた.
+      \end{itemize}
+      \item ベンチマークの生成に使用可能なグラフについて調査した.
+      \begin{itemize}
+        \item 解空間グラフの大きさ(実行可能解の総数)が異なる9つのグラフを使用可能であることが判明した.
       \end{itemize}
     \end{itemize}
   \end{block}
   
   \begin{alertblock}{今後の課題}
     \begin{itemize}
+      \item ベンチマークの生成.
       \item 生成したベンチマークを用いた, 各種符号化の評価実験.
       \item 評価実験で優れていた符号化を, インクリメンタルな解法へと拡張.
     \end{itemize}
   \end{alertblock}
 
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% まとめ
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
