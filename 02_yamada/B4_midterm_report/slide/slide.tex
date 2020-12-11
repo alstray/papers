@@ -16,7 +16,7 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shadows}
-%\usepackage{listings}
+\usepackage{listings}
 %\usepackage{plistings}
 \def\lstlistingname{コード}
 \usetheme{Copenhagen}
@@ -40,6 +40,16 @@
   \vskip0pt
 }
 \makeatletter
+
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
 
 \renewcommand{\kanjifamilydefault}{\gtdefault}
 %\usetheme{Madrid}
@@ -132,7 +142,7 @@
 %% 点彩色遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{点彩色遷移問題の定義}
+\begin{frame}\frametitle{点彩色遷移問題}
   \begin{itemize}
     \item \alert{点彩色遷移問題}とは, グラフ点彩色問題を遷移問題に拡張したもの.
   \end{itemize}
@@ -330,7 +340,7 @@
   \begin{alertblock}{}
     結果, 44個中\structure{\textbf{9}}個のグラフにおいて彩色数での全解列挙が可能であった.
     \begin{itemize}
-      \item 最小で120個, 最大で約28億個の解を持つことが判明した.
+      \item 最小で\structure{120個}, 最大で\structure{約28億個}の解を持つことが判明した.
     \end{itemize}
   \end{alertblock}
   
@@ -389,4 +399,11 @@
   \end{alertblock}
 
 \end{frame}
+
+%###########################################################
+%##### 補助スライド ########################################
+%###########################################################
+
+\input{subslide.tex}
+
 \end{document}
