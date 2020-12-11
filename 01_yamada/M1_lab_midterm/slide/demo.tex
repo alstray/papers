@@ -1,0 +1,77 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 第2部 開始
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{~}
+\centering \Large
+\textbf{-- 根付き全域森遷移問題のデモ --}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 遷移問題の入力 (グラフ)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{問題:入力グラフ}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+\begin{textblock*}{\linewidth}(5pt,40pt)
+\begin{itemize}
+ \item DNET\footnote{https://github.com/takemaru/dnet}
+	   \!の例(\code{data/test.yaml})を使用
+\end{itemize} 
+\end{textblock*}\vfill
+\begin{textblock*}{0.4\linewidth}(223pt,25pt)
+ \centering
+ \fbox{\includegraphics[width=\linewidth]{fig/dnet.png}}
+ {\tiny(https://github.com/takemaru/dnetより引用)}
+\end{textblock*}\vfill
+\scalebox{0.75}{\input{tikz/tikz-testlp}}
+\begin{textblock*}{0.4\linewidth}(225pt,150pt)
+\begin{itemize}
+ \item \structure{\bf ノード数: 15}
+ \item \structure{\bf 辺数: 16}
+ \item \structure{\bf 根ノード数: 3}
+\end{itemize}
+\end{textblock*}\vfill
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 遷移問題の入力 (スタートとゴール)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{問題:スタート状態とゴール状態}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{スタート状態}
+	\centering
+	\scalebox{0.55}{\input{tikz/tikz-testlp-start}}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.05\textwidth}\centering
+      $\Rightarrow$
+    \end{column}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{ゴール状態}
+        \centering
+        \scalebox{0.55}{\input{tikz/tikz-testlp-goal}}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}\vfill
+\begin{itemize}
+ \item 問題のASPファクト形式，遷移問題の符号化は\textit{emacs}にて 
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 遷移問題の実行
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{遷移}
+\begin{itemize}
+ \only<1>{\item $t=0$ \structure{\bf スタート状態}}
+ \only<2>{\item $t=1$}
+ \only<3>{\item $t=2$}
+ \only<4>{\item $t=3$}
+ \only<5>{\item $t=4$ \structure{\bf ゴール状態}}
+\end{itemize}\vfill
+ \begin{exampleblock}{}
+\centering
+\input{tikz/tikz-testlp-trans}
+\end{exampleblock}
+\end{frame}
+
+
+

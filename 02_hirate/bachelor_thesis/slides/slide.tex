@@ -1,0 +1,564 @@
+\documentclass[dvipdfmx,11pt]{beamer}
+
+\usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{listings,jlisting}%ソースコード貼り付けのため
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}} %% しおりが文字化けしないように
+\setbeamertemplate{navigation symbols}{} %% 右下のアイコンを消す
+
+\usetheme{Warsaw}
+%\usetheme{Darmstadt}
+
+\setbeamertemplate{footline}[frame number] %% スライド下のバーを消してフレーム番号を表示
+\useoutertheme{shadow}                 %% 箱に影をつける
+\usefonttheme{professionalfonts}       %% 数式の文字を通常の LaTeX と同じにする
+
+\usepackage{graphicx,xcolor}%%文字の色
+%\usepackage{bm}
+
+\lstset{
+	%プログラム言語(複数の言語に対応，C,C++も可)
+ 	language = Python,
+ 	%背景色と透過度
+ 	backgroundcolor={\color[gray]{.90}},
+ 	%枠外に行った時の自動改行
+ 	breaklines = true,
+ 	%自動開業後のインデント量(デフォルトでは20[pt])	
+ 	breakindent = 10pt,
+ 	%標準の書体
+ 	basicstyle = \ttfamily\scriptsize,
+ 	%basicstyle = {\small}
+ 	%コメントの書体
+        commentstyle = \ttfamily\scriptsize,
+ 	%commentstyle = {\itshape \color[cmyk]{0,0,0,1}},
+ 	%関数名等の色の設定
+ 	classoffset = 0,
+ 	%キーワード(int, ifなど)の書体
+ 	keywordstyle = {\bfseries \color[cmyk]{0,1,0,0}},
+ 	%""で囲まれたなどの"文字"の書体
+ 	stringstyle = {\ttfamily \color[rgb]{0,0,1}},
+ 	%枠 "t"は上に線を記載, "T"は上に二重線を記載
+	%他オプション：leftline，topline，bottomline，lines，single，shadowbox
+ 	frame = TBrl,
+ 	%frameまでの間隔(行番号とプログラムの間)
+ 	framesep = 5pt,
+ 	%行番号の位置
+ 	numbers = left,
+	%行番号の間隔
+ 	stepnumber = 1,
+	%右マージン
+ 	%xrightmargin=0zw,
+ 	%左マージン
+	%xleftmargin=3zw,
+	%行番号の書体
+ 	numberstyle = \tiny,
+	%タブの大きさ
+ 	tabsize = 4,
+ 	%キャプションの場所("tb"ならば上下両方に記載)
+ 	captionpos = t
+}
+
+\title{解集合プログラミングを用いた\\ハミルトン閉路問題の解法に関する考察}
+\author{平手 貴大(101730309)}
+\institute{名古屋大学情報学部コンピュータ科学科情報システム系}
+\date{番原研究室中間発表\\2020年12月11日}
+
+\begin{document}
+\frame{\maketitle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ハミルトン閉路問題(Hamiltonian Cycle Problem)}
+  \begin{alertblock}{}
+    \centering
+    有名なNP-完全問題の一つ[Karp'72]
+  \end{alertblock}
+
+  \begin{itemize}
+    \item \alert{\bf ハミルトン路問題(HPP)}とは
+      \begin{itemize}
+        \small{\item 与えられたグラフと始点,終点についてハミルトン路の存在を判定する問題}
+      \end{itemize}
+    \item \alert{\bf ハミルトン閉路問題(HCP)}とは
+      \begin{itemize}
+        \small{\item 与えられたグラフ上でハミルトン閉路の存在を判定する問題}
+        \small{\item 巡回セールスマン問題やナイトツアーなど応用も多数}
+      \end{itemize}
+    \item 多くの先行研究がなされている
+    \begin{itemize}
+      \small{\item インクリメンタルSATベースの手法[宋'14]}
+      \small{\item 制約プログラミングシステムScarabを用いる手法[宋'14]}
+    \end{itemize}
+    \item 本研究ではハミルトン路・閉路の双方を対象としている.
+  \end{itemize}
+  \begin{block}{ハミルトン路・ハミルトン閉路}
+    グラフ$G=(V,E)$と,始点$s(\in V)$と終点$t(\in V)$について
+    \begin{itemize}
+      \item \small{\alert{ハミルトン路} : 全ての頂点$v(\in V)$を一度通る$s$から$t$までの路}
+      \item \small{\alert{ハミルトン閉路} : 全ての頂点$v(\in V)$を一度通る閉路}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{解集合プログラミング(Answer Set Programming)}
+  \begin{itemize}
+  \item \structure{\bf ASP言語}は,一階論理に基づく知識表現言語の一種である.
+  \item \structure{\bf ASPシステム}は,安定モデル意味論~[Gelfond and Lifschitz '88]
+    に基づく解集合を計算するシステムである.
+  \item 近年,SAT技術を利用した高速なASPシステムが開発され,
+    システム検証,システム生物学,プランニングなど
+    様々な分野への実用的応用が急速に拡大している.
+  \end{itemize}
+  \begin{alertblock}{組合せ問題に対してASPを用いる利点}
+    \begin{itemize}
+%    \item ASPとCLP(制約論理プログラミング)については,両者の枠組みを統合する試みがなされている.
+%    \item 制約充足問題の計算言語としても有用.
+    \item ASP言語の高い表現力により,記号的な制約を簡潔に記述できる.
+%    \item 系統的探索 (分枝限定法) なので,解の最適性を保証できる.
+    \item 最新のASP言語では,アグリゲートという表記法により組合せ問題を完結に記述できる.
+%    \item 算術計算のアグリゲート関数により,容易に解集合を計算できる.
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{研究目的・概要}
+  \begin{alertblock}{研究目的}
+    無向ハミルトン路・閉路問題を解く手法をASP上で複数実装し,比較評価する.
+  \end{alertblock}
+  \begin{block}{研究概要}
+    \begin{itemize}
+    \item 無向ハミルトン路・閉路問題を解く3種類のASP符号化を実装.
+      \begin{itemize}
+      \item acyclicity
+      \item directed
+      \item undirected
+      \end{itemize}
+    \item コスト付きハミルトン路問題で実験・評価.
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPを用いた各問題の解法}
+ %% \begin{figure}[htbp]
+ %%  \centering
+ %%  \input{tikz/tikz-asp}
+ %% \end{figure}
+\tikz{
+  %1ノード目
+  \path[draw=black, fill=blue!20, rounded corners=5pt]%線の設定
+  node[at={(0.75,0.75)}] {問題}%文字を入れる
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;%外周
+  %2ノード目
+  \path[draw=black, fill=blue!20, rounded corners=5pt, shift={(3,0)}]
+  node[at={(0.75,0.75)}] {
+    \begin{tabular}{c}
+      ASP\\
+      ファクト
+    \end{tabular}
+  }
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  %3ノード目文字が複数行
+  \path[draw=black, fill=green!20, rounded corners=5pt, shift={(6,0)}]
+  node[at={(0.75,0.75)}] {
+    \begin{tabular}{c}
+      ASP\\
+      システム
+    \end{tabular}
+  }
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  %4ノード目文字が複数行
+  \path[draw=black, fill=blue!20, rounded corners=5pt, shift={(9,0)}]
+  node[at={(0.75,0.75)}] {解集合}
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  %5ノード目文字が複数行
+  \path[draw=black, fill=red!20, rounded corners=5pt, shift={(3,-3)}]
+  node[at={(0.75,0.75)}] {
+    \begin{tabular}{c}
+      ASP\\
+      符号化
+    \end{tabular}
+  }
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  \draw[arrows=->] (1.5,0.75) --(3.0,0.75);
+  \draw[arrows=->,shift={(3,0)}] (1.5,0.75) --(3.0,0.75);
+  \draw[arrows=->,shift={(6,0)}] (1.5,0.75) --(3.0,0.75);
+  \draw[arrows=->] (4.5,-2.25) --(6.0,0.5);
+}
+
+ \vspace{0.5cm}
+ \begin{exampleblock}{}
+  \begin{enumerate}
+   \item 様々な形式の問題インスタンスをASPのファクト形式に変換する.
+   \item 変換した問題と,ハミルトン路・閉路問題を解くASP符号化を結合し,
+     ASPシステムを用いて解集合を求める.
+  \end{enumerate}
+ \end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{提案する符号化}
+  \begin{block}{}
+    グラフの辺からハミルトン閉路(路)を構成する辺を選ぶため,
+    以下の内二つの制約をそれぞれのASP符号化にて実装
+    \begin{itemize}
+    \item \small{\alert{次数の制約}}
+      \begin{itemize}
+      \item \small{\structure{閉路}:\ 各頂点の次数が２}
+      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の次数が2}
+      \end{itemize}
+    \item \small{独立閉路禁止のための制約}
+      \begin{itemize}
+      \item \small{\alert{連結の制約}:\ 選択された全ての辺は連結している.}
+      \item \small{\alert{非循環性の制約}:\ 始点と終点を含まない閉路が存在しない.}
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  \begin{enumerate}
+  \item clingoの組み込みディレクティブ\#edgeを用いて,２つ目の制約を表現した方法(\structure{符号化 \bf acyclicity})
+  \item 問題を有向グラフのように扱い解く方法(\structure{符号化 \bf directed})\\
+  \item 無向グラフとしてダイレクトに解く方法(\structure{符号化 \bf undirected})\\
+  \end{enumerate}
+  いずれもハミルトン路・閉路の双方に対応している.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%for tikz
+\newcommand{\grid}[2]{
+    \draw (#1,#2) [fill=blue!20] circle[radius=0.5] node[at={(#1,#2)}]{1};
+    \draw (#1,#2) circle[radius=0.5,shift={(1.5,0)}] node[at={(#1,#2)},shift={(1.5,0)}]{2};
+    \draw (#1,#2) circle[radius=0.5,shift={(3.0,0)}] node[at={(#1,#2)},shift={(3.0,0)}]{3};
+    \draw (#1,#2) circle[radius=0.5,shift={(0,-1.5)}] node[at={(#1,#2)},shift={(0,-1.5)}]{4};
+    \draw (#1,#2) circle[radius=0.5,shift={(1.5,-1.5)}] node[at={(#1,#2)},shift={(1.5,-1.5)}]{5};
+    \draw (#1,#2) circle[radius=0.5,shift={(3.0,-1.5)}] node[at={(#1,#2)},shift={(3.0,-1.5)}]{6};
+    \draw (#1,#2) circle[radius=0.5,shift={(0,-3)}] node[at={(#1,#2)},shift={(0,-3)}]{7};
+    \draw (#1,#2) circle[radius=0.5,shift={(1.5,-3)}] node[at={(#1,#2)},shift={(1.5,-3)}]{8};
+    \draw (#1,#2) [fill=red!20] circle[radius=0.5,shift={(3.0,-3)}] node[at={(#1,#2)},shift={(3.0,-3)}]{9};
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{二つの制約}
+  \begin{block}{}
+    \begin{itemize}
+    \item \small{\alert{次数の制約}}
+      \begin{itemize}
+      \item \small{\structure{閉路}:\ 各頂点の次数が２}
+      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の次数が2}
+      \end{itemize}
+    \item \small{\textcolor[gray]{0.5}{独立閉路禁止のための制約}}
+      \begin{itemize}
+      \item \small{\textcolor[gray]{0.5}{連結の制約:\ 選択された全ての辺は連結している.}}
+      \item \small{\textcolor[gray]{0.5}{非循環性の制約:\ 始点と終点を含まない閉路が存在しない.}}
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  \tikz{
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,0) -- (1.0,0);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,0) -- (2.5,0);
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-1.5) -- (1.0,-1.5);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,-1.5) -- (2.5,-1.5);
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-3) -- (1.0,-3);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,-3) -- (2.5,-3);
+    \draw [shift={(0,0)}] (0,-0.5) -- (0,-1.0);
+    \draw [shift={(0,0)}] (1.5,-0.5) -- (1.5,-1.0);
+    \draw [red][line width=1.5, shift={(0,0)}] (3,-0.5) -- (3,-1.0);
+    \draw [red][line width=1.5, shift={(0,0)}] (0,-2) -- (0,-2.5);
+    \draw [shift={(0,0)}] (1.5,-2) -- (1.5,-2.5);
+    \draw [shift={(0,0)}] (3,-2) -- (3,-2.5);    
+    \grid{0}{0}
+    \draw [shift={(6.5,0)}] (0.5,0) -- (1.0,0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,0) -- (2.5,0);
+    \draw [shift={(6.5,0)}] (0.5,-1.5) -- (1.0,-1.5);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-1.5) -- (2.5,-1.5);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0.5,-3) -- (1.0,-3);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-3) -- (2.5,-3);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-0.5) -- (0,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (1.5,-0.5) -- (1.5,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (3,-0.5) -- (3,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-2) -- (0,-2.5);
+    \draw [shift={(6.5,0)}] (1.5,-2) -- (1.5,-2.5);
+    \draw [shift={(6.5,0)}] (3,-2) -- (3,-2.5);    
+    \grid{6.5}{0}
+  }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{二つの制約}
+  \begin{block}{}
+    \begin{itemize}
+    \item \small{\alert{次数の制約}}
+      \begin{itemize}
+      \item \small{\structure{閉路}:\ 各頂点の次数が２}
+      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の次数が2}
+      \end{itemize}
+    \item \small{独立閉路禁止のための制約}
+      \begin{itemize}
+      \item \small{\alert{連結の制約}:\ 選択された全ての辺は連結している.}
+      \item \small{\alert{非循環性の制約}:\ 始点と終点を含まない閉路が存在しない.}
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  \tikz{
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,0) -- (1.0,0);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,0) -- (2.5,0);
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-1.5) -- (1.0,-1.5);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,-1.5) -- (2.5,-1.5);
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-3) -- (1.0,-3);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,-3) -- (2.5,-3);
+    \draw [shift={(0,0)}] (0,-0.5) -- (0,-1.0);
+    \draw [shift={(0,0)}] (1.5,-0.5) -- (1.5,-1.0);
+    \draw [red][line width=1.5, shift={(0,0)}] (3,-0.5) -- (3,-1.0);
+    \draw [red][line width=1.5, shift={(0,0)}] (0,-2) -- (0,-2.5);
+    \draw [shift={(0,0)}] (1.5,-2) -- (1.5,-2.5);
+    \draw [shift={(0,0)}] (3,-2) -- (3,-2.5);    
+    \grid{0}{0}
+    \draw [shift={(6.5,0)}] (0.5,0) -- (1.0,0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,0) -- (2.5,0);
+    \draw [shift={(6.5,0)}] (0.5,-1.5) -- (1.0,-1.5);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-1.5) -- (2.5,-1.5);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0.5,-3) -- (1.0,-3);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-3) -- (2.5,-3);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-0.5) -- (0,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (1.5,-0.5) -- (1.5,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (3,-0.5) -- (3,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-2) -- (0,-2.5);
+    \draw [shift={(6.5,0)}] (1.5,-2) -- (1.5,-2.5);
+    \draw [shift={(6.5,0)}] (3,-2) -- (3,-2.5);
+    \grid{6.5}{0}
+  }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{二つの制約}
+  \begin{block}{}
+    \begin{itemize}
+    \item \small{\alert{次数の制約}}
+      \begin{itemize}
+      \item \small{\structure{閉路}:\ 各頂点の次数が２}
+      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の次数が2}
+      \end{itemize}
+    \item \small{独立閉路禁止のための制約}
+      \begin{itemize}
+      \item \small{\alert{連結の制約}:\ 選択された全ての辺は連結している.}
+      \item \small{\alert{非循環性の制約}:\ 始点と終点を含まない閉路が存在しない.}
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  \tikz{
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,0) -- (1.0,0);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,0) -- (2.5,0);
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-1.5) -- (1.0,-1.5);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,-1.5) -- (2.5,-1.5);
+    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-3) -- (1.0,-3);
+    \draw [red][line width=1.5, shift={(0,0)}] (2,-3) -- (2.5,-3);
+    \draw [shift={(0,0)}] (0,-0.5) -- (0,-1.0);
+    \draw [shift={(0,0)}] (1.5,-0.5) -- (1.5,-1.0);
+    \draw [red][line width=1.5, shift={(0,0)}] (3,-0.5) -- (3,-1.0);
+    \draw [red][line width=1.5, shift={(0,0)}] (0,-2) -- (0,-2.5);
+    \draw [shift={(0,0)}] (1.5,-2) -- (1.5,-2.5);
+    \draw [shift={(0,0)}] (3,-2) -- (3,-2.5);    
+    \grid{0}{0}
+    \draw [shift={(6.5,0)}] (0.5,0) -- (1.0,0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,0) -- (2.5,0);
+    \draw [shift={(6.5,0)}] (0.5,-1.5) -- (1.0,-1.5);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-1.5) -- (2.5,-1.5);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0.5,-3) -- (1.0,-3);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-3) -- (2.5,-3);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-0.5) -- (0,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (1.5,-0.5) -- (1.5,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (3,-0.5) -- (3,-1.0);
+    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-2) -- (0,-2.5);
+    \draw [shift={(6.5,0)}] (1.5,-2) -- (1.5,-2.5);
+    \draw [shift={(6.5,0)}] (3,-2) -- (3,-2.5);
+    \grid{6.5}{0}
+    \draw [black][line width = 10,shift={(6.5,0)}] (-0.5,0.5) -- (3.5,-3.5);    
+  }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{提案する３つの符号化}
+  \begin{itemize}
+  \item \structure{\bf undirected}
+    \begin{itemize}
+    \item 与えられた無向グラフについて以下の２制約を適用
+    \item \alert{次数の制約}:\ 各頂点についての次数の制約
+    \item \alert{連結の制約}:\ 選択された辺が全て繋がっている
+    \end{itemize}
+  \item \structure{\bf directed}
+    \begin{itemize}
+    \item 与えられた無向グラフを有向グラフ化し，その上で以下の２制約を適用
+    \item \alert{次数の制約}:\ 各頂点についての出次数と入次数の制約
+    \item \alert{連結の制約}:\ 選択された辺が全て繋がっている
+    \end{itemize}
+  \item \structure{\bf acyclicity}
+    \begin{itemize}
+    \item 与えられた無向グラフを有向グラフ化し，その上で以下の２制約を適用
+    \item \alert{次数の制約}:\ 各頂点についての出次数と入次数の制約
+    \item \alert{非循環性の制約}:\ 始点と終点を含まない閉路が存在しない
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験概要}
+  \begin{itemize}
+    \item 各符号化を比較するために実験を行った.
+    \item 提案手法
+      \begin{itemize}
+      \item \structure{acyclicity}
+      \item \structure{directed}
+      \item \structure{undirected}
+      \end{itemize}
+    \item コスト制約付きハミルトン路問題(全10問)
+      \begin{itemize}
+      \item 全米本土48州をそれぞれ一度だけ通って大陸を横断する経路の内,各辺のコストの合計値が制約コスト値以下であるものを求める問題.
+      \item 始点:ワシントン州\ 終点:メイン州
+      \item 制約コスト値: 10コスト(11698 $\sim$ 18716)
+      \end{itemize}
+    \item ASPシステム:clingo-5.4.0
+    \item オプション:tweety crafty trendy frumpy jumpy
+    \item 制限時間:3時間/問
+    \item 実験環境:Mac mini(CPU:Intel Corei7 3.2GHz,メモリ:64GB)
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験結果}
+  %%
+  %% 既存研究との比較も入れるべき
+  %%
+  \begin{itemize}
+  \item 最も性能のよかったオプションcraftyを取り上げる.
+\begin{table}
+  \begin{tabular}{l|rrrr}
+    \hline
+    Cost    &	Models & acyclicity & directed & undirected\\
+    \hline
+    11698   &	1      & 4.355	&10.020	&\alert{2.919}\\
+    11814   &	8      & \alert{4.136}	&7.416	&5.458\\
+    11931   &	28     & 4.799	&10.317	&\alert{3.226}\\
+    12282   &	388    & 10.715	&15.787	&\alert{9.993}\\
+    12867   &	16180  & \alert{10.819}	&23.406	&16.386\\
+    14037   &	939209 & \alert{24.655}	&41.515	&47.894\\
+    15207   &	4525541& \alert{41.217}	&56.953	&85.256\\
+    16377   &	6702964& \alert{41.301}	&51.991	&93.595\\
+    17547   &	6876526& \alert{37.290}	&46.065	&91.750\\
+    18716   &	6876928& \alert{37.905}	&45.416	&95.659\\
+    \hline
+    Average &  & \alert{21.7192} & 30.889 & 45.2136\\
+    Best    &   & \alert{7} & 0 & 3\\
+    \hline
+  \end{tabular}
+\end{table}
+  \item acyclicityの符号化の性能が優れていた.
+  \item 5つのオプション全てで,acyclicityのcpu時間の平均値が最小だった.
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{まとめ}
+  ハミルトン路・閉路問題を解くASP符号化を作成し,コスト制約付きハミルトン路(閉路)問題にこれを適用・評価した.
+  \begin{itemize}
+  \item 無向ハミルトン路・閉路問題を解く3種類のASP符号化を実装.
+    \begin{itemize}
+    \item acyclicity:\#edgeを利用する手法
+    \item directed:有向グラフとして解く手法
+    \item undirected:無向グラフのまま解く手法
+    \end{itemize}
+  \item コスト付きハミルトン路問題で実験・評価.
+    \begin{itemize}
+    \item 5つのオプション全てでacyclicityの符号化がCPU時間の平均値で最短時間を示していた.
+    \end{itemize}
+  \end{itemize}
+  \begin{alertblock}{今後の課題}
+    \begin{itemize}
+    \item 新たなASP符号化の考案
+    \item より多くのベンチマーク問題での評価実験
+      \begin{itemize}
+      \item HCP・HPP
+      \item 最短ハミルトン路・閉路問題
+      \end{itemize}
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{}
+  補足
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{符号化acyclicity}
+  \begin{block}{各アトム}
+    \begin{itemize}
+    \item \small{\alert{node(x)}: グラフの頂点xを表す.}
+    \item \small{\alert{edge(x,y)}: 頂点xからyへの辺を表す.}
+    \item \small{\alert{in(x,y)}: edge(x,y)がハミルトン路(閉路)を構成する.}
+    \item \small{\alert{reached(x)}: in(x,y)を辿ることで始点から頂点xに到達可能.}
+    \end{itemize}
+  \end{block}
+  \begin{alertblock}{コンセプト}
+    有向グラフ化したグラフ上で,連結の制約に対してclingoの組み込みディレクティブ\#edgeを利用した符号化
+  \end{alertblock}
+  \begin{itemize}
+  \item \alert{次数の制約}
+    \begin{itemize}
+    \item 符号化directedと同じであるため後述
+    \end{itemize}
+  \item \alert{連結の制約}
+    \begin{itemize}
+    \item 次数の制約の下で含まれてしまう望ましくない解は,ハミルトン路(閉路)から独立したサイクルが発生するものである.
+    \item 独立したサイクルの発生を抑えられれば,連結が保証できる.
+    \item 非循環性を保証する組み込みのディレクティブ\structure{\#edge}を利用.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{符号化directed}
+  \begin{alertblock}{コンセプト}
+    与えられた無向グラフを有向グラフ化して有向HCP(HPP)問題を解く符号化
+  \end{alertblock}
+  \begin{itemize}
+  \item \alert{有向グラフ化}
+    \begin{itemize}
+    \item すべてのedge(x,y)について,edge(y,x)を生成.
+    \end{itemize}
+  \item \alert{次数の制約}
+    \begin{itemize}
+    \item ハミルトン閉路
+      \begin{itemize}
+      \item すべての頂点xについてin(x,\_),in(\_,x)がそれぞれ1つである.
+      \end{itemize}
+    \item ハミルトン路
+      \begin{itemize}
+      \item 始点s,終点tについてin(s,\_),in(\_,t)がそれぞれ1つである.
+      \item 始点s,終点tについてin(\_,s),in(t,\_)がない.
+      \item 頂点s,t以外の頂点xについてin(x,\_),in(\_,x)がそれぞれ1つである.
+      \end{itemize}
+    \end{itemize}
+  \item \alert{連結の制約}
+    \begin{enumerate}
+    \item 始点はreached(到達可能)とする.
+    \item すでにreachedな頂点xについてin(x,y)があるなら頂点yもreached
+    \item 任意の頂点xについて,xはreachedでなければならない.
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{符号化undirected}
+  \begin{alertblock}{コンセプト}
+    無向グラフとしてダイレクトに解く符号化
+  \end{alertblock}
+  \begin{itemize}
+  \item \alert{次数の制約}
+    \begin{itemize}
+    \item ハミルトン閉路
+      \begin{itemize}
+      \item すべての頂点xについてin(x,\_),in(\_,x)が2つである.
+      \end{itemize}
+    \item ハミルトン路
+      \begin{itemize}
+      \item 始点sについてin(s,\_),in(\_,s)が1つである.
+      \item 終点tについてin(t,\_),in(\_,t)が1つである.
+      \item 頂点s,t以外の頂点xについてin(x,\_),in(\_,x)が2つである.
+      \end{itemize}
+    \end{itemize}
+  \item \alert{連結の制約}
+    \begin{enumerate}
+    \item 始点はreached(到達可能)とする.
+    \item すでにreachedな頂点xについてin(x,y)があるなら頂点yもreached
+    \item すでにreachedな頂点xについてin(y,x)があるなら頂点yもreached
+    \item 任意の頂点xについて,xはreachedでなければならない.
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

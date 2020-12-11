@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 根付き全域森の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}[scale=0.5]
+
+ % 設定
+ \tikzset{node/.style={circle,draw=black,fill=white}}
+
+ \definecolor{edge1}{RGB}{191,0,0}
+ \definecolor{node1}{RGB}{249,200,200}
+ \definecolor{edge3}{RGB}{38,38,134}
+ \definecolor{node3}{RGB}{200,200,249}
+
+ % 補助線
+ % \draw [help lines,blue] (0,0) grid (20,6);
+
+ % 入力されるグラフ
+ % node %
+ \node[circle, ultra thick,draw=edge1,fill=node1] (in1) {1};
+ \node[node,right= of in1] (in2){2};
+ \node[circle, ultra thick, draw=edge3,fill=node3, right=of in2](in3){3};
+ \node[node,below= of in1] (in4){4};
+ \node[node,below= of in2] (in5){5};
+ \node[node,below= of in3] (in6){6};
+
+ % 辺
+ \foreach \u / \v in {in1/in2,in2/in3,in1/in4,in2/in5,in3/in6,in4/in5,in5/in6}
+ \draw (\u) -- (\v);
+
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: ``slide''
+%%% End:
