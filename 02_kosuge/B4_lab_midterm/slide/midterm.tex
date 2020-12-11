@@ -1,0 +1,403 @@
+\documentclass [dvipdfmx,12pt]{beamer}
+\usepackage{bxdpx-beamer}
+\usepackage{pxjahyper}
+\usepackage{amsmath}
+\usepackage{minijs}
+\usepackage{tikz}
+\usepackage{otf}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\usetheme{Copenhagen}
+\usetikzlibrary{intersections, calc, arrows}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}[circle]
+\setbeamersize{text margin left=1.5em,text margin right=1.5em}
+\setlength{\abovedisplayskip}{0pt} % 上部のマージン
+\setlength{\belowdisplayskip}{0pt} % 下部のマージン
+%
+%
+%
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+\leavevmode%
+\hbox{%
+\begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+\usebeamerfont{author in head/foot}\insertshortauthor
+\end{beamercolorbox}%
+\begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+\usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+\textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+\end{beamercolorbox}}%
+\vskip0pt%
+}
+\makeatletter
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+\newcounter{framenumberappendix}
+\setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+\addtocounter{framenumberappendix}{-\value{framenumber}}
+\addtocounter{framenumber}{\value{framenumberappendix}}
+}
+\title{SMTソルバーにおける\\distinct制約の高速化に関する考察}
+\author{小菅脩司}
+\institute{番原研究室}
+\date{2020年番原研中間発表会\\12月11日}
+\begin{document}
+\begin{frame} {}
+\titlepage
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 背景理論付きSAT\\(Satisfiable Modulo Theories:SMT)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{背景理論付きSAT\\(Satisfiable Modulo Theories:SMT)}
+\begin{itemize}
+\item SATが命題論理を扱うのに対して, SMTでは述語論理を扱う.
+\item SMTは, 命題論理よりも表現能力の高い論理体系で記述された背景理論を, SAT技法で効果的に取り扱うことを目的としている.
+\end{itemize}
+\begin{alertblock}{SMTソルバーの利点}
+\begin{itemize}
+\item 高い表現力で制約を簡潔に記述することができる.
+\item 等号や算術, 配列やリスト, ビットベクタなどの背景理論を切り替えて取り扱うことができる.
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% distinct制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{distinct制約}
+\begin{block}{}
+\begin{itemize}
+\item $distinct(x_1 ... x_n)$は変数$x_i$が互いに異なる値をとることを意味する.
+\item 今回実験に使用したSMTソルバーのうちの1つである\textit{z3}においてこの制約は, $$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$に分解される.
+\end{itemize}
+\end{block}
+\begin{alertblock}{distinct制約高速化の意義}
+\begin{itemize}
+\item distinct制約は時間割問題やグラフ彩色問題等の制約充足可能問題に用いられるため, 求解速度を速くする事によって多くの人がその恩恵を得られる.
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 研究概要
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{研究概要}
+\begin{alertblock}{研究目的}
+distinct制約に対して, ヒント制約を追加し, その比較評価を行う.
+\end{alertblock}
+\begin{block}{研究内容}
+追加したヒント制約は以下の通りであり, \structure{クイーングラフ彩色問題}を用いて比較実験を行った.
+\begin{itemize}
+\item 鳩の巣原理を用いたヒント制約
+\item distinct制約の要素数と要素のドメインの大きさが等しい場合のヒント制約
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% クイーングラフ彩色問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{クイーングラフ彩色問題}
+\input{tikz/queen_graph}
+\begin{itemize}
+\item N×Nの大きさのチェス盤に, N色のクイーンをN個ずつ互いに取り合わないように配置する問題.
+\item \alert{各行}, \alert{各列}, \alert{各右上がり対角線}, \alert{各右下がり対角線}に配置されているクイーンの色が互いに異なる.
+\end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ヒント制約1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{ヒント制約1}
+distinct制約に鳩の巣原理を基にした以下のヒントを追加する.
+\begin{exampleblock}{}
+$distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$であるときに以下の制約を追加する.
+\begin{eqnarray}
+&& \bigvee_{i=1}^n   x_i \geq l+n-1\\
+&& \bigvee_{i=1}^n \lnot(x_i \geq u-n+1)
+\end{eqnarray}
+\end{exampleblock}
+\begin{itemize}
+\item (1)は, 全ての$x_i$が$l+n-2$以下になることを禁止している.\\
+\item (2)は, 全ての$x_i$が$u-n+1$以上になることを禁止している.\\
+\end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ヒント制約2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{ヒント制約2}
+distinct制約の要素数と要素のドメインの大きさが等しい場合に以下のヒントを追加する．
+\begin{exampleblock}{}
+$distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
+$$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
+\end{exampleblock}
+\begin{itemize}
+\item 各値$a$に対し, その値をとる変数$x_i$が存在する.
+\end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験概要
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{実験概要}
+ベンチマーク問題
+\begin{itemize}
+\item クイーングラフ彩色問題 N=5..13
+\end{itemize}
+使用ソルバー
+\begin{itemize}
+\item SMTソルバー: \textit{z3}(ver.4.8.9)
+\end{itemize}
+制限時間
+\begin{itemize}
+\item 1問あたり2時間
+\end{itemize}
+実験環境:
+\begin{itemize}
+\item Mac mini,  3.2GHz,  64GB メモリ
+\end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{実験結果}
+計測したCPU時間は以下の通りである.
+\begin{block}{}
+    {\tiny \input{tables/result} }
+\end{block}
+\begin{itemize}
+\item ヒント無しのdistinct制約では, 位置変数モデルの方が性能が良い.
+\item ヒント有りがN＝11まで解けていることから, 加えたヒントが有効であることがわかる.
+\end{itemize}
+\input{tikz/line}\\
+{\footnotesize COL: 色変数モデル, POS: 位置変数モデル}\\
+{\footnotesize H1: ヒント制約1, H2: ヒント制約2, H3: H1+H2}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% まとめ
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{まとめ}
+    distinct制約に対するヒント制約として以下の2つを追加した.
+\begin{itemize}
+\item 鳩の巣原理を用いたヒント制約
+\item distinct制約の要素数と要素のドメインの大きさが等しい場合のヒント制約
+\end{itemize}
+    比較実験として, N=5からN=13までのクイーングラフ彩色問題を解く速度を測定した.\\
+    SMTソルバーにおいて, ヒント制約が有効であることを確認した.
+\begin{alertblock}{今後の課題}
+\begin{itemize}
+\item ブール基数制約モデルとの性能比較
+\item 新たなdistinct制約の符号化の提案\\
+\end{itemize}
+\end{alertblock}
+\end{frame}
+% %%%% 補助スライド
+
+\appendix
+
+\backupbegin
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{~}
+ \centering
+ - 補足用 -
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \textit{z3}ソルバーについて
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\textit{z3}ソルバーについて}
+\begin{itemize}
+\item \textit{z3}はMicrosoft Researchが作成したSMTソルバーである．
+\item プログラム解析，検証，テストケース生成プロジェクトなどで使われている．
+\item smt-lib2形式で記述する他に，python,Rustなどの言語のインターフェースが存在する．
+\end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% smt-lib2での記述方法
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{smt-lib2での記述方法}
+\begin{exampleblock}{変数宣言}
+(declare-const x int)
+\end{exampleblock}
+\begin{exampleblock}{制約宣言}
+(assert (and ($>$= x 0) ($<$= x 5)))
+\end{exampleblock}
+\begin{exampleblock}{distinct制約の宣言}
+(assert (distinct x y z))
+\end{exampleblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% クイーングラフ彩色問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{クイーングラフ彩色問題}
+\begin{itemize}
+\item $N$個ずつの$N$個のグループからなるクイーン(計$N^2$個)を，$N$×$N$のチェス盤に，同じグループのクイーン同士が互いに取られないように配置する問題．
+\item $N \equiv \pm 1 \: (mod6)$の時にだけ2重周期的な解が存在し，2005年までに2重周期的ではないものも含み11以上26以下のすべてのNに対し解が発見されている．
+\end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 色変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{色変数モデル}
+{\small
+\alert{クイーンの色}を整数変数とした制約モデル\\
+\setlength{\abovedisplayskip}{1pt} % 上部のマージン
+\setlength{\belowdisplayskip}{1pt} % 下部のマージン
+\begin{block}{}
+\begin{itemize}
+\item 位置$(i, j)$に配置されたクイーンの色を整数変数$c_{ij} \in \bf N (i, j \in \bf N)$で表す
+\item \alert{各行}, \alert{各列}, \alert{各右上がり対角線}, \alert{各右下がり対角線}に配置されるクイーンの色がそれぞれ互いに異なることから以下の制約が得られる
+\end{itemize}
+\vspace{-0.5\baselineskip}           %余白
+\begin{eqnarray*}
+& distinct\{c_{ij} | j \in \bf N\} \; & (i \in \bf N)\\
+& distinct\{c_{ij} | i \in \bf N\} \; & (j \in \bf N)\\
+& distinct\{c_{ij} | i, j \in \bf N,  i+j=u\} \; & (u \in \bf U)\\
+& distinct\{c_{ij} | i, j \in \bf N,  i-j=d\} \; & (d \in \bf D)
+\end{eqnarray*}
+\end{block}
+}
+\input{tikz/line}\\
+{\footnotesize
+$\bf N$: 行$i$, 列$j$クイーンの色$k$の取り得る値の集合\\
+$\bf U$: $i+j$の取り得る値の集合, 右上がり対角線に対応する.\\
+$\bf D$: $i-j$の取り得る値の集合, 右下がり対角線に対応する.\\
+}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 位置変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{位置変数モデル}
+{\small
+各行に配置される\alert{クイーンの列番号}を整数変数とした制約モデル
+}
+{\footnotesize
+\setlength{\abovedisplayskip}{1pt} % 上部のマージン
+\setlength{\belowdisplayskip}{0pt} % 下部のマージン
+\begin{block}{}
+\setlength{\itemsep}{0pt}
+\setlength{\parskip}{0pt}
+\begin{itemize}
+\item 色$k$のクイーンが行$i$で配置されている列番号を整数変数$y_{ik} \in \bf N (i, k \in \bf N)$で表す
+\item 同一の\alert{行番号}に同色のクイーンが配置されないことより
+$$distinct\{y_{ik} | i \in \bf N\} \; (k \in \bf N)$$
+\item 同一の\alert{列番号}に同色のクイーンが配置されないことより
+$$distinct\{y_{ik} | k \in \bf N\} \; (i \in \bf N)$$
+\item \alert{右上がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
+$$distinct\{y_{ik}+i | i \in \bf N\} \; (k \in \bf N)$$
+\item \alert{右下がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
+$$distinct\{y_{ik}-i | i \in \bf N\} \; (k \in \bf N)$$
+\end{itemize}
+\end{block}
+}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 位置変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{位置変数モデル}
+\input{tikz/pos}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 鳩の巣原理
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{鳩の巣原理}
+\begin{exampleblock}{鳩の巣原理}
+自然数$n$, $m$において, $n>m$であるとき, $n$個のものを$m$組に分けようとすると, 少なくとも1組は2個以上のものを含む
+\end{exampleblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \textit{Sugar}での実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\textit{Sugar}での実験結果}
+計測したCPU時間は以下の通りである.
+\begin{block}{}
+    {\tiny \input{tables/result_csp} }
+\end{block}
+\begin{itemize}
+\item \textit{Sugar}でもヒント制約の有効性を確認した．
+\item 色変数モデルでヒント1とヒント2を同時に使用した場合が一番性能が良かった．
+\end{itemize}
+\input{tikz/line}\\
+{\footnotesize
+使用ソルバー: \textit{Sugar}(ver.2.3.3)\\
+実験環境: Mac mini, 3.2GHz, 64GB メモリ\\
+制限時間: 1問あたり2時間\\
+}
+\end{frame}
+
+\backupend
+% TikZ
+\end{document}
