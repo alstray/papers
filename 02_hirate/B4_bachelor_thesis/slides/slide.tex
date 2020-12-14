@@ -3,10 +3,13 @@
 \usepackage{bxdpx-beamer}% dvipdfmxなので必要
 \usepackage{listings,jlisting}%ソースコード貼り付けのため
 \usepackage{tikz}
+\usepackage{otf}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shadows}
 \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}} %% しおりが文字化けしないように
 \setbeamertemplate{navigation symbols}{} %% 右下のアイコンを消す
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
 
 \usetheme{Warsaw}
 %\usetheme{Darmstadt}
@@ -62,8 +65,8 @@
 
 \title{解集合プログラミングを用いた\\ハミルトン閉路問題の解法に関する考察}
 \author{平手 貴大(101730309)}
-\institute{名古屋大学情報学部コンピュータ科学科情報システム系}
-\date{番原研究室中間発表\\2020年12月11日}
+\institute{名古屋大学情報学部コンピュータ科学科情報システム系\\番原研究室}
+\date{2020年度 番原研中間発表会\\2020年12月11日}
 
 \begin{document}
 \frame{\maketitle}
@@ -77,19 +80,23 @@
   \begin{itemize}
     \item \alert{\bf ハミルトン路問題(HPP)}とは
       \begin{itemize}
-        \small{\item 与えられたグラフと始点,終点についてハミルトン路の存在を判定する問題}
+        \small{\item 与えられたグラフについてハミルトン路の存在を判定する問題}
       \end{itemize}
     \item \alert{\bf ハミルトン閉路問題(HCP)}とは
       \begin{itemize}
         \small{\item 与えられたグラフ上でハミルトン閉路の存在を判定する問題}
         \small{\item 巡回セールスマン問題やナイトツアーなど応用も多数}
       \end{itemize}
-    \item 多くの先行研究がなされている
+    \item 様々な手法を用いた研究がなされている
     \begin{itemize}
       \small{\item インクリメンタルSATベースの手法[宋'14]}
-      \small{\item 制約プログラミングシステムScarabを用いる手法[宋'14]}
+%      \small{\item 制約プログラミングシステムScarabを用いる手法[宋'14]}
+      \small{\item SAT符号化してSATソルバーを用いる手法[船越'12]}
     \end{itemize}
-    \item 本研究ではハミルトン路・閉路の双方を対象としている.
+  \item 本研究ではハミルトン路・閉路の双方を対象としている.
+    \begin{itemize}
+    \item 中間発表ではコスト制約付きハミルトン路問題を対象とする．
+    \end{itemize}
   \end{itemize}
   \begin{block}{ハミルトン路・ハミルトン閉路}
     グラフ$G=(V,E)$と,始点$s(\in V)$と終点$t(\in V)$について
@@ -113,9 +120,9 @@
     \begin{itemize}
 %    \item ASPとCLP(制約論理プログラミング)については,両者の枠組みを統合する試みがなされている.
 %    \item 制約充足問題の計算言語としても有用.
-    \item ASP言語の高い表現力により,記号的な制約を簡潔に記述できる.
+    \item ASP言語の高い表現力により,記号上の制約を簡潔に記述できる.
 %    \item 系統的探索 (分枝限定法) なので,解の最適性を保証できる.
-    \item 最新のASP言語では,アグリゲートという表記法により組合せ問題を完結に記述できる.
+    \item 最新のASP言語では,アグリゲートという表記法により組合せ問題を簡潔に記述できる.
 %    \item 算術計算のアグリゲート関数により,容易に解集合を計算できる.
     \end{itemize}
   \end{alertblock}
@@ -129,16 +136,16 @@
     \begin{itemize}
     \item 無向ハミルトン路・閉路問題を解く3種類のASP符号化を実装.
       \begin{itemize}
-      \item acyclicity
-      \item directed
       \item undirected
+      \item directed
+      \item acyclicity
       \end{itemize}
-    \item コスト付きハミルトン路問題で実験・評価.
+    \item コスト制約付きハミルトン路問題で実験・評価.
     \end{itemize}
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPを用いた各問題の解法}
+\begin{frame}{ASPシステムの利用法}
  %% \begin{figure}[htbp]
  %%  \centering
  %%  \input{tikz/tikz-asp}
@@ -189,21 +196,21 @@
  \begin{exampleblock}{}
   \begin{enumerate}
    \item 様々な形式の問題インスタンスをASPのファクト形式に変換する.
-   \item 変換した問題と,ハミルトン路・閉路問題を解くASP符号化を結合し,
-     ASPシステムを用いて解集合を求める.
+   \item 変換した問題と,ハミルトン路・閉路問題を解くASP符号化を渡し,
+     ASPシステムに解集合を求めさせる.
   \end{enumerate}
  \end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{提案する符号化}
+\begin{frame}[fragile]{ハミルトン路・閉路の符号化}
   \begin{block}{}
     グラフの辺からハミルトン閉路(路)を構成する辺を選ぶため,
     以下の内二つの制約をそれぞれのASP符号化にて実装
     \begin{itemize}
     \item \small{\alert{次数の制約}}
       \begin{itemize}
+      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の頂点の次数が2}        
       \item \small{\structure{閉路}:\ 各頂点の次数が２}
-      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の次数が2}
       \end{itemize}
     \item \small{独立閉路禁止のための制約}
       \begin{itemize}
@@ -213,11 +220,14 @@
     \end{itemize}
   \end{block}
   \begin{enumerate}
-  \item clingoの組み込みディレクティブ\#edgeを用いて,２つ目の制約を表現した方法(\structure{符号化 \bf acyclicity})
-  \item 問題を有向グラフのように扱い解く方法(\structure{符号化 \bf directed})\\
-  \item 無向グラフとしてダイレクトに解く方法(\structure{符号化 \bf undirected})\\
+%  \item 無向グラフとしてダイレクトに解く方法
+  \item \structure{符号化 \bf undirected}
+%  \item 問題を有向グラフのように扱い解く方法
+  \item \structure{符号化 \bf directed}
+%  \item \textit{clingo}の組み込みディレクティブ\textit{\#edge}を用いて,２つ目の制約を表現した方法
+  \item \structure{符号化 \bf acyclicity}
   \end{enumerate}
-  いずれもハミルトン路・閉路の双方に対応している.
+  いずれもハミルトン路・閉路の双方に対応させた.
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %for tikz
@@ -320,52 +330,9 @@
     \draw [shift={(6.5,0)}] (1.5,-2) -- (1.5,-2.5);
     \draw [shift={(6.5,0)}] (3,-2) -- (3,-2.5);
     \grid{6.5}{0}
-  }
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{二つの制約}
-  \begin{block}{}
-    \begin{itemize}
-    \item \small{\alert{次数の制約}}
-      \begin{itemize}
-      \item \small{\structure{閉路}:\ 各頂点の次数が２}
-      \item \small{\structure{路}:\ 始点と終点の次数は1,それ以外の次数が2}
-      \end{itemize}
-    \item \small{独立閉路禁止のための制約}
-      \begin{itemize}
-      \item \small{\alert{連結の制約}:\ 選択された全ての辺は連結している.}
-      \item \small{\alert{非循環性の制約}:\ 始点と終点を含まない閉路が存在しない.}
-      \end{itemize}
-    \end{itemize}
-  \end{block}
-  \tikz{
-    \draw [red][line width=1.5, shift={(0,0)}] (0.5,0) -- (1.0,0);
-    \draw [red][line width=1.5, shift={(0,0)}] (2,0) -- (2.5,0);
-    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-1.5) -- (1.0,-1.5);
-    \draw [red][line width=1.5, shift={(0,0)}] (2,-1.5) -- (2.5,-1.5);
-    \draw [red][line width=1.5, shift={(0,0)}] (0.5,-3) -- (1.0,-3);
-    \draw [red][line width=1.5, shift={(0,0)}] (2,-3) -- (2.5,-3);
-    \draw [shift={(0,0)}] (0,-0.5) -- (0,-1.0);
-    \draw [shift={(0,0)}] (1.5,-0.5) -- (1.5,-1.0);
-    \draw [red][line width=1.5, shift={(0,0)}] (3,-0.5) -- (3,-1.0);
-    \draw [red][line width=1.5, shift={(0,0)}] (0,-2) -- (0,-2.5);
-    \draw [shift={(0,0)}] (1.5,-2) -- (1.5,-2.5);
-    \draw [shift={(0,0)}] (3,-2) -- (3,-2.5);    
-    \grid{0}{0}
-    \draw [shift={(6.5,0)}] (0.5,0) -- (1.0,0);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (2,0) -- (2.5,0);
-    \draw [shift={(6.5,0)}] (0.5,-1.5) -- (1.0,-1.5);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-1.5) -- (2.5,-1.5);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (0.5,-3) -- (1.0,-3);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (2,-3) -- (2.5,-3);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-0.5) -- (0,-1.0);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (1.5,-0.5) -- (1.5,-1.0);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (3,-0.5) -- (3,-1.0);
-    \draw [red][line width=1.5, shift={(6.5,0)}] (0,-2) -- (0,-2.5);
-    \draw [shift={(6.5,0)}] (1.5,-2) -- (1.5,-2.5);
-    \draw [shift={(6.5,0)}] (3,-2) -- (3,-2.5);
-    \grid{6.5}{0}
-    \draw [black][line width = 10,shift={(6.5,0)}] (-0.5,0.5) -- (3.5,-3.5);    
+    \pause
+    \draw [black][line width = 10,shift={(6.5,0)}] (-0.2,0.2) -- (3.2,-3.2);
+    \draw [black][line width = 10,shift={(6.5,0)}] (-0.2,-3.2) -- (3.2,0.2);
   }
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -388,6 +355,9 @@
     \item 与えられた無向グラフを有向グラフ化し，その上で以下の２制約を適用
     \item \alert{次数の制約}:\ 各頂点についての出次数と入次数の制約
     \item \alert{非循環性の制約}:\ 始点と終点を含まない閉路が存在しない
+      \begin{itemize}
+      \item 非循環性を保証する\textit{clingo}の組み込みディレクティブ\textit{\#edge}を利用
+        \end{itemize}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -397,9 +367,9 @@
     \item 各符号化を比較するために実験を行った.
     \item 提案手法
       \begin{itemize}
-      \item \structure{acyclicity}
+      \item \structure{undirected}        
       \item \structure{directed}
-      \item \structure{undirected}
+      \item \structure{acyclicity}        
       \end{itemize}
     \item コスト制約付きハミルトン路問題(全10問)
       \begin{itemize}
@@ -407,8 +377,8 @@
       \item 始点:ワシントン州\ 終点:メイン州
       \item 制約コスト値: 10コスト(11698 $\sim$ 18716)
       \end{itemize}
-    \item ASPシステム:clingo-5.4.0
-    \item オプション:tweety crafty trendy frumpy jumpy
+    \item ASPシステム:\textit{clingo-5.4.0}
+    \item オプション:\textit{tweety crafty trendy frumpy jumpy}
     \item 制限時間:3時間/問
     \item 実験環境:Mac mini(CPU:Intel Corei7 3.2GHz,メモリ:64GB)
   \end{itemize}
@@ -421,23 +391,23 @@
   \begin{itemize}
   \item 最も性能のよかったオプションcraftyを取り上げる.
 \begin{table}
-  \begin{tabular}{l|rrrr}
+  \begin{tabular}{l|r|rrr}
     \hline
-    Cost    &	Models & acyclicity & directed & undirected\\
+    制約Cost値    &	Models & undirected & directed & acyclicity \\
     \hline
-    11698   &	1      & 4.355	&10.020	&\alert{2.919}\\
-    11814   &	8      & \alert{4.136}	&7.416	&5.458\\
-    11931   &	28     & 4.799	&10.317	&\alert{3.226}\\
-    12282   &	388    & 10.715	&15.787	&\alert{9.993}\\
-    12867   &	16180  & \alert{10.819}	&23.406	&16.386\\
-    14037   &	939209 & \alert{24.655}	&41.515	&47.894\\
-    15207   &	4525541& \alert{41.217}	&56.953	&85.256\\
-    16377   &	6702964& \alert{41.301}	&51.991	&93.595\\
-    17547   &	6876526& \alert{37.290}	&46.065	&91.750\\
-    18716   &	6876928& \alert{37.905}	&45.416	&95.659\\
+    11698   &	1      &\alert{2.919} &10.020 & 4.355	\\
+    11814   &	8      &5.458  &7.416	& \alert{4.136}	\\
+    11931   &	28     &\alert{3.226}&10.317	& 4.799	\\
+    12282   &	388    &\alert{9.993}&15.787	& 10.715	\\
+    12867   &	16180  &16.386       &23.406	& \alert{10.819}\\
+    14037   &	939209 &47.894       &41.515	& \alert{24.655}\\
+    15207   &	4525541&85.256       &56.953	& \alert{41.217}\\
+    16377   &	6702964&93.595       &51.991	& \alert{41.301}	\\
+    17547   &	6876526&91.750       &46.065	& \alert{37.290}	\\
+    18716   &	6876928&95.659       &45.416	& \alert{37.905}	\\
     \hline
-    Average &  & \alert{21.7192} & 30.889 & 45.2136\\
-    Best    &   & \alert{7} & 0 & 3\\
+    Average &   & 45.2136 & 30.889  & \alert{21.7192}\\
+    Best    &   & 3 & 0 & \alert{7} \\
     \hline
   \end{tabular}
 \end{table}
@@ -447,15 +417,15 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめ}
-  ハミルトン路・閉路問題を解くASP符号化を作成し,コスト制約付きハミルトン路(閉路)問題にこれを適用・評価した.
+  ハミルトン路・閉路問題を解くASP符号化を作成し,コスト制約付きハミルトン路問題にこれを適用・評価した.
   \begin{itemize}
-  \item 無向ハミルトン路・閉路問題を解く3種類のASP符号化を実装.
+  \item 無向ハミルトン路・閉路問題を解くASP符号化を3種類実装.
     \begin{itemize}
-    \item acyclicity:\#edgeを利用する手法
-    \item directed:有向グラフとして解く手法
-    \item undirected:無向グラフのまま解く手法
+    \item \alert{undirected}:\ 無向グラフのまま解く手法      
+    \item \alert{directed}:\ 有向グラフとして解く手法
+    \item \alert{acyclicity}:\ \textit{\#edge}を利用する手法      
     \end{itemize}
-  \item コスト付きハミルトン路問題で実験・評価.
+  \item コスト制約付きハミルトン路問題で実験・評価.
     \begin{itemize}
     \item 5つのオプション全てでacyclicityの符号化がCPU時間の平均値で最短時間を示していた.
     \end{itemize}
@@ -472,11 +442,11 @@
   \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{}
+\begin{frame}[noframenumbering]{}
   補足
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{符号化acyclicity}
+\begin{frame}[noframenumbering]{符号化acyclicity}
   \begin{block}{各アトム}
     \begin{itemize}
     \item \small{\alert{node(x)}: グラフの頂点xを表す.}
@@ -486,7 +456,7 @@
     \end{itemize}
   \end{block}
   \begin{alertblock}{コンセプト}
-    有向グラフ化したグラフ上で,連結の制約に対してclingoの組み込みディレクティブ\#edgeを利用した符号化
+    有向グラフ化したグラフ上で,連結の制約に対して\textit{clingo}の組み込みディレクティブ\textit{\#edge}を利用した符号化
   \end{alertblock}
   \begin{itemize}
   \item \alert{次数の制約}
@@ -497,12 +467,12 @@
     \begin{itemize}
     \item 次数の制約の下で含まれてしまう望ましくない解は,ハミルトン路(閉路)から独立したサイクルが発生するものである.
     \item 独立したサイクルの発生を抑えられれば,連結が保証できる.
-    \item 非循環性を保証する組み込みのディレクティブ\structure{\#edge}を利用.
+    \item 非循環性を保証する組み込みのディレクティブ\textit{\structure{\#edge}}を利用.
     \end{itemize}
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{符号化directed}
+\begin{frame}[noframenumbering]{符号化directed}
   \begin{alertblock}{コンセプト}
     与えられた無向グラフを有向グラフ化して有向HCP(HPP)問題を解く符号化
   \end{alertblock}
@@ -533,7 +503,7 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{符号化undirected}
+\begin{frame}[noframenumbering]{符号化undirected}
   \begin{alertblock}{コンセプト}
     無向グラフとしてダイレクトに解く符号化
   \end{alertblock}
@@ -559,6 +529,18 @@
     \item 任意の頂点xについて,xはreachedでなければならない.
     \end{enumerate}
   \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{clingo option}
+   \begin{itemize}
+     \item frumpy:\ 以前のクラスプバージョンで使用されていたものと同様の保守的なデフォルト．
+     \item jumpy:\ より攻撃的なデフォルト，探索リスタートを頻繁に行う．
+     \item tweety:\ 典型的なASPの問題を想定したデフォルト．
+     \item trendy:\ 構造的な問題を想定したデフォルト．
+     \item crafty:\ 細工された問題を対象としたデフォルト．
+%     \item handy:\ 大規模な問題を対象としたデフォルト。
+%     \item \<ファイル\>:\ 設定ファイルを使用してソルバーを設定する。
+   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
