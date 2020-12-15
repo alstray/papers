@@ -1,0 +1,86 @@
+ \begin{tikzpicture}
+ % Grade
+  \nodeVP{grade}{at={(0,0)}}{Grade};
+  \nodeV{dx}{below=0.3cm of via_grade}{DX}{= 580};
+  \draw(via_grade)--(dx.north);
+  \onslide<1>{\nodeV{std}{left=0.3cm of dx}{STD}{= 580};}
+  \onslide<2>{\nodeVlb{std}{left=0.3cm of dx}{STD}{= 580};}
+  \draw(via_grade)--(std.north);
+  \onslide<1>{\nodeV{lx}{right=0.3cm of dx}{LX}{= 580};}
+  \onslide<2>{\nodeVchoiced{lx}{right=0.3cm of dx}{LX}{= 580};}
+  \draw(via_grade)--(lx.north);
+
+  % Tire
+  \nodeVP{tire}{right=6cm of grade}{Tire};
+  \nodeV{16inch}{below left=0.4cm of via_tire}{16inch}{= 110};
+  \nodeV{17inch}{below right=0.4cm of via_tire}{17inch}{= 130};
+  \onslide<1>{\nodeV{15inch}{left=0.3cm of 16inch}{15inch}{= 90};}
+  \onslide<2>{\nodeVlb{15inch}{left=0.3cm of 16inch}{15inch}{= 90};}
+  \onslide<1>{\nodeV{18inch}{right=0.3cm of 17inch}{18inch}{= 150};}
+  \onslide<2>{\nodeVchoiced{18inch}{right=0.3cm of 17inch}{18inch}{= 150};}
+  \draw (via_tire)--(15inch.north);
+  \draw (via_tire)--(16inch.north);
+  \draw (via_tire)--(17inch.north);
+  \draw (via_tire)--(18inch.north);
+
+  % Transmission
+  \nodeTrans{trans}{below=3.5cm of grade}{Transmission};
+  \onslide<1>{\nodeV{6at}{left=1cm of via_trans}{6AT}{= 125};}
+  \onslide<2>{\nodeVchoiced{6at}{left=1cm of via_trans}{6AT}{= 125};}
+  \nodeV{hev}{above right=0.3cm of 6at.north}{HEV}{= 115};
+  \nodeV{10at}{below right=0.3cm of 6at.south}{10AT}{= 95};
+  \nodeV{6mt}{right=1cm of via_trans}{6MT}{= 55};
+  \onslide<1>{\nodeV{5mt}{above left=0.3cm of 6mt.north}{5MT}{= 48};}
+  \onslide<2>{\nodeVlb{5mt}{above left=0.3cm of 6mt.north}{5MT}{= 48};}
+  \nodeV{cvt}{below left=0.3cm of 6mt.south}{CVT}{= 80};
+  \draw (via_trans)--(10at.north);
+  \draw (via_trans)--(6at.east);
+  \draw (via_trans)--(hev.south);
+  \draw (via_trans)--(6mt.west);
+  \draw (via_trans)--(5mt.south);
+  \draw (via_trans)--(cvt.north);
+
+  % Drive_Type
+  \nodeVP{drivetype}{right=5.5cm of trans}{Drive\_Type};
+  \onslide<1>{\nodeV{2wd}{below left=0.3cm of via_drivetype}{2WD}{= 125};}
+  \onslide<2>{\nodeVlb{2wd}{below left=0.3cm of via_drivetype}{2WD}{= 125};}
+  \draw (via_drivetype)--(2wd.north);
+  \onslide<1>{\nodeV{4wd}{below right=0.3cm of via_drivetype}{4WD}{= 200};}
+  \onslide<2>{\nodeVchoiced{4wd}{below right=0.3cm of via_drivetype}{4WD}{= 200};}
+  \draw (via_drivetype)--(4wd.north);
+
+
+  % Sun_Roof
+  \nodeVPdashed{sunroof}{below right=3cm of drivetype}{Sun\_Roof};
+  \nodeV{nomal}{below left=0.3cm of via_sunroof}{Nomal}{= 35};
+  \draw (via_sunroof)--(nomal.north);
+  \onslide<1>{\nodeV{panorama}{below right=0.3cm of via_sunroof}{Panorama}{= 70};}
+  \onslide<2>{\nodeVchoiced{panorama}{below right=0.3cm of via_sunroof}{Panorama}{= 70};}
+  \draw (via_sunroof)--(panorama.north);
+
+  % Engine
+  \nodeVP{engine}{below left=3cm of drivetype}{Engine};
+  \onslide<1>{\nodeV{v4}{below left=0.3cm of via_engine}{V4}{= 120};}
+  \onslide<2>{\nodeVlb{v4}{below left=0.3cm of via_engine}{V4}{= 120};}
+  \draw (via_engine)--(v4.north);
+  \onslide<1>{\nodeV{v6}{below right=0.3cm of via_engine}{V6}{= 200};}
+  \onslide<2>{\nodeVchoiced{v6}{below right=0.3cm of via_engine}{V6}{= 200};}
+  \draw (via_engine)--(v6.north);
+  
+ 
+
+  % require
+  \draw[->] (std.south)--++(0,-0.2) node[below=-1mm] {\tiny{require\_v\_v}} -|(16inch.south);
+  \draw[white,line width=4pt](dx.south) ++(0,-0.1)--++(0,-0.5);
+  \draw[->] (dx.south)--++(0,-0.5) node[below=-1mm] {\tiny{require\_v\_v}} -|(17inch.south);
+  \draw[white,line width=4pt] (lx.south) ++(0,-0.1)--++(0,-0.8);
+  \draw[->] (lx.south)--++(0,-0.8) node[below=-1mm] {\tiny{require\_v\_v}} -|(18inch.south);
+  \draw[->] (lx.south)--++(0,-0.8) -|(6at.north);
+
+  % exclude
+  \draw[<->] (v4.west)-|(10at.south) node[pos=0.25,below=-1mm]{\tiny{exclude\_v\_v}};
+
+  \onslide<1>{\node [right=1.5cm of drivetype,align=left] (iwr) {基本符号化 \\ \structure{0} $\leq$ IWR $\leq$ \alert{3378}};}
+  \onslide<2>{\node [right=1.5cm of drivetype,align=left] (iwr) {改良符号化 \\ \structure{963} $\leq$ IWR $\leq$ \alert{1325}};}
+
+ \end{tikzpicture}
