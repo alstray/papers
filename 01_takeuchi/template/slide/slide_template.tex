@@ -1,0 +1,84 @@
+% Template
+\documentclass[dvipdfmx, 11pt]{beamer}
+
+%%%% Packages %%%%%
+%\usepackage{bxdpx-beamer}
+%\usepackage{minijs}
+%\usepackage{tabularx}
+%\usepackage{graphicx}
+% \usepackage{graphicx}
+% \usepackage{amsmath,amssymb,amsthm}
+% \usepackage{multirow}
+\usepackage{multicol}
+% \usepackage{url}
+% \usepackage{listings,jlisting}
+%%%% Fonts %%%%%
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+ %\usepackage{otf} % otfパッケージ
+\usepackage[deluxe]{otf} 
+%\renewcommand{\kanjifamilydefault}{mg}
+\usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
+% \usepackage[T1]{fontenc} % 8bit フォント
+% \usepackage{minijs}
+% \usepackage{textcomp} % 欧文フォントの追加
+% \usepackage[utf8]{inputenc} % 文字コードをUTF-8
+
+%%%%% Beamer %%%%%
+\usetheme{Madrid}
+\useinnertheme{rectangles}
+%\useoutertheme{smoothbars}
+\setbeamercolor{enumerate}{fg=white, bg=black}
+\usefonttheme{professionalfonts}
+\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{navigation symbols}{}
+% \setbeamercovered{transparent} % 好みに応じてどうぞ
+\setbeamertemplate{footline}[frame number]
+\setbeamercolor{page number in head/foot}{fg=black} % ページ数を表示する
+% \setbeamerfont{footline}{size=\normalsize,series=\bfseries}
+\setbeamerfont{footline}{size=\scriptsize,series=\mdseries}
+\setbeamercolor{footline}{fg=black,bg=black}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{items}[ball]
+% \setbeamertemplate{enumerate items}[default]
+% \setbeamerfont{alerted text}{series=\bfseries}
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+\renewcommand{\thefootnote}{\dag} % フットノート番号をダガーにする
+
+%%%% Code %%%%%%%%%
+% \lstset{
+%  basicstyle=\ttfamily\color{black},
+%  keepspaces=true,
+%  escapechar=|,
+%  columns=[l]{fullflexible},
+%  commentstyle={\color{red}},
+%  stringstyle={\color{blue}}
+% }
+%%%% My macro %%%%%
+% \input{macro}
+% \input{ovm_macro}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{タイトル}
+\author{竹内頼人}
+\institute{名古屋大学 大学院情報学研究科 番原研究室}
+\date{日付}
+\begin{document}
+\frame{\titlepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{フレームタイトル}
+ 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
