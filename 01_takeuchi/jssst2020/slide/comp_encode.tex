@@ -1,0 +1,41 @@
+{\renewcommand{\arraystretch}{0.6}
+\begin{tikzpicture}
+ \coordinate (zero) at (0,0);
+ \draw (zero) node [below,color=blue]{0};
+ \uncover<1>{
+ \draw (zero) + (1,-0.9) node [color=blue]{\scriptsize{(オプションを一つも装備しない)}};
+ }
+ \coordinate (all) at (10,0);
+ \draw (all) node [below,color=blue] {$\sum_{j\in V}w_{j}$};
+ \uncover<1>{
+ \draw (all) + (-1,-0.9) node [color=blue]{\scriptsize{(すべてのオプションを装備)}};
+ }
+ \draw [|-|,thick] (zero)  -- (all);
+ \draw [color=blue] (zero) to [out=30, in=150] (all);
+ \draw (5,1.5) node [fill=white,blue]{基本符号化};
+ 
+ \uncover<2>{
+ \coordinate (min) at (3,0);
+ \draw (min) node [below,color=red]{
+   \begin{tabular}{c}
+    $\sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}$ \\
+    \\
+    \scriptsize{(必須タイプのみでIWR値が} \\
+    \scriptsize{最小のオプションを装備)}
+   \end{tabular}
+ };
+ \coordinate (max) at (7,0);
+ \draw [|-|,thick] (min) -- (max);
+ \draw (max) node [below,color=red]{
+   \begin{tabular}{c}
+    $\sum_{i\in VP}\max_{j\in V_{i}}w_{j}$ \\
+    \\
+    \scriptsize{(すべてのタイプでIWR値が} \\
+    \scriptsize{最大のオプションを装備)}
+   \end{tabular}
+ }; 
+ \draw [color=red] (min) to [out=45, in=135] (max);
+ \draw (5,0.7) node [fill=white,red]{改良符号化};
+ }
+\end{tikzpicture}
+}

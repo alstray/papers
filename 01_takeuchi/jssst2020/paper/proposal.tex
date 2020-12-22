@@ -1,0 +1,265 @@
+\section{ASPに基づくCAFE問題ソルバー}
+
+提案するCAFE問題ソルバーは，与えられた問題インスタンスをASPの
+ファクト形式に変換した後，それらファクトとCAFE問題を解くためのASP符号
+化(論理プログラム)を結合した上で，高速ASPシステム{\clingo}を用いて解
+を求める(図~\ref{fig:arch}参照)．
+本節では，CAFE問題の入力と制約を論理プログラムとして表現する方法に
+ついて述べる．
+本論文では，説明の簡単化のため，
+各タイプが選択可能なオプション数の上下限値を1とする．
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{ASPファクト形式}
+
+%----------------------------------------
+\lstinputlisting[float=htbp,caption={%
+  CAFE問題の例(図~\ref{fig:ovm_example})のファクト表現．
+  装備仕様の個数:3，
+  装備仕様とオプションの依存関係:
+  (装備仕様1, \textsf{STD}),
+  (装備仕様2, \textsf{DX}),
+  (装備仕様3, \textsf{LX})},%
+captionpos=b,frame=single,label=code:ovm.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily\scriptsize]{codes/ovm.lp} 
+%----------------------------------------
+
+CAFE 問題の入力は，CAFE 基準値(入力~\ref{input:cafe})
+を除いて，ASP のファクトで表される．
+CAFE 基準値は ASP の定数\code{t}で表すものとし，
+実行時に{\clingo}のオプションから値を指定する．
+
+CAFE 問題の例(図~\ref{fig:ovm_example})
+をファクトで表現したものをコード~\ref{code:ovm.lp}に示す．
+この2つを見比べると，可変性モデルの
+可変点，
+バリアント，
+制約依存性(要求)，
+制約依存性(排除)が，
+それぞれファクト
+\code{vp_def/1}, 
+\code{v_def/3},
+\code{require_v_v/2},
+\code{exclude_v_v/2}
+に対応していることがわかる．
+例えば，バリアント\textsf{V4}は，ファクト
+\code{v_def("V4", "Engine", 120).}に対応している．
+%
+可変性モデルは CAFE 問題の入力~\ref{input:vp}〜\ref{input:iwr}を含んでいる．
+%
+この他，
+\code{require_vp/1}は必須タイプ，
+\code{group/1}は装備仕様の識別子(入力~\ref{input:g})，
+\code{require_g_v/2}は
+各装備仕様とオプション間の依存関係を表している(入力~\ref{input:init})．
+例えば，\code{require_g_v(1, "STD").}は，装備仕様~\code{1}が
+オプション\code{STD}を要求することを表す．
+
+IWR 値の総和と燃費の対応表(入力~\ref{input:fe})は，
+ファクト\texttt{fe\_map($S$,$FE$)}の有限集合で表される．
+ここで，$S$はIWR 値の総和，$FE$は燃費を表す．
+同様にして，
+IWR 値の総和と予想販売台数の対応表(入力~\ref{input:sv})は，
+ファクト\texttt{sv\_map($S$,$SV$)}の有限集合で表される．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{CAFE問題の ASP 符号化}
+
+%----------------------------------------
+\lstinputlisting[float=tb,caption={%
+  基本符号化},%
+captionpos=b,frame=single,label=code:basic1.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily\scriptsize]{codes/basic1.lp} 
+%----------------------------------------
+
+CAFE問題の各制約は，ASP の個数制約および一貫性制約を使って簡潔に表現される．
+CAFE問題の制約と目的関数を表す論理プログラムをコード\ref{code:basic1.lp}に示す．
+装備仕様\code{G}がタイプ\code{VP}を装備することを意味するアトム\code{vp(VP,G)}を導入する．
+また，
+装備仕様\code{G}がオプション\code{V}を実装することを意味するアトム
+\code{v(V,G)}も併せて導入する．
+
+1行目のルールは，
+各装備仕様\code{G}，各タイプ\code{VP}に対して，
+\code{vp(VP,G)}の候補を生成する．
+2行目のルールは，各装備仕様\code{G}に対して，
+\code{VP}が必須タイプならば，
+\code{G}は\code{VP}を装備しなければならないことを表す．
+
+範囲制約は5行目のルールで表される．
+このルールは，タイプ\code{VP}を装備する装備仕様\code{G}に対して，
+\code{VP}のオプションからちょうど1個を実装することを表す．
+
+燃費制約は8〜13行目のルールで表される．
+8行目の\code{iwr(S,G)}は，装備仕様\code{G}のIWR値の総和が\code{S}であ
+ることを表す．11〜12行目の
+\code{fe(FE,G)}と\code{sv(SV,G)}は，それぞれ，
+装備仕様\code{G}の燃費\code{FE}と予想販売台数\code{SV}を表す．
+13行目のルールは，第~\ref{sec:background}節で示した
+CAFE 規制の式を以下のように変形し，ASPの重み付き個数制約で表している．
+\begin{center}
+\(\sum_{i=1}^{n} (FE_{i}-t)\cdot SV_{i} \geq 0\)  
+\end{center}
+
+要求制約は16〜19行目のルールで表される．
+例えば，
+16行目のルールは，装備仕様\code{G}がオプション\code{V1}
+を実装し，かつ，\code{V1}が\code{V2}を要求するならば，
+\code{G}は\code{V2}を実装しなければならないことを表す．
+他の要求制約，排除制約，初期制約も同様に，一貫性制約を用いて
+簡潔に表現できる．
+
+CAFE 問題の目的は，予想販売台数を最大化することである．
+この目的関数は，31行目の最大化関数\code{#maximize}によって表される．
+%
+本節で述べた論理プログラム(コード\ref{code:basic1.lp})を
+基本符号化と呼ぶ．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{符号化の改良}
+
+%----------------------------------------
+\lstinputlisting[float=tb,caption={%
+  基本符号化(コード\ref{code:basic1.lp}の8〜10行目)の改良},%
+captionpos=b,frame=single,label=code:basic2.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily\scriptsize]{codes/basic2.lp} 
+%----------------------------------------
+
+前節で述べた基本符号化はCAFE問題の制約を簡潔に表現できるが，
+改良できる点も残っている．
+
+タイプの集合を$VP$，
+必須タイプの集合を$VP^{*}$，
+オプションの集合を$V$，
+タイプ$i\in VP$が実装可能なオプションの集合を$V_{i}$，
+オプション$j\in V$のIWR値を$w_{j}$とする．
+このとき，
+基本符号化(コード\ref{code:basic1.lp})の8〜10行目のルールで生成され
+るアトム\code{iwr(S,G)}について，
+IWR値の総和を表す\code{S}の上下限は，
+\begin{center}
+\(0 \leq \texttt{S} \leq \sum_{j\in V}w_{j}\)
+\end{center}
+である．
+しかし，これは自明な上下限であり，
+各タイプが選択可能なオプション数の上下限値，および，
+必須かどうかの別を考慮することで，
+\begin{center}
+\(
+\sum_{i\in VP^{*}}\min_{j\in V_{i}}w_{j}
+\leq \texttt{S} \leq
+\sum_{i\in VP}\max_{j\in V_{i}}w_{j}
+\)
+\end{center}
+のように\code{S}の上下限をより厳密に計算することができる．
+下限値は，各必須タイプが選択可能なオプションのIWR値の最小値の総和である．
+上限値は，各タイプが選択可能なオプションのIWR値の最大値の総和である．
+このアイデアを元にした論理プログラムをコード~\ref{code:basic2.lp}に示す．
+基本符号化(コード\ref{code:basic1.lp})の8〜10行目を，
+コード~\ref{code:basic2.lp}で置き換えた符号化を，
+改良符号化と呼ぶ．
+改良符号化は，基本符号化と比較して，
+\code{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることができる．
+そのため，大規模な問題への有効性が期待できる．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{符号化の拡張}
+
+%----------------------------------------
+\lstinputlisting[float=tb,caption={%
+  オプション数の最小化},%
+captionpos=b,frame=single,label=code:obj_op.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily\scriptsize]{codes/obj_op.lp} 
+%----------------------------------------
+
+%-----------------------------------------------------------
+\begin{table*}[htbp]
+  \caption{CAFE問題(図~\ref{fig:ovm_example})の最適解全列挙．CAFE基準値: 8.5km/L}
+  \centering
+%  \small
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 0.9mm
+  \begin{tabular}{l|l|c|c|c||c|c|c||c|c|c} \bhline
+    \multicolumn{2}{l|}{} & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c}{\bf{解3}}\\ \hline
+    \multicolumn{2}{l|}{装備仕様} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 \\ \hline
+    装備 & \textsf{Grade}        & \textsf{STD}& \textsf{DX} & \textsf{LX}& \textsf{STD} & \textsf{DX}  & \textsf{LX}    & \textsf{STD} & \textsf{DX}  & \textsf{LX}       \\
+        & \textsf{Drive\_Type}  & \textsf{4WD}  & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD}  \\
+        & \textsf{Engine} & \textsf{V4} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6}      \\ 
+        & \textsf{Tire} & \textsf{16}	& \textsf{17} & \textsf{18} & \textsf{16}  & \textsf{17}  & \textsf{18} & \textsf{16} & \textsf{17} & \textsf{18} \\
+        & \textsf{Transmission} & \textsf{5MT} & \textsf{HEV} & \textsf{10AT} & \textsf{CVT} & \textsf{HEV} & \textsf{10AT}  & \textsf{6AT} & \textsf{HEV} & \textsf{10AT}     \\
+        & \textsf{Sun\_Roof} & \textsf{Panorama} & -   & -       & \textsf{Nomal} & -  & -     & -   & -   & -       \\ \hline
+    \multicolumn{2}{l|}{IWR値の総和}  & 1,128 & 1,130   & 1,255    & 1,130 & 1,130&1,255  & 1,130& 1,130& 1,255     \\ %\hline
+    \multicolumn{2}{l|}{燃費(km/L)}    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
+    \multicolumn{2}{l|}{予想販売台数}  & 2,007  & 2,007   & 1,511   & 2,007 & 2,007 & 1,511 & 2,007& 2,007& 1,511       \\ \hline
+    \multicolumn{2}{l|}{平均燃費(km/L)} & \multicolumn{3}{c||}{8.6} & \multicolumn{3}{c||}{8.5} & \multicolumn{3}{c}{8.5}\\ 
+    \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c||}{5,525} & \multicolumn{3}{c||}{5,525}  &\multicolumn{3}{c}{5,525}\\
+    \multicolumn{2}{l|}{オプション数}  & \multicolumn{3}{c||}{14} & \multicolumn{3}{c||}{13}  &\multicolumn{3}{c}{12}\\ \hline
+  \end{tabular}
+  \label{tab:optN}
+\end{table*}
+%-----------------------------------------------------------
+
+製造ラインの削減や大量生産を促進することを狙いとして，
+予想販売台数の最大化に加えて，
+オプション数の最小化も可能なように拡張する．
+コード~\ref{code:obj_op.lp}に拡張のための論理プログラムを示す．
+
+予想販売台数の最大化(2行目)ついては，これまでと同じである．
+5行目の\code{used_v(V)}は，
+オプション\code{V}がいずれかの装備仕様において実装されたことを意味する．
+オプション数の最小化は，\code{used_v(V)}が成り立つ\code{V}の数を最小化
+することにより，容易に実現される(6行目)．
+目的関数中の\code{@}の右側はその優先度を表しており，今回の拡張例では，
+予想販売台数の最大化(優先度2)，オプション数の最小化(優先度1)の順に最適
+化される．
+改良符号化の目的関数を，コード~\ref{code:obj_op.lp}で置き換えた符号化を
+拡張符号化と呼ぶ．
+
+図~\ref{fig:ovm_example}のCAFE問題に対して，最適解の全列挙をした結果を
+表~\ref{tab:optN}に示す．
+CAFE基準値が8.5km/Lのとき，予想販売台数が5,525台である最適解が，
+改良符号化では(解1,解2,解3)の3つ存在した．
+一方で，オプション数の最小化を加えた拡張符号化では，
+最適解は(解3)のただ1つだけとなる．
+このように，ASPに基づくCAFE問題ソルバーでは，ユーザの選好にあわせて目
+的関数を柔軟に追加することにより，複数ある最適解に対して優劣をつけるこ
+とができる．
+
+% \begin{table}[tb]
+%  \caption{最適解の個数の比較}
+%  \centering
+%   \begin{tabular}{r|r|c|c} \bhline
+%     \small{CAFE} & \small{販売台数} & \multicolumn{2}{c}{\small{最適解の個数}} \\ \cline{3-4}
+%     \small{基準値} &     & \small{改良符号化} & \small{拡張符号化}\\ \hline        
+%     8.5       & 5,525   & 3 & \textbf{1}\\ 
+%     9.0       & 3,904   & 2 & 2 \\
+%     9.5       & 1,699   & 1 & 1 \\ \hline
+%   \end{tabular}
+%  \label{tab:option}
+% \end{table}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:

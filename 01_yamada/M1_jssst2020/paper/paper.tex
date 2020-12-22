@@ -1,0 +1,64 @@
+﻿%#BIBTEX pbibtex paper
+% 以下の3行は変更しないこと．
+\documentclass[T]{compsoft}
+\taikai{2020}
+\pagestyle {empty}
+
+% ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
+% 再定義は原則として避けること．
+
+\input{macro}
+
+\begin{document}
+
+% 論文のタイトル
+\title{解集合プログラミングを用いた配電網問題の解法に関する一考察
+%(A Study on Solving Power Distribution Network Problem with Answer Set Programming)
+}
+
+% 著者
+% 和文論文の場合，姓と名の間には半角スペースを入れ，
+% 複数の著者の間は全角スペースで区切る
+%
+\author{山田 健太郎　湊 真一　番原 睦則
+%
+% ここにタイトル英訳 (英文の場合は和訳) を書く．
+%
+\ejtitle{
+A Study on Solving Power Distribution Network Problem with Answer Set Programming.
+}
+%
+% ここに著者英文表記 (英文の場合は和文表記) および
+% 所属 (和文および英文) を書く．
+% 複数著者の所属はまとめてよい．
+%
+\shozoku{Kentaro Yamada, Mutsunori Banbara}{名古屋大学大学院情報学研究科}%
+{Graduate School of Informatics, Nagoya University}
+\shozoku{Shin-ichi Minato}{京都大学大学院情報学研究科}%
+{Graduate School of Informatics, Kyoto University}}
+% \shozoku{Mutsunori Banbara}{名古屋大学大学院情報学研究科}%
+% {Graduate School of Informatics, Nagoya University}}
+
+\input{abstract}
+
+\maketitle
+\thispagestyle {empty}
+
+\input{introduction}
+\input{problem}
+\input{asp}
+\input{encoding}
+\input{transition}
+\input{experiment}
+\input{conclusion}
+
+\bibliographystyle {jssst}
+\bibliography{bachelor,aisat}    % 参考文献リスト
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: yatex
+%%% TeX-master: t
+%%% End:

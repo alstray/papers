@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+ \node [draw] (const) at (0,1) {制約・目的関数};
+ \node [draw] (ins) at (0,0) {インスタンス};
+ \node [draw] (fe) at (0,-1) {燃費テーブル};
+ \node [draw] (sv) at (0,-2) {販売台数テーブル};
+ \node [draw,inner sep=10pt] (asp) at (8,-1) {ASPプログラム};
+ \node [draw,inner sep=10pt] (answerset) at (8,-5) {解集合};
+ \node [draw,inner sep=10pt] (vd) at (0,-5) {装備仕様};
+
+ \draw (ins)-|(2,-1);
+ \draw [->] (fe)--(asp) node[pos=0.6,anchor=north]{\scriptsize{ASPファクト形式に変換}}; 
+ \draw (sv)-|(2,-1);
+ \draw [->] (const)-|(asp) node[pos=0.25,anchor=north]{\scriptsize{ASP符号化}};
+ \draw [->] (asp)--(answerset) node[pos=0.5,anchor=west]{\scriptsize{ASPシステム}};
+ \draw [->] (answerset)--(vd) node[pos=0.5,anchor=north]{\scriptsize{解釈}};
+\end{tikzpicture}

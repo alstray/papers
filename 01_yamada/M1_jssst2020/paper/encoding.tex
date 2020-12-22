@@ -1,0 +1,124 @@
+﻿\section{根付き全域森問題のASP符号化}\label{chap:encode}
+
+本節では，根付き全域森問題の入力と制約を論理プログラムとして表現する方
+法について述べる．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  根付き全域森問題(図~\ref{fig:dnetgraph})のファクト表現},%
+captionpos=b,frame=single,label=code:graph.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/graph.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{ASPファクト形式.} 
+根付き全域森問題の入力(図~\ref{fig:dnetgraph})のファクト表現を
+コード\ref{code:graph.lp}に示す．
+この問題は，ノード6個，根ノード2個，辺7個から構成され，
+それぞれ，アトム\code{node/1}，\code{root/1}，\code{edge/2}
+によって表されている．
+例えば，ファクト\code{edge(1,2).}は，ノード\code{1}とノード\code{2}が
+隣接していることを表す．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  根付き全域森問題の基本符号化},%
+captionpos=b,frame=single,label=code:srf1.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/srf1.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  根付き全域森問題の改良符号化},%
+captionpos=b,frame=single,label=code:srf2.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/srf2.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 5節 遷移問題の解の例 (配置の関係でここに記述)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\newcommand{\lw}[1]{\smash{\lower-8.ex\hbox{#1}}}
+\begin{figure*}[tbp]
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 3mm  
+  \centering
+  \begin{tabular}{ccc}
+    $t=0$ (スタート状態) & & $t=1$\\
+    \scalebox{0.8}{\input{tikz/tikz-trans-1}}
+    & \lw{$\Rightarrow$} & 
+    \scalebox{0.8}{\input{tikz/tikz-trans-2}}\\
+    & & $\Downarrow$\\
+    & & \\
+    \scalebox{0.8}{\input{tikz/tikz-trans-4}}
+    & \lw{$\Leftarrow$} &
+    \scalebox{0.8}{\input{tikz/tikz-trans-3}}\\
+    $t=3$ (ゴール状態) & & $t=2$
+  \end{tabular}
+  \caption{根付き全域森遷移問題 (遷移制約$d=2$) の解の一例}
+  \label{fig:trans}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{基本符号化.}
+根付き全域森問題のASP符号化をコード\ref{code:srf1.lp}に示す．
+2行目のルールは，各辺(\code{X},\code{Y})に対して，
+解の候補となるアトム\code{inForest(X,Y)}を導入する．
+この\code{inForest(X,Y)}は，
+辺(\code{X},\code{Y})が根付き全域森に含まれることを意味する．
+%
+各ノードの到達可能性は5～7行目のルールで表される．
+アトム\code{reached(X,R)}は，ノード\code{X}は根
+\code{R}から到達可能であることを意味する．
+5行目のルールは，各根ノードは自分自身から到達可能であることを表す．
+6～7行目のルールは，ノード\code{Y}が根ノード\code{R}から到達可能であり，
+かつ，辺(\code{X},\code{Y})が全域森に含まれるならば，
+ノード\code{X}も\code{R}から到達可能であることを表す．
+
+非閉路制約は10～13行目のルールで表される．
+このルールは，各連結成分のノード数と辺数の差が1になること(木の性質)を，
+ASP の重み付き個数制約を使って表している．
+%
+根付き連結制約は16～17行目のルールで表される．
+16行目のルールは，各ノードは少なくとも1つの根から到達可能であることを
+表している(\textit{at-least-one}制約)．
+17行目のルールは，各ノードは高々1つの根から到達可能である
+ことを表している(\textit{at-most-one}制約)．
+これら2つの一貫性制約により，各ノードはちょうど1つの根から到達可能であ
+ることが強制される．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{改良符号化.}
+基本符号化は，根付き全域森問題の制約をASPのルール7個で簡潔に表現できる．
+しかし，根付き連結制約を表す\textit{at-most-one}制約の基礎化後のルール
+数は，根ノード数の2乗に比例するため，大規模な問題に対する求解性能が低
+下する可能性がある．
+%
+この問題を解決するために考案した改良符号化をコード\ref{code:srf2.lp}に
+示す．基本符号化との違いは，根付き連結制約をASPの個数制約で表している
+点である(16行目)．
+グラフのノード数を$n$，根ノード数を$r$として，
+根付き連結制約の基礎化後のルール数を比較すると，
+基本符号化が$n(1+{}_{r}C_{2})$個なのに対し，
+改良符号化は$n$個と少なく抑えることができる．
+これにより，大規模な問題に対する有効性が期待できる．
+
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:

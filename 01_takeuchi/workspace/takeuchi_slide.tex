@@ -10,21 +10,39 @@
 % \usepackage{graphicx}
 % \usepackage{amsmath,amssymb,amsthm}
 % \usepackage{multirow}
+\usepackage{multicol}
 % \usepackage{url}
+\usepackage{colortbl}
 \usepackage{tikz}
-\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{arrows,shapes,calc,intersections}
 \usetikzlibrary{positioning}
+\usetikzlibrary{fit}
 % \usepackage{alltt}
 % \usepackage{bm}
-% \usepackage{listings,jlisting}
-% \usepackage{listings}
+\usepackage{listings,jlisting}
 % \lstset{
-%  basicstyle=\ttfamily\scriptsize,
-%  keepspaces=true,
-%  escapechar=|,
-%  columns=[l]{fullflexible}
-% }
+%   basicstyle={\ttfamily\tiny},
+%   tabsize=2,
+%   breaklines=true,
+%   %numbers=left,
+%}
+% captionpos=b,frame=single,
+% columns=fullflexible,keepspaces=true,%
 
+% \usepackage{listings}
+
+\lstset{
+ basicstyle=\ttfamily\tiny\color{black},
+ keepspaces=true,
+ escapechar=|,
+ columns=[l]{fullflexible},
+ commentstyle={\color{red}},
+ stringstyle={\color{blue}},
+ % literrate =%
+ %   {:-}{{\textcolor{black}{:-}}}2%
+ %   {,}{{\textcolor{black}{,}}}1%
+ %   {.}{{\textcolor{black}{.}}}1%
+}
 %%%% Fonts %%%%%
 \renewcommand{\kanjifamilydefault}{\gtdefault}
 % \usepackage{otf} % otfパッケージ
@@ -56,14 +74,15 @@
 
 %%%% My macro %%%%%
 \input{macro}
+\input{ovm_macro}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{解集合プログラミングを用いた\\車両装備仕様問題の解法}
-\author{竹内 頼人}
-\institute{番原研究室}
-\date{M1研究紹介\\2020年5月22日}
+\title{車両装備仕様問題に対する\\解集合プログラミングの適用}
+\author{竹内 頼人(名古屋大学情報学研究科) \and \\ 番原 睦則(名古屋大学情報学研究科)}
+%\institute{番原研究室}
+\date{2020年7月X日}
 \begin{document}
-\begin{frame} {}
+\begin{frame}
  \titlepage
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -75,66 +94,28 @@
   \item 日本では2020年度から，
     \structure{\bf 企業別平均燃費}
     (Corporate Average Fuel Efficiency; \structure{\bf CAFE})基準
-    と呼ばれる燃費規制が採用される．
+    と呼ばれる燃費規制が採用されている．
   \end{itemize}
   \vfill
   \begin{alertblock}{車両装備仕様問題}
     \begin{itemize}
     \item 組合せ最適化問題として定式化される．
-    \item \alert{個数制約}，\alert{燃費制約}(CAFE基準)，\alert{要求制約}から構成される．
+    \item \alert{個数制約}，\alert{要求・排他制約}，\alert{燃費制約}(CAFE基準)から構成される．
     \item \alert{販売台数を最大化}する\textbf{装備仕様}
       (装備タイプと装備オプションの組合せ)を求めることが目的である．
     \end{itemize}
   \end{alertblock}
+ \begin{itemize}
+  \item 本研究ではCAFE基準に基づく車両装備仕様問題(CAFE問題)を対象とする．
+ \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{車両装備仕様問題の例}
-\begin{exampleblock}{}\centering
-  \begin{tabular}{l|l|r|c|c|c}
-    \lw{装備タイプ}& \lw{装備オプション}& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
-                &		&	& 1	& 2	& 3	\\\cline{1-6}
-    グレード 	& STD 		& 700	& \onslide<2->{\OK}	&	&	\\%\cline{2-6}
-                & DX 		& 700	&	& \onslide<2->{\OK}	&	\\%\cline{2-6}	
-		& LX 		& 700	& 	&	& \onslide<2->{\OK}	\\\cline{1-6}
-    エンジン	& V4 		& 120	&	&	& \onslide<2->{\OK}	\\%\cline{2-6}
-                & V6 		& 200	& \onslide<2->{\OK}	& \onslide<2->{\OK}	& \\\cline{1-6}
-    タイヤ	& 16インチ	& 110	& \onslide<2->{\OK}	&	&	\\%\cline{2-6}
-		& 17インチ 	& 130	&	& \onslide<2->{\OK}	&	\\%\cline{2-6}
-		& 18インチ 	& 150	&       &	& \onslide<2->{\OK}	\\\cline{1-6}
-    トランス	& MT		& 55	&	& &	\\%\cline{2-6}
-    ミッション	& HEV 	        & 95	&	\onslide<2->{\OK}& \onslide<2->{\OK}	&\\%\cline{2-6}
-                & AT 		& 115	&	& 	& \onslide<2->{\OK}
-  \end{tabular}
-\end{exampleblock}
-%
-\begin{itemize}
-\item \onslide<1->{装備タイプはすべて\structure{\bf 必須}とする．}
-\item \onslide<2>{実行可能解の例を{\OK}マークで示す．}
-\end{itemize}
+\begin{frame}{CAFE問題の例}
+ \input{ovm}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]{個数制約}
-\begin{alertblock}{}
-  各装備仕様$g$, 各装備タイプ$i$に対して，$i$が$g$で選択されるならば，
-  $i$の装備オプションのうち，ちょうど1つが$g$で選択される．
-\end{alertblock}
-\begin{exampleblock}{}\centering
-  \begin{tabular}{l|l|r|c|c|c} %\cline{1-6}
-    \lw{装備タイプ}& \lw{装備オプション}	& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
-                &			&		& 1	& 2	& 3	\\\cline{1-6}
-    グレード 	&STD 			& 700	& \OK	&	&	\\%\cline{2-6}
-                & DX 			& 700	&	& \OK	&	\\%\cline{2-6}	
-                & LX 			& 700	& 	&	& \OK	\\\cline{1-6}
-    エンジン	& V4 			& 120	&	&	& \OK	\\%\cline{2-6}
-                & V6 			& 200	& \OK	& \OK	& \\\cline{1-6}
-    タイヤ	& 16インチ	& 110	&  \OK	&	&	\\%\cline{2-6}
-                & 17インチ 	& 130	&	& \OK	&	\\%\cline{2-6}
-                & 18インチ 	& 150	& &	& \OK	\\\cline{1-6}
-    トランス	& MT		& 55	&	 &  &	\\%\cline{2-6}
-    ミッション	& HEV 	& 95	& \OK	& \OK	&	\\%\cline{2-6}
-                & AT 		& 115	&	& 	& \OK %\\\cline{1-6}
-  \end{tabular}
-\end{exampleblock}
+\begin{frame}{CAFE問題の例}
+ \input{ovm_ans}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{燃費制約 (CAFE基準)と目的関数}
@@ -152,27 +133,55 @@
   \item $FE_{g}$と$SV_{g}$は，装備仕様$g$の\structure{\bf IWR値の和}か
     ら算出される．
   \end{itemize}
+
 \end{alertblock}
+% \begin{exampleblock}{}\centering
+%   \renewcommand{\arraystretch}{0.9}
+%   \begin{tabular}{l|l|r|c|c|c} %\cline{1-6}
+%     \lw{装備タイプ}& \lw{装備オプション}& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
+%                 &		&	& 1	& 2	& 3	\\\cline{1-6}
+%     グレード 	&STD 		& 700	& \OK	&	&	\\%\cline{2-6}
+%                 & DX 		& 700	&	& \OK	&	\\%\cline{2-6}	
+%                 & LX 		& 700	& 	&	& \OK	\\\cline{1-6}
+%     エンジン	& V4 		& 120	&	&	& \OK	\\%\cline{2-6}
+%                 & V6 		& 200	& \OK	& \OK	& \\\cline{1-6}
+%     タイヤ	& 16インチ	& 110	&  \OK	&	&	\\%\cline{2-6}
+%                 & 17インチ 	& 130	&	& \OK	&	\\%\cline{2-6}
+%                 & 18インチ 	& 150	& &	& \OK	\\\cline{1-6}
+%     トランス	& MT		& 55	&	 &  &	\\%\cline{2-6}
+%     ミッション	& HEV 	& 95	& \OK	& \OK	&	\\%\cline{2-6}
+%                 & AT 		& 115	&	& 	& \OK \\\cline{1-6}
+%     \multicolumn{1}{l}{} & \multicolumn{2}{r}{\structure{\bf IWR値の和}} & \multicolumn{1}{c}{1,105} &%
+% 		\multicolumn{1}{c}{1,125} & \multicolumn{1}{c}{1,085}\\ 
+% 	\end{tabular}
+% \end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{最適解の例}
+\begin{itemize}
+ \item 装備仕様の数 G=3 (GradeはそれぞれSTD,DX,LXになるように設定)
+ \item CAFE基準値 X=9.0
+      
+\end{itemize}
 \begin{exampleblock}{}\centering
-  \renewcommand{\arraystretch}{0.9}
-  \begin{tabular}{l|l|r|c|c|c} %\cline{1-6}
-    \lw{装備タイプ}& \lw{装備オプション}& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
-                &		&	& 1	& 2	& 3	\\\cline{1-6}
-    グレード 	&STD 		& 700	& \OK	&	&	\\%\cline{2-6}
-                & DX 		& 700	&	& \OK	&	\\%\cline{2-6}	
-                & LX 		& 700	& 	&	& \OK	\\\cline{1-6}
-    エンジン	& V4 		& 120	&	&	& \OK	\\%\cline{2-6}
-                & V6 		& 200	& \OK	& \OK	& \\\cline{1-6}
-    タイヤ	& 16インチ	& 110	&  \OK	&	&	\\%\cline{2-6}
-                & 17インチ 	& 130	&	& \OK	&	\\%\cline{2-6}
-                & 18インチ 	& 150	& &	& \OK	\\\cline{1-6}
-    トランス	& MT		& 55	&	 &  &	\\%\cline{2-6}
-    ミッション	& HEV 	& 95	& \OK	& \OK	&	\\%\cline{2-6}
-                & AT 		& 115	&	& 	& \OK \\\cline{1-6}
-    \multicolumn{1}{l}{} & \multicolumn{2}{r}{\structure{\bf IWR値の和}} & \multicolumn{1}{c}{1,105} &%
-		\multicolumn{1}{c}{1,125} & \multicolumn{1}{c}{1,085}\\ 
-	\end{tabular}
+  %\renewcommand{\arraystretch}{0.9}
+  \begin{tabular}{l|c|c|c} 
+    \lw{装備}      & \multicolumn{3}{c}{装備仕様} \\ \cline{2-4}
+                 & 1	& 2 	 & 3	\\  \hline
+    Grade	 & STD	& DX	 & LX	\\
+    Drive\_Type  & 2WD  & 2WD    & 2WD  \\
+    Engine	 & V4	& V6	 & V6	\\
+    Tire	 & 16	& 17	 & 18	\\
+    Transmission & 5MT	& 6MT    & 10AT	\\
+    Sun\_Roof    & -    & normal & -    \\ \hline
+    IWR          & 983  & 1125   & 1180 \\ %\hline
+    燃費(km/L)    & 10.2  & 8.9     & 8.5 \\ %\hline
+    予想販売台数  & 745  & 1988   & 1171  \\ \hline
+    平均燃費(km/L) & \multicolumn{3}{c}{\bf{9.0}} \\ 
+    合計販売台数  & \multicolumn{3}{c}{\bf{3904}} \\
+  \end{tabular}
 \end{exampleblock}
+ 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{解集合プログラミング(Answer Set Programing; ASP)}
@@ -205,31 +214,307 @@
     ASP技術を活用して，大規模な車両装備仕様問題を効率よく解くシステム
     を実現すること．
   \end{alertblock}
-
+  \begin{block}{既存研究}
+   \begin{itemize}
+    \item CAFE問題に対するASP符号化(基本符号化と呼ぶ)
+    \item Babieca・神戸大学・名古屋大学 共同研究(2019)
+   \end{itemize}
+  \end{block}
   \begin{block}{研究内容}
     \begin{enumerate}
-    \item \structure{\bf 車両装備仕様問題に対する2種類のASP符号化(基本・改良)を考案}
-      \begin{itemize}
-      \item 問題を簡潔に記述できることを確認した
-        (ASPのルール\alert{\bf 11}個)．
-      \item 改良符号化は，基本符号化と比較して，
-        \alert{\bf IWR値の和の上下限を厳密に計算する}ように改良されている．
-	\item この改良により，基礎化後のルール数を少なく抑えることができ，
-		大規模な問題に対する有効性が期待できる．
-      \end{itemize}
-    \item \structure{\bf 企業から提供された実データを用いた実験・評価}
-      \begin{itemize}
-      \item 小規模な問題に対して，その最適解を得ることができた．
-      \item 大規模な問題に対して，改良符号化の優位性が確認できた．
-      \end{itemize}
+     \item \structure{\bf 改良符号化を提案}
+	   \begin{itemize}
+	    \item 基本符号化での問題点
+	    \item \alert{\bf IWR値の和の上下限を厳密に計算する}ように改良
+	    % 	\item この改良により，基礎化後のルール数を少なく抑えることができ，
+	    % 		大規模な問題に対する有効性が期待できる．
+	   \end{itemize}
+     \item \structure{\bf オプション数最小化}
+	   \begin{itemize}
+	    \item 販売台数の等しい複数の最適解に優劣をつけることが目的
+	    \item コスト削減が見込める
+	   \end{itemize}
+	   
+     \item \structure{\bf 排他制約への対応}
     \end{enumerate}
   \end{block}
-  \pause
-  \begin{itemize}
-  	\item IWR値の和を表す制約モデルを用いて，2種類の提案符号化の違いを説明する．
-  \end{itemize}
+  % \pause
+  % \begin{itemize}
+  % 	\item IWR値の和を表す制約モデルを用いて，2種類の提案符号化の違いを説明する．
+  % \end{itemize}
 \end{frame}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{提案する車両装備ソルバーの概要}
+ \input{solution}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}[fragile]{CAFE問題のASPファクト形式}
+ \begin{multicols}{2}
+  \lstinputlisting[language={prolog}]{code/ovm.lp} 
+ \end{multicols}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{基本符号化}
+  \lstinputlisting[language={prolog}]{code/basic1.lp}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{基本符号化の問題点}
+ 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{改良符号化}
+  \lstinputlisting[language={prolog}]{code/basic2.lp}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{実験1}
+ 考案したASP符号化の有効性を評価するために実験を行なった．
+ \begin{itemize}
+  \item ベンチマーク問題(計15問)
+	\begin{itemize}
+	 \item 企業から提供された問題(3問)に対して
+	 \item 5通りのCAFE基準値$X \in \{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$で生成
+	 \item 求める装備仕様の数$G = 3$
+	\end{itemize}
+	\begin{exampleblock}\small
+	 \centering
+	 \begin{tabular}{ l|r r r }
+	  問題		& 装備タイプ数	& 装備オプション数& 要求制約数 	\\ \hline
+	  small	& 8			& 21		& 4		\\
+	  medium	& 86		& 226		& 147	\\
+	  big		& 315		& 1,337		& 0		\\
+	 \end{tabular}
+	\end{exampleblock}
+  \item ASPシステム: \textit{clingo-5.4.0}
+  \item 制限時間: 1問あたり2時間
+  \item 実験環境: Mac mini, 3.2GHz, 64GB メモリ
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験結果: 得られた最適値と最良値}
+ \begin{exampleblock}{}
+  \centering
+  \scriptsize
+  \begin{tabular}{l|r|r|r}
+   \lw{問題} & \lw{CAFE基準値} & \multicolumn{2}{c}{販売台数} \\ \cline{3-4}
+            &                 & 基本符号化 & 改良符号化 \\\hline    
+   small & 8.5   & \alert{6,021*} & \alert{6,021*}       \\
+   small & 9.0   & \alert{5,007*} & \alert{5,007*}       \\
+   small & 9.5   & \alert{2,688*} & \alert{2,688*}       \\
+   small & 10.0  & \alert{1,318*} & \alert{1,318*}       \\
+   small & 10.5  & UNSAT          & UNSAT    \\\hline
+   medium & 8.5  & 6,010          & \alert{6,021}        \\
+   medium & 9.0  & \alert{5,595}  & \alert{5,595}        \\
+   medium & 9.5  & \alert{3,447}  & 3,430        \\
+   medium & 10.0 & 2,245          & \alert{2,250}        \\
+   medium & 10.5 & 1,690          & \alert{1,845}        \\\hline
+   big & 8.5     & TO             & \alert{3,877}        \\
+   big & 9.0     & 1,038          & \alert{4,623}        \\
+   big & 9.5     & 688            & \alert{3,121}        \\
+   big & 10.0    & 1,634          & \alert{2,064}        \\
+   big & 10.5    & 538            & \alert{904}         \\\hline
+   \multicolumn{2}{l}{最適値・最良値の数} & \multicolumn{1}{r}{6} & \alert{13} \\
+  \end{tabular}
+ \end{exampleblock}
+ \begin{itemize}
+  \item 改良符号化は，基本符号化と比較して，多くの問題に対してより良い解を得た．
+  \item 大規模な問題に対する改良符号化の優位性が確認できた．
+ \end{itemize}	
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験2}
+ グループ数を大きくして比較を行った．
+ \begin{itemize}
+  \item ベンチマーク問題
+	\begin{itemize}
+	 \item 小規模な問題(small)に対して
+	 \item 5通りのCAFE基準値$X \in \{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$
+	 \item 3通りの装備仕様の数$G=3,6,12$で生成
+	 \item 要求制約を追加
+	\end{itemize}
+  \item ASPシステム: \textit{clingo-5.4.0}
+  \item 制限時間: 1問あたり1時間
+  \item 実験環境: Mac mini, 3.2GHz, 64GB メモリ
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験結果}
+ % \begin{exampleblock}{}
+ %  \centering
+ %  \scriptsize
+ %  \begin{tabular}{r|r|r|r}
+ %   \lw{グループ数} & \lw{CAFE基準値} & \multicolumn{2}{c}{販売台数} \\ \cline{3-4}
+ %             &                & 基本符号化 & 改良符号化 \\\hline    
+ %   3 & 8.5   & \alert{6,021*} & \alert{6,021*}       \\
+ %   3 & 9.0   & \alert{5,007*} & \alert{5,007*}       \\
+ %   3 & 9.5   & \alert{2,688*} & \alert{2,688*}       \\
+ %   3 & 10.0  & \alert{1,318*} & \alert{1,318*}       \\
+ %   3 & 10.5  & UNSAT          & UNSAT    \\\hline
+ %   6 & 8.5  & 6,010          & \alert{6,021}        \\
+ %   6 & 9.0  & \alert{5,595}  & \alert{5,595}        \\
+ %   6 & 9.5  & \alert{3,447}  & 3,430        \\
+ %   6 & 10.0 & 2,245          & \alert{2,250}        \\
+ %   6 & 10.5 & 1,690          & \alert{1,845}        \\\hline
+ %   12 & 8.5     & TO             & \alert{3,877}        \\
+ %   12 & 9.0     & 1,038          & \alert{4,623}        \\
+ %   12 & 9.5     & 688            & \alert{3,121}        \\
+ %   12 & 10.0    & 1,634          & \alert{2,064}        \\
+ %   12 & 10.5    & 538            & \alert{904}         \\\hline
+ %   \multicolumn{2}{l}{最適値・最良値の数} & \multicolumn{1}{r}{6} & \alert{13} \\
+ %  \end{tabular}
+ % \end{exampleblock}
+ 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{オプション数最小化}
+ \begin{block}{}
+  \begin{itemize}
+   \item インスタンスによっては最適解が複数得られる
+   \item 
+	 
+  \end{itemize}
+ \end{block}
+ \begin{exampleblock}{}
+  \centering
+  \tiny
+  \begin{tabular}{l|c|c|c||c|c|c||c|c|c} 
+    \lw{装備}     & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c}{解3}\\ \cline{2-10}
+                 & STD	& DX 	 & LX	   & STD & DX  & LX    & STD & DX  & LX       \\  \hline
+    Drive\_Type  & 4WD  & 2WD    & 4WD     & 2WD & 2WD & 4WD   & 2WD & 2WD & 4WD     \\
+    Engine	 & V4	& V6	 & V6	   & V6  & V6  & V6    & V6  & V6  & V6      \\ 
+    Tire	 & 16	& 17	 & 18	   & 16  & 17  & 18    & 16  & 17  & 18     \\
+    Transmission & 5MT	& HEV    & 10AT	   & CVT & HEV & 10AT  & 6AT & HEV & 10AT     \\
+    Sun\_Roof    & Panorama& -   & -       & Nomal& -  & -     & -   & -   & -       \\ \hline
+    IWR          & 1128 & 1130   & 1255    & 1130 & 1130&1255  & 1130& 1130& 1255     \\ %\hline
+    燃費(km/L)    & 8.9 & 8.8    & 8.0     & 8.8 & 8.8  & 8.0 & 8.8  & 8.8  & 8.0         \\ %\hline
+    予想販売台数  & 2007  & 2007   & 1511   & 2007 & 2007 & 1511 & 2007& 2007& 1511       \\ \hline
+    平均燃費(km/L) & \multicolumn{3}{c||}{\bf{8.6}} & \multicolumn{3}{c||}{\bf{8.5}} & \multicolumn{3}{c}{\bf{8.5}}\\ 
+    合計販売台数  & \multicolumn{3}{c||}{\bf{5525}} & \multicolumn{3}{c||}{\bf{5525}}  &\multicolumn{3}{c}{\bf{5525}}\\
+    オプション数  & \multicolumn{3}{c||}{\alert{14}} & \multicolumn{3}{c||}{\alert{13}}  &\multicolumn{3}{c}{\alert{12}}\\
+  \end{tabular}
+ \end{exampleblock}
+ \begin{alertblock}{提案}
+  最適解の中で優劣をつけるために目的関数として，オプション数の最小化を追加
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{オプション数最小化の実装例}
+\begin{block}{}
+ \begin{itemize}
+  \item 選択された装備オプションの種類をカウントし，最小化する.
+  \item 優先度を販売台数最大化の次にする.
+ \end{itemize}
+\end{block}
+  \lstinputlisting[language={prolog}]{code/obj_op.lp}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{最適解の個数}
+%  \begin{itemize}
+%   \item clingoはオプションを加えることで最適解の列挙が可能
+%   \item 改良符号化を用いて，問題smallに対して最適解の個数を調査
+%  \end{itemize}
+
+%  \begin{exampleblock}{}\centering
+%   \begin{tabular}{l|r|r|c}
+%    問題 & CAFE基準値 & 販売台数 & 最適解の個数 \\ \hline
+%    small & 8.5   & 6,021 & \alert{2} \\ 
+%    small & 9.0   & 5,007 & \alert{2} \\
+%    small & 9.5   & 2,688 & 1 \\
+%    small & 10.0  & 1,318 & 1 \\
+%    small & 10.5  & UNSAT & - \\ 
+%   \end{tabular}
+%  \end{exampleblock}
+%  \begin{itemize}
+%   \item CAFE基準値が8.5,9.0km/Lのとき，最適解が複数存在 
+%   \item 最適解の中でもより優れた解を選択したい
+%  \end{itemize}
+
+%  \begin{alertblock}{提案}
+%   目的関数として，オプション数の最小化を追加
+%  \end{alertblock}
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% \begin{frame}{共通部品数の最大化}
+%  \begin{exampleblock}{}\centering
+%   \small
+%   \begin{tabular}{l|l|r|c|c|c} %\cline{1-6}
+%     \lw{装備タイプ}& \lw{装備オプション}	& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
+%                 &			&		& 1	& 2	& 3	\\\cline{1-6}
+%     グレード 	& \alert{STD}		& 700	& \OK	&	&	\\%\cline{2-6}
+%                 & \alert{DX}		& 700	&	& \OK	&	\\%\cline{2-6}	
+%                 & \alert{LX}		& 700	& 	&	& \OK	\\\cline{1-6}
+%     エンジン	& \alert{V4} 			& 120	&	&	& \OK	\\%\cline{2-6}
+%                 & \alert{V6} 			& 200	& \OK	& \OK	& \\\cline{1-6}
+%     タイヤ	& \alert{16インチ}	& 110	&  \OK	&	&	\\%\cline{2-6}
+%                 & \alert{17インチ} 	& 130	&	& \OK	&	\\%\cline{2-6}
+%                 & \alert{18インチ} 	& 150	& &	& \OK	\\\cline{1-6}
+%     トランス	& MT		& 55	&	 &  &	\\%\cline{2-6}
+%     ミッション	& \alert{HEV} 	& 95	& \OK	& \OK	&	\\%\cline{2-6}
+%                 & \alert{AT} 		& 115	&	& 	& \OK \\\cline{1-6}
+%     \multicolumn{1}{c}{選択オプション数} & \multicolumn{1}{l}{\alert{10}} & \multicolumn{4}{r}
+
+%   \end{tabular}
+%  \end{exampleblock}
+
+%  \begin{alertblock}{提案手法}
+%   選択される装備オプションの数を最小化する．
+%  \end{alertblock}
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{オプション数最小化}
+ \begin{block}{実験概要}
+  \begin{itemize}
+   \item オプション数最小化の有無で最適解の個数を比較
+   \item インスタンスはOVMで示したCAFE問題の例を使用
+  \end{itemize}
+ \end{block}
+ 
+ \begin{exampleblock}{実験結果}\centering
+  \begin{tabular}{l|r|r|c|c}
+   \lw{問題} & \lw{CAFE基準値} & \lw{販売台数} & \multicolumn{2}{c}{最適解の個数} \\ \cline{4-5}
+            &                &              & 改良符号化 & +共通部品数最大化　\\ \hline        
+   small & 8.5   & 5,525 & 3 & 1\\ 
+   small & 9.0   & 3,904 & 2 & 2 \\
+   small & 9.5   & 1,699 & 1 & 1 \\
+   small & 10.0  & UNSAT & - & - \\
+   small & 10.5  & UNSAT & - & - \\ 
+  \end{tabular}
+ \end{exampleblock}
+ \begin{itemize}
+  \item CAFE基準値8.5km/Lでは，最適解の個数が減少した
+  \item CAFE基準値9.0km/Lでは，最適解が複数のままだった
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{まとめ}
+ \begin{itemize}
+  \item \structure{\bf 車両装備仕様問題に対する2種類のASP符号化を考案}
+	\begin{itemize}
+	 \item 問題を簡潔に記述できることを確認した
+	       (ASPのルール\alert{\bf 11}個)．
+	 \item 改良符号化は，基本符号化と比較して，
+	       \alert{\bf IWR値の和の上下限を厳密に計算する}ように改良されている．
+	\end{itemize}
+  \item \structure{\bf 企業から提供された実データを用いた実験・評価}
+	\begin{itemize}
+	 \item 小規模な問題に対して，その最適解を得ることができた．
+	 \item 大規模な問題に対して，改良符号化の優位性が確認できた．
+	\end{itemize}
+ \end{itemize}
+ \vfill
+ \begin{alertblock}{今後の課題}
+  \begin{itemize}
+   \item 企業の技術者へのヒアリングに基づく問題拡張
+	 \begin{itemize}
+	  \item 装備オプション間の排他制約などの新たな制約の追加
+	  \item 共通部品の最大化などの新たな目的関数の追加
+	 \end{itemize}
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % \begin{frame}
 % \frametitle{ASPを用いた問題解法}
 
@@ -342,170 +627,6 @@
 %   \]
 % \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験概要}
- 考案したASP符号化の有効性を評価するために実験を行なった．
- \begin{itemize}
-  \item ベンチマーク問題(計15問)
-	\begin{itemize}
-	 \item 企業から提供された問題(3問)に対して
-	 \item 5通りのCAFE基準値$X \in \{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$で生成
-	 \item 求める装備仕様の数$G = 3$
-	\end{itemize}
-	\begin{exampleblock}\small
-	 \centering
-	 \begin{tabular}{ l|r r r }
-	  問題		& 装備タイプ数	& 装備オプション数& 要求制約数 	\\ \hline
-	  small	& 8			& 21		& 4		\\
-	  medium	& 86		& 226		& 147	\\
-	  big		& 315		& 1,337		& 0		\\
-	 \end{tabular}
-	\end{exampleblock}
-  \item ASPシステム: \textit{clingo-5.4.0}
-  \item 制限時間: 1問あたり2時間
-  \item 実験環境: Mac mini, 3.2GHz, 64GB メモリ
- \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験結果: 得られた最適値と最良値}
- \begin{exampleblock}{}
-  \centering
-  \scriptsize
-  \begin{tabular}{l|r|r|r}
-   \lw{問題} & \lw{CAFE基準値} & \multicolumn{2}{c}{販売台数} \\ \cline{3-4}
-            &                 & 基本符号化 & 改良符号化 \\\hline    
-   small & 8.5   & \alert{6,021*} & \alert{6,021*}       \\
-   small & 9.0   & \alert{5,007*} & \alert{5,007*}       \\
-   small & 9.5   & \alert{2,688*} & \alert{2,688*}       \\
-   small & 10.0  & \alert{1,318*} & \alert{1,318*}       \\
-   small & 10.5  & UNSAT          & UNSAT    \\\hline
-   medium & 8.5  & 6,010          & \alert{6,021}        \\
-   medium & 9.0  & \alert{5,595}  & \alert{5,595}        \\
-   medium & 9.5  & \alert{3,447}  & 3,430        \\
-   medium & 10.0 & 2,245          & \alert{2,250}        \\
-   medium & 10.5 & 1,690          & \alert{1,845}        \\\hline
-   big & 8.5     & TO             & \alert{3,877}        \\
-   big & 9.0     & 1,038          & \alert{4,623}        \\
-   big & 9.5     & 688            & \alert{3,121}        \\
-   big & 10.0    & 1,634          & \alert{2,064}        \\
-   big & 10.5    & 538            & \alert{904}         \\\hline
-   \multicolumn{2}{l}{最適値・最良値の数} & \multicolumn{1}{r}{6} & \alert{13} \\
-  \end{tabular}
- \end{exampleblock}
- \begin{itemize}
-  \item 改良符号化は，基本符号化と比較して，多くの問題に対してより良い解を得た．
-  \item 大規模な問題に対する改良符号化の優位性が確認できた．
- \end{itemize}	
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめ}
- \begin{itemize}
-  \item \structure{\bf 車両装備仕様問題に対する2種類のASP符号化を考案}
-	\begin{itemize}
-	 \item 問題を簡潔に記述できることを確認した
-	       (ASPのルール\alert{\bf 11}個)．
-	 \item 改良符号化は，基本符号化と比較して，
-	       \alert{\bf IWR値の和の上下限を厳密に計算する}ように改良されている．
-	\end{itemize}
-  \item \structure{\bf 企業から提供された実データを用いた実験・評価}
-	\begin{itemize}
-	 \item 小規模な問題に対して，その最適解を得ることができた．
-	 \item 大規模な問題に対して，改良符号化の優位性が確認できた．
-	\end{itemize}
- \end{itemize}
- \vfill
- \begin{alertblock}{今後の課題}
-  \begin{itemize}
-   \item 企業の技術者へのヒアリングに基づく問題拡張
-	 \begin{itemize}
-	  \item 装備オプション間の排他制約などの新たな制約の追加
-	  \item 共通部品の最大化などの新たな目的関数の追加
-	 \end{itemize}
-  \end{itemize}
- \end{alertblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{最適解の個数}
- \begin{itemize}
-  \item clingoはオプションを加えることで最適解の列挙が可能
-  \item 改良符号化を用いて，問題smallに対して最適解の個数を調査
- \end{itemize}
-
- \begin{exampleblock}{}\centering
-  \begin{tabular}{l|r|r|c}
-   問題 & CAFE基準値 & 販売台数 & 最適解の個数 \\ \hline
-   small & 8.5   & 6,021 & \alert{2} \\ 
-   small & 9.0   & 5,007 & \alert{2} \\
-   small & 9.5   & 2,688 & 1 \\
-   small & 10.0  & 1,318 & 1 \\
-   small & 10.5  & UNSAT & - \\ 
-  \end{tabular}
- \end{exampleblock}
- \begin{itemize}
-  \item CAFE基準値が8.5,9.0km/Lのとき，最適解が複数存在 
-  \item 最適解の中でもより優れた解を選択したい
- \end{itemize}
-
- \begin{alertblock}{提案}
-  目的関数として，共通部品数の最大化を追加
- \end{alertblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{共通部品数の最大化}
- \begin{exampleblock}{}\centering
-  \small
-  \begin{tabular}{l|l|r|c|c|c} %\cline{1-6}
-    \lw{装備タイプ}& \lw{装備オプション}	& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
-                &			&		& 1	& 2	& 3	\\\cline{1-6}
-    グレード 	& \alert{STD}		& 700	& \OK	&	&	\\%\cline{2-6}
-                & \alert{DX}		& 700	&	& \OK	&	\\%\cline{2-6}	
-                & \alert{LX}		& 700	& 	&	& \OK	\\\cline{1-6}
-    エンジン	& \alert{V4} 			& 120	&	&	& \OK	\\%\cline{2-6}
-                & \alert{V6} 			& 200	& \OK	& \OK	& \\\cline{1-6}
-    タイヤ	& \alert{16インチ}	& 110	&  \OK	&	&	\\%\cline{2-6}
-                & \alert{17インチ} 	& 130	&	& \OK	&	\\%\cline{2-6}
-                & \alert{18インチ} 	& 150	& &	& \OK	\\\cline{1-6}
-    トランス	& MT		& 55	&	 &  &	\\%\cline{2-6}
-    ミッション	& \alert{HEV} 	& 95	& \OK	& \OK	&	\\%\cline{2-6}
-                & \alert{AT} 		& 115	&	& 	& \OK \\\cline{1-6}
-    \multicolumn{1}{c}{選択オプション数} & \multicolumn{1}{l}{\alert{10}} & \multicolumn{4}{r}
-
-  \end{tabular}
- \end{exampleblock}
-
- \begin{alertblock}{提案手法}
-  選択される装備オプションの数を最小化する．
- \end{alertblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{共通部品数の最大化}
- \begin{block}{実験概要}
-  \begin{itemize}
-   \item 改良符号化に共通部品数最大化の目的関数を追加
-	 \begin{itemize}
-	  \item 優先度: 販売台数最大化 $>$ 共通部品数最大化
-	 \end{itemize}
-   \item 共通部品数最大化の有無で最適解の個数を比較
-
-  \end{itemize}
- \end{block}
- 
- \begin{exampleblock}{実験結果}\centering
-  \begin{tabular}{l|r|r|c|c}
-   \lw{問題} & \lw{CAFE基準値} & \lw{販売台数} & \multicolumn{2}{c}{最適解の個数} \\ \cline{4-5}
-            &                &              & 改良符号化 & +共通部品数最大化　\\ \hline        
-   small & 8.5   & 6,021 & 2 & 2\\ 
-   small & 9.0   & 5,007 & \alert{2} & \alert{1}\\
-   small & 9.5   & 2,688 & 1 & 1 \\
-   small & 10.0  & 1,318 & 1 & 1 \\
-   small & 10.5  & UNSAT & - & - \\ 
-  \end{tabular}
- \end{exampleblock}
- \begin{itemize}
-  \item CAFE基準値9.0km/Lでは，最適解の個数が減少した
-  \item CAFE基準値8.5km/Lでは，最適解が複数のままだった
- \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \appendix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{要求制約}
@@ -604,6 +725,55 @@
 	\structure{解集合}(一種の最小モデル)を計算する．
  \end{enumerate}
 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{車両装備仕様問題の例}
+\begin{exampleblock}{}\centering
+  \begin{tabular}{l|l|r|c|c|c}
+    \lw{装備タイプ}& \lw{装備オプション}& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
+                &		&	& 1	& 2	& 3	\\\cline{1-6}
+    グレード 	& STD 		& 700	& \onslide<2->{\OK}	&	&	\\%\cline{2-6}
+                & DX 		& 700	&	& \onslide<2->{\OK}	&	\\%\cline{2-6}	
+		& LX 		& 700	& 	&	& \onslide<2->{\OK}	\\\cline{1-6}
+    エンジン	& V4 		& 120	&	&	& \onslide<2->{\OK}	\\%\cline{2-6}
+                & V6 		& 200	& \onslide<2->{\OK}	& \onslide<2->{\OK}	& \\\cline{1-6}
+    タイヤ	& 16インチ	& 110	& \onslide<2->{\OK}	&	&	\\%\cline{2-6}
+		& 17インチ 	& 130	&	& \onslide<2->{\OK}	&	\\%\cline{2-6}
+		& 18インチ 	& 150	&       &	& \onslide<2->{\OK}	\\\cline{1-6}
+    トランス	& MT		& 55	&	& &	\\%\cline{2-6}
+    ミッション	& HEV 	        & 95	&	\onslide<2->{\OK}& \onslide<2->{\OK}	&\\%\cline{2-6}
+                & AT 		& 115	&	& 	& \onslide<2->{\OK}
+  \end{tabular}
+\end{exampleblock}
+%
+\begin{itemize}
+\item \onslide<1->{装備タイプはすべて\structure{\bf 必須}とする．}
+\item \onslide<2>{実行可能解の例を{\OK}マークで示す．}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]{個数制約}
+\begin{alertblock}{}
+  各装備仕様$g$, 各装備タイプ$i$に対して，$i$が$g$で選択されるならば，
+  $i$の装備オプションのうち，ちょうど1つが$g$で選択される．
+\end{alertblock}
+\begin{exampleblock}{}\centering
+  \begin{tabular}{l|l|r|c|c|c} %\cline{1-6}
+    \lw{装備タイプ}& \lw{装備オプション}	& \lw{IWR値}& \multicolumn{3}{c}{装備仕様} \\\cline{4-6}
+                &			&		& 1	& 2	& 3	\\\cline{1-6}
+    グレード 	&STD 			& 700	& \OK	&	&	\\%\cline{2-6}
+                & DX 			& 700	&	& \OK	&	\\%\cline{2-6}	
+                & LX 			& 700	& 	&	& \OK	\\\cline{1-6}
+    エンジン	& V4 			& 120	&	&	& \OK	\\%\cline{2-6}
+                & V6 			& 200	& \OK	& \OK	& \\\cline{1-6}
+    タイヤ	& 16インチ	& 110	&  \OK	&	&	\\%\cline{2-6}
+                & 17インチ 	& 130	&	& \OK	&	\\%\cline{2-6}
+                & 18インチ 	& 150	& &	& \OK	\\\cline{1-6}
+    トランス	& MT		& 55	&	 &  &	\\%\cline{2-6}
+    ミッション	& HEV 	& 95	& \OK	& \OK	&	\\%\cline{2-6}
+                & AT 		& 115	&	& 	& \OK %\\\cline{1-6}
+  \end{tabular}
+\end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

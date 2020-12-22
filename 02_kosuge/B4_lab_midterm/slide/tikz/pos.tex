@@ -1,0 +1,44 @@
+\begin{center}
+\scalebox{0.8}{
+    \begin{tikzpicture}
+        \foreach \x / \y in {0.5/0, 1.5/2, 2.5/4, 3.5/6, 4.5/8}
+        {
+        \node at (\x, 5-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/1, 1.5/3, 2.5/5, 3.5/7}
+        {
+        \node at (\x, 4-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/2, 1.5/4, 2.5/6}
+        {
+        \node at (\x, 3-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/3, 1.5/5}
+        {
+        \node at (\x, 2-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/4}
+        {
+        \node at (\x, 1-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/1, 1.5/3, 2.5/5, 3.5/7}
+        {
+        \node at (1+\x, 5-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/2, 1.5/4, 2.5/6}
+        {
+        \node at (2+\x, 5-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/3, 1.5/5}
+        {
+        \node at (3+\x, 5-\x) {\y};
+        }
+        \foreach \x / \y in {0.5/4}
+        {
+        \node at (4+\x, 5-\x) {\y};
+        }
+        \draw [step=10mm] (0,0) grid (5,5);
+        \node at (2.5, 0) [below] {i+jのとき};
+    \end{tikzpicture}
+}
+\end{center}

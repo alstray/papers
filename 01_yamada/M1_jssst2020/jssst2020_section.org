@@ -1,0 +1,44 @@
+#+TITLE:JSSST2020 予稿構成
+
+* 必要情報
+** タイトル(和文・英文)
+解集合プログラミングを用いた配電網問題の解法に関する一考察
+(A Study on Solving Power Distribution Network Problem with Answer Set Programming)
+
+** 著者(和文・英文)
+*** Author1
+First name: 健太郎 Kentaro
+Last name：山田    Yamada
+Organization: 名古屋大学大学院情報学研究科
+Graduate School of Informatics, Nagoya University
+
+*** Author2
+First name: 真一 Shin-ichi 
+Last name：湊    Minato
+Organization: 京都大学大学院情報学研究科
+Graduate School of Informatics, Kyoto University
+
+*** Author3
+First name: 睦則 Mutsunori
+Last name：番原  Banbara
+Organization: 名古屋大学大学院情報学研究科
+Graduate School of Informatics, Nagoya University
+
+** abstruct
+
+
+* section
+
+** はじめに
+
+** 根付き全域森問題
+
+** 解集合プログラミング
+  
+** 根付き全域森問題のASP符号化
+
+** 遷移問題への拡張
+
+** 実行実験
+
+** まとめと今後の課題

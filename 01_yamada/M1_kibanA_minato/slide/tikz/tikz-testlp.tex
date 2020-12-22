@@ -1,0 +1,53 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% test.lp
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}
+
+ % 設定
+ \tikzset{node/.style={circle,draw=black,fill=white,minimum height=1cm}}
+
+ \definecolor{edgeR}{RGB}{191,0,0}
+ \definecolor{nodeR}{RGB}{249,200,200}
+ \definecolor{edgeY}{RGB}{255,149,0}
+ \definecolor{nodeY}{RGB}{255,231,76}
+ \definecolor{edgeB}{RGB}{38,38,134}
+ \definecolor{nodeB}{RGB}{200,200,249}
+
+ \tikzset{NodeR/.style={circle,draw=black,fill=nodeR,minimum height=1cm}}
+ \tikzset{NodeY/.style={circle,draw=black,fill=nodeY,minimum height=1cm}}
+ \tikzset{NodeB/.style={circle,draw=black,fill=nodeB,minimum height=1cm}}
+
+ % 補助線
+ % \draw [help lines,blue] (0,0) grid (20,6);
+
+ % 入力されるグラフ
+ % node %
+ \node[node, ultra thick,draw=edgeR,fill=nodeR] (1) {1};
+ \node[node,left= of 1] (2){2};
+ \node[node,above= of 2] (3){3};
+ \node[node,left= of 2] (4){4};
+ \node[node,above= of 3] (5){5};
+ \node[node,left= of 3] (6){6};
+ \node[node,above= of 5] (7){7};
+ \node[node,left= of 5] (8){8};
+ \node[node,left= of 7] (9){9};
+ \node[node,right= of 7, ultra thick,draw=edgeB,fill=nodeB] (10){10};
+ \node[node,right= of 1] (11){11};
+ \node[node,right= of 11] (12){12};
+ \node[node,above=2cm of 12, ultra thick,draw=edgeY,fill=nodeY] (13){13};
+ \node[node,right= of 10] (14){14};
+ \node[node,right= of 14] (15){15};
+
+ %\node[rectangle,above=2cm of 1, draw=black,ultra thick,minimum height=1cm] (ss){変電所};
+
+ % 辺
+ \foreach \u / \v in {1/2,2/3,2/4,3/5,4/6,5/7,6/8,8/9,7/9,7/10,1/11,11/12,12/13,13/15,14/15,10/14}
+ \draw (\u) -- (\v);
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: ``slide''
+%%% End:

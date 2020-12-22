@@ -1,0 +1,240 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+\begin{frame}{~}
+ \centering
+ - 補足用 -
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 電気制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : 電気制約}
+ \begin{itemize}
+  \item \alert{電気制約}は，送電する電流$\cdot$電圧の適正範囲を保証する制約．
+  \begin{itemize}
+   \item 供給経路の各区間で許容電流を超えない．
+   \item 電気抵抗による電圧降下が許容範囲を超えない．
+   \item etc.
+  \end{itemize}
+  \item 電流と電圧が影響し合う\structure{実数ドメイン上の制約}によって表される．
+		% \begin{itemize}
+		%  		 \item 送電システム上の条件など．
+		% \end{itemize}
+  \item 実数ドメイン上の制約は，純粋なASPのみで扱うのは\alert{困難}．
+		\begin{itemize}
+		 \item 緩和問題として，変電所から供給できる家庭の数に上限をつける．
+		 \item ASPMT技術により，ASPで得られた解について，
+			   背景理論ソルバーと連携して実数ドメイン上の制約を調べる．
+		\end{itemize}
+ \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 基礎化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : ASPシステム}
+ 
+ \vspace{-0.5cm}
+
+ \begin{figure}[htbp]
+  \centering
+  \input{tikz/tikz-grounding}
+ \end{figure}
+
+ \vspace{-0.5cm}
+
+ \begin{exampleblock}{}
+  \begin{enumerate}
+   \item 一階ASPプログラムを基礎化ソルバーによって，
+		 命題ASPプログラムに\alert{基礎化}する．
+   \item 命題ASPプログラムについて，SAT技術を応用した解集合ソルバーが解集合を探索する．
+  \end{enumerate}
+ \end{exampleblock}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの構文}
+  \begin{alertblock}{}\centering
+    ASPの言語は論理プログラムをベースとしている~\footnotemark．
+  \end{alertblock}
+  \begin{itemize}
+  \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
+    \begin{center}
+      \begin{minipage}[c]{0.7\textwidth}
+        \begin{block}{}\centering
+          $a_0$\quad\code{:-}\quad$a_1$\code{,}\ldots\code{,}$a_m$\code{,}
+          \ \code{not}~$a_{m+1}$\code{,}\ldots\code{,} \code{not}~$a_n$\code{.}
+        \end{block}        
+      \end{minipage}
+   \end{center}\vfill
+    $0 \leq m \leq n$ であり，各 $a_i$ はアトム，
+    \code{not}は\structure{\bf デフォルトの否定}，\\
+    ``\code{,}''は連言(AND)を表す．``\code{:-}''の左辺を\structure{\bf ヘッド}，
+		右辺を\structure{\bf ボディ}と呼ぶ．
+  \item \alert{\bf 直感的な意味}は，
+    「$a_1,\ldots,a_m$がすべて成り立ち，
+    $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
+    $a_0$が成り立つ」である．
+  \item ボディが空のルールを\structure{\bf ファクト}と呼び，``\code{:-}''は省略できる．
+  \item ヘッドが空のルールを\structure{\bf 一貫性制約}と呼ぶ．例えば，\hspace{-1ex}
+    ``\code{:-} $a_1$\code{,} \code{not}~$a_{2}$''は，
+    「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
+  \end{itemize}
+  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの拡張構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの拡張構文}
+\begin{alertblock}{}\centering
+  組合せ問題を解くための便利な構文が用意されている．
+\end{alertblock}
+\begin{itemize}
+ \item \structure{\bf 選択子}
+   \begin{center}
+     \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}
+   \end{center}
+   アトム集合 $\{a_1,\dots,a_n\}$
+   の任意の部分集合が成り立つことを意味する．
+ \item \structure{\bf 個数制約}
+   \begin{center}
+     $lb$\ \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}\ $ub$
+   \end{center}
+   $a_1,\dots,a_n$ のうち，
+   $lb$個以上，$ub$個以下が成り立つことを意味する．
+ \item \structure{\bf 重み付き個数制約}
+   \begin{center}
+     $lb$ \code{\#sum\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
+   \end{center}
+   $a_1,\dots,a_n$のうち，
+   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (到達可能性)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{改良符号化: 到達可能性}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(1) { inForest(X,Y) } :- edge(X,Y).
+\end{lstlisting}
+\end{exampleblock}
+\begin{itemize}
+ \item (1) 各辺\code{(X,Y)について}，根付き全域森に含まれること意味する \\
+	  アトム\code{inForest(X,Y)}を導入する．
+\end{itemize}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(2) reached(R,R) :- root(R).
+(3) reached(X,R) :- reached(Y,R), inForest(Y,X).
+(4) reached(X,R) :- reached(Y,R), inForest(X,Y).
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item アトム\code{reached(X,R)}は，ノード\code{X}が根ノード\code{R}から到達可能であることを意味する．
+%\item (2) 各根ノード\code{R}について，自分自身から到達可能であることを表す．
+\item (3) ノード\code{Y}が根ノード\code{R}から到達可能かつ，辺\code{(Y,X)}が根付き全域森に含まれるならば，
+	  ノード\code{X}も同じ根ノード\code{R}から到達可能であることを表す．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (根付き連結制約)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{改良符号化: 根付き連結制約}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(5) :- node(X), not 1 { reached(X,R) } 1.
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item (5) 各ノード\code{X}について，ちょうど1つの根からのみ到達可能であることを意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (非閉路制約)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{改良符号化: 非閉路制約}
+\begin{minipage}[c]{1.01\textwidth}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+(6) :- root(R),
+       not 1 #sum{ 1,X:reached(X,R) ;
+                  -1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R)
+                 } 1.
+\end{lstlisting}
+\end{exampleblock}
+\end{minipage}
+\vfill
+\begin{itemize}
+\item (6) 各連結成分の\structure{\bf ノード数と辺数の差が1}になることを意味する．
+\item 各連結成分が\structure{\bf 木の性質}を満たすことにより，サイクルを持たない
+	  ことを保証する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ルール数の比較
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{基礎化後のルール数}
+  \begin{itemize}
+  \item グラフのノード数を$|V|$，根ノードの数を$|R|$とする．
+  \end{itemize}
+  \begin{table}[t]
+    \centering
+    \input{table/proposal}
+  \end{table}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPのコード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{補足 : 根付き全域森 基本符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[frame=single,label=code:roop,%
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/srf1.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{frame}
+
+\begin{frame}[fragile]{補足 : 遷移問題 シングルショット符号化}
+
+\begin{multicols*}{2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[frame=single,label=code:roop,%
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\tiny]{code/trans-const.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{multicols*}
+\end{frame}
+
+\begin{frame}[fragile]{補足 : 遷移問題 マルチショット符号化}
+\begin{multicols*}{2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[frame=single,label=code:incmode,% 
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\tiny]{code/dnet-trans.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\end{multicols*}
+\end{frame}
+
+\backupend

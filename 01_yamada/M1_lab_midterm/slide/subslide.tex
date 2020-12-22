@@ -1,0 +1,144 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+\begin{frame}{~}
+ \centering
+ - 補足用 -
+\end{frame} 
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 改良符号化 (到達可能性)
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]{改良符号化1: 到達可能性}
+% \begin{exampleblock}{}\small
+% \begin{lstlisting}
+% (1) { inForest(X,Y) } :- edge(X,Y).
+% \end{lstlisting}
+% \end{exampleblock}
+% \begin{itemize}
+%  \item (1) 各辺\code{(X,Y)について}，根付き全域森に含まれること意味する \\
+% 	  アトム\code{inForest(X,Y)}を導入する．
+% \end{itemize}
+% \begin{exampleblock}{}\small
+% \begin{lstlisting}
+% (2) reached(R,R) :- root(R).
+% (3) reached(X,R) :- reached(Y,R), inForest(Y,X).
+% (4) reached(X,R) :- reached(Y,R), inForest(X,Y).
+% \end{lstlisting}
+% \end{exampleblock}
+% \vfill
+% \begin{itemize}
+% \item アトム\code{reached(X,R)}は，ノード\code{X}が根ノード\code{R}から到達可能であることを意味する．
+% %\item (2) 各根ノード\code{R}について，自分自身から到達可能であることを表す．
+% \item (3) ノード\code{Y}が根ノード\code{R}から到達可能かつ，辺\code{(Y,X)}が根付き全域森に含まれるならば，
+% 	  ノード\code{X}も同じ根ノード\code{R}から到達可能であることを表す．
+% \end{itemize}
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (根付き連結制約)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{根付き連結制約}
+\begin{exampleblock}{基本符号化}\small
+\begin{lstlisting}
+   :- node(X),  not reached(X,_).
+   :- reached(X,R1), reached(X,R2), R1 < R2.
+\end{lstlisting}
+\end{exampleblock}
+\begin{exampleblock}{改良符号化1・2}\small
+\begin{lstlisting}
+   :- node(X), not 1 { reached(X,R) } 1.
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item 各ノード\code{X}について，ちょうど1つの根からのみ到達可能であることを意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ルール数の比較
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{基礎化後のルール数}
+  \begin{itemize}
+  \item グラフのノード数を$|V|$，根ノードの数を$|R|$とする．
+  \end{itemize}
+  \begin{table}[t]
+    \centering
+    \input{table/proposal2}
+  \end{table}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 改良符号化 (非閉路制約)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{非閉路制約}
+\begin{minipage}[c]{1.01\textwidth}
+\begin{exampleblock}{基本符号化・改良符号化1 (辺数の制約)}\small
+\begin{lstlisting}
+    :- root(R),
+       not 1 #sum{ 1,X:reached(X,R) ;
+                  -1,X,Y:inForest(X,Y),reached(X,R),reached(Y,R)
+                 } 1.
+\end{lstlisting}
+\end{exampleblock}
+\begin{exampleblock}{改良符号化2 (ノードの入次数の制約)}\small
+\begin{lstlisting}
+    :- root(R), inForest(_,R).
+    :- node(X), not root(X), not 1 { inForest(_,X) } 1.
+\end{lstlisting}
+\end{exampleblock}
+\end{minipage}
+\vfill
+\begin{itemize}
+\item 各連結成分が\structure{\bf 木の性質}を満たすことにより，サイクルを持たない
+	  ことを保証する．
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPのコード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{補足 : 根付き全域森 改良符号化2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[frame=single,label=code:roop,%
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/dnet-directed.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{frame}
+
+% \begin{frame}[fragile]{補足 : 遷移問題 シングルショット符号化}
+
+% \begin{multicols*}{2}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% \lstinputlisting[frame=single,label=code:roop,%
+% xleftmargin=1zw,%
+% xrightmargin=1zw,%
+% numbersep=5pt,%
+% numbers=left,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\tiny]{code/trans-const.lp}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \end{multicols*}
+% \end{frame}
+
+% \begin{frame}[fragile]{補足 : 遷移問題 マルチショット符号化}
+% \begin{multicols*}{2}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \lstinputlisting[frame=single,label=code:incmode,% 
+% xleftmargin=1zw,%
+% xrightmargin=1zw,%
+% numbersep=5pt,%
+% numbers=left,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\tiny]{code/dnet-trans.lp}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% \end{multicols*}
+% \end{frame}
+
+\backupend
