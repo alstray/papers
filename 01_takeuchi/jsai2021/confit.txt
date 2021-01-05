@@ -1,5 +1,4 @@
 email: takeuchi.raito@nagoya-u.jp
-pass:  take4423
 
 ** プロフィール
    - 氏名(日本語)
