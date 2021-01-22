@@ -1,11 +1,41 @@
-clingo version 5.3.0
-Reading from color.lp
-Solving...
-Answer: 1
-color(2,b) color(1,g) color(3,b) color(4,r) color(5,g) color(6,r)
-SATISFIABLE
-
-Models       : 1+
-Calls        : 1
-Time         : 0.004s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
-CPU Time     : 0.004s
+sat
+(model 
+  (define-fun x_2 () Int
+    1)
+  (define-fun x_4 () Int
+    3)
+  (define-fun x_1 () Int
+    2)
+  (define-fun x_3 () Int
+    1)
+  (define-fun x_5 () Int
+    2)
+  (define-fun x_6 () Int
+    3)
+)
+(:added-eqs                      10
+ :arith-eq-adapter               10
+ :arith-bound-propagations-cheap 16
+ :arith-bound-propagations-lp    6
+ :arith-conflicts                4
+ :arith-diseq                    20
+ :arith-lower                    38
+ :arith-make-feasible            18
+ :arith-max-columns              20
+ :arith-max-rows                 10
+ :arith-propagations             16
+ :arith-upper                    16
+ :binary-propagations            11
+ :conflicts                      4
+ :decisions                      11
+ :final-checks                   1
+ :max-memory                     3.06
+ :memory                         2.55
+ :mk-bool-var                    54
+ :mk-clause                      36
+ :num-allocs                     33298
+ :num-checks                     1
+ :propagations                   21
+ :rlimit-count                   2188
+ :time                           0.01
+ :total-time                     0.02)
