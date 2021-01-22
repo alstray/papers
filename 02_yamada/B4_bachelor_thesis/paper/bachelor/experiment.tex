@@ -1,0 +1,114 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\chapter{実行実験} \label{chap:experiment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\section{ベンチマーク}
+\ref{chap:proposal}で提案した3種の符号化を評価するにあたり，ベンチマークを作成した．
+評価には，ステップ数の最大値となる全解数がわかる，グラフ$G$と色数$k$の組合せが必要となる．
+そこで初めに，ベンチマークに使用可能なグラフと色数について調査を行った．
+調査するグラフとして，Graph Coloring and its Generalization\footnote{https://mat.tepper.cmu.edu/COLOR04/}
+で公開されているグラフ彩色問題127問のうち，\textbf{彩色数}が判明している44問~\cite{DBLP:journals/constraints/TamuraTKB09}を用いた．
+彩色数とは， グラフを彩色可能な色数の最小値である．
+
+44問のグラフに対して，色数を彩色数としたときに全解数を求めることが可能か調査を行った．
+%また，色数を彩色数-1としたときにUNSATになるかについても調査した．
+調査にあたり，各グラフをASPファクト形式にしたうえで{\clingo}を使用した．
+グラフ点彩色問題を解くのに用いた論理プログラムをコード~\ref{code:gcp.lp}に示す．
+コード~\ref{code:gcp.lp}は，コード~\ref{code:color.lp}からグラフに関するファクトを除いたものである．
+それぞれの制限時間は1時間とした．
+{\clingo}のバージョンは5.4.0，オプションは\textsl{tweety}と\textsl{crafty}を用いた．
+調査環境はMac Mini，3.2GHz 6コア Intel Core i7，64GBメモリである．
+
+\lstinputlisting[float=t,caption={%
+グラフ彩色問題の論理プログラム (\code{gcp.lp})},%
+captionpos=b,frame=single,label=code:gcp.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
+
+\begin{table}[tb]
+  \centering
+  \caption{彩色数における全解数が判明したグラフ}
+  \begin{tabular}{|c|c|c|c|c|} \hline
+    グラフ名 & 頂点数 & 辺数 & 彩色数 & 全解数 \\ \hline
+    1-FullIns\_3 & 30 & 100 & 4 & 50693280 \\ \hline
+    le450\_5a & 450 & 5714 & 5 & 3840 \\ \hline
+    le450\_5c & 450 & 9803 & 5 & 120 \\ \hline
+    le450\_5d & 450 & 9757 & 5 & 960 \\ \hline
+    myciel3 & 11 & 20 & 4 & 12480 \\ \hline
+    myciel4 & 23 & 71 & 5 & 2845658400 \\ \hline
+    queen5\_5 & 25 & 160 & 5 & 240 \\ \hline 
+    queen6\_6 & 36 & 290 & 7 & 100800 \\ \hline
+    queen7\_7 & 49 & 476 & 7 & 20160 \\ \hline
+  \end{tabular}
+  \label{tab:bench_graph}
+\end{table}
+
+結果，9つのグラフにおいて全解数を求めることができた．
+全解数が判明したものについて，表~\ref{tab:bench_graph}に示す．
+全解数が100万個未満のグラフについて，全ての解からランダムで2個の解を抽出した．
+一方，全解数が100万個以上存在するものについて出力する解の個数を10万個に制限し，
+その中からランダムで2個の解を抽出した．
+そして各グラフごとに10問ずつ，計90問のベンチマークを生成した．
+
+\section{実行実験}
+次に，3種の符号化の評価実験を行った．
+ベンチマークは，前節で生成した90問を用いた．
+制限時間は1時間とした．
+ただし，各グラフ，色数，初期状態，目標状態に対して$t=1, 2, \dots$と増やしていくものに対する制限時間である．
+{\clingo}のバージョンは5.4.0，オプションは\textsl{tweety}と\textsl{crafty}を用いた．
+調査環境はMac Mini，3.2GHz 6コア Intel Core i7，64GBメモリである．
+
+得られた結果を表~\ref{tab:result}に示す．
+連結はある$t$で経路が存在したものである．
+部分的非連結はある$t' \lt T_{limit}$までに経路が存在しないことが確かめられたものである．
+非連結は$T_{limit}$までに経路が存在せず，その問題では経路が存在しないと確かめられたものである．
+
+\begin{table}
+  \centering
+  \caption{得られた結果の数(分類別)}
+  \input{table/result.tex}
+  \label{tab:result}
+\end{table}
+
+次に結果が連結であるものについて，かかったCPU時間を各符号ごとにまとめたものを表~\ref{tab:result_con}に示す．
+各行はインスタンスごとに分けられている．
+ただし，最終行は各符号化ごとにもっとも早く解いたインスタンスの合計を表している．
+各列は左から順にインスタンス名，経路が存在した最小の遷移回数，\code{vrc1}での時間，\code{vrc2}での時間，vrc3での時間となっている．
+また各CPU時間は，$t=1, 2, \dots $遷移回数でのCPU時間での合計となっている．
+
+\begin{table}
+  \centering
+  \caption{連結インスタンスの結果}
+  \input{table/result_con}
+  \label{tab:result_con}
+\end{table}
+
+次に結果が部分的非連結であるものについて，経路がないことを確かめられた遷移回数を
+各符号化ごとにまとめたものを表~\ref{tab:result_unknown}に示す．
+各行はインスタンスごとに分けられている．
+ただし，最終行は各符号化ごとにもっとも長い遷移回数まで確かめられたインスタンスの合計を表している．
+各列は左から順にインスタンス名，vrc1で確かめられた遷移回数，vrc2で確かめられた遷移回数，
+vrc3で確かめられた遷移回数となっている．
+
+連結インスタンスと部分的非連結インスタンスの両方で\code{vrc3}$\gt$\code{vrc2}$\gt$
+\code{vrc1}の順に優れた結果を出した．
+ただし連結インスタンスにおいては1秒未満で解けたものも多く，
+\code{vrc2}と\code{vrc3}で大きな差がついたのは3問にとどまった．
+
+このような結果の要因の一つとして，表~\ref{tab:result}で
+示した基礎化後のルール数の差が考えられる．
+{\clingo}ではルールを基礎化して充足可能性問題として解く．
+ここで基礎化後のルール数は充足可能性問題における節数に関係してくる．
+充足可能性問題において節数が多いことは，単位伝播や変数選択ヒューリスティックにおける
+オーバーヘッドが大きくなることにつながる．
+結果として基礎化後のルール数が多いほどオーバーヘッドも大きくなり，
+表\ref{tab:result}のような結果になったと考えられる．
+
+\input{table/result_unknown}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
