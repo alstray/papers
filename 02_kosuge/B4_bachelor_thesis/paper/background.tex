@@ -1,6 +1,80 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\chapter{XXX問題}
+\chapter{クイーングラフ彩色問題}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+クイーングラフ彩色問題は，N×Nの大きさのチェス盤上にN色のクイーンの駒を各色N個ずつ互いに取り合わないように配置する問題である．
+互いに取り合わないとは，各行，各列，各右上がり対角線，各右下がり対角線に配置されるクイーンの色が互いに異なるということである．
+
+\input{tikz/queen_graph}\label{fig:queengraph5}
+
+図\ref{queengraph5}はN=5の時のクイーングラフ彩色問題の解の一例を示している．
+
+今回この問題の解を求めるにあたって使用したモデル化方法は色変数モデルと位置変数モデルである．
+
+\section{色変数モデル}
+色変数モデルはクイーンの駒の色を整数変数として解を求める制約モデルである．
+チェス盤上の行を$i$，列を$j$，クイーンの色を$k$とし，それらが取り得る値の集合を$\bf N$とする．
+\begin{eqnarray*}
+    {\bf N} = \{0,1,...,N-1\}
+\end{eqnarray*}
+
+位置$(i,j)$に配置されたクイーンの色を整数変数$c_{ij} \in {\bf N} (i,j \in {\bf N})$で表す．
+
+各行について，配置されるクイーンの色が互いに異なることから$distinct$制約を用いて
+\begin{eqnarray*}
+    distinct\{c_{ij} | j \in {\bf N} \} (i \in {\bf N})
+\end{eqnarray*}
+という制約が得られる．
+
+同様にして，各列については
+\begin{eqnarray*}
+    distinct\{c_{ij} | i \in {\bf N} \} (j \in {\bf N})
+\end{eqnarray*}
+という制約が得られる．
+
+各右上がり対角線について$i+j$が取り得る値の集合を$\bf U$とすると
+\begin{eqnarray*}
+    {\bf U} = \{0,1,...,2N-2\} \\
+    distinct\{c_{ij} | i,j \in {\bf N}, i+j=u \} (u \in {\bf U})
+\end{eqnarray*}
+という制約が得られる．
+
+各右下がり対角線について$i-j$が取り得る値の集合を$\bf D$とすると
+\begin{eqnarray*}
+    {\bf D} = \{1-N,2-N,...,N-1\} \\
+    distinct\{c_{ij} | i,j \in {\bf N}, i-j=d \} (d \in {\bf D})
+\end{eqnarray*}
+という制約が得られる．
+
+\section{位置変数モデル}
+位置変数モデルは盤面上のある行に対して何列目にクイーンが配置されるのかを整数変数とした制約モデルである．
+
+色$k$のクイーンが行$i$において配置される列を整数変数$y_{ik} \in {\bf N} (i,k \in {\bf N})$で表す．
+
+同一の行に同色のクイーンが配置されないことから
+\begin{eqnarray*}
+    distinct\{y_{ik} | k \in {\bf N} \} (i \in {\bf N})
+\end{eqnarray*}
+という制約が得られる．
+
+同様にして，同一の列に同色のクイーンが配置されないことから
+\begin{eqnarray*}
+    distinct\{y_{ik} | i \in {\bf N} \} (k \in {\bf N})
+\end{eqnarray*}
+という制約が得られる．
+
+また，各右上がり対角線については，行と列の和が2つ以上同じにならないことから，
+\begin{eqnarray*}
+    distinct\{y_{ik}+i | i \in {\bf N} \} (k \in {\bf N})
+\end{eqnarray*}
+という制約が得られる．
+
+同様に各右下がり対角線については，行と列の差が2つ以上同じにならないことから，
+\begin{eqnarray*}
+    distinct\{y_{ik}-i | i \in {\bf N} \} (k \in {\bf N})
+\end{eqnarray*}
+という制約が得られる．
+
 
 %%% Local Variables:
 %%% mode: latex
