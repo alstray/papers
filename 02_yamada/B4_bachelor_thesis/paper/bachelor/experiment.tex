@@ -4,7 +4,7 @@
 
 \section{ベンチマーク}
 \ref{chap:proposal}で提案した3種の符号化を評価するにあたり，ベンチマークを作成した．
-評価には，ステップ数の最大値となる全解数がわかる，グラフ$G$と色数$k$の組合せが必要となる．
+評価には，ステップ数の最大値となる全解数を求めることが可能グラフ$G$と色数$k$の組合せが必要となる．
 そこで初めに，ベンチマークに使用可能なグラフと色数について調査を行った．
 調査するグラフとして，Graph Coloring and its Generalization\footnote{https://mat.tepper.cmu.edu/COLOR04/}
 で公開されているグラフ彩色問題127問のうち，\textbf{彩色数}が判明している44問~\cite{DBLP:journals/constraints/TamuraTKB09}を用いた．
@@ -30,18 +30,7 @@ basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
 \begin{table}[tb]
   \centering
   \caption{彩色数における全解数が判明したグラフ}
-  \begin{tabular}{|c|c|c|c|c|} \hline
-    グラフ名 & 頂点数 & 辺数 & 彩色数 & 全解数 \\ \hline
-    1-FullIns\_3 & 30 & 100 & 4 & 50693280 \\ \hline
-    le450\_5a & 450 & 5714 & 5 & 3840 \\ \hline
-    le450\_5c & 450 & 9803 & 5 & 120 \\ \hline
-    le450\_5d & 450 & 9757 & 5 & 960 \\ \hline
-    myciel3 & 11 & 20 & 4 & 12480 \\ \hline
-    myciel4 & 23 & 71 & 5 & 2845658400 \\ \hline
-    queen5\_5 & 25 & 160 & 5 & 240 \\ \hline 
-    queen6\_6 & 36 & 290 & 7 & 100800 \\ \hline
-    queen7\_7 & 49 & 476 & 7 & 20160 \\ \hline
-  \end{tabular}
+  \input{table/graph}
   \label{tab:bench_graph}
 \end{table}
 
@@ -57,12 +46,12 @@ basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
 ベンチマークは，前節で生成した90問を用いた．
 制限時間は1時間とした．
 ただし，各グラフ，色数，初期状態，目標状態に対して$t=1, 2, \dots$と増やしていくものに対する制限時間である．
-{\clingo}のバージョンは5.4.0，オプションは\textsl{tweety}と\textsl{crafty}を用いた．
+{\clingo}のバージョンは5.4.0，オプションは\textsl{jumpy}を用いた．
 調査環境はMac Mini，3.2GHz 6コア Intel Core i7，64GBメモリである．
 
 得られた結果を表~\ref{tab:result}に示す．
 連結はある$t$で経路が存在したものである．
-部分的非連結はある$t' \lt T_{limit}$までに経路が存在しないことが確かめられたものである．
+部分的非連結はある$t' < T_{limit}$までに経路が存在しないことが確かめられたものである．
 非連結は$T_{limit}$までに経路が存在せず，その問題では経路が存在しないと確かめられたものである．
 
 \begin{table}

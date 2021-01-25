@@ -37,7 +37,7 @@ basicstyle=\ttfamily\scriptsize]{code/path.lp}
 \code{goal(X,C)}は目標状態において頂点\code{X}が色\code{C}で塗られることを意味する．
 
 \section{ASP符号化}
-$k$彩色遷移問題の制約は主に探索問題の制約と隣接関係の制約からなる．
+$k$彩色遷移問題の制約は主に基となった探索問題の制約と隣接関係の制約からなる．
 本研究では隣接関係の制約の記述が異なる3種の符号化を提案した．
 また，本来与えられる入力に加え遷移回数$t$を与えるようにした．
 本来の問題では「グラフ$G$，色数$k$における初期状態から目標状態への経路の存在」を解いていたのに対し，
@@ -48,15 +48,6 @@ $t=1, 2, \dots T_{limit}$のすべてで経路が存在しないのであれば�
 一方で，ある$t$で経路が存在するのであれば本来の問題でも経路は存在する．
 
 初めに，基本となる\code{vrc1}符号化をコード~\ref{code:vrc1.lp}に示す．
-
-\lstinputlisting[float=t,caption={%
-$k$彩色遷移問題の論理プログラム (\code{vrc1.lp})},%
-captionpos=b,frame=single,label=code:vrc1.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring1.lp}
-
 \code{color(X,C,T)}はステップ\code{T}において頂点\code{X}が色\code{C}で塗られることを意味する．
 1行目では定数を用いて色\code{1}から色\code{c}までを定義している．
 2行目では定数を用いて遷移ステップ(以下ステップ)\code{0}から\code{t}までを定義している．
@@ -70,9 +61,17 @@ basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring1.lp}
 「ステップ\code{T-1}と\code{T}($1 \geq T \geq t$)においてある2つの頂点\code{X}と\code{Y}が変化することはない」
 を意味する．
 
+\lstinputlisting[float=t,caption={%
+$k$彩色遷移問題の論理プログラム (\code{vrc1.lp})},%
+captionpos=b,frame=single,label=code:vrc1.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring1.lp}
+
 次に，コード~\ref{code:vrc1.lp}に新しいアトムを加え，隣接関係に関するルールを変更した
 \code{vrc2}符号化と\code{vrc3}符号化をそれぞれコード~\ref{code:vrc2.lp}とコード~\ref{code:vrc3.lp}に示す．
-これらのコードについて，1～13行目はコード~\ref{code:vrc1.lp}と同じである．
+これらのコードは，1～13行目はコード~\ref{code:vrc1.lp}と同じである．
 
 \lstinputlisting[float=t,caption={%
 $k$彩色遷移問題の論理プログラム (\code{vrc2.lp})},%
@@ -105,6 +104,9 @@ basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
 
 各符号化における隣接関係を表す基礎化後のルール数を表~\ref{tab:rule}に示す．
 基礎化とは，各アトムの変数に代入を行い命題変数とすることである．
+基礎化後のルール数は基となるアトムの変数の組合せより求められる．
+本研究で用いる符号化の場合，$($色(\code{C})の選択方法の数$)*($
+頂点(\code{V})の選択方法の数$)*($ステップ(\code{T})の選択方法の数$)$となる．
 
 \begin{table}[tb]
   \centering
@@ -112,10 +114,6 @@ basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
   \input{table/rule}
   \label{tab:rule}
 \end{table}
-
-基礎化後のルール数は基となるアトムの変数の組合せより求められる．
-本研究で用いる符号化の場合，$($色(\code{C})の選択方法の数$)*($
-頂点(\code{V})の選択方法の数$)*($ステップ(\code{T})の選択方法の数$)$となる．
 
 %%% Local Variables:
 %%% mode: latex
