@@ -1,0 +1,93 @@
+\begin{lstlisting}[frame=trl,numbers=left,breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]
+; QGCP model=18 n=5 opts={'-m': '18', '-x': ''}
+; color-variable model (pb)
+(declare-const c_0_0_0 Int)
+(assert (and (>= c_0_0_0 0) (<= c_0_0_0 1)))
+(declare-const c_0_0_1 Int)
+(assert (and (>= c_0_0_1 0) (<= c_0_0_1 1)))
+(declare-const c_0_0_2 Int)
+(assert (and (>= c_0_0_2 0) (<= c_0_0_2 1)))
+(declare-const c_0_0_3 Int)
+(assert (and (>= c_0_0_3 0) (<= c_0_0_3 1)))
+(declare-const c_0_0_4 Int)
+(assert (and (>= c_0_0_4 0) (<= c_0_0_4 1)))
+(declare-const c_0_1_0 Int)
+(assert (and (>= c_0_1_0 0) (<= c_0_1_0 1)))
+(declare-const c_0_1_1 Int)
+(assert (and (>= c_0_1_1 0) (<= c_0_1_1 1)))
+(declare-const c_0_1_2 Int)
+(assert (and (>= c_0_1_2 0) (<= c_0_1_2 1)))
+(declare-const c_0_1_3 Int)
+(assert (and (>= c_0_1_3 0) (<= c_0_1_3 1)))
+(declare-const c_0_1_4 Int)
+(assert (and (>= c_0_1_4 0) (<= c_0_1_4 1)))
+(declare-const c_0_2_0 Int)
+(assert (and (>= c_0_2_0 0) (<= c_0_2_0 1)))
+(declare-const c_0_2_1 Int)
+(assert (and (>= c_0_2_1 0) (<= c_0_2_1 1)))
+(declare-const c_0_2_2 Int)
+(assert (and (>= c_0_2_2 0) (<= c_0_2_2 1)))
+(declare-const c_0_2_3 Int)
+(assert (and (>= c_0_2_3 0) (<= c_0_2_3 1)))
+(declare-const c_0_2_4 Int)
+(assert (and (>= c_0_2_4 0) (<= c_0_2_4 1)))
+(declare-const c_0_3_0 Int)
+(assert (and (>= c_0_3_0 0) (<= c_0_3_0 1)))
+(declare-const c_0_3_1 Int)
+(assert (and (>= c_0_3_1 0) (<= c_0_3_1 1)))
+(declare-const c_0_3_2 Int)
+(assert (and (>= c_0_3_2 0) (<= c_0_3_2 1)))
+(declare-const c_0_3_3 Int)
+(assert (and (>= c_0_3_3 0) (<= c_0_3_3 1)))
+(declare-const c_0_3_4 Int)
+(assert (and (>= c_0_3_4 0) (<= c_0_3_4 1)))
+(declare-const c_0_4_0 Int)
+(assert (and (>= c_0_4_0 0) (<= c_0_4_0 1)))
+(declare-const c_0_4_1 Int)
+(assert (and (>= c_0_4_1 0) (<= c_0_4_1 1)))
+(declare-const c_0_4_2 Int)
+(assert (and (>= c_0_4_2 0) (<= c_0_4_2 1)))
+(declare-const c_0_4_3 Int)
+(assert (and (>= c_0_4_3 0) (<= c_0_4_3 1)))
+(declare-const c_0_4_4 Int)
+(assert (and (>= c_0_4_4 0) (<= c_0_4_4 1)))
+\end{lstlisting}
+$\vdots$
+\begin{lstlisting}[frame=rl,numbers=left,breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize,firstnumber=253]
+(assert (= (+ c_0_0_0 c_0_0_1 c_0_0_2 c_0_0_3 c_0_0_4) 1))
+(assert (= (+ c_0_1_0 c_0_1_1 c_0_1_2 c_0_1_3 c_0_1_4) 1))
+(assert (= (+ c_0_2_0 c_0_2_1 c_0_2_2 c_0_2_3 c_0_2_4) 1))
+(assert (= (+ c_0_3_0 c_0_3_1 c_0_3_2 c_0_3_3 c_0_3_4) 1))
+(assert (= (+ c_0_4_0 c_0_4_1 c_0_4_2 c_0_4_3 c_0_4_4) 1))
+\end{lstlisting}
+$\vdots$
+
+\begin{lstlisting}[frame=rl,numbers=left,breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize,firstnumber=278]
+; alldiff_pb c_0_0 c_0_1 c_0_2 c_0_3 c_0_4
+(assert (= (+ c_0_0_0 c_0_1_0 c_0_2_0 c_0_3_0 c_0_4_0) 1))
+(assert (= (+ c_0_0_1 c_0_1_1 c_0_2_1 c_0_3_1 c_0_4_1) 1))
+(assert (= (+ c_0_0_2 c_0_1_2 c_0_2_2 c_0_3_2 c_0_4_2) 1))
+(assert (= (+ c_0_0_3 c_0_1_3 c_0_2_3 c_0_3_3 c_0_4_3) 1))
+(assert (= (+ c_0_0_4 c_0_1_4 c_0_2_4 c_0_3_4 c_0_4_4) 1))
+\end{lstlisting}
+$\vdots$
+
+\begin{lstlisting}[frame=rbl,numbers=left,breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize,firstnumber=426,%
+captionpos=b,caption={N=5の0-1変数のみを用いた色変数モデルのクイーングラフ彩色問題},label={code:qgcp_5_pb}]
+(assert (= c_0_0_0 1))
+(assert (= c_0_1_1 1))
+(assert (= c_0_2_2 1))
+(assert (= c_0_3_3 1))
+(assert (= c_0_4_4 1))
+(check-sat)
+(get-model)
+(exit)
+\end{lstlisting}
