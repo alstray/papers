@@ -172,17 +172,16 @@ c\_i\_j\_kはi行j列目がk色に塗られるかどうかを示している．
 278から425行目が各行，各列，各右上がり対角線，各右下がり対角線についてそれぞれ互いに異なるという制約を追加している．
 また，426から430行目は対称性除去のために0行目の値を指定している．
 
+\input{code/pb_code}
 
-% \twocolumn
-\lstinputlisting[float=htbp,caption={%
-N=5の0-1変数のみを用いた色変数モデルのクイーングラフ彩色問題},%
-captionpos=b,frame=single,label=code:qgcp_5_pb,%
-numbers=left,%
-classoffset=1,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\tiny]{code/qgcp_5_m18__z3_489.smt2}
-% \onecolumn
+% \lstinputlisting[float=htbp,caption={%
+% N=5の0-1変数のみを用いた色変数モデルのクイーングラフ彩色問題},%
+% captionpos=b,frame=single,label=code:qgcp_5_pb,%
+% numbers=left,%
+% classoffset=1,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\tiny]{code/qgcp_5_m18__z3_489.smt2}
 
 本研究では，$distinct$制約を3つ方法で符号化した．
 これらは，参考文献\cite{Ono19:ai}から引用したものであり，
