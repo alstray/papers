@@ -1,0 +1,45 @@
+%#BIBTEX pbibtex paper_jsai2021
+%%\documentstyle[twocolumn,jsaiac]{jarticle}
+%%\documentstyle[twocolumn,jsaiac]{j-article}
+\documentclass[twocolumn]{jarticle}
+
+\usepackage{jsaiac}
+\usepackage [dvipdfmx]{graphicx}
+
+\usepackage{listings}
+\usepackage{plistings}
+\def\lstlistingname{コード}
+
+\usepackage{url}
+\newcommand{\bhline}{\noalign{\hrule height 1.5pt}}  % 表のための太いライン
+
+%%% For ASP
+\newcommand{\asap}{\textit{teaspoon}}
+\newcommand{\gringo}{\textit{gringo}}
+\newcommand{\clingo}{\textit{clingo}}
+\newcommand{\clasp}{\textit{clasp}}
+\newcommand{\asprin}{\textit{asprin}}
+\newcommand{\dlv}{\textit{DLV}}
+\newcommand{\wasp}{\textit{WASP}}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
+\newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
+\newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
+%\newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+\newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
+\newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
+\newcommand{\pbody}[1]{\poslits{\body{#1}}}
+\newcommand{\nbody}[1]{\neglits{\body{#1}}}
+%\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+\newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
+
+\input{00_data}
+\input{01_introduction}
+\input{02_background}
+\input{03_proposal}
+\input{04_experiment}
+\input{05_conclusion}
+
+\bibliographystyle{jsai}
+\bibliography{jsai2021}
+\end{document}

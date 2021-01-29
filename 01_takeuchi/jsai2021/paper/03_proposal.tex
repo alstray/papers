@@ -1,0 +1,186 @@
+\section{多目的CAFE問題のASP符号化}\label{sec:proposal}
+
+ASPの言語は，
+一般拡張選言プログラム
+(General Extended Disjunctive Program)
+をベースとしている\cite{Inoue08:jssst}．
+本節では，説明の簡略化のため，そのサブクラスである
+標準論理プログラムについて説明する．
+以降，標準論理プログラムを単に{\bf 論理プログラム}と呼ぶ．
+
+論理プログラムは，以下の形式の\textbf{ルール}の有限集合である．
+\begin{equation}
+  \label{eq:rule}
+  a_0\leftarrow a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}
+\end{equation}
+このルールの直観的な意味は，
+「$a_1,\ldots,a_m$がすべて成り立ち，$a_{m+1},\ldots,a_n$のそれぞれが成
+り立たないならば，$a_0$が成り立つ」である．
+ここで，
+$0\leq m\leq n$ であり，
+各$a_i$はアトム，
+$\naf{}$は\textbf{デフォルトの否定}
+\footnote{\textbf{失敗による否定}とも呼ばれる．述語論理で定義される否定($\neg$)とは意味が異なる．}，
+``$,$''は連言を表す．
+$\leftarrow$の左側を\textbf{ヘッド}，右側を\textbf{ボディ}と呼ぶ．
+ボディが空のルール(すなわち\(a_0\leftarrow\))を\textbf{ファクト}と呼び，
+$\leftarrow$を省略してよい．
+
+ヘッドが空のルールを\textbf{一貫性制約}と呼び，以下のように表す．
+\begin{equation}
+  \label{eq:constr}
+  \leftarrow a_1,\dots,a_m,\naf{a_{m+1}},\dots,\naf{a_n}
+\end{equation}
+例えば，一貫性制約
+``\(\leftarrow a_1,a_2\)''は，「$a_1$と$a_2$が両方同時に成り立つことはない」を意味し，
+``\(\leftarrow a_1, \naf{a_{2}}\)''は，「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
+
+ASP言語には，組合せ問題を簡潔に記述するために，
+\textbf{アグリゲート}(aggregate)と呼ばれる拡張構文がいくつか用意されている．
+例えば，\textbf{選択子}``$\{a_1;\ldots;a_n\}$.''は，
+アトム集合\(\{a_1,\ldots,a_n\}\)の任意の部分集合を解集合に含めることを意味する．
+\textbf{個数制約}は選択子の両端に選択可能な個数の上下限を付けたものである．
+例えば，``\(lb\ \{a_1;\dots;a_n\}\ ub \leftarrow Body\)''と書くと，
+「$Body$が成り立つならば，$a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下
+が成り立つ」を意味する．
+\textbf{重み付き個数制約}``\(t = \#sum\ \{w_1:a_1;\ldots;w_n:a_n\}\).''は，
+$a_1,\dots,a_n$のうち真となるアトムの重み和が項$t$に等しくなることを意味する．
+項$w_i$は重みを表し，演算子としては``=''以外にも``$\leq$'',``$\geq$''などを使用できる．
+さらに，重み付き個数制約の``$\#sum$''を，``$\#max$''や``$\#min$''に書
+き換えると，重み和ではなく，真となるアトムの重みの最大値や最小値を求め
+ることができる．
+
+近年，
+{\clingo}~\footnote{\url{https://potassco.org/}}，
+{\dlv}~\footnote{\url{http://www.dlvsystem.com/dlv/}}，
+{\wasp}~\footnote{\url{https://www.mat.unical.it/ricca/wasp/}}
+など，SATソルバー技術を応用した高速なASPシステムが開発されている．
+なかでも{\clingo}は，高性能かつ高機能なASPシステムとして世界中で広く使われている．
+これらの高速ASPシステムは，変数を含む論理プログラムを変数を含まない論
+理プログラムに変換(\textbf{基礎化})したのち，ASPソルバーを用いて解集合を計算する．
+本論文で使用するASPシステム{\clingo}は，基礎化のためのグラウンダー
+{\gringo}とASPソルバー{\clasp}をシームレスに結合したものである．
+
+本論文では，論理プログラムの解集合の中で，選好関係の宣言・評価を可能にするシステム
+{\asprin}~\cite{Brewka15:casp}も使用する．
+選好関係は，{\bf 選好文}と呼ばれるプログラムの中で，次のように宣言される．
+\begin{equation}
+  \label{eq:preference}
+  \#preference(s,t)\{e_1,\dots,e_n\}
+\end{equation}
+ここで，$s$ と $t$ はそれぞれ選好の名称とタイプであり，
+引数の各 $e_j$ は選好の要素である． 
+{\asprin} では，新たに選好タイプを定義することも可能だが，
+いくつかの選好タイプはあらかじめライブラリに定義されており，
+それを利用することで簡潔に選好関係を記述することができる．
+% 本発表では選好のタイプとして$less(weight), more(weight), pareto$ を使用する．
+そして，次のように最適化命令を記述することで，選好関係 $s$ について
+最適な解集合を得ることができる．
+\begin{equation}
+ \label{eq:optimize}
+ \#optimize(s)
+\end{equation} 
+このとき，{\asprin}では繰り返しASPソルバーを呼び出すことで，
+最適な解集合を段階的に計算する．
+
+本論文で提案する多目的CAFE問題の解法では，
+与えられた問題インスタンスをASPのファクト形式に変換した後，
+それらファクトと多目的CAFE問題を解くためのASP符号化(論理プログラム)を結合した上で，
+高速ASPシステム{\clingo}と{\asprin}を用いて解を求める(図\ref{fig:arch}参照)．
+本論文では，説明の簡略化のため，各タイプが選択可能なオプション数の上下限値を1とする．
+
+多目的CAFE問題の問題インスタンスは，CAFE基準値を除いてアトムに変換され，
+ファクトとして表現される．
+CAFE基準値はASPの定数$t$で表すものとし，実行時に\clingo のオプションから値を指定する．
+各アトムは，表\ref{tab:fact}のように第\ref{sec:background}節の各入力に対応する．
+\begin{table}[t]
+ \caption{問題インスタンスのアトム}
+ \centering
+ \tabcolsep = 1mm
+ \begin{tabular}{ll} \bhline
+  アトム & 対応する入力番号 \\ \hline
+  $vp\_def(vp)$ & 入力\ref{input:vp} \\
+  $v\_def(v,vp,x)$ & 入力\ref{input:v}, \ref{input:vp-v}, \ref{input:iwr} \\
+  $require\_vp(vp)$ & 入力\ref{input:req_vp} \\
+  $require\_v\_v(v_1,v_2)$ & 入力\ref{input:dependency} \\
+  $exclude\_v\_v(v_1,v_2)$ & 入力\ref{input:dependency} \\
+  $group(1..n)$ & 入力\ref{input:g} \\ 
+  $require\_g\_v(i,v)$ & 入力\ref{input:init} \\
+  $fe\_map(s,fe)$ & 入力\ref{input:fe} \\
+  $sv\_map(s,fe)$ & 入力\ref{input:sv} \\ \hline
+ \end{tabular}
+ \label{tab:fact}
+\end{table}
+
+多目的CAFE問題の各制約は，ASPの個数制約および一貫性制約を使用して
+簡潔に表現される(コード\ref{code:basic.lp})．
+また，コード\ref{code:basic.lp}の8〜12行目では，
+各タイプが選択可能なオプション数の上下限値，および，必須かどうかの別を考慮することで，
+IWR値の和である\code{S}の上下限をより厳密に計算するように工夫がされている．
+これにより，\code{iwr(S,G)}に関する基礎化後のルール数を少なく抑えることができる．
+
+%----------------------------------------
+\lstinputlisting[float=tb,caption={%
+  制約の符号化},%
+captionpos=b,frame=single,label=code:basic.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily\footnotesize]{codes/basic.lp} 
+%----------------------------------------
+
+
+多目的CAFE問題の選好文は，コード\ref{code:preference.lp}のように定義される．
+目的関数である予想販売台数の最大化とオプション数の最小化は，
+それぞれ選好名\code{max\_sv}, \code{min\_op} として定義している．
+9行目で使用している選好タイプ\code{pareto} は，
+選好文中で定義された選好名を引数に取り，
+それらの選好関係についてパレートな解を得ることができる．
+すなわち，解集合$S_1$が$S_2$よりも厳密に好まれるならば，かつそのときに限り，
+引数のすべての選好関係に関して，少なくとも$S_1$は$S_2$と同等で，かつ，
+少なくとも1つの選好関係に関して$S_1$は$S_2$より厳密に優れている．
+
+%----------------------------------------
+\lstinputlisting[float=tb,caption={%
+  選好文},%
+captionpos=b,frame=single,label=code:preference.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily]{codes/preference.lp} 
+%----------------------------------------
+
+第\ref{sec:background}節と同様に多目的CAFE問題の例
+(図\ref{fig:ovm_example})を用いて，
+最適解をすべて列挙した結果を表~\ref{tab:prt_ans}に示す．
+予想販売台数とオプション数の値から，
+得られた各装備仕様が互いにトレードオフの関係にあることが分かる．
+本解法の利点は，このような定性的に得られた複数の解を人が見比べることで，
+定量的な判断により最終的な決定をすることができる点である．
+
+%----------------------------------------
+\begin{table*}[t]
+   \centering
+ % \small
+ \tabcolsep=1mm
+  \caption{CAFE問題(図~\ref{fig:ovm_example})のパレート解}
+  \begin{tabular}{l|l|c|c|c||c|c|c||c|c|c||c|c|c} \bhline
+   \multicolumn{2}{l|}{} & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c||}{解3} & \multicolumn{3}{c}{解4}\\ \hline
+   \multicolumn{2}{l|}{装備仕様} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 \\ \hline
+   装備 & \textsf{Grade} & \textsf{STD} & \textsf{DX} & \textsf{LX} & \textsf{STD} & \textsf{DX} & \textsf{LX} & \textsf{STD} & \textsf{DX} & \textsf{LX} & \textsf{STD} & \textsf{DX} & \textsf{LX} \\
+       & \textsf{Drive\_Type} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{4WD} & \textsf{2WD} & \textsf{2WD} & \textsf{2WD} & \textsf{2WD} & \textsf{2WD} & \textsf{2WD} \\
+       & \textsf{Engine} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} & \textsf{V6} \\
+       & \textsf{Tire} & \textsf{16inch} & \textsf{17inch} & \textsf{18inch} & \textsf{16inch} & \textsf{17inch} & \textsf{18inch} & \textsf{16inch} & \textsf{17inch} & \textsf{18inch} & \textsf{16inch} & \textsf{17inch} & \textsf{18inch} \\
+       & \textsf{Transmission} & \textsf{6AT} & \textsf{HEV} & \textsf{10AT} & \textsf{10AT} & \textsf{HEV} & \textsf{10AT} & \textsf{10AT} & \textsf{HEV} & \textsf{10AT} & \textsf{10AT} & \textsf{10AT} & \textsf{10AT} \\
+       & \textsf{Sun\_Roof} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} & \textsf{-} \\ \hline
+   \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c||}{\bf 5,525} & \multicolumn{3}{c||}{\bf 5,475} & \multicolumn{3}{c||}{\bf 5,135} & \multicolumn{3}{c}{\bf 4,723} \\ 
+   \multicolumn{2}{l|}{オプション数} & \multicolumn{3}{c||}{\bf 12} & \multicolumn{3}{c||}{\bf 11} & \multicolumn{3}{c||}{\bf 10} & \multicolumn{3}{c}{\bf 9} \\ \hline
+   %\multicolumn{14}{c}{}
+  \end{tabular}
+ \label{tab:prt_ans}
+\end{table*}
+%----------------------------------------
