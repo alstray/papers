@@ -1,38 +1,24 @@
-%%% Packages
-\usepackage{graphicx}
-\usepackage{color}
-\usepackage{lineno}
-%\usepackage{bm}
-%\usepackage{array}
-\usepackage{url}
-\usepackage{alltt}
-\usepackage{ascmac}
-\usepackage{tikz}
-\usetikzlibrary{arrows,shapes}
-%\usetikzlibrary{positioning}
+%#BIBTEX pbibtex paper_jsai2021
+%%\documentstyle[twocolumn,jsaiac]{jarticle}
+%%\documentstyle[twocolumn,jsaiac]{j-article}
+\documentclass[twocolumn]{jarticle}
+
+\usepackage{jsaiac}
+\usepackage [dvipdfmx]{graphicx}
+
 \usepackage{listings}
 \usepackage{plistings}
 \def\lstlistingname{コード}
-\def\lstlistlistingname{コード目次}
-\renewcommand{\bibname}{参考文献}
 
-%%% listings
-\lstset{
-        frame=single,
-        basicstyle=\ttfamily,
-        numbers=left,
-        numbersep=10pt,
-        tabsize=2,
-        extendedchars=true,
-        xleftmargin=17pt,
-        framexleftmargin=17pt
-}
+\usepackage{url}
+\newcommand{\bhline}{\noalign{\hrule height 1.5pt}}  % 表のための太いライン
 
 %%% For ASP
 \newcommand{\asap}{\textit{teaspoon}}
-\newcommand{\clasp}{\textit{clasp}}
 \newcommand{\gringo}{\textit{gringo}}
 \newcommand{\clingo}{\textit{clingo}}
+\newcommand{\clasp}{\textit{clasp}}
+\newcommand{\asprin}{\textit{asprin}}
 \newcommand{\dlv}{\textit{DLV}}
 \newcommand{\wasp}{\textit{WASP}}
 \newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
@@ -46,10 +32,14 @@
 \newcommand{\nbody}[1]{\neglits{\body{#1}}}
 %\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
 \newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
-\newcommand{\mcode}[1]{\ensuremath{{\mbox{\code{#1}}}}}
 
+\input{00_data}
+\input{01_introduction}
+\input{02_background}
+\input{03_proposal}
+\input{04_experiment}
+\input{05_conclusion}
 
-%%% Local Variables:
-%%% mode: japanese-latex
-%%% TeX-master: "paper"
-%%% End:
+\bibliographystyle{jsai}
+\bibliography{jsai2021}
+\end{document}

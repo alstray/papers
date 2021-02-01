@@ -1,0 +1,1 @@
+cost(Y,X,C) :- cost(X,Y,C).
