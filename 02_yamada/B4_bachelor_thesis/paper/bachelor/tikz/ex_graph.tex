@@ -13,10 +13,10 @@
   % \draw [help lines,blue] (0,0) grid (20,6);
  
   % node %
-  \node[node, label=above:$v_1$] at (-1,1) (node1);
-  \node[node, label=above:$v_2$] at (1,1) (node2);
-  \node[node, label=below:$v_3$] at (-1,-1) (node3);
-  \node[node, label=below:$v_4$] at (1,-1) (node4);
+  \node[node, label=above:$v_1$] at (-1,1) (node1) {};
+  \node[node, label=above:$v_2$] at (1,1) (node2) {};
+  \node[node, label=below:$v_3$] at (-1,-1) (node3) {};
+  \node[node, label=below:$v_4$] at (1,-1) (node4) {};
  
   \foreach \u / \v in {node1/node2, node2/node3, node2/node4, node3/node4}
   \draw (\u) -- (\v);
