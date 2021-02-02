@@ -39,22 +39,35 @@
 %\session{0A0-00}%% <-- 講演ID（必須)
 
 \begin{abstract}
-Here is an abstract of up to 150 words \textcolor{red}{in English}. 
-This document describes the format guidelines for Japanese manuscripts in \LaTeX{} of the annual conference of JSAI. 
-This is also a sample of a formatted manuscripts (see 2.4 for writing the abstract).\\
-車両装備仕様とは，簡単に言うと，自動車のカタログに記載されている
-モデル/グレードと装備の組合せのことである．
-多目的車両装備仕様問題は，与えられたモデル/グレードの個数，装備タイプ
-の集合，装備オプションの集合などから，装備および燃費に関する制約を満た
-しつつ，予想販売台数の最大化や装備オプション数の最小化など，トレードオ
-フの関係にある複数の目的関数のもとで最適な車両装備仕様を求める問題である．
-本発表では，CAFE 方式と呼ばれる燃費制約に基づく多目的車両装備仕様問題
-(多目的 CAFE 問題)に対して，解集合プログラミングを用いてパレート最適解
-を列挙する方法について述べる．提案手法は，可変性モデルで表現された問題
-インスタンスを ASP のファクト形式に変換した後，それらファクトと多目的
-CAFE 問題を解くための ASP 符号化と結合し，高速 ASP システムを用いて解
-を求める．企業から提供されたベンチマーク問題を用いた実行実験の結果，小
-規模な問題についてパレート最適解を全列挙することができた．
+Vehicle equipment specification is, in a nutshell, 
+a combination of model/grade and equipments listed in the automobile catalog.
+Multi-objective Vehicle Equipment Specification Problem (MVESP) is the problem
+that computes optimal vehicle equipment specifications based on trade-off 
+multiple objective functions while it satisfies equipments and fuel economy 
+constraints from given the number of model/grade, a set of equipment types, 
+a set of equipment options and so on.
+In this paper, we discuss the method to enumerate all pareto optimal answers 
+of MVESP based on the fuel economy constraint called Corporate Average Fuel Economy 
+(CAFE) Standards with Answer Set Programming (ASP).
+In our method, the problem instance represented by Orthogonal Variability Model
+(OVM) is converted to a set of facts and combined with ASP encoding 
+to solve MVESP, and then we compute answers with fast ASP system.
+As a result of running experiments using benchmark problems provided by a company, 
+we succeeded in enumerating all pareto optimal answers for small-scale problems.
+
+% 車両装備仕様とは，簡単に言うと，自動車のカタログに記載されている
+% モデル/グレードと装備の組合せのことである．
+% 多目的車両装備仕様問題は，与えられたモデル/グレードの個数，装備タイプ
+% の集合，装備オプションの集合などから，装備および燃費に関する制約を満た
+% しつつ，予想販売台数の最大化や装備オプション数の最小化など，トレードオ
+% フの関係にある複数の目的関数のもとで最適な車両装備仕様を求める問題である．
+% 本発表では，CAFE 方式と呼ばれる燃費制約に基づく多目的車両装備仕様問題
+% (多目的 CAFE 問題)に対して，解集合プログラミングを用いてパレート最適解
+% を列挙する方法について述べる．提案手法は，可変性モデルで表現された問題
+% インスタンスを ASP のファクト形式に変換した後，それらファクトと多目的
+% CAFE 問題を解くための ASP 符号化と結合し，高速 ASP システムを用いて解
+% を求める．企業から提供されたベンチマーク問題を用いた実行実験の結果，小
+% 規模な問題についてパレート最適解を全列挙することができた．
 \end{abstract}
 
 %\setcounter{page}{1}
