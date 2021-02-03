@@ -6,7 +6,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SMTとSMTソルバー}
-SMT(背景理論付きSAT)は，命題論理よりも高い表現力を持つ論理体系で記述された背景理論をSAT技術で効果的に扱うことを目的とした技術である．
+背景理論付きSAT(Satisfiability Modulo Theories; SMT)は，命題論理よりも高い表現力を持つ論理体系で記述された背景理論をSAT技術で効果的に扱うことを目的とした技術である．
 SATが命題論理を扱うのに対して，SMTでは述語論理を扱う\cite{JSAI:IwanumaN10}．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -19,26 +19,26 @@ SMTソルバーは，プログラム検証,スケジューリング,プランニ
 
 
 % \subsection{smt-lib2とは}
-今回SMTソルバーを扱う際に使用する記述方法はsmt-lib2である．
+今回SMTソルバーを扱う際に使用する記述方法はsmt-lib2\footnote{\url{http://smtlib.cs.uiowa.edu/}}である．
 SMT-LIBはSMTの研究開発の促進を目的とした国際的な取り組みであり，
 その目的としては，
 SMTシステムで使用される背景理論の標準的で厳密な記述の提供や
 SMTソルバーのための共通の入出力言語を開発し促進することなどが挙げられる．
 
 
-% distinct制約とは
-本研究で扱う$distinct$制約とは，$(distinct x_1 ... x_n)$で表され，その要素$x_i$が互いに異なることを表す制約である．
-今回使用したSMTソルバーの$z3ソルバー$においてこの制約は以下のことを意味する．
-\begin{eqnarray*}
-    \bigwedge_{1 \leq i < j \leq n} x_i \neq x_j
-\end{eqnarray*}
 
 
 % \subsection{背景理論}
 SMTで扱われる背景理論には等号や算術，配列やリスト，ビットベクターなどが挙げられる．
 
 % \subsection{既存のSMTソルバー}
-既存のSMTソルバーとしては，OpenSMT,YICES,UCLID,CVC3,Z3などが挙げられる．
+既存のSMTソルバーとしては，
+OpenSMT\footnote{\url{http://verify.inf.usi.ch/opensmt}},
+YICES\footnote{\url{https://yices.csl.sri.com/}},
+UCLID\footnote{\url{https://github.com/uclid-org/uclid}},
+CVC3\footnote{\url{https://cs.nyu.edu/acsys/cvc3/}},
+Z3\footnote{\url{https://github.com/Z3Prover/z3}}
+などが挙げられる．
 今回使用したソルバーは$z3ソルバー$である．Microsoft社によって開発されたもので，プログラム解析やテスト,検証などを目的としている\cite{Umemura10:jssst}．
 
 
@@ -99,13 +99,31 @@ basicstyle=\ttfamily\scriptsize]{code/color.log}
 \section{$distinct$制約}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{itemize}
-\item $distinct$制約とは...
-\item $distinct$制約の実装方法．($\neq$分解, PB符号化)
-  
-\end{itemize}
+% \begin{itemize}
+% \item $distinct$制約とは...
+% \item $distinct$制約の実装方法．($\neq$分解, PB符号化)
+% \end{itemize}
 
+% distinct制約とは
+本研究で扱う$distinct$制約とは，$(distinct x_1 ... x_n)$で表され，その要素$x_i$が互いに異なることを表す制約である．
+$distinct$制約の実装方法として，
+今回使用したSMTソルバーの$z3ソルバー$では以下のように実装される．．
+\begin{eqnarray*}
+    \bigwedge_{1 \leq i < j \leq n} x_i \neq x_j
+\end{eqnarray*}
 
+また，以下のようにPB符号化を用いて実装することができる．
+$$distinct(x_1, x_2,\ldots, x_n) \; (x_i \in \{l,l+1,\ldots,u\}, n-1 \leq u-l)$$
+は
+0-1変数$p_{ij} \in {0,1} \; (p_{ij}=1 \Leftrightarrow x_i=j)$を導入して，
+\begin{eqnarray}
+    \sum_{j=l}^{u} p_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:smt_pb_1}\\
+    \begin{cases}
+        \sum_{i=1}^{n} p_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-lのとき) \\
+        \sum_{i=1}^{n} p_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
+    \end{cases}\label{eq:smt_pb_2}
+\end{eqnarray}
+と表される．
 
 %%% Local Variables:
 %%% mode: japanese-latex
