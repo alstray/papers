@@ -56,10 +56,9 @@ basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
 部分的非連結はある$t' < T_{limit}$までに経路が存在しないことが確かめられたものである．
 非連結は$T_{limit}$までに経路が存在せず，その問題では経路が存在しないと確かめられたものである．
 
-% 表だけでわかりやすく
 \begin{table}
   \centering
-  \caption{得られた結果の数(分類別)}
+  \caption{結果ごとのインスタンス数}
   \input{table/result.tex}
   \label{tab:result}
 \end{table}
@@ -77,7 +76,7 @@ basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
 
 \begin{table}
   \centering
-  \caption{連結インスタンスの結果}
+  \caption{連結インスタンスにおける経路発見までのCPU時間の合計}
   \input{table/result_con}
   \label{tab:result_con}
 \end{table}
@@ -98,7 +97,7 @@ vrc3で確かめられた最大値の平均値となっている．
 
 \begin{table}[htbp]
   \centering
-  \caption{グラフごとの最長遷移回数の平均値}
+  \caption{部分的非連結インスタンスにおける最長遷移回数の平均値}
   \input{table/result_uk_ave.tex}
   \label{tab:ave_unknown}
 \end{table}
