@@ -16,7 +16,7 @@
 grid以外は，\textit{JELIA2014}にて投稿された論文\cite{soh14}の補足資料
 が載せられたwebページ\footnote{\url{https://tsoh.org/scarab/jelia2014/}}から手に入り，
 completeとgridについてはそれをASPファクト形式に変換したものを使用した．
-color04は1993年秋に開催された\textit{DIMACS Computational Challenge}をベースとする，
+color04は1993年秋に開催された\textit{DIMACS Computational Challenge}をベースとする
 グラフ彩色問題の計算手法の研究を奨励する一連の活動
 \textit{COLOR02/03/04}\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
 が提供するグラフ彩色問題のインスタンスをそれぞれASPファクト形式に変換したもの，
@@ -25,8 +25,14 @@ knightは騎士巡回問題(Knight's Tour)のインスタンスであり，
 論文\cite{soh14}と同様に8x8,12x12,20x20,30x30,...100x100のマス目のものを用いた．
 tsplibは，TSPLIBが提供するハミルトン閉路問題のインスタンス群\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}をASPファクト形式に変換したものであり，
 gridは，自作した6x6...10x10，11x11...17x17グリッドグラフのインスタンスである．
-randomは，上記にて挙げたwebページ\footnotemark[1]にて入手した，ランダムに生成されたグラフである．
+randomは，上記にて挙げたwebページ\footnotemark[1]にて入手した，ランダムに生成されたグラフを表すインスタンスである．
 
+解くのに使用したASPシステムは\clingoのver5.4.0であり，
+オプションは\textit{trendy}，一問あたりの時間制限を30分とした．
+実験環境は，Mac mini，Intel Corei7 3.2GHz,64GBメモリである．
+
+まとめると，この実験では提案した３つのASP符号化undirected，directed，acyclicityを用いて
+上記ベンチマークをそれぞれ符号化し，一問あたりの制限時間を
 \begin{figure}[htbp]
 \begin{center}
   \includegraphics[width=10cm]{fig/cactus.png}
