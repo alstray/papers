@@ -11,7 +11,7 @@
 解集合プログラミングは，
 非単調論理プログラミングが制約プログラミング(Constraint Programming; CP)の概念と融合した
 論理プログラミングの枠組みである．\cite{Inoue08}
-そして，その記述言語は一般拡張選言プログラム(GEDP)かそのサブクラスをベースとしているが，
+そして，その記述言語は，一階論理に基づく知識表現言語の一種であり，一般拡張選言プログラム(GEDP)かそのサブクラスをベースとしているが，
 本論文では簡単のため，GEDPのサブクラスである\textbf{標準論理プログラム}(Normal Logic Program; NLP)を説明する．
 
 NLPは次の形式のルールの集合である．\\
@@ -77,56 +77,56 @@ ASPシステムは，与えられたGEDPやNLPから，そこに書かれた全�
  \gringo は \clingo に与えられた一階ASPプログラムを命題ASPプログラムに変換する\textbf{基礎化}
 を行った後に基礎化後のプログラムを \clasp に渡し，その後， \clasp が解集合を算出する．
 \newpage
-\[
-%\tabcolsep = 2mm
-\begin{array}{c|c|c|c}
-       X                   & \reduct{P}{X}  & 
-\reduct{P}{X}\textrm{の最小モデル}  & X\textrm{は}P\textrm{の解集合?}\\\hline
-\{\phantom{p         ,q}\} & \{p\leftarrow,\quad q\leftarrow\}             & \{p,q\}    
-&  \times \\\hline
-\{         p\phantom{,q}\} & \{p\leftarrow\phantom{\quad q\leftarrow}\}    & \{p\}      
-& \circ \\\hline
-\{\phantom{p,}        q \} & \{\phantom{p\leftarrow,\quad} q \leftarrow\}  & \{q\}      
-& \circ \\\hline
-\{         p         ,q \} & \{\phantom{p\leftarrow,\quad q\leftarrow}\}   & \emptyset  
-& \times \\\hline
-\end{array}
-\]
+%% \[
+%% %\tabcolsep = 2mm
+%% \begin{array}{c|c|c|c}
+%%        X                   & \reduct{P}{X}  & 
+%% \reduct{P}{X}\textrm{の最小モデル}  & X\textrm{は}P\textrm{の解集合?}\\\hline
+%% \{\phantom{p         ,q}\} & \{p\leftarrow,\quad q\leftarrow\}             & \{p,q\}    
+%% &  \times \\\hline
+%% \{         p\phantom{,q}\} & \{p\leftarrow\phantom{\quad q\leftarrow}\}    & \{p\}      
+%% & \circ \\\hline
+%% \{\phantom{p,}        q \} & \{\phantom{p\leftarrow,\quad} q \leftarrow\}  & \{q\}      
+%% & \circ \\\hline
+%% \{         p         ,q \} & \{\phantom{p\leftarrow,\quad q\leftarrow}\}   & \emptyset  
+%% & \times \\\hline
+%% \end{array}
+%% \]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[tb]
-  \centering
-  \begin{tabular}{l|*{4}{p{1cm}}}
-    論理プログラム &   $\leftarrow$ & $,$        & $;$        & $\sim$       \\\hline
-    ソースコード   &   \texttt{:-}  & \texttt{,} & \texttt{;} & \texttt{not}
-  \end{tabular}
-  \caption{論理プログラムとソースコードの対応}
-  \label{tbl:map}
-\end{table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[tb]
-  \centering
-  \includegraphics[width=0.6\linewidth]{fig/graph.png}
-  \caption{グラフ}
-  \label{fig:graph}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
-グラフ彩色問題の論理プログラム (\code{color.lp})},%
-captionpos=b,frame=single,label=code:color.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/color.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
-\code{color.lp}に対する{\clingo}の実行例},%
-captionpos=b,frame=single,label=code:color.log,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/color.log}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \begin{table}[tb]
+%%   \centering
+%%   \begin{tabular}{l|*{4}{p{1cm}}}
+%%     論理プログラム &   $\leftarrow$ & $,$        & $;$        & $\sim$       \\\hline
+%%     ソースコード   &   \texttt{:-}  & \texttt{,} & \texttt{;} & \texttt{not}
+%%   \end{tabular}
+%%   \caption{論理プログラムとソースコードの対応}
+%%   \label{tbl:map}
+%% \end{table}
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \begin{figure}[tb]
+%%   \centering
+%%   \includegraphics[width=0.6\linewidth]{fig/graph.png}
+%%   \caption{グラフ}
+%%   \label{fig:graph}
+%% \end{figure}
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \lstinputlisting[float=t,caption={%
+%% グラフ彩色問題の論理プログラム (\code{color.lp})},%
+%% captionpos=b,frame=single,label=code:color.lp,%
+%% numbers=left,%
+%% breaklines=true,%
+%% columns=fullflexible,keepspaces=true,%
+%% basicstyle=\ttfamily\scriptsize]{code/color.lp}
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \lstinputlisting[float=t,caption={%
+%% \code{color.lp}に対する{\clingo}の実行例},%
+%% captionpos=b,frame=single,label=code:color.log,%
+%% numbers=none,%
+%% breaklines=true,%
+%% columns=fullflexible,keepspaces=true,%
+%% basicstyle=\ttfamily\scriptsize]{code/color.log}
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Local Variables:
 %%% mode: japanese-latex

@@ -12,7 +12,7 @@
 
 以下，本章ではASPファクト形式でのグラフの表現と，提案するASP符号化手法について説明する．
 \input{fig/asp_method}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ASPファクト形式}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[tbp]
@@ -33,9 +33,10 @@
 よって，コード\ref{graphexamplp}の２行目は，頂点が番号１〜６の６つあることを定義し，
 ５〜７行目では，辺が7つ定義されている．
 アトム\code{edge}は２つ引数を持ち，これは表す辺の両端の頂点番号である．
-例えば\code{edge(1,2)}は\code{node(1)}から\code{node(2)}の辺を表す．
-
-\section{ハミルトン路・閉路問題のASP符号化}
+例えば\code{edge(1,2)}は\code{node(1)}と\code{node(2)}を結ぶ無向辺を表す．
+最後に，１０〜１２行目にあるアトム\code{cost}について，図\ref{graphexample}では表記されていないが，これは各辺に割り当てられる重みの値を表す．\code{cost(X,Y,C)}は\code{edge(X,Y}の重みがCであることを定義する．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ハミルトン路・閉路問題のASP符号化}\label{hamiltonianasp}
 本研究では，\textbf{undirected}，\textbf{directed}，\textbf{acyclicity}の３通りのASP符号化を提案する．
 これらはいずれもハミルトン路・閉路問題のASP符号化である．
 
@@ -144,11 +145,54 @@ $1 \rightarrow 3 \rightarrow 2 \rightarrow 1$の２通りのハミルトン閉�
 を使用した．この場合，組み込みのアサイクリシティチェック\cite{bomanson2016}が使用される．\cite{dimopoulos2018}
 １５行目では，ハミルトン路問題に対して「解となるハミルトン路上の辺で閉路が構成されることはない」という制約を，
 １６行目では，ハミルトン閉路問題に対して「解となるハミルトン閉路上の辺で始点と終点を含まない閉路が構成されることはない」という制約をそれぞれ表している．
-\section{最短ハミルトン路・閉路問題のASP符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{最短ハミルトン路・閉路問題のASP符号化}\label{minexpl}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[caption =  最適化,label = minimize]{code/obj_minimize.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ref{sec:background}章で説明したように，
+ハミルトン路・閉路を構成する各辺の重みの総和が
+最短ハミルトン路・閉路問題の目的関数である．
+よって，\ref{hamiltonianasp}にて説明した各符号化により
+求められたハミルトン路・閉路のうち，
+目的関数値が最小であるものが問題の解となる．
+その最小化の処理を行うのがコード\ref{minimize}である．
 
-\section{コスト制約付きハミルトン路・閉路問題のASP符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[caption =  重み付き無向グラフの有向グラフ化,label = costboth]{code/cost_both.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+さらに，無向グラフの有向グラフ化を行った
+符号化directed，acyclicityについては，
+アトム\code{cost}についても有向グラフ化に
+対応させるためにコード\ref{costboth}を追加した．
 
+このように，\ref{hamiltonianasp}にて説明した３符号化について，
+符号化undirectedにコード\ref{minimize}を，
+符号化directedにコード\ref{minimize}とコード\ref{costboth}を，
+符号化acyclicityにコード\ref{minimize}とコード\ref{costboth}をそれぞれ追加した．
+最短ハミルトン路・閉路問題を対象とする時，
+符号化undirected，符号化directed，符号化acyclicityは，
+これらコードを追加後のものを指すこととする．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{コスト制約付きハミルトン路問題のASP符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[caption = コスト制約, label = costconst]{code/cost_constraint.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ref{hamiltonianasp}にて説明した各符号化に，
+コード\ref{costconst}を追加した．
+コード\ref{costconst}は，\ref{sec:background}章で説明したように，
+ハミルトン路を構成する辺の重みの総和を\code{c}以下とする制約を表す．
+以後，この\code{c}の値を制約コスト値と呼ぶ．
 
+また，\ref{minexpl}同様に，
+符号化directed，acyclicityについては，
+アトム\code{cost}についても有向グラフ化に
+対応させるためにコード\ref{costboth}を追加した．
+
+なお，コスト制約付きハミルトン路・閉路問題を対象とする時，
+符号化undirected，符号化directed，符号化acyclicityは，
+これらコードを追加後のものを指すこととする．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "paper"
