@@ -1,4 +1,6 @@
-% コスト付きハミルトン閉路問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ハミルトン閉路問題関係
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 @inproceedings{comp20:Minato,
   author     = {湊真一 and 番原睦則 and 堀山貴史 and 川原純 and 瀧川一学 and 山口勇太郎},
   title      = {コスト制約つき組合せ問題に対するZDDを用いた高速な解列挙手法},
@@ -11,128 +13,83 @@
   yomi       = {Shin-ichi Minato and Mutsunori Banbara and Takashi Horiyama and Jun Kawahara and Ichigaku Takigawa and Yutaro Yamaguchi}
 }
 
+@book{hirata15:book,
+ author      = "平田 富夫",
+ title       = "アルゴリズム設計とデータ構造",
+ yomi        = "Tomio Hirata",
+ publisher   = "サイエンス社",
+ year        = 2015
+}
+
+@inproceedings{soh14:jelia2014,
+  title     =  {Incremental SAT-based Method with Native Boolean Cardinality Handling for the Hamiltonian Cycle Problem},
+  author    =  {Takehide Soh and Daniel Le Berre and St{\'e}phanie Roussel and Mutsunori Banbara and Naoyuki Tamura},
+  booktitle =  {Proceedings of the 14th European Conference on Logics in Artificial Intelligence (JELIA 2014), LNAI 8761},
+  pages     =  {684--693},
+  year      =  {2014},
+  publisher = {Springer},
+  doi       =  {10.1007/978-3-319-11558-0_52}
+}                  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ASP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-@book{DAD:book,
- author     = "平田 富夫",
- title      = "アルゴリズム設計とデータ構造",
- yomi       = "Tomio Hirata",
- publisher  = "サイエンス社",
- year       = 2015
+@inproceedings{gebser16:clingo5,
+  title     = {Theory solving made easy with clingo 5},
+  author    = {Martin Gebser and Roland Kaminski and Benjamin Kaufmann and Max Ostrowski and Torsten Schaub and Philipp Wanko},
+  booktitle = {Technical Communications of the 32nd International Conference on Logic Programming (ICLP 2016)},
+  year      = {2016},
+  publisher = {Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik}
 }
 
-@inproceedings{Hayama17,
-  title={制約充足問題の ASP 符号化に関する一考察},
-  author={坡山直樹 and 番原睦則 and 宋剛秀 and 田村直之},
-  booktitle={人工知能学会全国大会論文集 第 31 回全国大会 (2017)},
-  pages={1M1OS02a4--1M1OS02a4},
-  year={2017},
-  organization={一般社団法人 人工知能学会}
+@article{bomanson16:acyclicity,
+  title     = {Answer set programming modulo acyclicity},
+  author    = {Jori Bomanson and Martin Gebser and Tomi Janhunen and Benjamin Kaufmann and Torsten Schaub},
+  journal   = {Fundamenta Informaticae},
+  volume    = {147},
+  number    = {1},
+  pages     = {63--91},
+  year      = {2016},
+  publisher ={IOS Press}
 }
 
-@inproceedings{gelfond88,
-  title={The stable model semantics for logic programming.},
-  author={Gelfond, Michael and Lifschitz, Vladimir},
-  booktitle={ICLP/SLP},
-  volume={88},
-  pages={1070--1080},
-  year={1988}
+@book{Baral03:cambridge,
+  author    = {Chitta Baral},
+  title     = {Knowledge Representation, Reasoning and Declarative Problem Solving},
+  publisher = {Cambridge University Press},
+  year      = {2003}
 }
 
-@inproceedings{soh14,
-  title={Incremental SAT-based method with native Boolean cardinality handling for the Hamiltonian cycle problem},
-  author={Soh, Takehide and Le Berre, Daniel and Roussel, St{\'e}phanie and Banbara, Mutsunori and Tamura, Naoyuki},
-  booktitle={European Workshop on Logics in Artificial Intelligence},
-  pages={684--693},
-  year={2014},
-  organization={Springer}
-}                  
-
-@article{Inoue08,
-  title={論理プログラミングから解集合プログラミングへ},
-  author={井上克巳 and 坂間千秋},
-  journal={コンピュータ ソフトウェア},
-  volume={25},
-  number={3},
-  pages={3\_20--3\_32},
-  year={2008},
-  publisher={日本ソフトウェア科学会}
+@inproceedings{Gelfond88:iclp,
+  author    = {Michael Gelfond and Vladimir Lifschitz},
+  title     = {The Stable Model Semantics for Logic Programming},
+  booktitle = {Proceedings of the Fifth International Conference and Symposium on Logic Programming},
+  year      = {1988},
+  pages     = {1070--1080},
+  publisher = {MIT Press}
 }
 
-@article{Sakama10,
-  title={解集合プログラミング (< 特集> 論理に基づく推論研究の動向)},
-  author={坂間千秋 and 井上克巳},
-  journal={人工知能},
-  volume={25},
-  number={3},
-  pages={368--378},
-  year={2010},
-  publisher={一般社団法人 人工知能学会}
+@article{Niemela99:amai,
+  author    = {Ilkka Niemel{\"a}},
+  title     = {Logic Programs with Stable Model Semantics as a Constraint Programming Paradigm},
+  journal   = {Ann.\ Mathematics and Artificial Intelligence},
+  volume    = {25},
+  number    = {3--4},
+  year      = {1999},
+  pages     = {241--273}
 }
 
-@article{dimopoulos2018,
-  title={plasp 3: Towards effective ASP planning},
-  author={Dimopoulos, Yannis and Gebser, Martin and L{\"u}hne, Patrick and Romero, Javier and Schaub, Torsten},
-  journal={arXiv preprint arXiv:1812.04491},
-  year={2018}
+@article{Inoue08:jssst,
+  author    = {井上 克巳 and 坂間 千秋},
+  title     = {論理プログラミングから解集合プログラミングへ},
+  journal   = {コンピュータソフトウェア},
+  year      = {2008},
+  volume    = {25},
+  pages     = {20--32},
+  number    = {3},
+  timestamp = {2009.11.05},
+  yomi      = {Katsumi Inoue and Chiaki Sakama}
 }
-
-@inproceedings{gebser2016,
-  title={Theory solving made easy with clingo 5},
-  author={Gebser, Martin and Kaminski, Roland and Kaufmann, Benjamin and Ostrowski, Max and Schaub, Torsten and Wanko, Philipp},
-  booktitle={Technical Communications of the 32nd International Conference on Logic Programming (ICLP 2016)},
-  year={2016},
-  organization={Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik}
-}
-
-@article{bomanson2016,
-  title={Answer set programming modulo acyclicity},
-  author={Bomanson, Jori and Gebser, Martin and Janhunen, Tomi and Kaufmann, Benjamin and Schaub, Torsten},
-  journal={Fundamenta Informaticae},
-  volume={147},
-  number={1},
-  pages={63--91},
-  year={2016},
-  publisher={IOS Press}
-}
-@Comment @book{Baral03:cambridge,
-@Comment   author    = {Chitta Baral},
-@Comment   title     = {Knowledge Representation, Reasoning and Declarative Problem Solving},
-@Comment   publisher = {Cambridge University Press},
-@Comment   year      = {2003}
-@Comment }
-
-@Comment @inproceedings{Gelfond88:iclp,
-@Comment   author    = {Michael Gelfond and Vladimir Lifschitz},
-@Comment   title     = {The Stable Model Semantics for Logic Programming},
-@Comment   booktitle = {Proceedings of the Fifth International Conference and Symposium on Logic Programming},
-@Comment   year      = {1988},
-@Comment   pages     = {1070--1080},
-@Comment   publisher = {MIT Press}
-@Comment }
-
-@Comment @article{Niemela99:amai,
-@Comment   author    = {Ilkka Niemel{\"a}},
-@Comment   title     = {Logic Programs with Stable Model Semantics as a Constraint Programming Paradigm},
-@Comment   journal   = {Ann.\ Mathematics and Artificial Intelligence},
-@Comment   volume    = {25},
-@Comment   number    = {3--4},
-@Comment   year      = {1999},
-@Comment   pages     = {241--273}
-@Comment }
-
-@Comment @article{Inoue08:jssst,
-@Comment   author    = {井上 克巳 and 坂間 千秋},
-@Comment   title     = {論理プログラミングから解集合プログラミングへ},
-@Comment   journal   = {コンピュータソフトウェア},
-@Comment   year      = {2008},
-@Comment   volume    = {25},
-@Comment   pages     = {20--32},
-@Comment   number    = {3},
-@Comment   timestamp = {2009.11.05},
-@Comment   yomi      = {Katsumi Inoue and Chiaki Sakama}
-@Comment }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SAT
@@ -145,6 +102,3 @@
   Series                   = {The Art of Computer Programming},
   Volume                   = {4, Fascicle 6}
 }
-
-
-
