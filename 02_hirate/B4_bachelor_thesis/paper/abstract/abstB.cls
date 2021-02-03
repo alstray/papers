@@ -891,11 +891,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    {\XYBC{\Xa}{\Ya}{\Xf}{\Yb}
      {\bunshostyle\Large\underline{%
-        \@年度~~{\@コース名}コース卒業研究報告要旨}}}
+        \@年度~~{\@コース名}卒業論文要旨}}}
    {\XYBC{\Xa}{\Yc}{\Xb}{\Yd}{\bunshostyle\large\@研究室名~研究室}}
    {\XYBC{\Xb}{\Yc}{\Xd}{\Yd}{\bunshostyle\large\kinto{4zw}{氏名}}}
    {\XYBC{\Xd}{\Yc}{\Xf}{\Yd}{\bunshostyle\large\@氏名}}
-   {\XYBC{\Xa}{\Yd}{\Xb}{\Ye}{\bunshostyle\large\kinto{7zw}{卒業研究題目}}}
+   {\XYBC{\Xa}{\Yd}{\Xb}{\Ye}{\bunshostyle\large\kinto{7zw}{卒業論文題目}}}
    {\XYBC{\Xc}{\Yd}{\Xe}{\Ye}{\large \@卒研題目}}
    {\XM=3mm \YM=3mm \baselineskip 14pt
      {\XYBP{\Xa}{\Ye}{\Xf}{\Yf}{\bunshostyle\parindent=1zw\@卒研要旨}}}
@@ -934,10 +934,10 @@
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\年度#1{\def\@年度{#1}}
-\年度{令和元年度}
+\年度{令和２年度}
 
 \def\コース名#1{\def\@コース名{#1}}
-\コース名{情報工学}
+\コース名{コンピュータ科学科}
 
 \long\def\卒研題目#1{\def\@卒研題目{#1}}
 \卒研題目{卒研の題目です}
