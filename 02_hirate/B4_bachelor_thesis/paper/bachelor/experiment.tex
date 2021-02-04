@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+y%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \chapter{実行実験}\label{chap:experiment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 本章では，前章にて説明した３つの符号化
@@ -28,31 +28,39 @@
 \item knightは騎士巡回問題(Knight's Tour)のインスタンスであり，
 論文\cite{soh14}と同様に8x8,12x12,20x20,30x30,...100x100のマス目のものを用いた．
 \item tsplibは，TSPLIBが提供するハミルトン閉路問題のインスタンス群\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}をASPファクト形式に変換したものであり，
-\item gridは，自作した6x6...10x10，11x11...17x17グリッドグラフのインスタンスである．
+\item gridは，自作した頂点数が6x6...10x10，12x12...17x17のグリッドグラフのインスタンスである．
 \item randomは，先述のwebページ\footnotemark[1]にて提供されたランダムに生成されたグラフを表すインスタンスである．
 \end{itemize}
 
 解くのに使用したASPシステムは{\clingo}のver5.4.0であり，
 オプションは\textit{trendy}，一問あたりの時間制限を30分とした．
-実験環境は，Mac mini，Intel Corei7 3.2GHz,64GBメモリである．
+実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
 
 まとめると，この実験では提案した３つのASP符号化\code{undirected}，\code{directed}，\code{acyclicity}を用いて
 上記のベンチマーク問題をそれぞれ符号化し，一問あたりの制限時間を30分として，
 {\clingo}で実行し，実行CPU時間などの結果を集計した．
 
 \begin{itemize}
-\item ３符号化の性能比較のため，集計した結果をカクタスプロットにしたものが図\ref{cactus}である．
+\item ３符号化の性能比較のため，集計した結果をカクタスプロットにしたものが図~\ref{cactus}である．
 \item カクタスプロットは，縦軸が各問題を解くのかかったCPU時間，横軸は解けた問題数を表す．
 \item カクタスプロット上では，グラフが右によるほど制限時間内に多くの問題を解けたことを示し，
   下によるほどより早く問題を解けたことを示すが，
   横軸で同じ値を示しても同じ問題を解いていることを示しているわけではないため注意が必要である．
-\item 図\ref{cactus}からわかるように，\code{acyclicity}がもっとも優秀な性能を示した．
+\item 図~\ref{cactus}からわかるように，\code{acyclicity}がもっとも優秀な性能を示した．
+\item ただし，\code{undirected}と\code{acyclicity}の間に大きな差が見られなかったため，
+  表~\ref{sat_table}によって詳細を比較した．
 \end{itemize}
 
 \begin{itemize}
-\item さらに，ベンチマーク問題の種類ごとに解がSAT，UNSAT，UNKNとなった問題の数を表にしたものが
-  表\ref{sat_table}である．
-\item 
+\item　表\ref{sat_table}は，ベンチマーク問題の種類ごとに解がSAT，UNSAT，UNKNとなった問題の数を表にしたものである．
+\item \code{undirected}と\code{acyclicity}が制限時間内に解けなかった問題数はともに４問であったが，その内訳は\code{undirected}がcolor04の１問とgridの３問，\code{acyclicity}がcolor04の２問とgridの２問となった．
+\item color04にて，\code{undirected}に解けて\code{acyclicity}に解けなかった問題では，変数の個数や一貫性制約の数において，その結果に反して\code{acyclicity}が少ない値を示したに．
+\item しかし，{\clingo}が解く過程で\code{acyclicity}では，制限時間内のみで，\code{undirected}の約４０倍もの選択が行われ，発生したコンフリクト数は約６０倍であった．
+\item 一方で，gridにて\code{acyclicity}に解けて\code{undirected}に解けなかった問題では，一貫性制約の数に大きな差はなかったが，変数の数において後者は前者の２倍であった．
+\item さらに，{\clingo}が解く過程で発生した選択数は後者は前者の９０倍以上であった．
+\item 結果に差が生じた２問について，color04のものは解がSATであったが，gridの問題の解はUNSATであったため，図~\ref{cactus}を解がSATであったものと，UNSATのものに分けたものとに分けて集計したところ，それぞれ，図~\ref{cactussat}と図~\ref{cactusunsat}となった．
+\item 図~\ref{cactussat}は図~\ref{cactus}と比べても，傾向に大差はなかったが，図~\ref{cactusunsat}では，\code{undirected}が優秀な成績を示している．
+\item つまり，解がSATであるような問題では\code{acyclicity}が優秀であり，解がUNSATであるような問題では\code{undirected}が優秀であった．
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,22 +74,68 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{fig/cyclesat_table.tex}%label{sat_table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\begin{figure}[htbp]
+\begin{center}
+  \includegraphics[width=10cm]{fig/cactussat.png}
+\caption{SATのみのカクタスプロット}
+\label{cactussat}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[htbp]
+\begin{center}
+  \includegraphics[width=10cm]{fig/cactusunsat.png}
+\caption{UNSATのみのカクタスプロット}
+\label{cactusunsat}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{最短ハミルトン路・閉路問題}
 続いて，最短ハミルトン路・閉路問題について，３つの符号化の性能を比較した．
 
 \begin{itemize}
-\item ベンチマーク問題としては，１２個のグリッドグラフとアメリカ合衆国本土４８州の隣接グラフを用いた．
+\item ベンチマーク問題としては，１２個のグリッドグラフと図~\ref{fig:USmap}の米国本土48州の隣接グラフを用いた．
+\item １２個のグリッドグラフは，前章で用いたgridの１１問に，頂点11x11のグリッドグラフを追加したものである．
+\item グリッドグラフの各辺のコストは1000〜2000の範囲の一様ランダム整数値である．
 \end{itemize}
+
+解くのに使用したASPシステムは{\clingo}のver5.4.0であり，
+オプションは\textit{trendy}，一問あたりの時間制限を3時間とした．
+実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
+
+つまり，この実験では提案した３つのASP符号化\code{undirected}，\code{directed}，\code{acyclicity}を用いて
+上記のベンチマーク問題をそれぞれ符号化し，一問あたりの制限時間を3時間として，
+{\clingo}で実行した．結果として得られた時間内に求められたハミルトン路・閉路の最短距離を表~\ref{min_table_tr}にまとめた．
+
+\begin{itemize}
+\item 表~\ref{min_table_tr}では，問題ごとに各符号化が時間内に求められた最短距離を記した．
+\item 赤文字が，３符号化を比較した際の最良値であり，*マークがその問題の最短距離が求められたことを表している．
+\item したがって，grid5〜7とUS48では全ての符号化にて最短距離が時間内に求められた．
+\item 表~\ref{min_table_tr}より，赤文字がもっとも多かった\code{undirected}が優秀な性能を示した．
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{fig/min_table_tr.tex}%\label{min_table_tr}
-\input{fig/min_table_cr.tex}%\label{min_table_cr}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{コスト制約付きハミルトン路問題}
+最後に，コスト制約付きハミルトン路問題について，３符号化を比較した．
 
+この実験では，ベンチマーク問題として図~\ref{fig:USmap}の米国本土48州の隣接グラフについて，
+閾値を表\ref{cost_table}にあるように11698〜18716までの１０の値を与えた．
+解くのに使用したASPシステムは{\clingo}のver5.4.0であり，
+オプションは\textit{crafty}，一問あたりの時間制限を3時間とした．
+実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
+
+したがって，この実験では提案した３つのASP符号化\code{undirected}，\code{directed}，\code{acyclicity}を用いて
+上記のベンチマーク問題１０問をそれぞれ符号化し，一問あたりの制限時間を3時間として，
+{\clingo}で実行した．結果として，問題ごとにかかったCPU時間を表~\ref{cost_table}にまとめた．
+
+表~\ref{cost_table}では，各閾値におけるコスト制約を満たしたハミルトン路の数が Modelsの列に記されており，
+その右に各符号化が解くのにかかったCPU時間が記されている．
+赤文字が３符号化の中での最短時間を表しており，タイムアウトは発生しなかった．
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{fig/cost_table.tex}%\label{cost_table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
