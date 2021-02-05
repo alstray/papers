@@ -55,7 +55,6 @@
 それぞれ，color04，complete，knight，tsplib，grid，randomと呼ぶ．
 \item grid以外は，
 \textit{Incremental SAT-based Method with Native Boolean Cardinality Handling for the Hamiltonian Cycle Problem}\cite{soh14:jelia2014}の補足資料が載せられたwebページ\footnote{\url{https://tsoh.org/scarab/jelia2014/}}から手に入る．
-
 \item color04は1993年秋に開催された\textit{DIMACS Computational Challenge}をベースとする
 グラフ彩色問題の計算手法の研究を奨励する一連の活動
 \textit{COLOR02/03/04}\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
@@ -90,10 +89,10 @@
 \begin{itemize}
 \item　表\ref{sat_table}は，ベンチマーク問題の種類ごとに解がSAT，UNSAT，UNKNとなった問題の数を表にしたものである．
 \item \textsf{undirected}と\textsf{acyclicity}が制限時間内に解けなかった問題数はともに4問であったが，その内訳は\textsf{undirected}がcolor04の1問とgridの3問，\textsf{acyclicity}がcolor04の2問とgridの2問となった．
-\item color04にて，\textsf{undirected}に解けて\textsf{acyclicity}に解けなかった問題では，変数の個数や一貫性制約の数において，その結果に反して\textsf{acyclicity}が少ない値を示したに．
-\item しかし，{\clingo}が解く過程で\textsf{acyclicity}では，制限時間内のみで，\textsf{undirected}の約40倍もの選択が行われ，発生したコンフリクト数は約60倍であった．
-\item 一方で，gridにて\textsf{acyclicity}に解けて\textsf{undirected}に解けなかった問題では，一貫性制約の数に大きな差はなかったが，変数の数において後者は前者の2倍であった．
-\item さらに，{\clingo}が解く過程で発生した選択数は後者は前者の90倍以上であった．
+%\item color04にて，\textsf{undirected}に解けて\textsf{acyclicity}に解けなかった問題では，変数の個数や一貫性制約の数において，その結果に反して\textsf{acyclicity}が少ない値を示したに．
+%\item しかし，{\clingo}が解く過程で\textsf{acyclicity}では，制限時間内のみで，\textsf{undirected}の約40倍もの選択が行われ，発生したコンフリクト数は約60倍であった．
+%\item 一方で，gridにて\textsf{acyclicity}に解けて\textsf{undirected}に解けなかった問題では，一貫性制約の数に大きな差はなかったが，変数の数において後者は前者の2倍であった．
+%\item さらに，{\clingo}が解く過程で発生した選択数は後者は前者の90倍以上であった．
 \item 結果に差が生じた2問について，color04のものは解がSATであったが，gridの問題の解はUNSATであったため，図~\ref{cactus}を解がSATであったものと，UNSATのものに分けたものとに分けて集計したところ，それぞれ，図~\ref{cactussat}と図~\ref{cactusunsat}となった．
 \item 図~\ref{cactussat}は図~\ref{cactus}と比べても，傾向に大差はなかったが，図~\ref{cactusunsat}では，\textsf{undirected}が優秀な成績を示している．
 \item つまり，解がSATであるような問題では\textsf{acyclicity}が優秀であり，解がUNSATであるような問題では\textsf{undirected}が優秀であった．
@@ -159,7 +158,7 @@
 
 \begin{itemize}
 \item 表~\ref{cost_table}では，各閾値におけるコスト制約を満たした
-  ハミルトン路の数がModelsの列に記されており，
+  ハミルトン路の数がModelsの列に記されており，p
   その右に各符号化が解くのにかかったCPU時間が記されている．
 \item 赤文字が3符号化の中での最短時間を表しており，タイムアウトは発生しなかった．
 \item 10の閾値の内の7つにて\textsf{acyclicity}が最短時間で解いている．
