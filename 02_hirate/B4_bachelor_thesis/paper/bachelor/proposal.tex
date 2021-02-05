@@ -125,9 +125,9 @@ ASP の一貫性制約で表した基本的な符号化である．
 \item 1行目のルールは，各辺\code{edge(X,Y)}に対して，その辺がハミルト
   ン閉路に含まれるかどうかを意味するアトム\code{in(X,Y)}を選択子を用い
   て導入している．
-\item 次数制約は3行目のルールで表される．このルールは，
-  各頂点\code{node(X)}に対して，その次数の和が2に等しいことを個数制約
-  を使って表している．
+\item 次数制約は3行目のルールで表される．
+  このルールは，各頂点\code{node(X)}に対して，
+  その次数の和が2に等しいことを個数制約を使って表している．
 \item 連結制約は11行目のルールで表される．
 ある頂点\code{X}が始点\code{s}から到達可能であることを意味する補助アト
 ム\code{reached(X)}を導入する．
@@ -235,10 +235,6 @@ basicstyle=\ttfamily\footnotesize]{code/hamilton3.lp}
 \section{最短ハミルトン閉路問題のASP符号化}\label{minexpl}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% \lstinputlisting[caption =  最適化,label = minimize]{code/obj_minimize.lp}
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
 最小化},%
@@ -256,7 +252,7 @@ basicstyle=\ttfamily\footnotesize]{code/obj_minimize.lp}
 このコードは，各辺\code{edge(X,Y)}に対して，その辺がハミルトン閉路に
 含まれ(\code{in(X,Y)})，その距離が\code{C}である時に(\code{cost(X,Y,C)})，
 \code{C}の総和の最小化を，最小化関数を用いて表している．
-．
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
 重み付き無向グラフの有向グラフ化},%
@@ -294,14 +290,14 @@ basicstyle=\ttfamily\footnotesize]{code/cost_constraint.lp}
 コスト制約付きハミルトン閉路問題は
 ハミルトン閉路問題に，距離の総和が所与の閾値以下 (または以上) であること
 を制約条件として付加した問題である．
-コード\ref{code:const_constraing.lp}のルールは，その制約を表す．
+コード\ref{code:cost_constraint.lp}のルールは，その制約を表す．
 ルール中の\code{c}は閾値を表し，これは実行時に与えられる.
 このルールは，各辺\code{edge(X,Y)}に対して，その辺がハミルトン閉路に
 含まれ(\code{in(X,Y)})，その距離が\code{C}である時に(\code{cost(X,Y,C)})，
 \code{C}の総和が\code{c}以下でなければならないことを，
 一貫性制約と重み付き個数制約を用いて表す．
 
-また，\ref{minexpl}と同様に，
+また，\ref{minexpl}節と同様に，
 符号化directed，acyclicityについては，
 アトム\code{cost}についても有向グラフ化に
 対応させるためにコード\ref{code:cost_both.lp}を追加した．
