@@ -171,7 +171,7 @@ $v\rightarrow u$を対応させることで有向グラフ化して解く符号�
   4行目では，各頂点\code{node(X)}に対して，
   その出次数が1に等しいことを個数制約を使って表している．
   5行目では，入次数について4行目と同様の制約を表す．
-\item 連結の制約は15行目のルールで表される．
+\item 連結制約は15行目のルールで表される．
   ある頂点\code{X}が始点\code{s}から到達可能であることを意味する
   補助アトム\code{reached(X)}を導入する．
   13行目のルールは，始点\code{s}が到達可能あることを表している．
@@ -180,6 +180,49 @@ $v\rightarrow u$を対応させることで有向グラフ化して解く符号�
   到達可能であれば(\code{reached(X)})，\code{Y}も到達可能であることを表している．
   15行目のルールは，各頂点\code{node(X)}が始点から到達可能でなければ
   ならないことを一貫性制約を使って表している．
+\item 18行目のルールは，解についての対称性を除去する．
+  与えられた無向グラフ上の各ハミルトン閉路に対して，
+  それを変換した有向グラフ上のハミルトン閉路は対称な２つが存在する．
+  これによる解の重複を防ぐために，18行目のルールは，各弧\code{s}--\code{X}，
+  \code{Y}--\code{s}がハミルトン閉路に含まれるならば(\code{in(s,X),in(Y,s)})，
+  \code{X < Y}でなければならないことを，一貫性制約を用いて表している
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{\textsf{acyclicity}符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=t,caption={%
+\textsf{acyclicity}符号化},%
+captionpos=b,frame=single,label=code:hamilton3.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]{code/hamilton3.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textsf{acyclicity}符号化は，\textsf{directed}符号化をベースに，
+連結の制約に代わる部分閉路禁止制約を組込み非閉路制約で表現した符号化である.
+コード~\ref{code:hamilton3.lp}に，\textsf{acyclicity}符号化を示す．
+前節と同様に，ハミルトン閉路問題(\code{s}=\code{t})の場合について説明する．
+
+\begin{itemize}
+\item 1行目では，無向グラフの有向グラフ化を行う．
+  与えられた無向グラフの各辺\code{edge(X,Y)}に対して，
+  2つの弧\code{edge(X,Y)},\code{edge(Y,X)}を導入した．
+\item 2行目のルールは，各弧\code{edge(X,Y)}に対して，その弧がハミルト
+  ン閉路に含まれるかどうかを意味するアトム\code{in(X,Y)}を選択子を用い
+  て導入している．
+\item 次数制約は4,5行目のルールで表される．
+  4行目では，各頂点\code{node(X)}に対して，
+  その出次数が1に等しいことを個数制約を使って表している．
+  5行目では，入次数について4行目と同様の制約を表す．
+\item 部分閉路禁止制約は14行目のルールで表される．
+  このルールは，始点でない各頂点\code{X}，\code{Y}について，
+  弧\code{X}--\code{Y}がハミルトン閉路に含まれるならば(\code{in(X,Y)})，
+  そのような弧の集合をもつグラフが閉路をもたないことを，\code{#edge}宣言を用いて表す．
+  ようするに，始点(終点)を含まないような閉路を禁止している．
 \item 17行目のルールは，解についての対称性を除去する．
   与えられた無向グラフ上の各ハミルトン閉路に対して，
   それを変換した有向グラフ上のハミルトン閉路は対称な２つが存在する．
@@ -188,78 +231,80 @@ $v\rightarrow u$を対応させることで有向グラフ化して解く符号�
   \code{X < Y}でなければならないことを，一貫性制約を用いて表している
 \end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{acyclicity 符号化}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[caption =  ASP符号化 acyclicity,label = acyclicity]{code/hamilton3.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-符号化acyclicityもdirected同様，無向グラフを有向グラフ化し，そのグラフ上でハミルトン路・閉路を探索する．
-1〜13，18〜19行目はdirectedと何も変わらない．異なるのは15，16行目の連結の制約のみである．
-
-15，16行目は連結の制約を表していない．
-そもそも，これまでの二つの符号化において，次数の制約だけではなく連結の制約が必要とされたのは，
-始点と終点を含まない閉路の存在を禁止するためである．
-符号化acyclicityでは，閉路の禁止として非循環性を保証するために，clingoの組み込みディレクティブ\code{#edge}\cite{gebser2016}
-を使用した．この場合，組み込みのアサイクリシティチェック\cite{bomanson2016}が使用される．\cite{dimopoulos2018}
-15行目では，ハミルトン路問題に対して「解となるハミルトン路上の辺で閉路が構成されることはない」という制約を，
-16行目では，ハミルトン閉路問題に対して「解となるハミルトン閉路上の辺で始点と終点を含まない閉路が構成されることはない」という制約をそれぞれ表している．
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{最短ハミルトン閉路問題のASP符号化}\label{minexpl}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[caption =  最適化,label = minimize]{code/obj_minimize.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ref{sec:background}章で説明したように，
-ハミルトン路・閉路を構成する各辺の重みの総和が
-最短ハミルトン路・閉路問題の目的関数である．
-よって，\ref{hamiltonianasp}にて説明した各符号化により
-求められたハミルトン路・閉路のうち，
-目的関数値が最小であるものが問題の解となる．
-その最小化の処理を行うのがコード\ref{minimize}である．
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \lstinputlisting[caption =  最適化,label = minimize]{code/obj_minimize.lp}
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[caption =  重み付き無向グラフの有向グラフ化,label = costboth]{code/cost_both.lp}
+\lstinputlisting[float=t,caption={%
+最小化},%
+captionpos=b,frame=single,label=code:obj_minimize.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]{code/obj_minimize.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-さらに，無向グラフの有向グラフ化を行った
+
+最短ハミルトン閉路問題の目的関数は，
+ハミルトン閉路を構成する各辺の距離の総和である．
+コード\ref{code:obj_minimize.lp}は，
+その目的関数の最小化を表す．
+このコードは，各辺\code{edge(X,Y)}に対して，その辺がハミルトン閉路に
+含まれ(\code{in(X,Y)})，その距離が\code{C}である時に(\code{cost(X,Y,C)})，
+\code{C}の総和の最小化を，最小化関数を用いて表している．
+．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=t,caption={%
+重み付き無向グラフの有向グラフ化},%
+captionpos=b,frame=single,label=code:cost_both.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]{code/cost_both.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 符号化directed，acyclicityについては，
-アトム\code{cost}についても有向グラフ化に
-対応させるためにコード\ref{costboth}を追加した．
-
-このように，\ref{hamiltonianasp}にて説明した3符号化について，
-符号化undirectedにコード\ref{minimize}を，
-符号化directedにコード\ref{minimize}とコード\ref{costboth}を，
-符号化acyclicityにコード\ref{minimize}とコード\ref{costboth}をそれぞれ追加した．
-最短ハミルトン路・閉路問題を対象とする時，
-符号化undirected，符号化directed，符号化acyclicityは，
-これらコードを追加後のものを指すこととする．
-
-
+与えられた無向グラフの各辺\code{edge(X,Y)}に対して，
+2つの弧\code{edge(X,Y)},\code{edge(Y,X)}を導入した．
+各辺の距離もこれに対応させるために，コード\ref{code:cost_both.lp}
+を追加した．
+このルールは，各辺\code{X}--\code{Y}の距離を表す\code{cost(X,Y,C)}について，
+\code{cost(Y,X,C)}を導入する．
+これにより，与えられた無向グラフの各辺\code{edge(X,Y)}の重み\code{C}が
+2つの弧\code{edge(X,Y)},\code{edge(Y,X)}にも付与された．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{コスト制約付きハミルトン閉路のASP符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[caption = コスト制約, label = costconst]{code/cost_constraint.lp}
+\lstinputlisting[float=t,caption={%
+コスト制約},%
+captionpos=b,frame=single,label=code:cost_constraint.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]{code/cost_constraint.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ref{hamiltonianasp}にて説明した各符号化に，
-コード\ref{costconst}を追加した．
-コード\ref{costconst}は，\ref{sec:background}章で説明したように，
-ハミルトン路を構成する辺の重みの総和を\code{c}以下とする制約を表す．
-以後，この\code{c}の値を制約コスト値と呼ぶ．
+
+コスト制約付きハミルトン閉路問題は
+ハミルトン閉路問題に，距離の総和が所与の閾値以下 (または以上) であること
+を制約条件として付加した問題である．
+コード\ref{code:const_constraing.lp}のルールは，その制約を表す．
+ルール中の\code{c}は閾値を表し，これは実行時に与えられる.
+このルールは，各辺\code{edge(X,Y)}に対して，その辺がハミルトン閉路に
+含まれ(\code{in(X,Y)})，その距離が\code{C}である時に(\code{cost(X,Y,C)})，
+\code{C}の総和が\code{c}以下でなければならないことを，
+一貫性制約と重み付き個数制約を用いて表す．
 
 また，\ref{minexpl}と同様に，
 符号化directed，acyclicityについては，
 アトム\code{cost}についても有向グラフ化に
-対応させるためにコード\ref{costboth}を追加した．
-
-なお，コスト制約付きハミルトン路・閉路問題を対象とする時，
-符号化undirected，符号化directed，符号化acyclicityは，
-これらコードを追加後のものを指すこととする．
+対応させるためにコード\ref{code:cost_both.lp}を追加した．
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Local Variables:
