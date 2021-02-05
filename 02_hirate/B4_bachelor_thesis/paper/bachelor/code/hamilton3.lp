@@ -3,10 +3,8 @@ edge(Y,X)   :- edge(X,Y).
 
 :- not 1 { in(X,_) } 1, node(X), s == t.
 :- not 1 { in(_,X) } 1, node(X), s == t.
-:- not 1 { in(X,_) } 1, node(X), s != t,
-       	   	     		 X != s, X != t.
-:- not 1 { in(_,X) } 1, node(X), s != t,
-       	   	     		 X != s, X != t.
+:- not 1 { in(X,_) } 1, node(X), s != t, X != s, X != t.
+:- not 1 { in(_,X) } 1, node(X), s != t, X != s, X != t.
 :- not 1 { in(s,_) } 1, s != t.
 :- not   { in(_,s) } 0, s != t.
 :- not 1 { in(_,t) } 1, s != t.

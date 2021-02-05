@@ -1,17 +1,20 @@
-\begin{table}[htb]
-  \caption{実験結果1}
+\begin{table}[t]\scriptsize
+  \caption{ハミルトン閉路問題: 解けた問題数}
   \label{sat_table}
   \centering  
-  \begin{tabular}{|l||r||r|r|r||r|r|r||r|r|r|} \hline
-    Group & &\multicolumn{3}{c ||}{undirected} & \multicolumn{3}{c ||}{directed} & \multicolumn{3}{c |}{acyclicity}\\
-     & total & sat & unsat & unkn & sat & unsat & unkn & sat & unsat & unkn \\
+  %\tabcolsep = 0.8mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{lr||rrr||r|r|r||r|r|r}
+    問題種類 & 問題数 &\multicolumn{3}{c ||}{undirected} & \multicolumn{3}{c ||}{\textsf{directed}} & \multicolumn{3}{c}{acyclicity}\\
+     &  & \textsf{SAT} & \textsf{UNSAT} & \textsf{UNKN} & sat & unsat & unkn & sat & unsat & unkn \\
     \hline
-    color04 & 127 & 95 & 31 & 1 & 93 & 31 & 3 & 94 & 31 & 2\\
+    \textsf{color04} & 127 & 95 & 31 & 1 & 93 & 31 & 3 & 94 & 31 & 2\\
     complete & 15 & 15 & 0 & 0 & 15 & 0 & 0 & 15 & 0 & 0\\
     knight & 11 & 11 & 0 & 0 & 11 & 0 & 0 & 11 & 0 & 0\\
     tsplib & 9 & 9 & 0 & 0 & 9 & 0 & 0 & 9 & 0 & 0\\
-    grid & 11 & 6 & 2 & 3 & 6 & 3 & 2 & 6 & 3 & 2\\
+    grid & 12 & 6 & 3 & 3 & 6 & 4 & 2 & 6 & 4 & 2\\
     random & 320 & 169 & 151 & 0 & 168 & 151 & 1 & 169 & 151 & 0\\
     \hline
+    合計 &  &  &  &  &  & &  &  &  & 
   \end{tabular}
 \end{table}
