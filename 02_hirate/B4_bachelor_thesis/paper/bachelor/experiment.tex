@@ -6,7 +6,7 @@
 \textsf{undirected}，\textsf{directed}，\textsf{acyclicity}
 の性能を評価するために実行実験を行った．
 %
-実験に使用したベンチマーク問題集(計494問)は，以下の通りである．
+実験に使用したベンチマーク問題集(計495問)は，以下の通りである．
 \begin{itemize}
 \item \textsf{color04} (計127問)\\
   グラフ彩色問題の国際競技会
@@ -26,11 +26,13 @@
 \item \textsf{random} (320問)\\
   SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
   ランダムグラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{usmap} (1問)\\
+  D.~E~.Knuth の教科書
+  The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
+  に記載されている最短ハミルトン路問題の例.
 \end{itemize}
 
 使用した ASP システムは{\clingo}のバージョン5.4.0である．
-オプションには，\textit{trendy}と\textit{crafty}を使用した．
-一問あたりの時間制限は30分とした．
 実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,19 +74,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %--
+オプションは\textit{trendy}，一問あたりの時間制限を30分とした．
+用いたベンチマーク問題は，\textsf{color04}，\textsf{complete}，\textsf{knight}，\textsf{tsplib}，\textsf{grid}，\textsf{random}である．
+
+%--
 表~\ref{sat_table}に，各符号化で解けた問題数を示す．
 ベンチマーク問題の種類ごとに，
 \textsf{SAT}，
 \textsf{UNSAT}，
-\textsf{SAT+UNSAT}，...
-
-
-\textsf{SAT+UNSAT}の問題数については，xxxxx だった．
-
-\textsf{SAT}の問題数については，xxxxx だった．
-
-\textsf{UNSAT}の問題数については，xxxxx だった．
-
+\textsf{SAT+UNSAT}と解いた問題数を集計した．
+\textsf{SAT+UNSAT}の問題数については,\textsf{undirected}符号化と\textsf{acyclicity}符号化が最大だった．
+\textsf{SAT}の問題数については，\textsf{undirected}符号化が最大だった．
+\textsf{UNSAT}の問題数については，\textsf{directed}符号化と\textsf{acyclicity}符号化が最大だった．
 
 %--
 図~\ref{cactus}に，\textsf{SAT+UNSAT}のカクタスプロットを示す．
@@ -95,22 +96,55 @@
 \textsf{undirected}符号化と比較して，より高速に問題を説いていることが
 確認できた．
 
+%--
 次に，図~\ref{cactussat}と図~\ref{cactusunsat}に，
 \textsf{SAT}と\textsf{UNSAT}のカクタスプロットを示す．
 図~\ref{cactussat}より，\textsf{SAT}のみの場合は，
 \textsf{SAT+UNSAT}と比べて，符号化の優劣に差は見られなかった．
 一方で，
-図~\ref{cactusunsat}から，xxxxxxxx,yyyy
-
+図~\ref{cactusunsat}から，\textsf{UNSAT}のみの場合は，
+\textsf{acyclicity}符号化と\textsf{undirected}符号化の優劣が逆転した．
 
 %--
-% \item 結果に差が生じた2問について，color04の問題は解がSATであったが，
-%   gridの問題の解はUNSATであった．
-%\item color04にて，\textsf{undirected}に解けて\textsf{acyclicity}に解けなかった問題では，変数の個数や一貫性制約の数において，その結果に反して\textsf{acyclicity}が少ない値を示したに．
-%\item しかし，{\clingo}が解く過程で\textsf{acyclicity}では，制限時間内のみで，\textsf{undirected}の約40倍もの選択が行われ，発生したコンフリクト数は約60倍であった．
-%\item 一方で，gridにて\textsf{acyclicity}に解けて\textsf{undirected}に解けなかった問題では，一貫性制約の数に大きな差はなかったが，変数の数において後者は前者の2倍であった．
-%\item さらに，{\clingo}が解く過程で発生した選択数は後者は前者の90倍以上であった．
+これらの結果から，
+\textsf{SAT}な問題に対しては，解けた問題数と解くのに要したCPU時間
+のどちらにおいても\textsf{acyclicity}符号化が優秀であったことがわかる．
+一方で，\textsf{UNSAT}な問題に対しては，
+解けた問題数では\textsf{directed}符号化と\textsf{acyclicity}が
+解くのに要したCPU時間では\textsf{undirected}符号化が優秀であったことがわかる．
 
+%--
+表~\ref{sat_table}より，
+\textsf{SAT+UNSAT}の問題数については,
+\textsf{undirected}符号化と\textsf{acyclicity}符号化は同数だった．
+しかし，その内訳には差があった．
+結果に差があった問題は，\textsf{3-FullIns\_5}と\textsf{grid12}で，
+それぞれ\textsf{color04}の\textsf{SAT}と，
+\textsf{grid}の\textsf{UNSAT}に属する．
+\textsf{3-FullIns\_5}は\textsf{undirected}に解けて
+\textsf{acyclicity}に解けなかった．
+一方で，\textsf{grid12}は，\textsf{acyclicity}に解けて
+\textsf{undirected}に解けなかった．
+
+\textsf{3-FullIns\_5}は\textsf{SAT}であったことから，
+\textsf{undirected}符号化は\textsf{3-FullIns\_5}でハミルトン閉路を
+偶然速く見つけられたと考える．
+%% \textsf{color04}の他の問題を見ても，
+%% \textsf{undirected}符号化が優秀であることを示してはいない．
+%% 変数の数や制約の数も少なくない．
+\textsf{grid12}については，変数の数や制約の数において，
+\textsf{acyclicity}符号化が少ない値を示していたため，
+要するCPUtimeを短縮できたと考える．
+
+%% \textsf{grid12}は，\textsf{UNSAT}の問題に限定すれば
+%% 要したCPU時間において優秀だった\textsf{undirected}符号化にのみ
+%% 解けていなかった．
+%% この問題の他にも,\textsf{grid}かつ\textsf{UNSAT}な問題を
+%% 確認した．
+%% \textsf{undirected}符号化がどの問題でも，
+%% もっとも多く時間を要していた．
+%% \textsf{undirected}符号化は\textsf{UNSAT}な\textsf{grid}問題が
+%% 苦手であると考える．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{最短ハミルトン閉路問題}
@@ -120,28 +154,17 @@
 \input{fig/min_table_tr.tex}%\label{min_table_tr}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-この節では，提案した3つのASP符号化
-\textsf{undirected}，\textsf{directed}，\textsf{acyclicity}の
-最短ハミルトン閉路問題に対しての性能を比較評価する．
-
-\begin{itemize}
-\item ベンチマーク問題としては，12個の正方グリッドグラフと図~\ref{fig:USmap}の米国本土48州の隣接グラフを用いた．
-\item 12個の正方グリッドグラフは，前節で用いたgridと同じものである．
-\item グリッドグラフの各辺のコストは1000〜2000の範囲の一様ランダム整数値である．
-\end{itemize}
-
-解くのに使用したASPシステムは{\clingo}のver5.4.0であり，
+%--
 オプションは\textit{trendy}，一問あたりの時間制限を3時間とした．
-実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
+ベンチマーク問題として，\textsf{grid}と\textsf{usmap}を用いた．
 
-実験結果を表~\ref{min_table_tr}にまとめた．
-
-\begin{itemize}
-\item 表~\ref{min_table_tr}は，制限時間内に求められたハミルトン閉路の最短距離をまとめたものである．
-\item 赤文字が，3符号化を比較した際の最良値であり，*マークがその問題の最短距離が求められたことを表している．
-\item したがって，grid5〜7とUS48では全ての符号化にて最短距離が時間内に求められた．
-\item 表~\ref{min_table_tr}より，赤文字がもっとも多かった\textsf{undirected}が優秀な性能を示した．
-\end{itemize}
+%--
+表\ref{min_table_tr}に，各符号化で
+時間内に求められた最短距離を示す．
+赤文字が，3符号化を比較した際の最良値である．
+*マークは，時間内に最適解が求められたことを表している．
+Bestは，符号化ごとに赤文字の個数を集計した値である．
+Bestより，\textsf{undirected}が優秀な性能を示した．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{コスト制約付きハミルトン路問題}
@@ -151,31 +174,22 @@
 \input{fig/cost_table.tex}%\label{cost_table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-この節では，提案した3つのASP符号化
-\textsf{undirected}，\textsf{directed}，\textsf{acyclicity}の
-コスト制約付きハミルトン閉路問題に対しての性能を比較評価する．
-
-\begin{itemize}
-\item ベンチマーク問題として図~\ref{fig:USmap}の米国本土48州の隣接グラフを用いた．
-\item 閾値は表\ref{cost_table}にあるように11698〜18716までの10の値を与えた．
-\item 始点はWA，終点はMEとした．
-\end{itemize}
-
-解くのに使用したASPシステムは{\clingo}のver5.4.0であり，
+%--
 オプションは\textit{crafty}，一問あたりの時間制限を3時間とした．
-実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
+ベンチマーク問題として\textsf{usmap}を用いた．
+閾値は表\ref{cost_table}にあるように11698〜18716までの10の値を与えた．
 
-実験結果として，表~\ref{cost_table}に問題ごとにかかったCPU時間と解の個数をまとめた．
+%--
+表~\ref{cost_table}に閾値ごとの解の個数と
+各符号化が要したCPU時間をまとめた．
+赤文字が3符号化の中での最短時間を表している．
+Averageは，各符号化のCPU時間の平均値を示す．
+Bestは，各符号化ごとの赤文字の個数を示す．
 
-\begin{itemize}
-\item 表~\ref{cost_table}では，各閾値におけるコスト制約を満たした
-  ハミルトン路の数がModelsの列に記されており，
-  その右に各符号化が解くのにかかったCPU時間が記されている．
-\item 赤文字が3符号化の中での最短時間を表しており，タイムアウトは発生しなかった．
-\item 10の閾値の内の7つにて\textsf{acyclicity}が最短時間で解いている．
-\item 各閾値でかかったCPU時間の平均でも，\textsf{acyclicity}が最小である．
-\item \textsf{acyclicity}がもっとも優秀であった．
-\end{itemize}
+%--
+Bestより，10の閾値の内の7つにて\textsf{acyclicity}が最短時間で解いている．
+Averageでも，\textsf{acyclicity}が最小である．
+以上より，\textsf{acyclicity}がもっとも優秀であった．
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Local Variables:
