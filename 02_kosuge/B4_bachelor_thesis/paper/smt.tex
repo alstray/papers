@@ -6,8 +6,10 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SMTとSMTソルバー}
-背景理論付きSAT(Satisfiability Modulo Theories; SMT)は，命題論理よりも高い表現力を持つ論理体系で記述された背景理論をSAT技術で効果的に扱うことを目的とした技術である．
-SATが命題論理を扱うのに対して，SMTでは述語論理を扱う\cite{JSAI:IwanumaN10}．
+背景理論付きSAT(Satisfiability Modulo Theories; SMT)\cite{JSAI:IwanumaN10, Umemura10:jssst, weko_169448_1}
+は，命題論理よりも高い表現力を持つ論理体系で記述された背景理論をSAT技術で効果的に扱うことを目的とした技術である．
+SATでは背景理論も命題論理で扱われるのに対して，SMTでは背景理論をより表現力の高い述語論理で扱うことができる．
+そのためSMTでは問題をより簡潔に記述することが可能である．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -19,7 +21,7 @@ SMTソルバーは，プログラム検証,スケジューリング,プランニ
 
 
 % \subsection{smt-lib2とは}
-今回SMTソルバーを扱う際に使用する記述方法はsmt-lib2\footnote{\url{http://smtlib.cs.uiowa.edu/}}である．
+今回SMTソルバーを扱う際に使用する記述方法はsmt-lib2~\footnote{\url{http://smtlib.cs.uiowa.edu/}}である．
 SMT-LIBはSMTの研究開発の促進を目的とした国際的な取り組みであり，
 その目的としては，
 SMTシステムで使用される背景理論の標準的で厳密な記述の提供や
@@ -30,16 +32,23 @@ SMTソルバーのための共通の入出力言語を開発し促進するこ�
 
 % \subsection{背景理論}
 SMTで扱われる背景理論には等号や算術，配列やリスト，ビットベクターなどが挙げられる．
+smt-lib2において背景理論は以下のように記述して指定される．
+{\footnotesize \begin{verbatim}
+(set-logic QF_LIA)
+\end{verbatim}}
+これは，\verb|QF_LIA|の部分で使用する理論を示している．
+\verb|QF_LIA|は量化子を含まない線形整数算術を示している．
+その他にも前述した背景理論に対応するものが存在する．
 
 % \subsection{既存のSMTソルバー}
 既存のSMTソルバーとしては，
-OpenSMT\footnote{\url{http://verify.inf.usi.ch/opensmt}},
-YICES\footnote{\url{https://yices.csl.sri.com/}},
-UCLID\footnote{\url{https://github.com/uclid-org/uclid}},
-CVC3\footnote{\url{https://cs.nyu.edu/acsys/cvc3/}},
-Z3\footnote{\url{https://github.com/Z3Prover/z3}}
+OpenSMT~\footnote{\url{http://verify.inf.usi.ch/opensmt}},
+YICES~\footnote{\url{https://yices.csl.sri.com/}},
+UCLID~\footnote{\url{https://github.com/uclid-org/uclid}},
+CVC3~\footnote{\url{https://cs.nyu.edu/acsys/cvc3/}},
+Z3~\footnote{\url{https://github.com/Z3Prover/z3}}
 などが挙げられる．
-今回使用したソルバーは$z3ソルバー$である．Microsoft社によって開発されたもので，プログラム解析やテスト,検証などを目的としている\cite{Umemura10:jssst}．
+なかでも今回使用したZ3はMicrosoft社によって開発されたもので，プログラム解析やテスト,検証などを目的としている．
 
 
 \section{プログラム例}
