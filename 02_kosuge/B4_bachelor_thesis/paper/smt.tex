@@ -32,11 +32,11 @@ SMTソルバーのための共通の入出力言語を開発し促進するこ�
 
 % \subsection{背景理論}
 SMTで扱われる背景理論には等号や算術，配列やリスト，ビットベクターなどが挙げられる．
-smt-lib2において背景理論は以下のように記述して指定される．
+smt-lib2において使用する背景理論は以下のように記述される．
 {\footnotesize \begin{verbatim}
 (set-logic QF_LIA)
 \end{verbatim}}
-これは，\verb|QF_LIA|の部分で使用する理論を示している．
+これは，\verb|QF_LIA|の部分で使用する背景理論を指定している．
 \verb|QF_LIA|は量化子を含まない線形整数算術を示している．
 その他にも前述した背景理論に対応するものが存在する．
 
@@ -77,9 +77,9 @@ smt-lib2形式でのプログラムの例をグラフ彩色問題を用いて説
 
 2から7行目は整数変数の宣言をしている．ここではx\_iのiがノード番号を表している．
 8から13行目はx\_iは3色に塗り分けられるため，1以上3以下であるという制約を追加している．
-14から23行目は辺で結ばれたノードの色が同じにならないことを等号を使って表している．
+14から23行目は辺で結ばれたノードの色が同じにならないことを等号を使って記述している．
 24行目はそのプログラムに解が存在するかどうかをチェックし出力することを表し，
-25行目は求められた解を出力する．
+25行目は求められた解を出力することを表している．
 26行目はプログラムの終わりを表す．
 
 コード\ref{code:color.smt2}の$z3ソルバー$での実行例をコード\ref{code:color.log}に示す．
@@ -116,12 +116,13 @@ basicstyle=\ttfamily\scriptsize]{code/color.log}
 % distinct制約とは
 本研究で扱う$distinct$制約とは，$(distinct x_1 ... x_n)$で表され，その要素$x_i$が互いに異なることを表す制約である．
 $distinct$制約の実装方法として，
-今回使用したSMTソルバーの$z3ソルバー$では以下のように実装される．．
+今回使用したSMTソルバーの$z3ソルバー$では以下のように実装される．
 \begin{eqnarray*}
     \bigwedge_{1 \leq i < j \leq n} x_i \neq x_j
 \end{eqnarray*}
 
 また，以下のようにPB符号化を用いて実装することができる．
+\begin{screen}
 $$distinct(x_1, x_2,\ldots, x_n) \; (x_i \in \{l,l+1,\ldots,u\}, n-1 \leq u-l)$$
 は
 0-1変数$p_{ij} \in {0,1} \; (p_{ij}=1 \Leftrightarrow x_i=j)$を導入して，
@@ -133,6 +134,7 @@ $$distinct(x_1, x_2,\ldots, x_n) \; (x_i \in \{l,l+1,\ldots,u\}, n-1 \leq u-l)$$
     \end{cases}\label{eq:smt_pb_2}
 \end{eqnarray}
 と表される．
+\end{screen}
 
 %%% Local Variables:
 %%% mode: japanese-latex
