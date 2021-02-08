@@ -55,8 +55,8 @@
 %\usetheme{Madrid}
 
 \title[ASPを用いた組合せ遷移問題の解法に関する考察]{解集合プログラミングを用いた\\組合せ遷移問題の解法に関する考察}
-\author{山田 悠也}
-\date{2020年度番原研中間発表会\\2020年12月11日}
+\author{山田~悠也}
+\date{2020年度卒業研究発表会\\2021年2月19日}
 \institute{番原研究室}
 
 %% テンプレ 
@@ -88,79 +88,49 @@
 \begin{frame}\frametitle{組合せ遷移問題(Combinatorial Reconfiguration)}
 
   \begin{itemize}
-    \item \alert{組合せ遷移問題}とは, 組合せ判定問題の解空間グラフ上における初期状態から目標状態への経路の存在についての判定問題である.
-    \item \alert{解空間グラフ}とは,
+    \item \alert{組合せ遷移問題}では，組合せ問題の解空間グラフ上における初期状態から目標状態への経路の存在を問う．
+    \item \alert{解空間グラフ}とは，
     \begin{itemize}
-      \item 頂点は, 組合せ判定問題の実行可能解となる.
-      \item 辺は, \structure{隣接関係}を満たす2つの頂点間に存在する.
+      \item 頂点は組合せ問題の実行可能解となる．
+      \item 辺は\structure{遷移制約}を満たす二つの頂点間に存在する．
     \end{itemize} 
-    \item 既存の組合せ判定問題の多くを, 組合せ遷移問題に拡張できる.
+    \item 既存の組合せ問題の多くを組合せ遷移問題に拡張できる．
     \begin{itemize}
-      \item \structure{グラフ点彩色問題}, 充足可能性判定問題, 独立点集合問題など
+      \item NP完全である組合せ問題を基とする問題の多くは，\alert{PSPACE完全}であることが知られている．
+      \item \structure{グラフ点彩色問題}・充足可能性判定問題(SAT)・集合被覆問題など．
     \end{itemize}
-    \item \structure{持続可能なシステム}へと応用することが可能.
+    %\item \structure{持続可能なシステム}への応用が期待されている．
+    %\item 実践的な研究は初期段階．
+    \item \alert{$k$彩色遷移問題}は組合せ遷移問題の一つ．
     \begin{itemize}
-      \item リスト点彩色問題は無線ネットワークの周波数割当てに応用可能.
-      \item これを遷移問題に拡張することで, 正常な動作を保ちながら別の割当てへと変化させることが可能となる.
+      \item 基となる問題はグラフ点彩色問題．
+      \item 色数$k \geq 4$のとき，PSPACE完全であることが知られている．~[Paul Bonsmaほか '09]
+      \item \alert{汎用的かつ効率的なアルゴリズムは見つかっていない}．
     \end{itemize}
-    \item \structure{\textbf{PSPACE完全}}である問題も多数存在.
   \end{itemize}
-
-  \begin{alertblock}{}
-    \centering
-    グラフ点彩色問題を遷移問題へと拡張したものは,\\色数によってPSPACE完全であることが知られている.
-  \end{alertblock}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% グラフ点彩色問題
+%% k彩色遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{グラフ点彩色問題}
-    
-  \begin{block}{グラフ点彩色問題の定義}
-    与えられたグラフ$G=(V, E)$と色数$k$に対して, 以下の制約を満たす解が存在するかを判定する問題.
+
+\begin{frame}\frametitle{k彩色遷移問題}
+
+  \begin{block}{$k$彩色遷移問題の定義}
     \begin{itemize}
-      \item 各頂点は1つの色で塗られる.
-      \item $(u, v) \in E$である$u, v \in V$について, $u$と$v$は異なる色で塗られる.
-    \end{itemize}
-  \end{block}
-  
-  \begin{exampleblock}{グラフ点彩色問題の例($k=4$)}
-    \begin{columns}
-      \begin{column}{1.0\textwidth}
-        \centering
-        \input{tikz/graph0.tex}
-      \end{column}
-    \end{columns}
-  \end{exampleblock}
-  
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 点彩色遷移問題
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\frametitle{点彩色遷移問題}
-  \begin{itemize}
-    \item \alert{点彩色遷移問題}とは, グラフ点彩色問題を遷移問題に拡張したもの.
-  \end{itemize}
-
-  \begin{block}{点彩色遷移問題の定義}
-    \begin{itemize}
-      \item 問題の入力は, グラフ\structure{$G=(V, E)$}, 色数\structure{$k$}, 及び$G$の$k$-彩色の2つの実行可能解\structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態).
-      \item 隣接関係は, ある1つの頂点のみ色が異なるような実行可能解.
-      \item \structure{$\alpha$から$\beta$への経路の存在についての判定問題.}
+      \item 問題の入力は，グラフ\structure{$G=(V, E)$}，色数\structure{$k$}，及び$G$の$k$彩色の二つの実行可能解\structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態)．
+      \item 隣接関係は，ある一つの頂点のみ色が異なるような実行可能解．
+      \item \structure{$\alpha$から$\beta$への経路の存在についての判定問題．}
     \end{itemize}
   \end{block}
 
-  \begin{exampleblock}{点彩色遷移問題の例}
+  \begin{exampleblock}{$k$彩色遷移問題の例}
     \begin{columns}
       \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph0.tex}
-        $\alpha$(ステップ0)
+        $\alpha$ステップ0(初期状態)
       \end{column}
       \begin{column}{0.05\textwidth}
         \textbf{$\longrightarrow$}
@@ -168,7 +138,7 @@
       \begin{column}[]{0.3\textwidth}
         \centering
         \input{tikz/graph1.tex}
-        (ステップ1)
+        ステップ1
       \end{column}
       \begin{column}{0.05\textwidth}
         \textbf{$\longrightarrow$}
@@ -176,37 +146,11 @@
       \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph2.tex}
-        $\beta$(ステップ2)
+        ステップ2(終了状態)
       \end{column}
     \end{columns}
   \end{exampleblock}
   
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 点彩色遷移問題
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\frametitle{点彩色遷移問題の性質}
-
-  \begin{itemize}
-    \item 色数$k$によって問題の性質が異なることが知られている.
-    \begin{itemize}
-      \item \structure{$k=2$}のとき, グラフGは2部グラフであり\structure{自明}.
-      \item \structure{$k=3$}のとき, \structure{クラスP}に属する.~[L. Cerecedaほか '08]
-      \item \structure{$k \ge 4$}のとき, 一般に\structure{\textbf{PSPACE完全}}となる.~[Paul Bonsmaほか '09]
-    \end{itemize}
-
-    \item グラフの形に制限を加えることにより, 多項式時間で解決可能となるものが存在することがわかっている.[Paul Bonsmaほか '09]
-    \begin{itemize}
-      \item 平面グラフであり, かつ$4 \le k \le 6$でないとき.
-      \item 2部平面グラフであり, かつ$k=4$でないとき.
-    \end{itemize}
-
-    \item 一方で, \alert{$k \ge 4$における汎用的かつ効率的なアルゴリズムは見つかっていない}.
-
-  \end{itemize}
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -236,15 +180,14 @@
 
 \begin{frame}\frametitle{研究目的}
   \begin{alertblock}{目的}
-    ASPを利用し, PSPACE完全な問題の1つである$k \ge 4$の点彩色遷移問題を高速で解ける符号化を提案する.
+    ASPを利用し, PSPACE完全な問題の1つである$k \ge 4$の$k$彩色遷移問題を高速で解ける符号化を提案する.
   \end{alertblock}
 
   \begin{block}{研究内容}
     \begin{enumerate}
-      \item 点彩色遷移問題を解く, 3種類の符号化の提案.
-      \item 点彩色遷移問題のベンチマークの生成に使用可能なグラフの調査.
-      \item (ベンチマークの生成.)
-      \item (作成したベンチマークを用いた, 各種符号化の評価実験.)
+      \item $k$彩色遷移問題を解く，3種類の符号化の提案．
+      \item ベンチマークの環境の整備．
+      \item 作成したベンチマークを用いた，各種符号化の評価実験．
     \end{enumerate}
   \end{block}
 
@@ -379,7 +322,7 @@
 
   \begin{block}{まとめ}
     \begin{itemize}
-      \item 点彩色遷移問題の隣接関係に対して, 3種類の符号化を提案した.
+      \item $k$彩色遷移問題の隣接関係に対して, 3種類の符号化を提案した.
       \begin{itemize}
         \item アトムを追加することで, ルール数を大幅に削減することができた.
       \end{itemize}
