@@ -1,24 +1,26 @@
-\begin{table}[htbp]
-  \caption{実験結果3}
+\begin{table}[tb]\footnotesize
+  \caption{コスト制約付きハミルトン路問題: 解の全列挙に要した CPU 時間}
   \label{cost_table}
+  \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{1.0}
+  \vskip .5em
   \centering
-  \begin{tabular}{|l|r|rrr|}
+  \begin{tabular}{lr|rrr}
     \hline
-    閾値    &	Models & undirected & directed & acyclicity \\
+    閾値(倍率)    &	解の総数 & \textsf{undirected} & \textsf{directed} & \textsf{acyclicity} \\
     \hline
-    11698   &	1      &\textcolor{red}{2.919} &10.020 & 4.355	\\
-    11814   &	8      &5.458  &7.416	& \textcolor{red}{4.136}	\\
-    11931   &	28     &\textcolor{red}{3.226}&10.317	& 4.799	\\
-    12282   &	388    &\textcolor{red}{9.993}&15.787	& 10.715	\\
-    12867   &	16,180  &16.386       &23.406	& \textcolor{red}{10.819}\\
-    14037   &	939,209 &47.894       &41.515	& \textcolor{red}{24.655}\\
-    15207   &	4,525,541&85.256       &56.953	& \textcolor{red}{41.217}\\
-    16377   &	6,702,964&93.595       &51.991	& \textcolor{red}{41.301}	\\
-    17547   &	6,876,526&91.750       &46.065	& \textcolor{red}{37.290}	\\
-    18716   &	6,876,928&95.659       &45.416	& \textcolor{red}{37.905}	\\
+    11698(1.00)   &	1      &\textcolor{red}{2.919} &10.020 & 4.355	\\
+    11814(1.01)   &	8      &5.458  &7.416	& \textcolor{red}{4.136}	\\
+    11931(1.02)   &	28     &\textcolor{red}{3.226}&10.317	& 4.799	\\
+    12282(1.05)   &	388    &\textcolor{red}{9.993}&15.787	& 10.715	\\
+    12867(1.10)   &	16,180  &16.386       &23.406	& \textcolor{red}{10.819}\\
+    14037(1.20)   &	939,209 &47.894       &41.515	& \textcolor{red}{24.655}\\
+    15207(1.30)   &	4,525,541&85.256       &56.953	& \textcolor{red}{41.217}\\
+    16377(1.40)   &	6,702,964&93.595       &51.991	& \textcolor{red}{41.301}	\\
+    17547(1.50)   &	6,876,526&91.750       &46.065	& \textcolor{red}{37.290}	\\
+    18716(1.60)   &	6,876,928&95.659       &45.416	& \textcolor{red}{37.905}	\\
     \hline
-    Average &   & 45.2136 & 30.889  & \textcolor{red}{21.7192}\\
-    Best    &   & 3 & 0 & \textcolor{red}{7} \\
-    \hline
+    平均CPU時間 &   & 45.2136 & 30.889  & \textcolor{red}{21.7192}\\\hline
+%    Best    &   & 3 & 0 & \textcolor{red}{7} \\ \hline
   \end{tabular}
 \end{table}

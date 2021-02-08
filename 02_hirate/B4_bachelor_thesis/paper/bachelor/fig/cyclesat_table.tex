@@ -4,17 +4,18 @@
   \centering  
   %\tabcolsep = 0.8mm
   \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{lr||rrr||r|r|r||r|r|r}
-    問題種類 & 問題数 &\multicolumn{3}{c ||}{undirected} & \multicolumn{3}{c ||}{\textsf{directed}} & \multicolumn{3}{c}{acyclicity}\\
-     &  & \textsf{SAT} & \textsf{UNSAT} & \textsf{UNKN} & sat & unsat & unkn & sat & unsat & unkn \\
+  \begin{tabular}{lr||rrr||rrr||rrr}
+    問題種類 & 問題数 &\multicolumn{3}{c ||}{\textsf{undirected}} & \multicolumn{3}{c ||}{\textsf{directed}} & \multicolumn{3}{c}{\textsf{acyclicity}}\\
+     &  &  &  & {\tiny \textsf{SAT+}} &  &  & {\tiny \textsf{SAT+}} &  &  & {\tiny \textsf{SAT+}}\\
+     &  & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{UNSAT}}\\
     \hline
-    \textsf{color04} & 127 & 95 & 31 & 1 & 93 & 31 & 3 & 94 & 31 & 2\\
-    complete & 15 & 15 & 0 & 0 & 15 & 0 & 0 & 15 & 0 & 0\\
-    knight & 11 & 11 & 0 & 0 & 11 & 0 & 0 & 11 & 0 & 0\\
-    tsplib & 9 & 9 & 0 & 0 & 9 & 0 & 0 & 9 & 0 & 0\\
-    grid & 12 & 6 & 3 & 3 & 6 & 4 & 2 & 6 & 4 & 2\\
-    random & 320 & 169 & 151 & 0 & 168 & 151 & 1 & 169 & 151 & 0\\
+    \textsf{color04} & 127 & 95 & 31 & 126 & 93 & 31 & 124 & 94 & 31 & 125\\
+    \textsf{complete} & 15 & 15 & 0 & 15 & 15 & 0 & 15 & 15 & 0 & 15\\
+    \textsf{knight} & 11 & 11 & 0 & 11 & 11 & 0 & 11 & 11 & 0 & 11\\
+    \textsf{tsplib} & 9 & 9 & 0 & 9 & 9 & 0 & 9 & 9 & 0 & 9\\
+    \textsf{grid} & 12 & 6 & 3 & 9 & 6 & 4 & 10 & 6 & 4 & 10\\
+    \textsf{random} & 320 & 169 & 151 & 320 & 168 & 151 & 319 & 169 & 151 & 320\\
     \hline
-    合計 &  &  &  &  &  & &  &  &  & 
+    合計 & 494 & 305 & 185 & 490 & 302 & 186 & 488 & 304 & 186 & 490
   \end{tabular}
 \end{table}
