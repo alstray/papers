@@ -108,15 +108,15 @@
 \textsf{acyclicity}符号化と\textsf{undirected}符号化の優劣が逆転した．
 
 %--
-これらの結果から，
-\textsf{SAT}な問題に対しては，解けた問題数と解くのに要したCPU時間
-のどちらにおいても\textsf{acyclicity}符号化が優秀であったことがわかる．
-一方で，\textsf{UNSAT}な問題に対しては，
-解けた問題数では\textsf{directed}符号化と\textsf{acyclicity}が
-解くのに要したCPU時間では\textsf{undirected}符号化が優秀であったことがわかる．
+%% これらの結果から，
+%% \textsf{SAT}な問題に対しては，解けた問題数と解くのに要したCPU時間
+%% のどちらにおいても\textsf{acyclicity}符号化が優秀であったことがわかる．
+%% 一方で，\textsf{UNSAT}な問題に対しては，
+%% 解けた問題数では\textsf{directed}符号化と\textsf{acyclicity}符号化が，
+%% 解くのに要したCPU時間では\textsf{undirected}符号化がそれぞれ優秀であったことがわかる．
 
 %--
-表~\ref{sat_table}より，
+また，表~\ref{sat_table}より，
 \textsf{SAT+UNSAT}の問題数については,
 \textsf{undirected}符号化と\textsf{acyclicity}符号化は同数だった．
 しかし，その内訳には差があった．
@@ -163,7 +163,7 @@
 %--
 表\ref{min_table_tr}に，各符号化で
 時間内に求められた最短距離を示す．
-赤文字が，3符号化を比較した際の最良値である．
+赤文字は3符号化を比較した際の最良値である．
 *マークは，時間内に最適解が求められたことを表している．
 Bestは，符号化ごとに赤文字の個数を集計した値である．
 Bestの値がもっとも大きかった\textsf{undirected}が優秀な性能を示した．
@@ -184,7 +184,7 @@ Bestの値がもっとも大きかった\textsf{undirected}が優秀な性能を
 %--
 表~\ref{cost_table}に閾値ごとの解の個数と
 各符号化が要したCPU時間をまとめた．
-赤文字が3符号化の中での最短時間を表している．
+赤文字は3符号化の中での最短時間を表している．
 Averageは，各符号化のCPU時間の平均値を示す．
 Bestは，各符号化ごとの赤文字の個数を示す．
 
