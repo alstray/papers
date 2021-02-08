@@ -1,0 +1,85 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+\begin{frame}{~}
+ \centering
+ - 補足用 -
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% グラフ点彩色問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{グラフ点彩色問題}
+    
+  \begin{block}{グラフ点彩色問題の定義}
+    与えられたグラフ$G=(V, E)$と色数$k$に対して, 以下の制約を満たす解が存在するかを判定する問題.
+    \begin{itemize}
+      \item 各頂点は1つの色で塗られる.
+      \item $(u, v) \in E$である$u, v \in V$について, $u$と$v$は異なる色で塗られる.
+    \end{itemize}
+  \end{block}
+  
+  \begin{exampleblock}{グラフ点彩色問題の例($k=4$)}
+    \begin{columns}
+      \begin{column}{1.0\textwidth}
+        \centering
+        \input{tikz/graph0.tex}
+      \end{column}
+    \end{columns}
+  \end{exampleblock}
+  
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% k彩色遷移問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{$k$彩色遷移問題の性質}
+
+  \begin{itemize}
+    \item 色数$k$によって問題の性質が異なることが知られている.
+    \begin{itemize}
+      \item \structure{$k=2$}のとき, グラフGは2部グラフであり\structure{自明}.
+      \item \structure{$k=3$}のとき, \structure{クラスP}に属する.~[L. Cerecedaほか '08]
+      \item \structure{$k \ge 4$}のとき, 一般に\structure{\textbf{PSPACE完全}}となる.~[Paul Bonsmaほか '09]
+    \end{itemize}
+
+    \item グラフの形に制限を加えることにより, 多項式時間で解決可能となるものが存在することがわかっている.[Paul Bonsmaほか '09]
+    \begin{itemize}
+      \item 平面グラフであり, かつ$4 \le k \le 6$でないとき.
+      \item 2部平面グラフであり, かつ$k=4$でないとき.
+    \end{itemize}
+
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PSPACE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{クラスPSPACE}
+  \begin{itemize}
+    \item 計算量のクラスの一つ.
+    \item 決定性チューリングマシンに多項式量のメモリを与えることで解決できる問題が属する.
+    \item P$\subseteq$NP$\subseteq$PSPACEであることはわかっている.
+    \begin{itemize}
+      \item ただし, 真に包含するかは未解決.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% グラフの全解数
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{グラフの全解数}
+  \begin{table}[t]
+    \centering
+    \input{table/result.tex}
+  \end{table}
+\end{frame}
+
+\backupend
