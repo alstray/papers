@@ -20,7 +20,7 @@ basicstyle=\ttfamily\scriptsize]{code/graph.lp}
 6行目ではアトム\code{edge}によって辺を定義している．
 \code{edge(X,Y)}は頂点\code{X}と頂点\code{Y}間に辺が存在することを意味する．
 
-次に， 図~\ref{fig:recol_s}~\ref{fig:recol_g}の初期状態と目標状態をファクト形式で表したものを
+次に， 図~\ref{fig:recol_s}，~\ref{fig:recol_g}の初期状態と目標状態をファクト形式で表したものを
 コード~\ref{code:path.lp}に示す．
 
 \lstinputlisting[float=t,caption={%
@@ -37,15 +37,15 @@ basicstyle=\ttfamily\scriptsize]{code/path.lp}
 \code{goal(X,C)}は目標状態において頂点\code{X}が色\code{C}で塗られることを意味する．
 
 \section{ASP 符号化}
-$k$彩色遷移問題の制約は主に基となった探索問題の制約と隣接関係の制約からなる．
-本研究では隣接関係の制約の記述が異なる3種の符号化を提案した．
+$k$彩色遷移問題の制約は主に基となった組合せ問題の制約と遷移制約からなる．
+本研究では遷移制約の記述が異なる3種の符号化を提案した．
 また，本来与えられる入力に加え遷移回数$t$を与えるようにした．
 本来の問題では「グラフ$G$，色数$k$における初期状態から目標状態への経路の存在」を解いていたのに対し，
 遷移回数を加えることで
 「グラフ$G$，色数$k$における遷移回数$t$での初期状態から目標状態への経路の存在」を解くことになる．
 ここで$t$の最大値を$T_{limit}$とする．
 $T_{limit}$は遷移回数の最大値であり，
-これは解空間グラフの頂点数$-1$，すなわち探索問題の全解数$-1$となる．
+これは解空間グラフの頂点数$-1$，すなわち組合せ問題の全解数$-1$となる．
 $t=1, 2, \dots T_{limit}$のすべてで経路が存在しないのであれば本来の問題でも経路は存在しない．
 一方で，ある$t$で経路が存在するのであれば本来の問題でも経路は存在する．
 
@@ -61,8 +61,8 @@ $t=1, 2, \dots T_{limit}$のすべてで経路が存在しないのであれば�
 9行目のルールは「各ステップにおいて，各頂点は一つの色で塗られる」を意味する．
 10行目のルールは
 「各ステップにおいて，辺で結ばれた頂点\code{X}と\code{Y}は同じ色で塗られない」を意味する．
-14～15行目は隣接関係を表したルールである．
-「ステップ\code{T-1}と\code{T}($1 \geq T \geq t$)において，
+14～15行目は遷移制約を表したルールである．
+「ステップ\code{T-1}と\code{T}($1 \leq T \leq t$)において，
 ある2つの頂点\code{X}と\code{Y}が変化することはない」
 を意味する．
 
@@ -74,7 +74,7 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring1.lp}
 
-次に，コード~\ref{code:vrc1.lp}に新しいアトムを加え，隣接関係に関するルールを変更した
+次に，コード~\ref{code:vrc1.lp}に新しいアトムを加え，遷移制約に関するルールを変更した
 \code{vrc2}符号化と\code{vrc3}符号化をそれぞれコード~\ref{code:vrc2.lp}とコード~\ref{code:vrc3.lp}に示す．
 これらのコードは，1～13行目はコード~\ref{code:vrc1.lp}と同じである．
 
@@ -95,7 +95,7 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
 
 コード~\ref{code:vrc2.lp}ではアトム\code{changed}を使用している．
-14～15行目が隣接関係を表すルールである．
+14～15行目が遷移制約を表すルールである．
 \code{changed(X,T)}は
 「ステップ\code{T-1}とステップ\code{T}において頂点\code{X}の色が異なる」を意味し，
 14行目でそれを定義している．
@@ -103,7 +103,7 @@ basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
 「各ステップで色が変化する頂点は1つ」という制約を表している．
 
 コード~\ref{code:vrc3.lp}ではアトム\code{unchanged}を使用している．
-14～15行目が隣接関係を表すルールである．
+14～15行目が遷移制約を表すルールである．
 \code{unchanged(X,T)}は
 「ステップ\code{T-1}とステップ\code{T}において頂点\code{X}の色が同じ」を意味し，
 14行目でそれを定義している．
@@ -111,7 +111,7 @@ basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
 「各ステップで色が変化しない頂点は\code{N-1}個」という制約を表している．
 ここで，\code{N}はグラフ$G$の頂点数である．
 
-各符号化における隣接関係を表す基礎化後のルール数を表~\ref{tab:rule}に示す．
+各符号化における遷移制約を表す基礎化後のルール数を表~\ref{tab:rule}に示す．
 基礎化とは，各アトムの変数に代入を行い命題変数とすることである．
 基礎化後のルール数は基となるアトムの変数の組合せより求められる．
 本研究で用いる符号化の場合，$($色(\code{C})の選択方法の数$)*($
@@ -123,7 +123,7 @@ basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
 
 \begin{table}[tb]
   \centering
-  \caption{各符号化の隣接関係を表す基礎化後のルール数}
+  \caption{各符号化の遷移制約を表す基礎化後のルール数}
   \input{table/rule}
   \label{tab:rule}
 \end{table}
