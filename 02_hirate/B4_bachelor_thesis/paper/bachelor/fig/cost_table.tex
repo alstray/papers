@@ -1,10 +1,13 @@
-\begin{table}[htbp]
-  \caption{コスト制約付きハミルトン路問題: CPU時間}
+\begin{table}[tb]\footnotesize
+  \caption{コスト制約付きハミルトン路問題: 解の全列挙に要した CPU 時間}
   \label{cost_table}
+  \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{1.0}
+  \vskip .5em
   \centering
-  \begin{tabular}{|l|r|rrr|}
+  \begin{tabular}{lr|rrr}
     \hline
-    閾値    &	Models & \textsf{undirected} & \textsf{directed} & \textsf{acyclicity} \\
+    閾値    &	解の総数 & \textsf{undirected} & \textsf{directed} & \textsf{acyclicity} \\
     \hline
     11698   &	1      &\textcolor{red}{2.919} &10.020 & 4.355	\\
     11814   &	8      &5.458  &7.416	& \textcolor{red}{4.136}	\\
@@ -17,8 +20,7 @@
     17547   &	6,876,526&91.750       &46.065	& \textcolor{red}{37.290}	\\
     18716   &	6,876,928&95.659       &45.416	& \textcolor{red}{37.905}	\\
     \hline
-    Average &   & 45.2136 & 30.889  & \textcolor{red}{21.7192}\\
-    Best    &   & 3 & 0 & \textcolor{red}{7} \\
-    \hline
+    平均CPU時間 &   & 45.2136 & 30.889  & \textcolor{red}{21.7192}\\\hline
+%    Best    &   & 3 & 0 & \textcolor{red}{7} \\ \hline
   \end{tabular}
 \end{table}

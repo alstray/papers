@@ -1,17 +1,19 @@
-\begin{table}[htbp]
-  \caption{最短ハミルトン閉路問題: 時間内に求められた最短距離}
+\begin{table}[t]\footnotesize
+  \caption{最短ハミルトン閉路問題: 得られた目的関数の値}
   \label{min_table_tr}
+  \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{1.0}
+  \vskip .5em
   \centering
-  \begin{tabular}{|l|rrr|}
-    \hline
-    Instance & \textsf{undirected} & \textsf{directed} & \textsf{acyclicity} \\
+  \begin{tabular}{l|rrr}\hline
+     問題 & \textsf{undirected} & \textsf{directed} & \textsf{acyclicity} \\
     \hline
     grid5&50,656*&50,656*&50,656* \\
     grid6&68,656*&68,656*&68,656* \\
     grid7&91,822*&91,822*&91,822* \\
     grid8&113,250&\textcolor{red}{112,916}&113,277 \\
     grid9&\textcolor{red}{142,502}&143,326&143,660 \\
-    grid10rc&\textcolor{red}{172,703}&174,866&175,999 \\
+    grid10&\textcolor{red}{172,703}&174,866&175,999 \\
     grid11&\textcolor{red}{200,399}&204,456&200,638 \\
     grid12&\textcolor{red}{231,278}&239,275&232,012 \\
     grid13&\textcolor{red}{276,692}&276,926&276,899 \\
@@ -20,7 +22,6 @@
     grid16&421,249&\textcolor{red}{419,737}&423,753 \\
     US48&11,698*&11,698*&11,698* \\
     \hline
-    Best & 6 & 3 & 0 \\
-    \hline
+    最適値と最良値の数 & 10 & 7 & 4\\    \hline
   \end{tabular}
 \end{table}
