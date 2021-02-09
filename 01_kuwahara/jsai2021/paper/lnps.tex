@@ -1,0 +1,52 @@
+\section{優先度付き巨大近傍探索 (Large Neighborhood Prioritized Search; LNPS)}
+
+\subsection{LNPS の概要}
+LNS では，取り消された変数に対してのみ再割当てが行われ，
+他の変数に対する値割り当ては変化しない．
+そこで，LNS における解の再構築の操作を，
+値割当てをなるべく維持したままでの再探索に置き換え，
+取り消されなかった変数への再割当ても許す，
+優先度付き巨大近傍探索 (Large Neighborhood Prioritized Search; LNPS) を提案する．
+
+詳細は後述するが，
+今回実装に用いた
+解集合プログラミング (Answer Set Programming; ASP) 技術によって，
+値割当てをなるべく維持したままでの再探索が自然に実現できる．
+また，ASP では解の再探索を系統的探索で行うことができる．
+
+
+\subsection{LNPS のアルゴリズム}
+LNPS のアルゴリズムを以下の Algorythm 2 に示す．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[htb]
+%\centering
+\begin{tabular}{l}\hline
+\textbf{Algorythm 2} Large neighborhood Prioritized search 
+\cite{%
+ hayama19:kobe}\\ \hline
+%\begin{tabbing}
+ ~1: input: a feasible solution $x$ \\
+ ~2: $x^b$ = $x$; \\
+ ~3: \bf{repeat} \\
+ ~4: \quad \quad $x^t$ = re-search($d(x)$); \\
+ ~5: \quad \quad \textbf{if} accept($x^t$,$x$) \textbf{then} \\
+ ~6: \quad \quad \quad \quad $x$ = $x^t$; \\
+ ~7: \quad \quad \textbf{end if} \\
+ ~8: \quad \quad \textbf{if} $c(x^t)$ \verb|<| $c(x^b)$ \textbf{then} \\
+ ~9: \quad \quad \quad \quad $x^b$ = $x^t$; \\
+10: \quad \quad \textbf{end if} \\
+11: \textbf{until} stop criterion is met \\
+12: \textbf{return} $x^b$ \\ \hline
+%\end{tabbing}
+\end{tabular}
+\end{table}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+LNS とは 4 行目だけが異なっており，
+LNPS では，以下の destroy と re-search で $x$ から得られた解を $x^t$ とする．
+\begin{itemize}
+\item destroy : $x$ から値割当ての一部を取り消し $x′$ とする．
+\item re-search : $x′$ の値割当てをなるべく維持したまま解を再探索する．
+\end{itemize}
+
+値割り当てを固定しない再探索の実現によって，
+暫定解のどの値割り当てを取り消すかに依存しすぎない探索を行うことが可能である．
