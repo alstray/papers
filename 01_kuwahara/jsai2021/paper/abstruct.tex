@@ -1,0 +1,28 @@
+\begin{abstract}
+本発表では，SAT の発展形の一つである解集合プログラミング (Answer Set
+Programming; ASP) 技術を用い，組合せ最適化問題に対して系統的探索と確率
+的局所探索を統合的に適用する手法を提案する．
+
+提案手法は，近似解法の一種である巨大近傍探索 (Large Neighborhood
+Search; LNS) のアイデアをベースにしている．LNS は解に含まれる変数の値
+割当ての一部をランダムに選んで取り消し，その変数のみに対して再割当てを
+行うことで解を再構築する反復解法である．提案手法では，解の再構築の操作
+を，値割当てをなるべく維持したままでの再探索に置き換えることで，取り消
+されなかった変数への再割当てを許す．これによって，どの値割当てを取り消
+すかに依存しすぎない探索を行うことができる．
+
+提案手法を ASP ソルバー clingo 上に実装し，国際時間割競技会の問題集(全
+21問)を用いて性能評価を行った．その結果，提案手法は，通常の ASP 解法と
+比較して，多くの問題に対してより良い解を得ることができた．また，1問に
+ついて，既知の最良値を更新することに成功した．
+\end{abstract}
+
+%\setcounter{page}{1}
+\def\Style{``jsaiac.sty''}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em%
+ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\def\JBibTeX{\leavevmode\lower .6ex\hbox{J}\kern-0.15em\BibTeX}
+\def\LaTeXe{\LaTeX\kern.15em2$_{\textstyle\varepsilon}$}
+
+\begin{document}
+\maketitle
