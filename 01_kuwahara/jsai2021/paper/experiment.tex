@@ -3,6 +3,15 @@
 ベンチマーク問題には，国際時間割競技会 ITC2007 の comp01〜21の
 全21問を使用し，
 ソフト制約の多い問題集(UD5)を使用した．
+実験に使用した手法としては，
+既存 ASP 解法のみでの実行に加え，
+LNPS と 各種 destroy 演算を加えたもので行い，
+destroy 演算は，
+random $N$ ($N$ = 0, 3, 5)，
+day-period，
+day-room，
+swap-room $N$ ($N$ = 5, 10)を選択した．
+
 
 \begin{table*}[tbp]
   \label{table:bench:result1}

@@ -1,6 +1,0 @@
-SceCosC rB 1 2		TecCos rB 0 2		Geotec rA 0 1
-SceCosC rB 3 3		TecCos rB 0 3		Geotec rA 1 0
-SceCosC rB 4 2		TecCos rB 1 1		Geotec rA 2 2
-ArcTec rB 2 1		TecCos rB 2 3		Geotec rA 4 0
-ArcTec rB 2 2		TecCos rB 4 1
-ArcTec rB 3 2		Geotec rA 0 0
