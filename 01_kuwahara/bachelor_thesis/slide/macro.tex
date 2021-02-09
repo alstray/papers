@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% User-defined Macro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\compress}{\itemsep0pt\parsep0pt\parskip0pt\partopsep0pt}
+% \newcommand{\compress}{\itemsep1pt plus1pt\parsep0pt\parskip0pt}
+%\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\gringo}{\textit{gringo}}
+\newcommand{\clasp}{\textit{clasp}}
+\newcommand{\clingo}{\textit{clingo}}
+\newcommand{\teaspoon}{\textit{teaspoon}}
+\newcommand{\sat}{\textsf{SAT}}
+\newcommand{\unsat}{\textsf{UNSAT}}
+% \newcommand{\web}[2]{\href{#1}{#2\ \raisebox{-0.15ex}{\beamergotobutton{Web}}}}
+% \newcommand{\doi}[2]{\href{#1}{#2\ \raisebox{-0.15ex}{\beamergotobutton{DOI}}}}
+% \newcommand{\weblink}[1]{\web{#1}{#1}}
+% \newcommand{\imp}{\mathrel{\Rightarrow}}
+% \newcommand{\Iff}{\mathrel{\Leftrightarrow}}
+% \newcommand{\mybox}[1]{\fbox{\rule[.2cm]{0cm}{0cm}\mbox{${#1}$}}}
+% \newcommand{\mycbox}[2]{\tikz[baseline]\node[fill=#1!10,anchor=base,rounded corners=2pt] () {#2};}
+% \newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
+% \newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
+% \newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
+% \newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+% \newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
+% \newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
+% \newcommand{\pbody}[1]{\poslits{\body{#1}}}
+% \newcommand{\nbody}[1]{\neglits{\body{#1}}}
+% \newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+% \newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
+% \newcommand{\OK}{\mbox{\textcolor{green}{\Pisymbol{pzd}{52}}}}
+% \newcommand{\KO}{\mbox{\textcolor{red}{\Pisymbol{pzd}{56}}}}
+% \newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\lw}[1]{\smash{\lower1.ex\hbox{#1}}}
+\newcommand{\llw}[1]{\smash{\lower3.ex\hbox{#1}}}
+
+\newenvironment{tableC}{%
+  \scriptsize
+  \renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 0.6mm
+  % \begin{tabular}[t]{p{6mm}|rlr|rlr|rlr|rlr|rlr}\hline
+  %   \multicolumn{1}{l|}{\llw{問題　　　}} &
+  \begin{tabular}[t]{l|rlr|rlr|rlr|rlr|rlr}\hline
+    \multicolumn{1}{l|}{\llw{問題}} &
+    \multicolumn{3}{c|}{UD1} &
+    \multicolumn{3}{c|}{UD2} &
+    \multicolumn{3}{c|}{UD3} &
+    \multicolumn{3}{c|}{UD4} &
+    \multicolumn{3}{c}{UD5} \\
+    & 
+    \multicolumn{1}{c}{既知の} & & \multicolumn{1}{c|}{ASP} & 
+    \multicolumn{1}{c}{既知の} & & \multicolumn{1}{c|}{ASP} & 
+    \multicolumn{1}{c}{既知の} & & \multicolumn{1}{c|}{ASP} & 
+    \multicolumn{1}{c}{既知の} & & \multicolumn{1}{c|}{ASP} & 
+    \multicolumn{1}{c}{既知の} & & \multicolumn{1}{c}{ASP} \\
+    & 
+    ベスト & &  & 
+    ベスト & &  & 
+    ベスト & &  & 
+    ベスト & &  & 
+    ベスト & &  \\
+    \hline
+  }{%
+    \hline
+  \end{tabular}
+}
