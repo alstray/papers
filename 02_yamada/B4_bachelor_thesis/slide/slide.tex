@@ -121,7 +121,7 @@
     \begin{itemize}
       \item 問題の入力は，グラフ\structure{$G=(V, E)$}，色数\structure{$k$}，及び$G$の$k$彩色の二つの実行可能解\structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態)．
       \item 隣接関係は，ある一つの頂点のみ色が異なるような実行可能解．
-      \item \structure{$\alpha$から$\beta$への経路の存在についての判定問題．}
+      \item \structure{$\alpha$から$\beta$への経路の存在についての判定問題}．
     \end{itemize}
   \end{block}
 
@@ -130,7 +130,7 @@
       \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph0.tex}
-        $\alpha$ステップ0(初期状態)
+        ステップ0\\(初期状態)
       \end{column}
       \begin{column}{0.05\textwidth}
         \textbf{$\longrightarrow$}
@@ -146,7 +146,7 @@
       \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph2.tex}
-        ステップ2(終了状態)
+        ステップ2\\(終了状態)
       \end{column}
     \end{columns}
   \end{exampleblock}
@@ -160,15 +160,15 @@
 \begin{frame}\frametitle{解集合プログラミング(Answer Set Programming; ASP)}
 
   \begin{itemize}
-    \item ASP言語は一階論理に基づいた知識表現言語の一種である.
-    \item ASPシステムは安定モデル理論~[Gelfond and Lifschitz '88] に基づいた知識表現言語の一種である.
-    \item 近年, SAT技術の応用により高速なASPシステムが実現し, システム検証やプランニングなどの様々な分野での実用が拡大している.
+    \item ASP言語は一階論理に基づいた知識表現言語の一種である．
+    \item ASPシステムは安定モデル理論~[Gelfond and Lifschitz '88] に基づいた知識表現言語の一種である．
+    \item 近年, SAT技術の応用により高速なASPシステムが実現し, システム検証やプランニングなどの様々な分野での実用が拡大している．
   \end{itemize}
 
   \begin{alertblock}{組合せ遷移問題に対してASPを用いる利点}
     \begin{itemize}
-      \item ASPの高い表現力により, 記号上の制約を簡潔に記述できる.
-      \item ASPシステムの1つである\textit{clingo}のインクリメンタルモードを用いることにより, 段階的な解の探索を効率よく実行できる.
+      \item ASPの高い表現力により，問題の制約を簡潔に記述できる．
+      \item ASPシステムの一つである\textit{clingo}のインクリメンタルモードを用いることにより，段階的な解の探索を効率よく実行できる．
     \end{itemize}
   \end{alertblock}
   
@@ -180,7 +180,7 @@
 
 \begin{frame}\frametitle{研究目的}
   \begin{alertblock}{目的}
-    ASPを利用し, PSPACE完全な問題の1つである$k \ge 4$の$k$彩色遷移問題を高速で解ける符号化を提案する.
+    ASPを利用し，PSPACE完全な問題の一つである$k \ge 4$の$k$彩色遷移問題を高速で解く．%ける符号化を提案し評価する．
   \end{alertblock}
 
   \begin{block}{研究内容}
@@ -198,29 +198,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}\frametitle{符号化(1/2)}
-
-  \begin{itemize}
-    \item グラフ$G$, 色数$k$, Gのk-彩色の2つの実行可能解$\alpha$, $\beta$に加え, \structure{ステップ数$t$}を与える.
-    \begin{itemize}
-      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更.
-      \item $t$を遷移回数の上限値まで大きくしていくことで, 最終的に経路の存在について判定可能. 
-    \end{itemize}
-    \item これに対し, \structure{隣接関係の制約に対する記述が異なる\textbf{3}種類}のASP符号化を提案した. 
-    \begin{itemize}
-      \item グラフ点彩色に関わる制約は同じものを用いている.
-      \item 各符号化で独自に追加するアトム\footnote{ASP上の正リテラルを指す.}以外は, 同じものを用いている.
-    \end{itemize}
-  \end{itemize}
-
-
-  
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 符号化
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\frametitle{符号化(2/2)}
 
   \begin{itemize}
     \item $|T|$をステップ数$t$, $|C|$を色数$k$, $|V|$をグラフの頂点数とする.
@@ -241,9 +218,33 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ベンチマーク
+%% 符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}\frametitle{符号化(2/2)}
+
+  \begin{itemize}
+    \item グラフ$G$, 色数$k$, Gのk-彩色の2つの実行可能解$\alpha$, $\beta$に加え, \structure{ステップ数$t$}を与える.
+    \begin{itemize}
+      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更.
+      \item $t$を遷移回数の上限値まで大きくしていくことで, 最終的に経路の存在について判定可能. 
+    \end{itemize}
+    \item これに対し, \structure{隣接関係の制約に対する記述が異なる\textbf{3}種類}のASP符号化を提案した. 
+    \begin{itemize}
+      \item グラフ点彩色に関わる制約は同じものを用いている.
+      \item 各符号化で独自に追加するアトム\footnote{ASP上の正リテラルを指す.}以外は, 同じものを用いている.
+    \end{itemize}
+  \end{itemize}
+
+
+  
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ベンチマーク
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
 \begin{frame}\frametitle{ベンチマーク}
 
   \begin{itemize}
@@ -255,63 +256,30 @@
   従って, 全解列挙が可能な($G, k$)からベンチマークを生成する必要がある.
   
 \end{frame}
-
+\end{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験環境
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{グラフの調査}
-  全解列挙可能なグラフと色数の組合せを得るため, 以下の調査を行った.
+\begin{frame}\frametitle{実験概要}
+
+  3種の符号化の評価にあたり，以下の実験を行った．
   \begin{itemize}
-    \item \structure{使用するグラフ}: 全44個
+    \item \structure{ベンチマーク}: 全90問
     \begin{itemize}
       \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている, \textit{Graph Coloring Instances}に属するグラフを使用.
-      \item そのうち\structure{彩色数}が判明しているもの.[Tamuraほか '09]
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている，\textit{Graph Coloring Instances}に属するグラフ9個を使用．
+      \item 各グラフ10問ずつベンチマークを作成．[Tamuraほか '09]
     \end{itemize}
-    \item \structure{色数}: 各グラフの彩色数
 
     \item \structure{ASPシステム}: \textit{clingo-5.4.0}
       \begin{itemize}
-        \item \textit{configuration}は\textit{crafty, tweety}を使用.
+        \item \textit{configuration}は\textit{jumpy}を使用．
       \end{itemize}
     \item \structure{制限時間}: 3600秒/問
-    \item \structure{環境}: Mac mini, 3.2GHz 6コア Intel Core i7, 64GB メモリ
+    \item \structure{環境}: Mac mini，3.2GHz 6コア Intel Core i7，64GB メモリ
   \end{itemize}
-
-
-  \begin{alertblock}{}
-    結果, 44個中\structure{\textbf{9}}個のグラフにおいて彩色数での全解列挙が可能であった.
-    \begin{itemize}
-      \item 最小で\structure{120個}, 最大で\structure{約28億個}の解を持つことが判明した.
-    \end{itemize}
-  \end{alertblock}
   
-  
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ベンチマークの生成
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\frametitle{今後の方針}
-
-  \begin{enumerate}
-    \item ベンチマークの生成 
-    \begin{itemize}
-      \item 実行可能解の総数が小さいグラフについては, \structure{全ての解}を出力.
-      \item 実行可能解の総数が100万個を超えるグラフについては, \structure{10万個の解のみ}を出力.
-      \item 出力された解からランダムで2つの解を抽出しベンチマークを生成.
-      \item 各グラフから5問ずつ, \structure{計45問}のベンチマークを生成.
-    \end{itemize}
-
-    \item 符号化の評価実験
-    \begin{itemize}
-      \item 生成したベンチマークを用い, 3種の符号化の評価実験を行う.
-    \end{itemize}
-  \end{enumerate}
-  
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -322,22 +290,24 @@
 
   \begin{block}{まとめ}
     \begin{itemize}
-      \item $k$彩色遷移問題の隣接関係に対して, 3種類の符号化を提案した.
+      \item $k$彩色遷移問題の隣接関係に対して，3種類の符号化を提案した．
       \begin{itemize}
-        \item アトムを追加することで, ルール数を大幅に削減することができた.
+        \item アトムを追加することで，ルール数を大幅に削減することができた．
       \end{itemize}
-      \item ベンチマークの生成に使用可能なグラフについて調査した.
+      \item 提案した符号化に対して，評価実験を行った．
       \begin{itemize}
-        \item 解空間グラフの大きさ(実行可能解の総数)が異なる9つのグラフを使用可能であることが判明した.
+        \item ルール数が最少である符号化\textbf{vrc3}について，優位性が確かめられた．
       \end{itemize}
     \end{itemize}
   \end{block}
   
   \begin{alertblock}{今後の課題}
     \begin{itemize}
-      \item ベンチマークの生成.
-      \item 生成したベンチマークを用いた, 各種符号化の評価実験.
-      \item 評価実験で優れていた符号化を, インクリメンタルな解法へと拡張.
+      \item ベンチマーク環境の改善．
+      \begin{itemize}
+        \item 連結インスタンスの充実．
+      \end{itemize}
+      \item \textbf{vrc3}の\alert{インクリメンタルサーチモード}への拡張．
     \end{itemize}
   \end{alertblock}
 

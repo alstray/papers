@@ -72,6 +72,31 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験環境
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{グラフの調査}
+  全解列挙可能なグラフと色数の組合せを得るため, 以下の調査を行った.
+  \begin{itemize}
+    \item \structure{使用するグラフ}: 全44個
+    \begin{itemize}
+      \item \textit{Graph Coloring and its Generalizations}
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている, \textit{Graph Coloring Instances}に属するグラフを使用.
+      \item そのうち\structure{彩色数}が判明しているもの.[Tamuraほか '09]
+    \end{itemize}
+    \item \structure{色数}: 各グラフの彩色数
+
+    \item \structure{ASPシステム}: \textit{clingo-5.4.0}
+      \begin{itemize}
+        \item \textit{configuration}は\textit{crafty, tweety}を使用.
+      \end{itemize}
+    \item \structure{制限時間}: 3600秒/問
+    \item \structure{環境}: Mac mini, 3.2GHz 6コア Intel Core i7, 64GB メモリ
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% グラフの全解数
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
