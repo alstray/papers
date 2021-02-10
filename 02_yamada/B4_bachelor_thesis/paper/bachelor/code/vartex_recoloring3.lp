@@ -10,6 +10,6 @@ t(0..t).
 :- not {color(X, C, T); color(Y, C, T)} 1, edge(X, Y), col(C), t(T).
 
 
-% 隣接関係
+% 遷移制約
 unchanged(X, T) :- color(X, C, T), color(X, C, T-1), T >= 1.
 :- not N-1 { unchanged(X, T) } N-1 , t(T), T >= 1, n(N).
