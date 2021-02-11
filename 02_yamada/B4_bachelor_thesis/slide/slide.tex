@@ -4,6 +4,7 @@
 %\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
 
 \usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{graphicx}
 \usepackage{pxjahyper}
 \usepackage{minijs}
 \usepackage{otf}
@@ -55,7 +56,7 @@
 %\usetheme{Madrid}
 
 \title[ASPを用いた組合せ遷移問題の解法に関する考察]{解集合プログラミングを用いた\\組合せ遷移問題の解法に関する考察}
-\author{山田~悠也}
+\author{101730408~~~山田~悠也}
 \date{2020年度卒業研究発表会\\2021年2月19日}
 \institute{番原研究室}
 
@@ -104,7 +105,8 @@
     \item \alert{$k$彩色遷移問題}は組合せ遷移問題の一つ．
     \begin{itemize}
       \item 基となる問題はグラフ点彩色問題．
-      \item 色数$k \geq 4$のとき，PSPACE完全であることが知られている．~[Paul Bonsmaほか '09]
+      \item 色数\alert{$k \geq 4$}のとき，PSPACE完全であることが知られている．~[Paul Bonsmaほか '09]
+      \item グラフの形と色数に制限を加えることにより，多項式時間で解けるものも存在．
       \item \alert{汎用的かつ効率的なアルゴリズムは見つかっていない}．
     \end{itemize}
   \end{itemize}
@@ -214,7 +216,8 @@
     \item \structure{unchanged(X, T)}は, ステップ$T-1$とステップ$T$において頂点Xの色が同じであることを意味する.
     \item アトムを追加することにより, ルール数を削減することができた.
   \end{itemize}
-  
+  % 結果の分類の説明も行う？
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -224,16 +227,16 @@
 \begin{frame}\frametitle{符号化(2/2)}
 
   \begin{itemize}
-    \item グラフ$G$, 色数$k$, Gのk-彩色の2つの実行可能解$\alpha$, $\beta$に加え, \structure{ステップ数$t$}を与える.
+    \item グラフ$G$，色数$k$，Gの$k$彩色の二つの実行可能解$\alpha$，$\beta$に加え， \structure{遷移回数$t$}を与える．
     \begin{itemize}
-      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更.
-      \item $t$を遷移回数の上限値まで大きくしていくことで, 最終的に経路の存在について判定可能. 
+      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更. 
     \end{itemize}
-    \item これに対し, \structure{隣接関係の制約に対する記述が異なる\textbf{3}種類}のASP符号化を提案した. 
+    \item $t$を遷移回数の上限値まで大きくしていくことで，最終的に経路の存在について判定可能．
     \begin{itemize}
-      \item グラフ点彩色に関わる制約は同じものを用いている.
-      \item 各符号化で独自に追加するアトム\footnote{ASP上の正リテラルを指す.}以外は, 同じものを用いている.
+      \item 途中で経路が存在すれば，本来の問題でも経路が存在．
+      \item すべての$t$において経路が存在しないのであれば，本来の問題でも経路が存在しない．
     \end{itemize}
+    \item $t$の上限値は\structure{解空間グラフの頂点数$-1$}．
   \end{itemize}
 
 
@@ -265,19 +268,78 @@
 
   3種の符号化の評価にあたり，以下の実験を行った．
   \begin{itemize}
-    \item \structure{ベンチマーク}: 全90問
+    \item \structure{ベンチマーク}: 独自に作成した90問
     \begin{itemize}
       \item \textit{Graph Coloring and its Generalizations}
       \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている，\textit{Graph Coloring Instances}に属するグラフ9個を使用．
-      \item 各グラフ10問ずつベンチマークを作成．[Tamuraほか '09]
+      \item 各グラフ10問ずつベンチマークを作成．
     \end{itemize}
+    \item \structure{色数}: 各グラフにおける彩色数
 
-    \item \structure{ASPシステム}: \textit{clingo-5.4.0}
-      \begin{itemize}
-        \item \textit{configuration}は\textit{jumpy}を使用．
-      \end{itemize}
+    \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{jumpy}
     \item \structure{制限時間}: 3600秒/問
     \item \structure{環境}: Mac mini，3.2GHz 6コア Intel Core i7，64GB メモリ
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果:到達可能}
+
+  \begin{table}[t]
+    \centering
+    \input{table/result_con}  
+  \end{table}
+
+  \begin{itemize}
+    \item 90問中11問が該当．
+    \item vrc1が最も遅かった．
+    \item vrc2とvrc3では有意な差がついたのは1問にとどまったが，vrc3が最もよい性能を示した．
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果:到達不可能}
+
+  \begin{table}[t]
+    \centering
+    \input{table/result_uncon}  
+  \end{table}
+
+  \begin{itemize}
+    \item 90問中10問が該当．
+    \item vrc3$>$vrc2$>$vrc1の順によい性能を示した．
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果:考察}
+
+  \begin{itemize}
+    \item 90問中69問は判定に至らなかった．
+    \begin{itemize}
+      \item 遷移回数$t$をどこまで増やせたかで比較．
+      \item vrc3$>$vrc2$>$vrc1の順によい性能を示した．
+      \item グラフ\textit{queen6\_6}・\textit{queen7\_7}を基としたインスタンスではvrc2が著しく悪い性能を示した．
+    \end{itemize}
+    \item 結果によらず，\structure{vrc3$>$vrc2$>$vrc1の順}によい性能を示した．
+    \item 要因として，ルール数の差が考えられる．
+    \begin{itemize}
+      \item \textit{clingo}では与えられたASP言語を充足可能性判定問題へと変換して解く．
+      \item ルール数を少なくすることは，節数を少なくすることにつながる．
+      \item 節数が多いとオーバーヘッドが増加．
+    \end{itemize}
   \end{itemize}
   
 \end{frame}
@@ -303,11 +365,11 @@
   
   \begin{alertblock}{今後の課題}
     \begin{itemize}
+      \item vrc3の\alert{インクリメンタルサーチモード}への拡張．
       \item ベンチマーク環境の改善．
       \begin{itemize}
         \item 連結インスタンスの充実．
       \end{itemize}
-      \item \textbf{vrc3}の\alert{インクリメンタルサーチモード}への拡張．
     \end{itemize}
   \end{alertblock}
 

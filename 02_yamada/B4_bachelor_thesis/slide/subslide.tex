@@ -86,10 +86,7 @@
     \end{itemize}
     \item \structure{色数}: 各グラフの彩色数
 
-    \item \structure{ASPシステム}: \textit{clingo-5.4.0}
-      \begin{itemize}
-        \item \textit{configuration}は\textit{crafty, tweety}を使用.
-      \end{itemize}
+    \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{crafty, tweety}
     \item \structure{制限時間}: 3600秒/問
     \item \structure{環境}: Mac mini, 3.2GHz 6コア Intel Core i7, 64GB メモリ
   \end{itemize}
@@ -103,8 +100,27 @@
 \begin{frame}{グラフの全解数}
   \begin{table}[t]
     \centering
-    \input{table/result.tex}
+    \input{table/graph.tex}
   \end{table}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% グラフの全解数
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果:判定不能}
+  
+  \begin{table}[t]
+    \centering
+    \input{table/result_uk}
+  \end{table}
+
+  \begin{itemize}
+    \item グラフと色数ごとに分類．
+    \item \structure{到達不能が確かめられた遷移回数$t$の最大値の平均値．}
+    \item vrc3が優位性を示した．
+  \end{itemize}
+
 \end{frame}
 
 \backupend
