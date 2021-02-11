@@ -207,6 +207,7 @@ basicstyle=\ttfamily\footnotesize]{code/hamilton3.lp}
 で表現した符号化である.
 コード~\ref{code:hamilton3.lp}に，\textsf{acyclicity}符号化を示す．
 \textsf{directed}符号化との違いは，13--14行目だけである．
+前節と同様に，ハミルトン閉路問題(\code{s}=\code{t})の場合について説明する．
 
 \begin{itemize}
 % \item 1行目では，無向グラフの有向グラフ化を行う．
@@ -291,7 +292,7 @@ basicstyle=\ttfamily\footnotesize]{code/cost_constraint.lp}
 コスト制約付きハミルトン閉路問題は，
 ハミルトン閉路問題に，距離の総和が所与の閾値以下 (または以上) であるこ
 とを制約条件として付加した問題である．
-コード\ref{code:cost_constraint.lp}に，制約条件を示す．
+コード\ref{code:cost_constraint.lp}に，その制約条件を示す．
 ルール中の\code{c}は閾値を表し，これは実行時に与えられる.
 このルールは，各辺\code{edge(X,Y)}に対して，その辺がハミルトン閉路に
 含まれ(\code{in(X,Y)})，その距離が\code{C}である時に(\code{cost(X,Y,C)})，
