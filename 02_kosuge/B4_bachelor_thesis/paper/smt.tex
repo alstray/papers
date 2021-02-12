@@ -109,10 +109,9 @@ $distinct$制約の実装方法として，
 \end{eqnarray*}
 
 また，以下のようにPB符号化を用いて実装することができる．
-\\
 $$distinct(x_1, x_2,\ldots, x_n) \; (x_i \in \{l,l+1,\ldots,u\}, n-1 \leq u-l)$$
 は
-0-1変数$p_{ij} \in {0,1} \; (p_{ij}=1 \Leftrightarrow x_i=j)$を導入して式\ref{eq:smt_pb_1},\ref{eq:smt_pb_2}のように表される．
+0-1変数$p_{ij} \in {0,1} \; (p_{ij}=1 \Leftrightarrow x_i=j)$を導入して(\ref{eq:smt_pb_1})(\ref{eq:smt_pb_2})で表される．
 \begin{eqnarray}
     \sum_{j=l}^{u} p_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:smt_pb_1}\\
     \begin{cases}

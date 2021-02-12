@@ -136,7 +136,7 @@ basicstyle=\ttfamily\tiny]{code/qgcp_5_m7__z3_489.smt2}
 { \footnotesize \begin{verbatim}
 (assert (= (+ c_0_0_0 c_0_0_1 c_0_0_2 c_0_0_3 c_0_0_4) 1))
 \end{verbatim}}
-他のマスについても同様に宣言される．この制約は式\ref{eq:smt_pb_1}に対応しており，重複を避けるためにまとめて宣言する．
+他のマスについても同様に宣言される．この制約は(\ref{eq:smt_pb_1})に対応しており，重複を避けるためにまとめて宣言する．
 
 次に，0行目に配置されるクイーンの色が互いに異なるという制約は以下のように宣言される．
 { \footnotesize \begin{verbatim}
@@ -353,7 +353,7 @@ $distinct(x_1 ... x_n)$について，$n < d$の時，
 \begin{eqnarray}
     x_{i1} + ... + x_{id}=1 \; (i=1 ... n) \label{eq:pro_pb_2_1}\\
     x_{(n+1)1} + ... + x_{(n+1)d}=d-n \label{eq:pro_pb_2_2}\\
-    x_{1j} + ... + x_{(n+1)j}=1 \; (j=1 ... d) \label{eq:pro_pb_2_3}\\
+    x_{1j} + ... + x_{(n+1)j}=1 \; (j=1 ... d) \label{eq:pro_pb_2_3}
 \end{eqnarray}
 
 (\ref{eq:pro_pb_2_2})(\ref{eq:pro_pb_2_3})についてSMT符号化を行うと，
