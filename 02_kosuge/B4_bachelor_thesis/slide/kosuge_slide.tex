@@ -94,6 +94,22 @@
     \end{block}
 \end{frame}
 
+\begin{frame}
+    \frametitle{\distinct 制約のPB符号化}
+    \distinct 制約はnot-equalで表す他に以下のようにPB符号化して表すことができる．
+    \begin{block}{ \distinct 制約のPB符号化}
+        $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
+        $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
+        \begin{eqnarray}
+            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
+    \vspace{-3mm}
+            \begin{cases}
+                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
+                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
+            \end{cases}\label{eq:pb_2}
+        \end{eqnarray}
+    \end{block}
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,28 +205,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 高速化手法2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{高速化手法}
-    \distinct 制約はnot-equalで表す他に以下のようにPB符号化して表すことができる．
-    \begin{block}{ \distinct 制約のPB符号化}
-        $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
-        $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
-        \begin{eqnarray}
-            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
-    \vspace{-3mm}
-            \begin{cases}
-                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
-                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
-            \end{cases}\label{eq:pb_2}
-        \end{eqnarray}
-    \end{block}
-\end{frame}
 
 \begin{frame}\footnotesize
     \frametitle{高速化手法}
-    \vspace{-3mm}
+    PB符号化した\distinct 制約に対して2つの改良手法を適用した．
     \begin{exampleblock}{改良手法1}
-        $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し(\ref{eq:pb_1})(\ref{eq:pb_2})に以下の制約を追加する．
+        $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し，以下の制約を追加する．
     \vspace{-3mm}
         \begin{eqnarray}
             \sum_{i=1}^{n} x_{ij}=y_j \; (j \in \{l,l+1, \ldots,u\})\\
@@ -220,7 +220,7 @@
     \end{exampleblock}
     \vspace{-3mm}
     \begin{exampleblock}{改良手法2}
-        $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し(\ref{eq:pb_1})(\ref{eq:pb_2})に以下の制約を追加する．
+        $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し，以下の制約を追加する．
     \vspace{-3mm}
         \begin{eqnarray}
             \sum_{i=1}^{n+1} x_{ij}=1 \; (j \in \{l,l+1, \ldots,u\})\\
