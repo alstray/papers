@@ -132,7 +132,7 @@
       \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph0.tex}
-        ステップ0\\(初期状態)
+        ステップ0($=\alpha$)
       \end{column}
       \begin{column}{0.05\textwidth}
         \textbf{$\longrightarrow$}
@@ -148,7 +148,7 @@
       \begin{column}{0.3\textwidth}
         \centering
         \input{tikz/graph2.tex}
-        ステップ2\\(終了状態)
+        ステップ2($=\beta$)
       \end{column}
     \end{columns}
   \end{exampleblock}
@@ -182,7 +182,7 @@
 
 \begin{frame}\frametitle{研究目的}
   \begin{alertblock}{目的}
-    ASPを利用し，PSPACE完全な問題の一つである$k \ge 4$の$k$彩色遷移問題を高速で解く．%ける符号化を提案し評価する．
+    ASPを利用し，組合せ遷移問題の一つであり，PSPACE完全な問題の一つでもある$k \ge 4$の$k$彩色遷移問題を高速で解く．%ける符号化を提案し評価する．
   \end{alertblock}
 
   \begin{block}{研究内容}
@@ -202,7 +202,7 @@
 \begin{frame}\frametitle{符号化(1/2)}
 
   \begin{itemize}
-    \item $|T|$をステップ数$t$, $|C|$を色数$k$, $|V|$をグラフの頂点数とする.
+    \item $|T|$をステップ数$t$, $|C|$を色数$k$, $|V|$をグラフ$G$の頂点数とする.
     
   \end{itemize}
 
@@ -212,11 +212,12 @@
   \end{table}
 
   \begin{itemize}
-    \item \structure{changed(X, T)}は, ステップ$T-1$とステップ$T$において頂点Xの色が異なることを意味する.
-    \item \structure{unchanged(X, T)}は, ステップ$T-1$とステップ$T$において頂点Xの色が同じであることを意味する.
-    \item アトムを追加することにより, ルール数を削減することができた.
+    \item 3種の符号化は遷移制約の記述が異なる．
+    \item vrc1は基本となる符号化．
+    \item vrc2はアトムchangedを追加し，「遷移で色が変わる頂点は一つのみ」という個数制約を使用．
+    \item vrc3はアトムunchangedを追加し，「遷移で色が変わらない頂点は$|V|-1$個のみ」という個数制約を使用．
+    \item アトムを追加することで遷移制約のルール数を抑えている．
   \end{itemize}
-  % 結果の分類の説明も行う？
 
 \end{frame}
 
@@ -239,7 +240,7 @@
     \item $t$の上限値は\structure{解空間グラフの頂点数$-1$}．
   \end{itemize}
 
-
+% 結果の分類の説明も行う？
   
 \end{frame}
 
