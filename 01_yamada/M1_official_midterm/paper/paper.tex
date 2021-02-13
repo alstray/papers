@@ -1,0 +1,138 @@
+\documentclass[a4j,10pt,dvipdfmx]{jarticle}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{positioning}
+%%%%% 余白の設定 %%%%%%
+\setlength{\textheight}{\paperheight}
+\setlength{\topmargin}{-15.4truemm}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\textheight}{-20truemm}
+\setlength{\textwidth}{\paperwidth}
+\setlength{\oddsidemargin}{-10.4truemm}
+\setlength{\evensidemargin}{\oddsidemargin}
+\addtolength{\textwidth}{-30truemm}
+%%%%% 行間の設定 %%%%%
+\renewcommand{\baselinestretch}{.95}
+\newcommand{\mysection}[1]{\vspace{-15pt}\section{#1}}
+
+\pagestyle{empty}
+
+%%%%% 題目 %%%%%
+\title{解集合プログラミングを用いた配電網問題の解法}
+%%%%% 氏名 %%%%%
+\author{山田 健太郎（番原研究室）}
+
+\date{}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\begin{multicols}{1}
+%%%%% 本文ここから %%%%%
+
+\section{研究概要}
+本研究は，解集合プログラミング技術を活用して，大規模な配電網問題を
+効率よく解くシステムの構築を目指すものである．
+
+\textbf{配電網問題}は，求解困難な組合せ最適化問題の一種である．
+%一般に配電網は，変電所と家庭や工場を結ぶ電力供給経路のネットワークを指す．
+配電網の構成技術は，スマートグリッドや災害時の障害箇所の迂回構成など
+を支える重要な基盤技術として期待されている．
+配電網問題は，供給経路に関する\textbf{トポロジ制約}と，配電システムに関する
+\textbf{電気制約}を満たした上で，損失電力を最小にするスイッチの開閉状態を
+求める問題である．
+厳密解法として，フロンティア法による解法が提案されており，実用規模の配電網問題に
+おいて最適解を発見している\cite{Minato:dnet:ZDD}．
+
+\textbf{解集合プログラミング}(Answer Set Programming; ASP\cite{inoue08:jssst})は，
+論理プログラミングから派生したプログラミングパラダイムである．
+ASP言語は，一階論理に基づく知識表現言語の一種であり，論理プログラムはASPの
+ルールの有限集合である．ASPシステムは論理プログラムから安定モデル意味論に
+基づく解集合を計算するシステムである．近年，SATソルバーの技術を応用した高速な
+ASPシステムが確立され，制約充足問題，プランニング，システム生物学，時間割問題，
+システム検証など様々な分野への実用的応用が急速に拡大している．
+
+%%%%%% 研究成果 %%%%%%
+\mysection{研究成果}
+\textbf{トポロジ制約}~~
+トポロジ制約を満たす配電網構成は，グラフと根と呼ばれる特別なノードから
+\textbf{根付き全域森}\cite{Minato:dnet:netuki}
+を求める根付き全域森問題に帰着することができる．この問題に対し，考案したASP符号化では， 
+根付き全域森の連結制約をASPの個数制約で表現しており，基礎化後のルール数を抑えるよう工夫
+されている．また個数制約に加え，問題を有向グラフとすることでノードの入次数の制約により，
+非閉路制約を表現する符号化も新たに考案した．
+評価実験として，配電網問題及び，グラフ彩色問題を基に作成したベンチマーク問題を
+用いて，提案した符号化の性能評価を行ったところ，新たに考案した符号化では，85問中84問を
+解くことができ，求解までのリスタート数が大幅に減少する結果を示した．
+
+
+\textbf{根付き全域森遷移問題}~~
+根付き全域森問題とその2つの実行可能解が与えられたとき，
+ある解から他のもう一つの解へ根付き全域森の制約を満たしながら移る解の遷移問題として，
+問題の拡張を行った．この問題に対し，根付き全域森問題のASP符号化
+の自然な拡張である\textbf{シングルショット符号化}と，ASPシステム\textit{clingo}の
+インクリメンタル解法ライブラリを用いた\textbf{マルチショット符号化}を考案した．
+マルチショット符号化は，同様の探索失敗で獲得した学習節を保持するため，大規模な問題を
+効率的に解くことができる．評価実験では，各ステップ間で変更可能な辺の数を1つに制限し，
+最短ステップ長での変更手順を求めた．結果として，マルチショット符号化は，シングルショット
+符号化と比較して，平均で3.3倍の求解時間の高速化を実現した．また，最短ステップ長が10の問題も
+解けることを確認した．
+
+%%%%%% まとめ %%%%%%
+\mysection{まとめ}
+本稿では，配電網問題のトポロジ制約及び根付き全域森遷移問題について，
+解集合プログラミング技術を用いた解法を提案し，符号化の特徴と評価実験の結果を示した．
+
+今後の課題として，電気制約のASP符号化の実装を考えている．
+電気制約のうち，電流に関する制約の実装方針を示す．変電所を定電流源とした場合では，
+ある配電区間に流れる電流の値は，その配電区間より下流の配電区間に流れる電流の線形和として
+表すことができる．そのため，トポロジ制約を満たす実行可能解から配電区間を構成し直し，
+その構成を基に電流の値を計算する必要がある．
+
+%%%%%% 業績 %%%%%%
+\mysection{研究業績}
+\begin{itemize}
+ \setlength{\parskip}{0pt} % 段落間
+ \setlength{\itemsep}{2pt} % 項目間
+ \small
+ \item 発表．\textbf{学生奨励賞受賞．}「解集合プログラミングを用いた配電網問題の解法に関する一考察」．
+	   2020年度日本ソフトウェア科学会第37回大会. 
+ \item 発表．「解集合プログラミングを用いた配電網問題の解法に関する一考察」．
+	   NII共同研究「巨大な制約充足問題を解くためのSAT型CSPソルバーの研究開発」．
+ \item 発表．「解集合プログラミングを用いた配電網問題の解法」．
+	   基盤(A)「離散構造処理系に基づく列挙と最適化の統合的技法の研究」プロジェクト近況報告＆自由討論会．
+\end{itemize}
+
+
+%%%%% 参考文献 %%%%%
+% {
+% \small
+% \setlength{\itemsep}{-2pt} 
+%  \bibliographystyle{junsrt}
+%  \bibliography{bachelor,aisat}    % 参考文献リスト
+%}
+
+\begin{thebibliography}{10}
+\small
+\setlength{\itemsep}{-2pt} 
+\bibitem{Minato:dnet:ZDD} 井上武 ほか. フロンティア法による電力網構成制御. 
+		 オペレーションズ・リサーチ, Vol. 57, No. 11, pp. 610-615, nov 2012.
+\bibitem{Minato:dnet:netuki} 川原純, 湊真一. グラフ列挙索引化技法の種々の問題への適用. 
+		 オペレーションズ・リサーチ, Vol. 57, No. 11, pp. 604-609, nov 2012. 
+\bibitem{inoue08:jssst} 井上克巳, 坂間千秋: 論理プログラミングから解集合プログラミングへ, 
+		 コンピュータソフトウェア, Vol. 25, No. 3(2008), pp. 20-32.
+\end{thebibliography}
+
+%%%%% 本文ここまで %%%%%
+\end{multicols}
+\vfill
+\noindent
+{\gt コメント欄}
+{\footnotesize
+（本資料をそのまま発表者に返却します．コメント欄以外にもコメントを書いていただいてもかまいません．）}
+\\
+\fbox{\begin{minipage}{\textwidth}\noindent\\\\\end{minipage}}	
+\end{document}
