@@ -1,0 +1,156 @@
+\documentclass[a4j,10pt]{jarticle}
+\usepackage{multicol}
+%\usepackage{caption}
+%%%%% 余白の設定 %%%%%%
+\setlength{\textheight}{\paperheight}
+\setlength{\topmargin}{-15.4truemm}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\textheight}{-20truemm}
+\setlength{\textwidth}{\paperwidth}
+\setlength{\oddsidemargin}{-10.4truemm}
+\setlength{\evensidemargin}{\oddsidemargin}
+\addtolength{\textwidth}{-30truemm}
+%%%%% 行間の設定 %%%%%
+\renewcommand{\baselinestretch}{.95}
+
+\pagestyle{empty}
+
+%%%%% 題目 %%%%%
+\title{解集合プログラミングを用いた車両装備仕様問題の解法}
+%%%%% 氏名 %%%%%
+\author{竹内 頼人（番原研究室）}
+
+\date{\today}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\begin{multicols}{1}
+%%%%% 本文ここから %%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{研究の概要}
+% 車両装備仕様とは，簡単に言うと，自動車のカタログに記載されているモデル／
+% グレードと装備の組合せのことである．
+\textbf{車両装備仕様問題}は，組合せ最適化問題の一種であり，
+与えられたモデル/グレードの個数，装備タイプの集合，装備オプションの集
+合などから，装備および燃費に関する制約を満たしつつ，
+予想販売台数の最大化，装備オプション数の最小化などトレードオフの関係に
+ある複数の目的関数のもとで最適な車両装備仕様を求める問題である．
+本研究では，2020年度から導入された
+企業別平均燃費(Corporate Average Fuel Economy; CAFE)
+方式と呼ばれる燃費規制に基づく車両装備仕様問題(\textbf{CAFE問題})を対
+象とする．
+
+\textbf{解集合プログラミング}
+(Answer Set Programming; ASP)
+は，論理プログラミングから派生した宣言的プログラミングパラダイムである．
+ASP言語は一階論理に基づく知識表現言語の一種である．
+% 論理プログラムはASPのルールの有限集合である．
+ASPシステムは論理プログラムから安定モデル意味論
+に基づく解集合を計算するシステムである．
+近年，SAT 技術を応用した高速 ASP システムが実現され，
+システム検証，
+%プランニング，
+システム生物学
+など様々な分野への実用的応用が急速に拡大している．
+
+\textbf{本研究の目的}は，ASP を多目的最適化問題へ応用する試みとして，
+ASP を基盤とした CAFE 問題ソルバーを実現することである．
+CAFE 問題の ASP 符号化の研究開発を中心に研究を進める．
+企業から提供を受けたベンチマーク問題を使って
+手法およびソルバーを評価し，ASP の特長を活かした多目的最適化の利点・実
+用性を明らかにする．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{研究成果}
+% 提案手法では，まず与えられた問題インスタンスを ASP のファクト形式に変
+% 換した後，それらファクトと CAFE 問題を解くための ASP 符号化と結合した
+% 上で，高速 ASP システムを用いて解を求める．
+
+\textbf{単目的 CAFE 問題に関する研究 (卒業研究). }
+予想販売台数の最大化を目的関数とする単目的 CAFE 問題に対して，
+基本符号化と改良符号化の2種類の ASP 符号化を考案した．
+%基本符号化は CAFE 問題の制約を ASP のルール17個で簡潔に表現できる．
+特に，改良符号化は，装備仕様の燃費や予想販売台数を算出するために必要な
+IWR (Inertial Working Rating) 値の総和の上下限を厳密に計算
+することにより，基礎化後のルール数を少なく抑えるよう工夫されている．
+%
+提案手法の有効性を評価するために，企業から提供を受けたベンチマーク問題
+集を用いて実行実験を行った結果，
+基本符号化と改良符号化はどちらも小規模な問題の最適解を求めることができた．
+また，実用規模およびより大規模な問題に対しては，
+改良符号化が基本符号化より優れた結果を示し，その優位性が確認できた．
+
+\textbf{多目的 CAFE 問題に関する研究. }
+予想販売台数の最大化と装備オプション数の最小化の2つの目的関数をもつ
+多目的 CAFE 問題に対して，パレート最適解を求める Asprin 符号化を新たに
+考案した．
+Asprin 言語は，複数の目的関数およびそれらの間の選好 (preference)
+を記述できるように ASP 言語を拡張したものである~\cite{brewka_15}．
+%
+企業から提供を受けたベンチマーク問題集を用いて実行実験を行った結果，
+小規模な問題では，パレート最適解を全列挙することに成功した
+(下表参照)．
+
+\begin{center}
+% \renewcommand{\arraystretch}{0.9}
+% \tabcolsep = 0.9mm
+  \begin{tabular}{c|r|rr}
+  問題   & CAFE値  & パレート最 & CPU時間 \\
+         & (L/km)  & 適解の個数  & (秒) \\ \hline
+  small  & 8.5   & 8             & 35.136     \\
+  small  & 9.0   & 5             & 1085.354   \\
+  small  & 9.5   & --            & Timeout    \\
+  small  & 10.0  & 1             & 1.863      \\
+  small  & 10.5  & 0             & 0.221      \\ \hline
+ \end{tabular}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{まとめと今後の課題}
+解集合プログラミングを用いた CAFE 問題の解法について，
+研究概要とこれまでの研究成果を述べた．
+今後の課題は，
+認証制約，
+適用タイミング制約，
+IWRテーブル制約
+など，CAFE 問題に対する様々な追加制約に対応し，
+ソルバーの実用性を高めることである．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{受賞}
+
+\noindent\textbf{学生奨励賞}\\
+竹内頼人, 田村直之, 番原睦則.
+車両装備仕様問題に対する解集合プログラミングの適用.
+日本ソフトウェア科学会第37回大会講演論文集,
+2020年9月9日. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% 参考文献 %%%%%
+\begin{thebibliography}{10}
+\bibitem{brewka_15}
+G. Brewka, J. Delgrande, J. Romero, T. Schaub (2015) 
+asprin: Customizing Answer Set Preferences without a Headache.
+In: Proceedings of the Twenty-Ninth National Conference on Artificial
+Intelligence (AAAI'15), pp.1467--1474, AAAI Press, 2015.
+\end{thebibliography}
+
+
+%%%%% 本文ここまで %%%%%
+\end{multicols}
+\vfill
+\noindent
+{\gt コメント欄}
+{\footnotesize
+（本資料をそのまま発表者に返却します．コメント欄以外にもコメントを書いていただいてもかまいません．）}
+\\
+\fbox{\begin{minipage}{\textwidth}\noindent\\\\\end{minipage}}	
+\end{document}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
