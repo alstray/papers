@@ -66,13 +66,13 @@
 % 背景理論付き(SATSatisfiability Modulo Theories; SMT)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{背景理論付き(SATSatisfiability Modulo Theories; SMT)}
+    \frametitle{背景理論付きSAT(Satisfiability Modulo Theories; SMT)}
     \begin{itemize}
         \item SMTは等号や算術，配列やリスト，ビットベクターなど様々な背景 理論が扱えるように，SAT を拡張・発展させた技術である．
         \item 近年，SMTソルバーは制約充足問題，プログラム検証などへの応用が活発に研究されている.
     \end{itemize}
     \begin{alertblock}{SMTソルバーの特長}
-        背景理論をより表現能力 の高い述語論理で記述できるため，問題を簡潔に記述することができる
+        背景理論をより表現能力 の高い述語論理で記述できるため，問題を簡潔に記述することができる.
     \end{alertblock}
 \end{frame}
 
@@ -86,7 +86,7 @@
     \begin{itemize}
         \item $distinct(x_1,x_2,...x_n)$は，$x_i$ が互いに異なる値をとることを表す．
         \item 制約充足問題に対する SMT ソルバーの 求解性能は，SAT 型制約ソルバーと比べて劣っているとの報告もあり， 
-            distinct 制約を含めその効率的な実装は重要な研究課題となっている
+            distinct 制約を含めその効率的な実装は重要な研究課題となっている.
     \end{itemize}
     \begin{block}{\distinct 制約の定式化}
         $distinct(x_1,x_2,...x_n)$は以下のように表される．\\
@@ -102,7 +102,7 @@
         $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
         \begin{eqnarray}
             \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
-    \vspace{-3mm}
+            \vspace{-3mm}
             \begin{cases}
                 \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
                 \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
@@ -120,7 +120,7 @@
     \input{tikz/queen_graph}
     \begin{itemize}
         \item N × N の大きさのチェス盤上に N 色のク イーンの駒を各色 N 個ずつ互いに取り合わないように配置する問題である.
-        \item 各行，各列，各右上がり対角線，各右下 がり対角線に配置されるクイーンの色が互いに異なるということである
+        \item \alert{各行}，\alert{各列}，\alert{各右上がり対角線}，\alert{各右下がり対角線}に配置されるクイーンの色が互いに異なる.
     \end{itemize}
 \end{frame}
 
@@ -148,7 +148,7 @@
                 \begin{itemize}
                     \item N=11までの解を得ることが出来た．
                     \item 適用した高速化手法が求解速度を向上させることを確認した．
-                    % \item ハイブリッドモデルは求解性能を低下させることを確認した．
+                        % \item ハイブリッドモデルは求解性能を低下させることを確認した．
                 \end{itemize}
         \end{enumerate}
     \end{block}
@@ -164,15 +164,15 @@
     \begin{block}{}
         \begin{itemize}
             \item \structure{ 色変数モデル}\\
-                盤面に配置されるクイーンの駒の色を整数変数として解を求める制約モデル
+                盤面に配置されるクイーンの駒の色を整数変数として解を求める制約モデル.
             \item \structure{ 位置変数モデル}\\
-                盤面上のある行に対して何列目にクイーンが配置されるのかを整数変数として解を求める制約モデル
+                盤面上のある行に対して何列目にクイーンが配置されるのかを整数変数として解を求める制約モデル.
             \item \structure{ 0-1変数モデル}\\
-                盤面に配置されるクイーンの駒の色を0-1変数として解を求める制約モデル\\
-                つまり，色変数モデルの整数変数を 0-1 変数で表したモデル
+                盤面に配置されるクイーンの駒の色を0-1変数として解を求める制約モデル.\\
+                つまり，色変数モデルの整数変数を 0-1 変数で表したモデル.
             \item \structure{ ハイブリッドモデル}\\
-                色・位置変数モデルと0-1変数モデルを組み合わせたモデル\\
-                チャネリング制約を用いて解を整数変数で求め，\distinct 制約を0-1変数で解く
+                色・位置変数モデルと0-1変数モデルを組み合わせたモデル.\\
+                チャネリング制約を用いて解を整数変数で求め，\distinct 制約を0-1変数で解く.
         \end{itemize}
     \end{block}
 \end{frame}
@@ -211,20 +211,20 @@
     PB符号化した\distinct 制約に対して2つの改良手法[大野,2019]を適用した．
     \begin{exampleblock}{改良手法1}
         $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し，以下の制約を追加する．
-    \vspace{-3mm}
+        \vspace{-3mm}
         \begin{eqnarray}
             \sum_{i=1}^{n} x_{ij}=y_j \; (j \in \{l,l+1, \ldots,u\})\\
-    \vspace{-3mm}
+            \vspace{-3mm}
             \sum_{j=l}^{u} y_j = n
         \end{eqnarray}
     \end{exampleblock}
     \vspace{-3mm}
     \begin{exampleblock}{改良手法2}
         $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し，以下の制約を追加する．
-    \vspace{-3mm}
+        \vspace{-3mm}
         \begin{eqnarray}
             \sum_{i=1}^{n+1} x_{ij}=1 \; (j \in \{l,l+1, \ldots,u\})\\
-    \vspace{-3mm}
+            \vspace{-3mm}
             \sum_{j=l}^{u} x_{(n+1)j} = u-l-n
         \end{eqnarray}
     \end{exampleblock}
@@ -423,7 +423,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ハイブリッドモデル
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\small
+\begin{frame}[fragile]\small
     \frametitle{ハイブリッドモデル}
     色・位置変数モデルと0-1変数モデルを組み合わせたモデル\\
     % 整数変数を用いる色変数モデルと位置変数モデルに\distinct 制約のPB符号化とその高速化手法を
@@ -438,6 +438,14 @@
                 $$ c_{ij}=k \Rightarrow c_{ijk}=1 \; (i,j,k \in \bf N)$$
         \end{itemize}
     \end{block}
+    例えば，$i,j,k=0$の時に
+    上記の制約はsmt-lib2形式では以下のように宣言できる．
+    \begin{exampleblock}{}
+\begin{verbatim}
+(assert (=> (= c_0_0_0 1) (= c_0_0 0)))
+(assert (=> (= c_0_0 0) (= c_0_0_0 1)))
+\end{verbatim}
+    \end{exampleblock}
 \end{frame}
 
 
@@ -446,26 +454,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]\small
     \frametitle{SMT-LIBでの記述方法}
-SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である．\\
-変数や制約を宣言する際には以下のように宣言される．
-\begin{exampleblock}{変数の宣言}
-    整数変数\verb|x|は以下のように宣言される．
+    SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である．\\
+    変数や制約を宣言する際には以下のように宣言される．
+    \begin{exampleblock}{変数の宣言}
+        整数変数\verb|x|は以下のように宣言される．
 \begin{verbatim}
 (declare-const x Int)
 \end{verbatim}
-\end{exampleblock}
-\begin{exampleblock}{制約の宣言}
-    変数\verb|x|が0以上4以下であることは以下のように宣言される．
+    \end{exampleblock}
+    \begin{exampleblock}{制約の宣言}
+        変数\verb|x|が0以上4以下であることは以下のように宣言される．
 \begin{verbatim}
 (assert (and (>= x 0) (<= x 4)))
 \end{verbatim}
-\end{exampleblock}
-\begin{exampleblock}{\distinct 制約の宣言}
-    $distinct(x,y,z)$は以下のように宣言される．
+    \end{exampleblock}
+    \begin{exampleblock}{\distinct 制約の宣言}
+        $distinct(x,y,z)$は以下のように宣言される．
 \begin{verbatim}
 (assert (distinct x y z))
 \end{verbatim}
-\end{exampleblock}
+    \end{exampleblock}
 \end{frame}
 
 
@@ -474,19 +482,19 @@ SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である
 % 鳩の巣原理のSMT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]\small
-\frametitle{鳩の巣原理のSMT符号化}
-鳩の巣原理を用いた高速化手法についてのSMT符号化を示す．\\
-例として\verb|(distinct x_0 x_1 x_2 x_3)|は以下のように宣言される．\\
-(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
-\begin{exampleblock}{}\scriptsize
+    \frametitle{鳩の巣原理のSMT符号化}
+    鳩の巣原理を用いた高速化手法についてのSMT符号化を示す．\\
+    例として\verb|(distinct x_0 x_1 x_2 x_3)|は以下のように宣言される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
 (assert (distinct x_0 x_1 x_2 x_3))
 (assert (or (>= x_0 3) (>= x_1 3) (>= x_2 3) (>= x_3 3)))
 (assert (or (<= x_0 1) (<= x_1 1) (<= x_2 1) (<= x_3 1)))
 \end{verbatim}
-\end{exampleblock}
-2,3行目が高速化のために追加した制約である．\\
-これにより，例えば\verb|x_0,x_1,x_2|にそれぞれ0,1,2が割り当てられた際に\verb|x_3|が3以上となるので，探索空間が削減される．
+    \end{exampleblock}
+    2,3行目が高速化のために追加した制約である．\\
+    これにより，例えば\verb|x_0,x_1,x_2|にそれぞれ0,1,2が割り当てられた際に\verb|x_3|が3以上となるので，探索空間が削減される．
 \end{frame}
 
 
@@ -495,10 +503,10 @@ SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]\small
     \frametitle{at-least-one制約のSMT符号化}
-at-least-one制約を用いた高速化手法についてのSMT符号化を示す．\\
-例として，\verb|(distinct x_0 x_1 x_2 x_3 x_4)|は以下のように宣言される．\\
-(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
-\begin{exampleblock}{}\scriptsize
+    at-least-one制約を用いた高速化手法についてのSMT符号化を示す．\\
+    例として，\verb|(distinct x_0 x_1 x_2 x_3 x_4)|は以下のように宣言される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
 (assert (distinct x_0 x_1 x_2 x_3 x_4))
 (assert (or (= x_0 0) (= x_1 0) (= x_2 0) (= x_3 0) (= x_4 0)))
@@ -507,9 +515,9 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 (assert (or (= x_0 3) (= x_1 3) (= x_2 3) (= x_3 3) (= x_4 3)))
 (assert (or (= x_0 4) (= x_1 4) (= x_2 4) (= x_3 4) (= x_4 4)))
 \end{verbatim}
-\end{exampleblock}
-2行目以降が高速化のために追加した制約である．\\
-これにより，例えば\verb|x_0,x_1,x_2,x_3|に0以外が割り当てられた際に\verb|x_4|が0になることが確定するので，探索空間が削減される．
+    \end{exampleblock}
+    2行目以降が高速化のために追加した制約である．\\
+    これにより，例えば\verb|x_0,x_1,x_2,x_3|に0以外が割り当てられた際に\verb|x_4|が0になることが確定するので，探索空間が削減される．
 \end{frame}
 
 
@@ -518,10 +526,10 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
     \frametitle{\distinct 制約のPB符号化手法のSMT符号化}
-\distinct 制約のPB符号化手法についてのSMT符号化を示す．\\
-例として，\verb|(distinct x_0 x_1 x_2)|は以下のように宣言される．\\
-(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
-\begin{exampleblock}{}\scriptsize
+    \distinct 制約のPB符号化手法についてのSMT符号化を示す．\\
+    例として，\verb|(distinct x_0 x_1 x_2)|は以下のように宣言される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
 (assert (= (+ x_0_0 x_0_1 x_0_2 x_0_3 x_0_4) 1))
 (assert (= (+ x_1_0 x_1_1 x_1_2 x_1_3 x_1_4) 1))
@@ -532,8 +540,8 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 (assert (<= (+ x_0_3 x_1_3 x_2_3) 1))
 (assert (<= (+ x_0_4 x_1_4 x_2_4) 1))
 \end{verbatim}
-\end{exampleblock}
-\distinct 制約内の要素数が\verb|x_i|のドメインサイズと同じとき，上記の制約の"\verb|<=|"は"\verb|=|"となる．
+    \end{exampleblock}
+    \distinct 制約内の要素数が\verb|x_i|のドメインサイズと同じとき，上記の制約の"\verb|<=|"は"\verb|=|"となる．
 \end{frame}
 
 
@@ -543,18 +551,18 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]\footnotesize
     \frametitle{改良手法1のSMT符号化}
-\distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
-例として，\verb|(distinct x_0 x_1 x_2)|は以下のような制約が追加される．\\
-(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
+    例として，\verb|(distinct x_0 x_1 x_2)|は以下のような制約が追加される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
 
-\begin{columns}
-    \begin{column}{0.5\textwidth}
-\begin{exampleblock}{}\scriptsize
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
 (declare-const y_0 Int)
 (assert (and (>= y_0 0) (<= y_0 1)))
 (declare-const y_1 Int)
-(assert (and (>= y_1 0) (<= y_11 1)))
+(assert (and (>= y_1 0) (<= y_1 1)))
 (declare-const y_2 Int)
 (assert (and (>= y_2 0) (<= y_2 1)))
 (declare-const y_3 Int)
@@ -568,12 +576,12 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 (assert (= y_4 (+ x_0_4 x_1_4 x_2_4)))
 (assert (= (+ y_0 y_1 y_2 y_3 y_4) 3))
 \end{verbatim}
-\end{exampleblock}
-\end{column}
-\begin{column}{0.5\textwidth}\scriptsize
-    これは，例えば\verb|x_0,x_1,x_2|が0,1,2にならないと分かった際に，\verb|y_0 + y_1 + y_2 + y_3 + y_4 = 3|が成り立たないとわかるため，探索を切り上げることができる．
-\end{column}
-\end{columns}
+            \end{exampleblock}
+        \end{column}
+        \begin{column}{0.5\textwidth}\scriptsize
+            これは，例えば\verb|x_0,x_1,x_2|が0,1,2にならないと分かった際に，\verb|y_0 + y_1 + y_2 + y_3 + y_4 = 3|が成り立たないとわかるため，探索を切り上げることができる．
+        \end{column}
+    \end{columns}
 \end{frame}
 
 
@@ -582,13 +590,13 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]\footnotesize
     \frametitle{改良手法2のSMT符号化}
-\distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
-例として，\verb|(distinct x_0 x_1 x_2)|は以下のような制約が追加される．\\
-(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
+    例として，\verb|(distinct x_0 x_1 x_2)|は以下のような制約が追加される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
 
-\begin{columns}
-    \begin{column}{0.5\textwidth}
-\begin{exampleblock}{}\scriptsize
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
 (declare-const y_0 Int)
 (assert (and (>= y_0 0) (<= y_0 1)))
@@ -607,12 +615,12 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 (assert (= (+ x_0_3 x_1_3 x_2_3 y_3) 1))
 (assert (= (+ x_0_4 x_1_4 x_2_4 y_4) 1))
 \end{verbatim}
-\end{exampleblock}
-\end{column}
-\begin{column}{0.5\textwidth}\scriptsize
-    これは，例えば\verb|x_0,x_1,x_2|が0,1,2にならないと分かった際に，\verb|y_0 + y_1 + y_2 + y_3 + y_4 = 2|が成り立たないとわかるため，探索を切り上げることができる．
-\end{column}
-\end{columns}
+            \end{exampleblock}
+        \end{column}
+        \begin{column}{0.5\textwidth}\scriptsize
+            これは，例えば\verb|x_0,x_1,x_2|が0,1,2にならないと分かった際に，\verb|y_0 + y_1 + y_2 + y_3 + y_4 = 2|が成り立たないとわかるため，探索を切り上げることができる．
+        \end{column}
+    \end{columns}
 
 \end{frame}
 
