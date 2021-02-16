@@ -447,6 +447,7 @@
 \begin{frame}[fragile]\small
     \frametitle{SMT-LIBでの記述方法}
 SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である．\\
+変数や制約を宣言する際には以下のように宣言される．
 \begin{exampleblock}{変数の宣言}
     整数変数\verb|x|は以下のように宣言される．
 \begin{verbatim}
@@ -459,6 +460,12 @@ SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である
 (assert (and (>= x 0) (<= x 4)))
 \end{verbatim}
 \end{exampleblock}
+\begin{exampleblock}{\distinct 制約の宣言}
+    $distinct(x,y,z)$は以下のように宣言される．
+\begin{verbatim}
+(assert (distinct x y z))
+\end{verbatim}
+\end{exampleblock}
 \end{frame}
 
 
@@ -469,16 +476,33 @@ SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である
 \begin{frame}[fragile]\small
 \frametitle{鳩の巣原理のSMT符号化}
 鳩の巣原理を用いた高速化手法についてのSMT符号化を示す．\\
-例として\verb|(distinct c_0_3 c_1_2 c_2_1 c_3_0)|は以下のように宣言される．\\
-(\verb|c_i_j|$\in \{0,1,2,3,4\}$である)
+例として\verb|(distinct x_1 x_2 x_3 x_4)|は以下のように宣言される．\\
+(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
 \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
-(assert (distinct c_0_3 c_1_2 c_2_1 c_3_0))
-(assert (or (>= c_0_3 3) (>= c_1_2 3) (>= c_2_1 3) (>= c_3_0 3)))
-(assert (or (<= c_0_3 1) (<= c_1_2 1) (<= c_2_1 1) (<= c_3_0 1)))
+(assert (distinct x_1 x_2 x_3 x_4))
+(assert (or (>= x_1 3) (>= x_2 3) (>= x_3 3) (>= x_4 3)))
+(assert (or (<= x_1 1) (<= x_2 1) (<= x_3 1) (<= x_4 1)))
 \end{verbatim}
 \end{exampleblock}
 \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 鳩の巣原理のSMT符号化
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]\small
+% \frametitle{鳩の巣原理のSMT符号化}
+% 鳩の巣原理を用いた高速化手法についてのSMT符号化を示す．\\
+% 例として\verb|(distinct c_0_3 c_1_2 c_2_1 c_3_0)|は以下のように宣言される．\\
+% (\verb|c_i_j, i, j|$\in \{0,1,2,3,4\}$である)
+% \begin{exampleblock}{}\scriptsize
+% \begin{verbatim}
+% (assert (distinct c_0_3 c_1_2 c_2_1 c_3_0))
+% (assert (or (>= c_0_3 3) (>= c_1_2 3) (>= c_2_1 3) (>= c_3_0 3)))
+% (assert (or (<= c_0_3 1) (<= c_1_2 1) (<= c_2_1 1) (<= c_3_0 1)))
+% \end{verbatim}
+% \end{exampleblock}
+% \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -487,19 +511,62 @@ SMTソルバーを扱う際に使用する記述方法はsmt-lib2形式である
 \begin{frame}[fragile]\small
     \frametitle{at-least-one制約のSMT符号化}
 at-least-one制約を用いた高速化手法についてのSMT符号化を示す．\\
-例として，\verb|(distinct c_0_0 c_0_1 c_0_2 c_0_3 c_0_4)|は以下のように宣言される．\\
-(\verb|c_i_j|$\in \{0,1,2,3,4\}$である)
+例として，\verb|(distinct x_0 x_1 x_2 x_3 x_4)|は以下のように宣言される．\\
+(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
 \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
-(assert (distinct c_0_0 c_0_1 c_0_2 c_0_3 c_0_4))
-(assert (or (= c_0_0 0) (= c_0_1 0) (= c_0_2 0) (= c_0_3 0) (= c_0_4 0)))
-(assert (or (= c_0_0 1) (= c_0_1 1) (= c_0_2 1) (= c_0_3 1) (= c_0_4 1)))
-(assert (or (= c_0_0 2) (= c_0_1 2) (= c_0_2 2) (= c_0_3 2) (= c_0_4 2)))
-(assert (or (= c_0_0 3) (= c_0_1 3) (= c_0_2 3) (= c_0_3 3) (= c_0_4 3)))
-(assert (or (= c_0_0 4) (= c_0_1 4) (= c_0_2 4) (= c_0_3 4) (= c_0_4 4)))
+(assert (distinct x_0 x_1 x_2 x_3 x_4))
+(assert (or (= x_0 0) (= x_1 0) (= x_2 0) (= x_3 0) (= x_4 0)))
+(assert (or (= x_0 1) (= x_1 1) (= x_2 1) (= x_3 1) (= x_4 1)))
+(assert (or (= x_0 2) (= x_1 2) (= x_2 2) (= x_3 2) (= x_4 2)))
+(assert (or (= x_0 3) (= x_1 3) (= x_2 3) (= x_3 3) (= x_4 3)))
+(assert (or (= x_0 4) (= x_1 4) (= x_2 4) (= x_3 4) (= x_4 4)))
 \end{verbatim}
 \end{exampleblock}
 \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % at-least-one制約のSMT符号化
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]\small
+%     \frametitle{at-least-one制約のSMT符号化}
+% at-least-one制約を用いた高速化手法についてのSMT符号化を示す．\\
+% 例として，\verb|(distinct c_0_0 c_0_1 c_0_2 c_0_3 c_0_4)|は以下のように宣言される．\\
+% (\verb|c_i_j, i, j|$\in \{0,1,2,3,4\}$である)
+% \begin{exampleblock}{}\scriptsize
+% \begin{verbatim}
+% (assert (distinct c_0_0 c_0_1 c_0_2 c_0_3 c_0_4))
+% (assert (or (= c_0_0 0) (= c_0_1 0) (= c_0_2 0) (= c_0_3 0) (= c_0_4 0)))
+% (assert (or (= c_0_0 1) (= c_0_1 1) (= c_0_2 1) (= c_0_3 1) (= c_0_4 1)))
+% (assert (or (= c_0_0 2) (= c_0_1 2) (= c_0_2 2) (= c_0_3 2) (= c_0_4 2)))
+% (assert (or (= c_0_0 3) (= c_0_1 3) (= c_0_2 3) (= c_0_3 3) (= c_0_4 3)))
+% (assert (or (= c_0_0 4) (= c_0_1 4) (= c_0_2 4) (= c_0_3 4) (= c_0_4 4)))
+% \end{verbatim}
+% \end{exampleblock}
+% \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PB符号化のSMT符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+    \frametitle{\distinct 制約のPB符号化手法のSMT符号化}
+\distinct 制約のPB符号化手法についてのSMT符号化を示す．\\
+例として，\verb|(distinct x_0 x_1)|は以下のように宣言される．\\
+(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+\begin{exampleblock}{}\scriptsize
+\begin{verbatim}
+(assert (= (+ x_0_0 x_0_1 x_0_2 x_0_3 x_0_4) 1))
+(assert (= (+ x_1_0 x_1_1 x_1_2 x_1_3 x_1_4) 1))
+(assert (<= (+ x_0_0 x_1_0) 1))
+(assert (<= (+ x_0_1 x_1_1) 1))
+(assert (<= (+ x_0_2 x_1_2) 1))
+(assert (<= (+ x_0_3 x_1_3) 1))
+(assert (<= (+ x_0_4 x_1_4) 1))
+\end{verbatim}
+\end{exampleblock}
+\end{frame}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -508,27 +575,27 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 \begin{frame}[fragile]\small
     \frametitle{改良手法1のSMT符号化}
 \distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
-例として，\verb|(distinct c_0_1 c_1_0)|は以下のように宣言される．\\
-(\verb|c_i_j|$\in \{0,1,2,3,4\}$である)
+例として，\verb|(distinct x_0 x_1)|は以下のような制約が追加される．\\
+(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
 
 \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
-(declare-const _T1_0 Int)
-(assert (and (>= _T1_0 0) (<= _T1_0 1)))
-(declare-const _T1_1 Int)
-(assert (and (>= _T1_1 0) (<= _T1_1 1)))
-(declare-const _T1_2 Int)
-(assert (and (>= _T1_2 0) (<= _T1_2 1)))
-(declare-const _T1_3 Int)
-(assert (and (>= _T1_3 0) (<= _T1_3 1)))
-(declare-const _T1_4 Int)
-(assert (and (>= _T1_4 0) (<= _T1_4 1)))
-(assert (= _T1_0 (+ c_0_1_0 c_1_0_0)))
-(assert (= _T1_1 (+ c_0_1_1 c_1_0_1)))
-(assert (= _T1_2 (+ c_0_1_2 c_1_0_2)))
-(assert (= _T1_3 (+ c_0_1_3 c_1_0_3)))
-(assert (= _T1_4 (+ c_0_1_4 c_1_0_4)))
-(assert (= (+ _T1_0 _T1_1 _T1_2 _T1_3 _T1_4) 2))
+(declare-const y_0 Int)
+(assert (and (>= y_0 0) (<= y_0 1)))
+(declare-const y_1 Int)
+(assert (and (>= y_1 0) (<= y_1 1)))
+(declare-const y_2 Int)
+(assert (and (>= y_2 0) (<= y_2 1)))
+(declare-const y_3 Int)
+(assert (and (>= y_3 0) (<= y_3 1)))
+(declare-const y_4 Int)
+(assert (and (>= y_4 0) (<= y_4 1)))
+(assert (= y_0 (+ x_0_0 x_1_0)))
+(assert (= y_1 (+ x_0_1 x_1_1)))
+(assert (= y_2 (+ x_0_2 x_1_2)))
+(assert (= y_3 (+ x_0_3 x_1_3)))
+(assert (= y_4 (+ x_0_4 x_1_4)))
+(assert (= (+ y_0 y_1 y_2 y_3 y_4) 2))
 \end{verbatim}
 \end{exampleblock}
 \end{frame}
@@ -540,30 +607,94 @@ at-least-one制約を用いた高速化手法についてのSMT符号化を示�
 \begin{frame}[fragile]\small
     \frametitle{改良手法2のSMT符号化}
 \distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
-例として，\verb|(distinct c_0_1 c_1_0)|は以下のように宣言される．\\
-(\verb|c_i_j|$\in \{0,1,2,3,4\}$である)
+例として，\verb|(distinct x_0 x_1)|は以下のような制約が追加される．\\
+(\verb|x_i|$\in \{0,1,2,3,4\}$とする)
 
 \begin{exampleblock}{}\scriptsize
 \begin{verbatim}
-(declare-const _T1_0 Int)
-(assert (and (>= _T1_0 0) (<= _T1_0 1)))
-(declare-const _T1_1 Int)
-(assert (and (>= _T1_1 0) (<= _T1_1 1)))
-(declare-const _T1_2 Int)
-(assert (and (>= _T1_2 0) (<= _T1_2 1)))
-(declare-const _T1_3 Int)
-(assert (and (>= _T1_3 0) (<= _T1_3 1)))
-(declare-const _T1_4 Int)
-(assert (and (>= _T1_4 0) (<= _T1_4 1)))
-(assert (= (+ _T1_0 _T1_1 _T1_2 _T1_3 _T1_4) 3))
-(assert (= (+ c_0_1_0 c_1_0_0 _T1_0) 1))
-(assert (= (+ c_0_1_1 c_1_0_1 _T1_1) 1))
-(assert (= (+ c_0_1_2 c_1_0_2 _T1_2) 1))
-(assert (= (+ c_0_1_3 c_1_0_3 _T1_3) 1))
-(assert (= (+ c_0_1_4 c_1_0_4 _T1_4) 1))
+(declare-const y_0 Int)
+(assert (and (>= y_0 0) (<= y_0 1)))
+(declare-const y_1 Int)
+(assert (and (>= y_1 0) (<= y_1 1)))
+(declare-const y_2 Int)
+(assert (and (>= y_2 0) (<= y_2 1)))
+(declare-const y_3 Int)
+(assert (and (>= y_3 0) (<= y_3 1)))
+(declare-const y_4 Int)
+(assert (and (>= y_4 0) (<= y_4 1)))
+(assert (= (+ y_0 y_1 y_2 y_3 y_4) 3))
+(assert (= (+ x_0_0 x_1_0 y_0) 1))
+(assert (= (+ x_0_1 x_1_1 y_1) 1))
+(assert (= (+ x_0_2 x_1_2 y_2) 1))
+(assert (= (+ x_0_3 x_1_3 y_3) 1))
+(assert (= (+ x_0_4 x_1_4 y_4) 1))
 \end{verbatim}
 \end{exampleblock}
 \end{frame}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 改良手法1のSMT符号化
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]\small
+%     \frametitle{改良手法1のSMT符号化}
+% \distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
+% 例として，\verb|(distinct c_0_1 c_1_0)|は以下のように宣言される．\\
+% (\verb|c_i_j, i, j|$\in \{0,1,2,3,4\}$である)
+%
+% \begin{exampleblock}{}\scriptsize
+% \begin{verbatim}
+% (declare-const _T1_0 Int)
+% (assert (and (>= _T1_0 0) (<= _T1_0 1)))
+% (declare-const _T1_1 Int)
+% (assert (and (>= _T1_1 0) (<= _T1_1 1)))
+% (declare-const _T1_2 Int)
+% (assert (and (>= _T1_2 0) (<= _T1_2 1)))
+% (declare-const _T1_3 Int)
+% (assert (and (>= _T1_3 0) (<= _T1_3 1)))
+% (declare-const _T1_4 Int)
+% (assert (and (>= _T1_4 0) (<= _T1_4 1)))
+% (assert (= _T1_0 (+ c_0_1_0 c_1_0_0)))
+% (assert (= _T1_1 (+ c_0_1_1 c_1_0_1)))
+% (assert (= _T1_2 (+ c_0_1_2 c_1_0_2)))
+% (assert (= _T1_3 (+ c_0_1_3 c_1_0_3)))
+% (assert (= _T1_4 (+ c_0_1_4 c_1_0_4)))
+% (assert (= (+ _T1_0 _T1_1 _T1_2 _T1_3 _T1_4) 2))
+% \end{verbatim}
+% \end{exampleblock}
+% \end{frame}
+%
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 改良手法2のSMT符号化
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]\small
+%     \frametitle{改良手法2のSMT符号化}
+% \distinct 制約のPB符号化手法の改良手法1についてのSMT符号化を示す．\\
+% 例として，\verb|(distinct c_0_1 c_1_0)|は以下のように宣言される．\\
+% (\verb|c_i_j, i, j|$\in \{0,1,2,3,4\}$である)
+%
+% \begin{exampleblock}{}\scriptsize
+% \begin{verbatim}
+% (declare-const _T1_0 Int)
+% (assert (and (>= _T1_0 0) (<= _T1_0 1)))
+% (declare-const _T1_1 Int)
+% (assert (and (>= _T1_1 0) (<= _T1_1 1)))
+% (declare-const _T1_2 Int)
+% (assert (and (>= _T1_2 0) (<= _T1_2 1)))
+% (declare-const _T1_3 Int)
+% (assert (and (>= _T1_3 0) (<= _T1_3 1)))
+% (declare-const _T1_4 Int)
+% (assert (and (>= _T1_4 0) (<= _T1_4 1)))
+% (assert (= (+ _T1_0 _T1_1 _T1_2 _T1_3 _T1_4) 3))
+% (assert (= (+ c_0_1_0 c_1_0_0 _T1_0) 1))
+% (assert (= (+ c_0_1_1 c_1_0_1 _T1_1) 1))
+% (assert (= (+ c_0_1_2 c_1_0_2 _T1_2) 1))
+% (assert (= (+ c_0_1_3 c_1_0_3 _T1_3) 1))
+% (assert (= (+ c_0_1_4 c_1_0_4 _T1_4) 1))
+% \end{verbatim}
+% \end{exampleblock}
+% \end{frame}
 
 
 
