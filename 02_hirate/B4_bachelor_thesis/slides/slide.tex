@@ -68,10 +68,9 @@
 %  \caption{D.~E.~Knuth の教科書にある最短ハミルトン路問題の例}
   \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+  WA から ME までの距離の総和がある閾値以下である
+  ハミルトン路を求める問題．
   \begin{itemize}
-  \item WA から ME までの距離の総和がある閾値以下である
-    ハミルトン路を求める問題．
   \item WA から ME までのハミルトン路は 6,876,928 通り
     あり，最短ハミルトン路は 11698 マイル．
   \item 閾値を最短距離の 10\%増 (12,868 マイル) とした場合，
@@ -81,10 +80,10 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{解集合プログラミング(Answer Set Programming)}
+\begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
   \begin{itemize}
   \item \alert{ASP 言語}は，一階論理に基づく知識表現言語の一種．
-  \item \alert{ASP システム}は論理プログラムから
+  \item \alert{ASP システム}は，論理プログラムから
     安定モデル意味論に基づく解集合を計算するシステム．
   \item 近年，SAT 技術を応用した高速 ASP システムが開発され，
     スケジューリング，プランニング，システム生物学，システム検証，
@@ -267,22 +266,6 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[noframenumbering]{符号化の拡張}
-  \begin{itemize}
-  \item 最短ハミルトン閉路問題への拡張
-    \begin{itemize}
-    \item 目的関数を追加．
-    \item ハミルトン閉路上の辺に付与された距離の総和を最小化．
-    \end{itemize}
-  \item コスト制約付きハミルトン閉路問題への拡張
-    \begin{itemize}
-    \item コスト制約を追加．
-    \item ハミルトン閉路上の辺の距離の総和が閾値以下である．
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{frame}[noframenumbering]{ベンチマーク詳細(1/2)}
 \begin{itemize}
 \item \textsf{color04} (127問)\\
@@ -336,6 +319,19 @@
 \item \textsf{usmap} (1問)\\
   辺の数: 48, 頂点の数:105 
 \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textit{clingo} のオプション}
+   \begin{itemize}
+     \item [\textit{frumpy}] 以前の\textit{clasp}のバージョンで使用されていたものと同様の保守的なデフォルト．
+     \item [\textit{jumpy}] より攻撃的なデフォルト．
+     \item [\textit{tweety}] 典型的なASPの問題を想定したデフォルト．
+     \item [\textit{trendy}] 構造的な問題を想定したデフォルト．
+     \item [\textit{crafty}] 細工された問題を対象としたデフォルト．
+     \item [\textit{handy}] 大規模な問題を対象としたデフォルト。
+%     \item \<ファイル\>:\ 設定ファイルを使用してソルバーを設定する。
+   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -419,6 +415,79 @@
 \item ハミルトン閉路問題を解く ASP 符号化と結合．
 \item ASP システムによって解が計算される．
 \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{グラフの ASP ファクト}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+\begin{center}
+\input{fig/graph_example.tex}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/graph_example.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textsf{undirected} 符号化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/hamilton1.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textsf{directed} 符号化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/hamilton2.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textsf{acyclicity} 符号化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/hamilton3.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{符号化の拡張}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/obj_minimize.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/cost_constraint.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/cost_both.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}
+  \item 最短ハミルトン閉路問題への拡張
+    \begin{itemize}
+    \item 目的関数を追加．
+    \item ハミルトン閉路上の辺に付与された距離の総和を最小化．
+    \end{itemize}
+  \item コスト制約付きハミルトン閉路問題への拡張
+    \begin{itemize}
+    \item コスト制約を追加．
+    \item ハミルトン閉路上の辺の距離の総和が閾値以下である．
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
