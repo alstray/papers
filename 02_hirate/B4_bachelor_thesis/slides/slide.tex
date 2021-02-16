@@ -1,4 +1,4 @@
-\documentclass[dvipdfmx,11pt]{beamer}
+\documentclass[dvipdfmx,10pt]{beamer}
 
 \usepackage{bxdpx-beamer}% dvipdfmxなので必要
 \usepackage{listings,jlisting}%ソースコード貼り付けのため
@@ -60,7 +60,7 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{コスト制約付きハミルトン閉路問題}
+\begin{frame}{コスト制約付きハミルトン路問題[Knuth2015]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{figure}[tb]
   \centering
@@ -68,6 +68,11 @@
 %  \caption{D.~E.~Knuth の教科書にある最短ハミルトン路問題の例}
   \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}  
+  \item 頂点数は48，辺の数が105の米国本土48州の隣接関係を表すグラフ．
+  \item 各辺に付与されている数字は，州都の間の距離(マイル)．
+  \end{itemize}
   WA から ME までの距離の総和がある閾値以下である
   ハミルトン路を求める問題．
   \begin{itemize}
@@ -76,7 +81,6 @@
   \item 閾値を最短距離の 10\%増 (12,868 マイル) とした場合，
     解の総数は 16180 個．
   \end{itemize}
-   
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -92,32 +96,32 @@
 
   \begin{alertblock}{ハミルトン閉路問題に ASP を用いる利点}
     \begin{itemize}
-    \item ASP 言語は表現力が高く，制約の記述が容易．
-    \item 組み込みの非閉路制約を利用できる．
-    \item 高速な解列挙．
+    \item ASP 言語は表現力が高く，記号制約の記述が容易．
+    \item 組み込みの \#edge 宣言を使うことにより，有向グラフの非閉路性を簡潔に記述可能.
+    \item 高速な解列挙が可能．
     \end{itemize}
   \end{alertblock}
 \end{frame}
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{研究目的}
   \begin{alertblock}{研究目的}
   ASP 技術を活用し，大規模なハミルトン閉路問題を
-    効率よく解く手法を模索する．
+    効率よく解くソルバーの実現を目指す．
   \end{alertblock}
   \begin{block}{研究内容}
     \begin{enumerate}
     \item \structure{ハミルトン閉路問題を解く3種類の ASP 符号化を考案．}
       \begin{itemize}
-      \item 3つの符号化 \textsf{undirected}, \textsf{directed}, \textsf{acyclicity}．
-      \item 最短ハミルトン閉路問題，コスト制約付きハミルトン閉路問題へ拡張．
+      \item \textsf{undirected}符号化, \textsf{directed}符号化, \textsf{acyclicity}符号化．
+      \item 最短ハミルトン閉路問題，コスト制約付きハミルトン閉路問題へ自然に拡張可能．
       \end{itemize}
     \item \structure{既存のベンチマーク問題集を用いた評価実験．}
       \begin{itemize}
-      \item  ベンチマーク問題は7種類，計517問．
+      \item ベンチマーク問題は7種類，計517問．
       \item ハミルトン閉路問題に対する実験．
-      \item 最短ハミルトン閉路問題に対する実験．(本発表では省略)
-      \item コスト制約付きハミルトン路問題に対する実験．
+      \item コスト制約付きハミルトン路問題(全列挙)に対する実験．
+      \item 最短ハミルトン閉路問題に対する実験．
       \end{itemize}
     \end{enumerate}
   \end{block}
@@ -130,7 +134,7 @@
     部分グラフ$G'= (V,E')$が存在するか判定する問題．
     \begin{itemize}
     \item $G'$の各頂点の次数が2．(\alert{次数制約})
-    \item $G'$が連結である．(\alert{連結制約})
+    \item $G'$が連結．(\alert{連結制約})
     \end{itemize}
   \end{block}
   \begin{itemize}
@@ -147,15 +151,14 @@
     \begin{itemize}
     \item \textsf{directed}符号化をベースに，連結制約に代わり
       部分閉路を禁止する制約を使用．
-      \item 組み込み非閉路制約で，部分閉路を禁止する制約を簡潔に表現．
+      \item \#edge を用いて，部分閉路を禁止する制約を簡潔に表現．
     \end{itemize}
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{実験概要}
-  %%  提案した符号化の性能を評価するために実験を行った．
-  以下では，提案した符号化の性能を評価するために行った2つの実験について説明する．
+  提案した ASP 符号化の性能を評価するために実験を行った．
   \begin{itemize}
   \item \structure{比較する ASP 符号化}:
     \begin{itemize}
@@ -165,23 +168,23 @@
     \end{itemize}
   \item \structure{対象とする問題}:
     \begin{enumerate}
-    \item ハミルトン閉路問題
+    \item ハミルトン閉路問題: 6種類 計494問
       \begin{itemize}
       \item \structure{制限時間}: 30分/問
-      \item \structure{オプション}: \textit{trendy}
-      \item \structure{ベンチマーク問題}:\\
-        \textsf{color04}，
-        \textsf{complete}，
-        \textsf{knight}，
-        \textsf{tsplib}，
-        \textsf{grid}，
-        \textsf{random}
+      %% \item \structure{オプション}: \textit{trendy}
+      %% \item \structure{ベンチマーク問題}:\\
+        %% \textsf{color04}，
+        %% \textsf{complete}，
+        %% \textsf{knight}，
+        %% \textsf{tsplib}，
+        %% \textsf{grid}，
+        %% \textsf{random}
       \end{itemize}
-    \item コスト制約付きハミルトン路問題(解の全列挙)
+    \item コスト制約付きハミルトン路問題(解の全列挙): 計10問
       \begin{itemize}
       \item \structure{制限時間}: 3時間/問
-      \item \structure{オプション}: \textit{crafty}
-      \item \structure{ベンチマーク問題}: \textsf{usmap} (閾値: 10問)
+      %% \item \structure{オプション}: \textit{crafty}
+      %% \item \structure{ベンチマーク問題}: \textsf{usmap} (閾値: 10問)
       \end{itemize}
     \end{enumerate}
   \item \structure{ASP システム}: \textit{clingo-5.4.0}
@@ -196,11 +199,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{itemize}
-\item \textsf{S+U}では，\textsf{undirected} と \textsf{acyclicity} が，
-  \textsf{directed} よりも2問多く解いた．
-\item \textsf{SAT}に限定すると，\textsf{undirected} が，最も多くの問題を解いた．
-\item \textsf{UNSAT}に限定すると，\textsf{directed} と \textsf{acyclicity} 符号化が，
-  \textsf{undirected} より1問多く解いた．
+\item \textsf{undirected} と \textsf{acyclicity} は，
+  494問中490問を解き，\textsf{directed} よりも多くの問題を解いた．
+%% \item \textsf{SAT}に限定すると，\textsf{undirected} が，最も多くの問題を解いた．
+%% \item \textsf{UNSAT}に限定すると，\textsf{directed} と \textsf{acyclicity} 符号化が，
+%%   \textsf{undirected} より1問多く解いた．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -224,12 +227,14 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{コスト制約付きハミルトン路問題の実験結果}
+\begin{frame}{コスト制約付きハミルトン路問題の実験結果(CPU時間)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{fig/cost_table.tex}%\label{cost_table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{itemize}
+\item 1列目はコスト制約の閾値と最短距離からの倍率，2列目は解の総数，
+  3列目以降は各符号化が解くのに要したCPU時間を表す．
 \item \textsf{acyclicity}符号化が，より多くの問題を
   高速に解き，平均CPU時間も最も短かった．
 \end{itemize}
@@ -241,20 +246,21 @@
     \begin{enumerate}
     \item \structure{ハミルトン閉路問題を解く3種類の ASP 符号化を考案．}
       \begin{itemize}
-      \item ASP の高い表現力による，最短ハミルトン閉路問題，コスト制約付きハミルトン閉路問題への自然な拡張．
+      \item ASP の高い表現力を生かし，ハミルトン閉路問題を簡潔に記述できることが確認できた．
       \end{itemize}
     \item \structure{既存のベンチマーク問題集を用いた評価実験．}
       \begin{itemize}
       \item ハミルトン閉路問題とコスト制約付きハミルトン路問題について，
         \textsf{acyclicity}符号化の優位性が確認できた．
       \item 最短ハミルトン閉路問題については，
-        \textsf{undirected}符号化の優位性を確認した．(本発表では省略)
+        \textsf{undirected}符号化の優位性を確認した．
       \end{itemize}
     \end{enumerate}
   \begin{alertblock}{今後の課題}
     \begin{itemize}
-    \item SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提案された，
-      ハミルトン閉路問題をインクリメンタルに解く手法のASPを用いた実装．
+    \item ハミルトン閉路問題の連結制約を緩和し，
+      部分巡回路をインクリメンタルに
+      除去する手法[Soh2014]の実装．
     \item 巡回セールスマン問題への拡張．
     \end{itemize}
   \end{alertblock}
