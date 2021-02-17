@@ -18,27 +18,56 @@
     - 補足用 -
 \end{frame}
 
-
+\newcommand{\rgeq}{\rotatebox[origin=c]{90}{$\geq$}}
+\newcommand{\req}{\rotatebox[origin=c]{90}{$=$}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % distinct制約のPB符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
+\begin{frame}\small
     \frametitle{\distinct 制約のPB符号化}
-    \distinct 制約はnot-equalで表す他に以下のようにPB符号化して表すことができる．
     \begin{block}{ \distinct 制約のPB符号化}
         $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
         $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
-        \begin{eqnarray}
+        \vspace{-3mm}
+        \begin{eqnarray*}
             \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
             \vspace{-3mm}
             \begin{cases}
                 \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
                 \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
             \end{cases}\label{eq:pb_2}
-        \end{eqnarray}
+        \end{eqnarray*}
     \end{block}
-    (\ref{eq:pb_1})は$x_i$が取り得る値が1つのみであることを表す．\\
-    (\ref{eq:pb_2})は2つ以上同じ値にならないことを表す．
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+    \begin{exampleblock}{n-1=u-l}
+        \begin{displaymath}
+        \begin{array}{c|cccc}
+                & l      & \cdots & u      &       \\\hline
+         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
+         \vdots & \vdots & \ddots & \vdots & \vdots\\
+         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
+                & \req   & \cdots & \req   &       \\
+                & 1      & \cdots & 1      &
+        \end{array}
+        \end{displaymath}
+    \end{exampleblock}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+    \begin{exampleblock}{otherwise}
+        \begin{displaymath}
+        \begin{array}{c|cccc}
+                & l      & \cdots & u      &       \\\hline
+         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
+         \vdots & \vdots & \ddots & \vdots & \vdots\\
+         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
+                & \rgeq  & \cdots & \rgeq  &       \\
+                & 1      & \cdots & 1      &
+        \end{array}
+        \end{displaymath}
+    \end{exampleblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,13 +75,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{色変数モデル}
+    \begin{columns}
+        \begin{column}{0.3\textwidth}
     \input{tikz/queen_graph_col}
-    {\footnotesize
+        \end{column}
+        \begin{column}{0.7\textwidth}
+    {\scriptsize
         \alert{クイーンの色}を整数変数とした制約モデル\\
         \setlength{\abovedisplayskip}{1pt} % 上部のマージン
         \setlength{\belowdisplayskip}{1pt} % 下部のマージン
         \begin{block}{}
             \begin{itemize}
+                \item 集合$\bf N$,$\bf U$,$\bf D$を次のように定義する．
+                    \begin{eqnarray*}
+                        \bf N &=& \{0,1,...,N-1\}\\
+                        \bf U &=& \{0,1,2,...,2N-2\}\\
+                        \bf D &=& \{1-N,2-N,...,N-1\}
+                    \end{eqnarray*}
+                \item $\bf N$は行$i$, 列$j$クイーンの色$k$の取り得る値の集合．\\
+                \item $\bf U$は$i+j$の取り得る値の集合． 右上がり対角線に対応する.\\
+                \item $\bf D$は$i-j$の取り得る値の集合． 右下がり対角線に対応する.\\
                 \item 位置$(i, j)$に配置されたクイーンの色を整数変数$c_{ij} \in \bf N (i, j \in \bf N)$で表す
                 \item \alert{各行}, \alert{各列}, \alert{各右上がり対角線}, \alert{各右下がり対角線}に配置されるクイーンの色がそれぞれ互いに異なることから以下の制約が得られる
             \end{itemize}
@@ -65,12 +107,8 @@
             \end{eqnarray*}
         \end{block}
     }
-    \input{tikz/line}\\
-    {\tiny
-        $\bf N$: 行$i$, 列$j$クイーンの色$k$の取り得る値の集合\\
-        $\bf U$: $i+j$の取り得る値の集合, 右上がり対角線に対応する.\\
-        $\bf D$: $i-j$の取り得る値の集合, 右下がり対角線に対応する.\\
-    }
+        \end{column}
+    \end{columns}
 \end{frame}
 
 
@@ -429,6 +467,26 @@
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \textit{Sugar}での実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\textit{Sugar}での実験結果}
+計測したCPU時間は以下の通りである.
+\begin{block}{}
+    {\tiny \input{table/result_csp} }
+\end{block}
+\begin{itemize}
+\item \textit{Sugar}でもヒント制約の有効性を確認した．
+\item 色変数モデルでヒント1とヒント2を同時に使用した場合が一番性能が良かった．
+\end{itemize}
+\input{tikz/line}\\
+{\footnotesize
+使用ソルバー: \textit{Sugar}(ver.2.3.3)\\
+実験環境: Mac mini, 3.2GHz, 64GB メモリ\\
+制限時間: 1問あたり2時間\\
+}
+\end{frame}
 
 
 
