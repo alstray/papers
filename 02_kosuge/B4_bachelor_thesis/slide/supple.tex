@@ -125,6 +125,95 @@
     \end{exampleblock}
 \end{frame}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% at-least-one制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{高速化手法}
+    \vspace{-3mm}
+    \begin{block}{at-least-one制約を用いたヒント制約(H2)}
+        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
+        \vspace{-3mm}
+        $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
+    \end{block}
+    \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
+        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            (x_1=1) \lor (x_2=1) \lor (x_3=1) \lor (x_4=1)\\
+            (x_1=2) \lor (x_2=2) \lor (x_3=2) \lor (x_4=2)\\
+            (x_1=3) \lor (x_2=3) \lor (x_3=3) \lor (x_4=3)\\
+            (x_1=4) \lor (x_2=4) \lor (x_3=4) \lor (x_4=4)
+        \end{eqnarray*}
+
+    \end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 高速化手法2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\footnotesize
+    \frametitle{高速化手法}
+    PB符号化した\distinct 制約に対して2つの改良手法[大野,2019]を適用した．
+    \begin{block}{改良手法1}
+        $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し，以下の制約を追加する．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            \sum_{i=1}^{n} x_{ij}=y_j \; (j \in \{l,l+1, \ldots,u\})\\
+            \vspace{-3mm}
+            \sum_{j=l}^{u} y_j = n
+        \end{eqnarray*}
+    \end{block}
+    \vspace{-3mm}
+    \begin{block}{改良手法2}
+        $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し，以下の制約を追加する．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            \sum_{i=1}^{n+1} x_{ij}=1 \; (j \in \{l,l+1, \ldots,u\})\\
+            \vspace{-3mm}
+            \sum_{j=l}^{u} x_{(n+1)j} = u-l-n
+        \end{eqnarray*}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{高速化手法}
+    \vspace{-3mm}
+    \begin{exampleblock}{改良手法1の例}
+        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            x_{11}+x_{21}+x_{31}=y_1\\
+            x_{12}+x_{22}+x_{32}=y_2\\
+            x_{13}+x_{23}+x_{33}=y_3\\
+            x_{14}+x_{24}+x_{34}=y_4\\
+            y_1+y_2+y_3+y_4=3
+        \end{eqnarray*}
+    \end{exampleblock}
+\end{frame}
+\begin{frame}
+    \frametitle{高速化手法}
+    \vspace{-3mm}
+    \begin{exampleblock}{改良手法2の例}
+        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            x_{11}+x_{21}+x_{31}+x_{41}=1\\
+            x_{12}+x_{22}+x_{32}+x_{42}=1\\
+            x_{13}+x_{23}+x_{33}+x_{43}=1\\
+            x_{14}+x_{24}+x_{34}+x_{44}=1\\
+            x_{41}+x_{42}+x_{43}+x_{44}=1
+        \end{eqnarray*}
+
+    \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 既存のSMTソルバー
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{既存のSMTソルバー}
     \begin{itemize}
@@ -173,32 +262,6 @@
     \end{exampleblock}
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 鳩の巣原理
-% at-least-one制約
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{高速化手法}
-    \vspace{-3mm}
-    \begin{block}{at-least-one制約を用いたヒント制約(H2)}
-        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
-        \vspace{-3mm}
-        $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
-    \end{block}
-    \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
-        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.\\
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            (x_1=1) \lor (x_2=1) \lor (x_3=1) \lor (x_4=1)\\
-            (x_1=2) \lor (x_2=2) \lor (x_3=2) \lor (x_4=2)\\
-            (x_1=3) \lor (x_2=3) \lor (x_3=3) \lor (x_4=3)\\
-            (x_1=4) \lor (x_2=4) \lor (x_3=4) \lor (x_4=4)
-        \end{eqnarray*}
-
-    \end{exampleblock}
-\end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 鳩の巣原理のSMT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -241,65 +304,6 @@
     これにより，例えば\verb|x_0,x_1,x_2,x_3|に0以外が割り当てられた際に\verb|x_4|が0になることが確定するので，探索空間が削減される．
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 高速化手法2
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\footnotesize
-    \frametitle{高速化手法}
-    PB符号化した\distinct 制約に対して2つの改良手法[大野,2019]を適用した．
-    \begin{block}{改良手法1}
-        $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し，以下の制約を追加する．
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            \sum_{i=1}^{n} x_{ij}=y_j \; (j \in \{l,l+1, \ldots,u\})\\
-            \vspace{-3mm}
-            \sum_{j=l}^{u} y_j = n
-        \end{eqnarray*}
-    \end{block}
-    \vspace{-3mm}
-    \begin{block}{改良手法2}
-        $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し，以下の制約を追加する．
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            \sum_{i=1}^{n+1} x_{ij}=1 \; (j \in \{l,l+1, \ldots,u\})\\
-            \vspace{-3mm}
-            \sum_{j=l}^{u} x_{(n+1)j} = u-l-n
-        \end{eqnarray*}
-    \end{block}
-\end{frame}
-
-\begin{frame}
-    \frametitle{高速化手法}
-    \vspace{-3mm}
-    \begin{exampleblock}{改良手法1の例}
-        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.\\
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            x_{11}+x_{21}+x_{31}=y_1\\
-            x_{12}+x_{22}+x_{32}=y_2\\
-            x_{13}+x_{23}+x_{33}=y_3\\
-            x_{14}+x_{24}+x_{34}=y_4\\
-            y_1+y_2+y_3+y_4=3
-        \end{eqnarray*}
-    \end{exampleblock}
-\end{frame}
-\begin{frame}
-    \frametitle{高速化手法}
-    \vspace{-3mm}
-    \begin{exampleblock}{改良手法の例}
-        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.\\
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            x_{11}+x_{21}+x_{31}+x_{41}=1\\
-            x_{12}+x_{22}+x_{32}+x_{42}=1\\
-            x_{13}+x_{23}+x_{33}+x_{43}=1\\
-            x_{14}+x_{24}+x_{34}+x_{44}=1\\
-            x_{41}+x_{42}+x_{43}+x_{44}=1
-        \end{eqnarray*}
-
-    \end{exampleblock}
-\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PB符号化のSMT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -405,6 +409,7 @@
 
 \begin{frame}
     \frametitle{クイーングラフ彩色問題:N=11}
+    実験で求めたN=11の解を示す．
     \input{tikz/queen_graph_11}
 \end{frame}
 
@@ -416,12 +421,11 @@
         {\tiny \input{table/result_channel} }
     \end{block}
     \begin{itemize}
-        \item N=11で間違えた解を求めた.
+        \item N=11でUNSATとなった.
         \item 色変数モデルでPB符号化の改良手法を用いると性能が低下した．
     \end{itemize}
     \input{tikz/line}\\
-    \vspace{-3mm}
-    {\tiny C:チャネリング制約を使用}\\
+    {\footnotesize C:チャネリング制約を使用}\\
 \end{frame}
 
 
