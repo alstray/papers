@@ -56,6 +56,7 @@
 
 \end{frame}
 
+\begin{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSPACE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,6 +72,49 @@
     \end{itemize}
   \end{itemize}
 \end{frame}
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASP符号化のルール数
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{ASP符号化のルール数}
+  \begin{itemize}
+    \item 遷移制約に関するルール数のみに着目する．
+    \item $|T|$を遷移回数$t$, $|C|$を色数$k$, $|V|$をグラフ$G$の頂点数とする.
+  \end{itemize}
+
+  \begin{table}[t]
+    \centering
+    \input{table/rule.tex}
+  \end{table}
+
+  \begin{itemize}
+    \item 基礎化とは，アトムに変数を代入し命題論理へと変換すること．
+    \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の場合の数・色の選び方の場合の数・グラフの頂点の選び方の場合の数の乗算となる．
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{遷移回数$t$の導入}
+
+  \begin{itemize}
+    \item グラフ点彩色問題とその二つの実行可能解$\alpha$，$\beta$に加え， \structure{遷移回数$t$}を与える．
+    \begin{itemize}
+      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更. 
+    \end{itemize}
+    \item $t$を遷移回数の上限値まで大きくしていくことで，最終的に経路の存在について判定可能．
+    \begin{itemize}
+      \item 途中で経路が存在すれば，本来の問題でも経路が存在．
+      \item すべての$t$において経路が存在しないのであれば，本来の問題でも経路が存在しない．
+    \end{itemize}
+    \item $t$の上限値は\structure{グラフ点彩色問題の実行可能解の総数$-1$}．
+  \end{itemize}
+  
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験環境
@@ -82,8 +126,8 @@
     \item \structure{使用するグラフ}: 全44個
     \begin{itemize}
       \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている, \textit{Graph Coloring Instances}に属するグラフを使用.
-      \item そのうち\structure{彩色数}が判明しているもの.[Tamuraほか '09]
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている, \textit{Graph Coloring Instances}に属するグラフから抜粋.
+      \item 選択基準は\structure{彩色数}が判明しているもの.[Tamuraほか '09]
     \end{itemize}
     \item \structure{色数}: 各グラフの彩色数
 
@@ -95,21 +139,27 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% グラフの全解数
+%% 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{グラフの全解数}
+\begin{frame}\frametitle{到達不可能インスタンスにおけるCPU時間の比較}
+
   \begin{table}[t]
     \centering
-    \input{table/graph.tex}
+    \input{table/result_uncon}  
   \end{table}
+
+  \begin{itemize}
+    \item vrc3$>$vrc2$>$vrc1の順によい性能を示した．
+  \end{itemize}
+  
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% グラフの全解数
+% 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{実験結果:判定不能}
+\begin{frame}\frametitle{判定不能インスタンスにおける最大遷移回数の比較}
   
   \begin{table}[t]
     \centering
@@ -117,11 +167,30 @@
   \end{table}
 
   \begin{itemize}
-    \item グラフと色数ごとに分類．
-    \item \structure{到達不能が確かめられた遷移回数$t$の最大値の平均値．}
+    \item グラフと色数ごとに分類している．
+    \item \structure{到達不能が確かめられた遷移回数$t$の最大値の平均値}を指標としている．
     \item vrc3が優位性を示した．
   \end{itemize}
 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果:考察}
+
+  \begin{itemize}
+    \item 結果によらず，\structure{vrc3$>$vrc2$>$vrc1の順}によい性能を示した．
+    \item 要因として，\alert{ルール数の差}が考えられる．
+    \begin{itemize}
+      \item \textit{clingo}では与えられたASP言語を充足可能性判定問題へと変換して解く．
+      \item ルール数を少なくすることは，節数を少なくすることにつながる．
+      \item 節数が多い時，単位伝播やヒューリスティックによる変数選択時のオーバーヘッドが増加する．
+      \item ルール数を抑えることでオーバーヘッドの減少につながり，優位性を示したと考えられる．
+    \end{itemize}
+  \end{itemize}
+  
 \end{frame}
 
 \backupend
