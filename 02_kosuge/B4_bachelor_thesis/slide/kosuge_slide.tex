@@ -1,4 +1,4 @@
-\documentclass [dvipdfmx,12pt]{beamer}
+\documentclass [dvipdfmx,11pt]{beamer}
 \usepackage{bxdpx-beamer}
 \usepackage{pxjahyper}
 \usepackage{amsmath}
@@ -67,13 +67,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{背景理論付きSAT(Satisfiability Modulo Theories; SMT)}
-    \begin{itemize}
-        \item SMTは等号や算術，配列やリスト，ビットベクターなど様々な背景 理論が扱えるように，SAT を拡張・発展させた技術である．
-        \item 近年，SMTソルバーは制約充足問題，プログラム検証などへの応用が活発に研究されている.
-    \end{itemize}
-    \begin{alertblock}{SMTソルバーの特長}
-        背景理論をより表現能力 の高い述語論理で記述できるため，問題を簡潔に記述することができる.
+    \begin{alertblock}{}
+    SMTは等号や算術，配列やリスト，ビットベクターなど様々な背景 理論が扱えるように，SAT を拡張・発展させた技術である．
     \end{alertblock}
+    \begin{itemize}
+        \item 近年では，z3ソルバーなどの高速なSMTソルバーが開発され，制約充足問題やプログラム検証などへの応用が活発に研究されている.
+        \item SMTソルバーの特長は背景理論をより表現能力 の高い述語論理で記述できるため，問題を簡潔に記述することができる点である.
+        \item 一方で，制約充足問題に対するSMT ソルバーの求解性能は，SAT 型制約ソルバーと比べて劣っているとの報告もある．
+    \end{itemize}
+
 \end{frame}
 
 
@@ -84,30 +86,14 @@
 \begin{frame}
     \frametitle{\distinct 制約}
     \begin{itemize}
-        \item $distinct(x_1,x_2,...x_n)$は，$x_i$ が互いに異なる値をとることを表す．
-        \item 制約充足問題に対する SMT ソルバーの 求解性能は，SAT 型制約ソルバーと比べて劣っているとの報告もあり， 
-            distinct 制約を含めその効率的な実装は重要な研究課題となっている.
+        \item 制約充足問題では，グローバル制約を用いて，複数の変数に対する複雑な制約を簡潔に表現できる点が特長の一つである．
+        \item 代表的なグローバル制約である$distinct(x_1,x_2,...x_n)$は，$x_i$ が互いに異なる値をとることを表す．
+        \item \distinct 制約はSMTソルバーにも取り入れられている.
+        \item そのため，\distinct 制約の効率的な実装は重要な研究課題となっている.
     \end{itemize}
     \begin{block}{\distinct 制約の定式化}
         $distinct(x_1,x_2,...x_n)$は以下のように表される．\\
         $$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$
-    \end{block}
-\end{frame}
-
-\begin{frame}
-    \frametitle{\distinct 制約のPB符号化}
-    \distinct 制約はnot-equalで表す他に以下のようにPB符号化して表すことができる．
-    \begin{block}{ \distinct 制約のPB符号化}
-        $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
-        $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
-        \begin{eqnarray}
-            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
-            \vspace{-3mm}
-            \begin{cases}
-                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
-                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
-            \end{cases}\label{eq:pb_2}
-        \end{eqnarray}
     \end{block}
 \end{frame}
 
@@ -119,8 +105,10 @@
     \frametitle{クイーングラフ彩色問題}
     \input{tikz/queen_graph}
     \begin{itemize}
-        \item N × N の大きさのチェス盤上に N 色のク イーンの駒を各色 N 個ずつ互いに取り合わないように配置する問題である.
+        \item D.~E.~Knuthの教科書The Art of Computer Programmingでも取り上げられている問題である．
+        \item N × N の大きさのチェス盤上に N 色のクイーンの駒を各色 N 個ずつ互いに取り合わないように配置する問題である.
         \item \alert{各行}，\alert{各列}，\alert{各右上がり対角線}，\alert{各右下がり対角線}に配置されるクイーンの色が互いに異なる.
+        \item この問題は\distinct 制約のみを用いて記述することができる．
     \end{itemize}
 \end{frame}
 
@@ -140,9 +128,9 @@
                 \begin{itemize}
                     \item 色変数モデル，位置変数モデル，0-1変数モデル，ハイブリッドモデルをSMT符号化した．
                 \end{itemize}
-            \item \structure{\distinct 制約の4種類の高速化手法を考案}
+            \item \structure{\distinct 制約の4種類の高速化手法を実装}
                 \begin{itemize}
-                    \item 考案した手法は，探索空間の枝刈りをするため求解速度の向上が期待できる．
+                    \item 実装した手法は，探索空間の枝刈りをするため求解速度の向上が期待できる．
                 \end{itemize}
             \item \structure{クイーングラフ彩色問題を用いた実験}
                 \begin{itemize}
@@ -159,25 +147,73 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 考案したSMT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}
+%     \frametitle{考案したSMT符号化}
+%     \begin{block}{}
+%         \begin{itemize}
+%             \item \structure{ 色変数モデル}\\
+%                 盤面に配置されるクイーンの駒の色を整数変数として解を求める制約モデル.
+%             \item \structure{ 位置変数モデル}\\
+%                 盤面上のある行に対して何列目にクイーンが配置されるのかを整数変数として解を求める制約モデル.
+%             \item \structure{ 0-1変数モデル}\\
+%                 盤面に配置されるクイーンの駒の色を0-1変数として解を求める制約モデル.\\
+%                 つまり，色変数モデルの整数変数を 0-1 変数で表したモデル.
+%             \item \structure{ ハイブリッドモデル}\\
+%                 色・位置変数モデルと0-1変数モデルを組み合わせたモデル.\\
+%                 チャネリング制約を用いて解を整数変数で求め，\distinct 制約を0-1変数で解く.
+%         \end{itemize}
+%     \end{block}
+% \end{frame}
 \begin{frame}
-    \frametitle{考案したSMT符号化}
+    \frametitle{クイーングラフ彩色問題のSMT符号化}
     \begin{block}{}
-        \begin{itemize}
-            \item \structure{ 色変数モデル}\\
-                盤面に配置されるクイーンの駒の色を整数変数として解を求める制約モデル.
-            \item \structure{ 位置変数モデル}\\
-                盤面上のある行に対して何列目にクイーンが配置されるのかを整数変数として解を求める制約モデル.
-            \item \structure{ 0-1変数モデル}\\
-                盤面に配置されるクイーンの駒の色を0-1変数として解を求める制約モデル.\\
-                つまり，色変数モデルの整数変数を 0-1 変数で表したモデル.
-            \item \structure{ ハイブリッドモデル}\\
-                色・位置変数モデルと0-1変数モデルを組み合わせたモデル.\\
-                チャネリング制約を用いて解を整数変数で求め，\distinct 制約を0-1変数で解く.
-        \end{itemize}
-    \end{block}
+    \begin{table}[htb]\small
+        \begin{tabular}{r||c|c|c}
+                                & 変数 & 制約 & 高速化手法 \\\hline \hline
+            色変数モデル        & クイーンの色 & distinct制約 & \begin{tabular}{c} H1\\H2 \end{tabular}\\\hline
+            位置変数モデル      & 配置される列 & distinct制約 & \begin{tabular}{c} H1\\H2 \end{tabular}\\\hline
+            0-1変数モデル       & クイーンの色 & \begin{tabular}{c} distinct制約の\\PB符号化 \end{tabular} & \begin{tabular}{c} PB2\\PB3 \end{tabular}\\\hline
+            ハイブリッドモデル  &\begin{tabular}{c} クイーンの色\\配置される列 \end{tabular} & \begin{tabular}{c} distinct制約の\\PB符号化 \end{tabular} & \begin{tabular}{c} PB2\\PB3 \end{tabular}\\
+        \end{tabular}
+    \end{table}
+\end{block}
+H1:  鳩の巣原理を用いたヒント制約\\
+H2:  at-least-one制約を用いたヒント制約\\
+PB2: PB符号化の改良手法1\\
+PB3: PB符号化の改良手法2
+
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 位置変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{位置変数モデル}
+    \input{tikz/queen_graph_pos}
+    {\small
+        各行に配置される\alert{クイーンの列番号}を整数変数とした制約モデル
+    }
+    {\footnotesize
+        \setlength{\abovedisplayskip}{1pt} % 上部のマージン
+        \setlength{\belowdisplayskip}{0pt} % 下部のマージン
+        \begin{block}{}
+            \setlength{\itemsep}{0pt}
+            \setlength{\parskip}{0pt}
+            \begin{itemize}
+                \item 色$k$のクイーンが行$i$で配置されている列番号を整数変数$y_{ik} \in \bf N (i, k \in \bf N)$で表す
+                \item 同一の\alert{行番号}に同色のクイーンが配置されないことより
+                    $$distinct\{y_{ik} | i \in \bf N\} \; (k \in \bf N)$$
+                \item 同一の\alert{列番号}に同色のクイーンが配置されないことより
+                    $$distinct\{y_{ik} | k \in \bf N\} \; (i \in \bf N)$$
+                \item \alert{右上がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
+                    $$distinct\{y_{ik}+i | i \in \bf N\} \; (k \in \bf N)$$
+                \item \alert{右下がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
+                    $$distinct\{y_{ik}-i | i \in \bf N\} \; (k \in \bf N)$$
+            \end{itemize}
+        \end{block}
+    }
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 高速化手法1
@@ -185,50 +221,26 @@
 \begin{frame}
     \frametitle{高速化手法}
     \vspace{-3mm}
-    \begin{exampleblock}{鳩の巣原理を用いたヒント制約}
+    \begin{block}{鳩の巣原理を用いたヒント制約(H1)}
         $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$であるときに以下の制約を追加する.
         \vspace{-3mm}
-        \begin{eqnarray}
+        \begin{eqnarray*}
             && \bigvee_{i=1}^n   x_i \geq l+n-1\\
             && \bigvee_{i=1}^n \lnot(x_i \geq u-n+1)
-        \end{eqnarray}
-    \end{exampleblock}
-    \begin{exampleblock}{at-most-one制約を用いたヒント制約}
-        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
+        \end{eqnarray*}
+    \end{block}
+    \begin{exampleblock}{鳩の巣原理を用いたヒント制約の例}
+        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{0,1,2,3,4\}$であるときには以下の制約が追加される.\\
         \vspace{-3mm}
-        $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
+        \begin{eqnarray*}
+            (x_1 \geq 3) \lor (x_2 \geq 3) \lor (x_3 \geq 3) \lor (x_4 \geq 3)\\
+        \lnot(x_1 \geq 1) \lor \lnot(x_2 \geq 1) \lor \lnot(x_3 \geq 1) \lor \lnot(x_4 \geq 1)
+        \end{eqnarray*}
     \end{exampleblock}
 \end{frame}
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 高速化手法2
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\footnotesize
-    \frametitle{高速化手法}
-    PB符号化した\distinct 制約に対して2つの改良手法[大野,2019]を適用した．
-    \begin{exampleblock}{改良手法1}
-        $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し，以下の制約を追加する．
-        \vspace{-3mm}
-        \begin{eqnarray}
-            \sum_{i=1}^{n} x_{ij}=y_j \; (j \in \{l,l+1, \ldots,u\})\\
-            \vspace{-3mm}
-            \sum_{j=l}^{u} y_j = n
-        \end{eqnarray}
-    \end{exampleblock}
-    \vspace{-3mm}
-    \begin{exampleblock}{改良手法2}
-        $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し，以下の制約を追加する．
-        \vspace{-3mm}
-        \begin{eqnarray}
-            \sum_{i=1}^{n+1} x_{ij}=1 \; (j \in \{l,l+1, \ldots,u\})\\
-            \vspace{-3mm}
-            \sum_{j=l}^{u} x_{(n+1)j} = u-l-n
-        \end{eqnarray}
-    \end{exampleblock}
-\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -236,6 +248,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{実験概要}
+    実装した高速化手法を比較するために以下の実験を行った．
+    \begin{block}{}
     ベンチマーク問題
     \begin{itemize}
         \item クイーングラフ彩色問題 N=5〜13
@@ -252,6 +266,7 @@
     \begin{itemize}
         \item Mac mini,  3.2GHz,  64GB メモリ
     \end{itemize}
+    \end{block}
 \end{frame}
 
 
@@ -260,7 +275,7 @@
 % 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{実験結果}
+    \frametitle{実験結果(計測したCPU時間(秒))}
     計測したCPU時間は以下の通りである.
     \begin{block}{}
         {\tiny \input{table/result} }
@@ -338,6 +353,26 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% distinct制約のPB符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{\distinct 制約のPB符号化}
+    \distinct 制約はnot-equalで表す他に以下のようにPB符号化して表すことができる．
+    \begin{block}{ \distinct 制約のPB符号化}
+        $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
+        $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
+        \begin{eqnarray}
+            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
+            \vspace{-3mm}
+            \begin{cases}
+                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
+                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
+            \end{cases}\label{eq:pb_2}
+        \end{eqnarray}
+    \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 色変数モデル
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -370,34 +405,6 @@
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 位置変数モデル
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{位置変数モデル}
-    {\small
-        各行に配置される\alert{クイーンの列番号}を整数変数とした制約モデル
-    }
-    {\footnotesize
-        \setlength{\abovedisplayskip}{1pt} % 上部のマージン
-        \setlength{\belowdisplayskip}{0pt} % 下部のマージン
-        \begin{block}{}
-            \setlength{\itemsep}{0pt}
-            \setlength{\parskip}{0pt}
-            \begin{itemize}
-                \item 色$k$のクイーンが行$i$で配置されている列番号を整数変数$y_{ik} \in \bf N (i, k \in \bf N)$で表す
-                \item 同一の\alert{行番号}に同色のクイーンが配置されないことより
-                    $$distinct\{y_{ik} | i \in \bf N\} \; (k \in \bf N)$$
-                \item 同一の\alert{列番号}に同色のクイーンが配置されないことより
-                    $$distinct\{y_{ik} | k \in \bf N\} \; (i \in \bf N)$$
-                \item \alert{右上がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
-                    $$distinct\{y_{ik}+i | i \in \bf N\} \; (k \in \bf N)$$
-                \item \alert{右下がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
-                    $$distinct\{y_{ik}-i | i \in \bf N\} \; (k \in \bf N)$$
-            \end{itemize}
-        \end{block}
-    }
-\end{frame}
 
 
 
@@ -477,6 +484,27 @@
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 鳩の巣原理
+% at-least-one制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{高速化手法}
+    \vspace{-3mm}
+    \begin{exampleblock}{鳩の巣原理を用いたヒント制約(H1)}
+        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$であるときに以下の制約を追加する.
+        \vspace{-3mm}
+        \begin{eqnarray}
+            && \bigvee_{i=1}^n   x_i \geq l+n-1\\
+            && \bigvee_{i=1}^n \lnot(x_i \geq u-n+1)
+        \end{eqnarray}
+    \end{exampleblock}
+    \begin{exampleblock}{at-most-one制約を用いたヒント制約(H2)}
+        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
+        \vspace{-3mm}
+        $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
+    \end{exampleblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 鳩の巣原理のSMT符号化
@@ -494,7 +522,7 @@
 \end{verbatim}
     \end{exampleblock}
     2,3行目が高速化のために追加した制約である．\\
-    これにより，例えば\verb|x_0,x_1,x_2|にそれぞれ0,1,2が割り当てられた際に\verb|x_3|が3以上となるので，探索空間が削減される．
+    これにより，例えば\verb|x_0,x_1,x_2|にそれぞれ0,1,2が割り当てられた際に\verb|x_3|が3以上に決まるため，探索空間が削減される．
 \end{frame}
 
 
@@ -520,6 +548,33 @@
     これにより，例えば\verb|x_0,x_1,x_2,x_3|に0以外が割り当てられた際に\verb|x_4|が0になることが確定するので，探索空間が削減される．
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 高速化手法2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\footnotesize
+    \frametitle{高速化手法}
+    PB符号化した\distinct 制約に対して2つの改良手法[大野,2019]を適用した．
+    \begin{exampleblock}{改良手法1}
+        $n-1 < u-l$の時，各値$j$ごとの$x_{ij}$の和を表す変数$y_{j}$を導入し，以下の制約を追加する．
+        \vspace{-3mm}
+        \begin{eqnarray}
+            \sum_{i=1}^{n} x_{ij}=y_j \; (j \in \{l,l+1, \ldots,u\})\\
+            \vspace{-3mm}
+            \sum_{j=l}^{u} y_j = n
+        \end{eqnarray}
+    \end{exampleblock}
+    \vspace{-3mm}
+    \begin{exampleblock}{改良手法2}
+        $n-1 < u-l$の時，各値$j$ごとに新たな変数$x_{(n+1)j}$を導入し，以下の制約を追加する．
+        \vspace{-3mm}
+        \begin{eqnarray}
+            \sum_{i=1}^{n+1} x_{ij}=1 \; (j \in \{l,l+1, \ldots,u\})\\
+            \vspace{-3mm}
+            \sum_{j=l}^{u} x_{(n+1)j} = u-l-n
+        \end{eqnarray}
+    \end{exampleblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PB符号化のSMT符号化
@@ -608,12 +663,12 @@
 (assert (and (>= y_3 0) (<= y_3 1)))
 (declare-const y_4 Int)
 (assert (and (>= y_4 0) (<= y_4 1)))
-(assert (= (+ y_0 y_1 y_2 y_3 y_4) 2))
 (assert (= (+ x_0_0 x_1_0 x_2_0 y_0) 1))
 (assert (= (+ x_0_1 x_1_1 x_2_1 y_1) 1))
 (assert (= (+ x_0_2 x_1_2 x_2_2 y_2) 1))
 (assert (= (+ x_0_3 x_1_3 x_2_3 y_3) 1))
 (assert (= (+ x_0_4 x_1_4 x_2_4 y_4) 1))
+(assert (= (+ y_0 y_1 y_2 y_3 y_4) 2))
 \end{verbatim}
             \end{exampleblock}
         \end{column}
