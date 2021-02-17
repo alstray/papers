@@ -39,41 +39,45 @@
 \begin{frame}\frametitle{組合せ遷移問題(Combinatorial Reconfiguration Problems)}
 
   \begin{alertblock}{}
-    組合せ遷移問題とは，
-    ある組合せ問題とその二つの実行可能解が与えられたとき，一方の実行可能解
+    \alert{\bf 組合せ遷移問題}とは，
+    基となる組合せ問題とその二つの実行可能解が与えられたとき，一方の実行可能解
     から他方の実行可能解へ，遷移制約を満たしつつ，
-    実行可能解のみを経由して到達できるかを判定する問題である．
+    実行可能解のみを経由して到達できるかを判定する問題
   \end{alertblock}
 
   \begin{itemize}
     %\item 既存の組合せ問題の多くを組合せ遷移問題に拡張できる．
-    \item NP完全である組合せ問題を基とする問題の多くは，\alert{PSPACE完全}であることが知られている．
-    \begin{itemize}
-      \item 代表的なものでは，\structure{グラフ点彩色問題}・充足可能性判定問題・集合被覆問題などが存在する．
-    \end{itemize}
+    \item 基となる問題が NP 完全である場合，その遷移問題の多くは，
+      \alert{PSPACE完全}であることが知られている~[xxx]．
     %\item \structure{持続可能なシステム}への応用が期待されている．
-    \item 理論的な基盤が整備されつつある一方で，実践的な研究は始まったばかりである．
-    \item \alert{$k$彩色遷移問題}はPSPACE完全な組合せ遷移問題の一つ．
-    \begin{itemize}
-      \item 基となる問題はグラフ点彩色問題である．
-      \item 色数\alert{$k \geq 4$}のとき，PSPACE完全であることが知られている．~[Paul Bonsmaほか '09]
-      \item \alert{汎用的かつ効率的なアルゴリズムは見つかっていない}．
-    \end{itemize}
+    \item 理論的な基盤が整備されつつある一方で，
+      組合せ遷移問題の\alert{汎用的かつ効率的なアルゴリズムは見つかっていない}．
+    \item 代表的な組合せ遷移問題
+      \begin{itemize}
+      \item 命題論理の充足可能性判定問題(SAT)の遷移問題~[xxx]
+      \item 集合被覆問題の遷移問題~[xxx]
+      \item グラフ点彩色問題の遷移問題~[xxx] 
+      \end{itemize}
   \end{itemize}
+  \begin{alertblock}{}\centering
+    本研究では，グラフ点彩色問題の遷移問題(\alert{$k$彩色遷移問
+      題})を扱う．
+  \end{alertblock}
 
+  
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% k彩色遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{frame}\frametitle{$k$彩色遷移問題}
 
-  \begin{block}{$k$彩色遷移問題の定義}
+  \begin{block}{$k$彩色遷移問題}
     \begin{itemize}
-      \item 問題の入力は，グラフ点彩色問題とその二つの実行可能解\structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態)．
-      \item 遷移制約は，ある一つの頂点のみ色が異なるような実行可能解．
-      \item \structure{$\alpha$から$\beta$への経路の存在についての判定問題}．
+    \item 問題の入力は，グラフ点彩色問題とその二つの実行可能解
+      \structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態)．
+    \item $\alpha$から$\beta$への到達可能性を判定することが目的．
+    \item 各遷移で色が変化する頂点はただ1つのみ (遷移制約)．
     \end{itemize}
   \end{block}
 
@@ -104,7 +108,6 @@
   \end{exampleblock}
   
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,41 +136,57 @@
 \begin{frame}\frametitle{研究目的}
   \begin{alertblock}{目的}
     ASP技術を活用し，大規模な組合せ遷移問題を効率よく解くシステムを実現する．%組合せ遷移問題の一つであり，PSPACE完全な問題の一つでもある$k \ge 4$の$k$彩色遷移問題を高速で解く．%ける符号化を提案し評価する．
-    \begin{itemize}
-      \item 本発表では$k$彩色遷移問題に着目する．
-    \end{itemize}
   \end{alertblock}
-
+  \begin{itemize}
+  \item 本発表では，$k$彩色遷移問題を対象とする．
+  \end{itemize}
   \begin{block}{研究内容}
     \begin{enumerate}
-      \item $k$彩色遷移問題を解く，3種類のASP符号化を提案した．
-      \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されているグラフをベースに，$k$彩色遷移問題のベンチマークを90問作成した．
-      \item 作成したベンチマークを用いた，3種のASP符号化の評価実験を行った．
+    \item $k$彩色遷移問題を解く，3種類の ASP 符号化を提案した．
+    \item \textit{COLOR04}~\footnotemark[1]
+      で公開されているグラフ点彩色問題をベースに，$k$彩色遷移問題のベ
+      ンチマーク問題を新たに90問作成した．
+    \item 独自に作成したベンチマーク問題を用い，3種のASP符号化の評価実験を行った．
     \end{enumerate}
   \end{block}
-
+\footnotetext[1]{\url{https://mat.tepper.cmu.edu/COLOR04/}}  
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{提案するASP符号化}
+\begin{frame}\frametitle{提案する$k$彩色遷移問題のASP符号化}
+
+  \begin{block}{}\centering
+    $k$彩色遷移問題を解く3種類のASP符号化，vrc1, vrc2, vrc3 を考案
+  \end{block}
 
   \begin{itemize}
-    \item vrc1, vrc2, vrc3の3種類のASP符号化を提案した．
-    \item 3種のASP符号化は\structure{遷移制約の表し方}が異なる．
-    \item 表中の$|V|$は，グラフの頂点数を表す．
+  \item 各符号化は，
+    \structure{「各遷移で色が変化する頂点はただ1つのみ」}という遷
+    移制約の表現方法が異なる．
+  \item 表中の$|V|$は，グラフの頂点数を表す．
   \end{itemize}
 
-  \begin{table}
-    \centering
-    \input{table/encoding}
-  \end{table}
+  \begin{exampleblock}{}\centering
+    \begin{tabular}{l|p{8cm}}
+      符号化名 & 遷移制約 \\\hline
+      vrc1 & 違反する組み合わせで表現  \\ \hline
+      vrc2 & 遷移制約を ASP の個数制約も用いて表現\\\hline
+      vrc3 & 「各遷移で色が変化しない頂点は$|V|-1$個」を，
+             ASPの個数制約も用いて表現
+    \end{tabular}
+  \end{exampleblock}
+
+  % \begin{table}
+  %   \centering
+  %   \input{table/encoding}
+  % \end{table}
 
   \begin{itemize}
-    \item アトムを追加することで遷移制約のルール数を抑えており，特にvrc3符号化では大規模な問題に対する有効性が期待できる．
+  \item 特に，vrc3符号化は基礎化後の ASP のルール数を抑えるように工夫
+    されており，大規模な問題に対する有効性が期待できる．
   \end{itemize}
 
 \end{frame}
@@ -193,17 +212,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}\frametitle{実験概要}
-
-  3種のASP符号化の評価にあたり，以下の実験を行った．
+  提案した3種のASP符号化の評価にあたり，以下の実験を行った．
+  \bigskip
   \begin{itemize}
-    \item \structure{ベンチマーク}: 独自に作成した90問
-    \begin{itemize}
-      \item \textit{Graph Coloring and its Generalizations}
-      %\footnote{https://mat.tepper.cmu.edu/COLOR04/}
-      で公開されている，\textit{Graph Coloring Instances}に属するグラフから抜粋した9個を使用．
-      \item 各グラフ10問ずつベンチマークを作成．
-    \end{itemize}
-    \item \structure{色数}: 各グラフにおける彩色数
+    \item \structure{ベンチマーク問題}: 独自に作成した$k$彩色遷移問題(90問)
+      \begin{enumerate}
+      \item xxx
+      \item yyy
+      \item zzz
+      \end{enumerate}
+      % \begin{itemize}
+      % \item \textit{COLOR04}で公開されている，グラフ点彩色問題Instances}に属するグラフから抜粋した9個を使用．
+      % \item 各グラフ10問ずつベンチマークを作成．
+      % \end{itemize}
+%    \item \structure{色数}: 各グラフにおける彩色数
 
     \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{jumpy}
     \item \structure{制限時間}: 3600秒/問
@@ -216,7 +238,7 @@
 %% グラフの全解数
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{ベンチマークの基となったグラフの全解数}
+\begin{frame}{独自に生成した$k$彩色遷移問題のベンチマーク問題}
 
   \begin{table}[t]
     \centering
@@ -224,7 +246,8 @@
   \end{table}
 
   \begin{itemize}
-    \item 実行可能解の総数は，最少で120個，最大で約28億個である．
+  \item 実行可能解の総数は，最少で120個，最大で約28億個である．
+  \item xxxx 90問
   \end{itemize}
 
 \end{frame}
@@ -233,12 +256,24 @@
 %% 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{結果ごとのインスタンス数}
+\begin{frame}\frametitle{実験結果: 解けた問題数}
 
-  \begin{table}[t]
-    \centering
-    \input{table/result.tex}
-  \end{table}
+提案符号化で解けた問題数は，以下の通りである．
+\bigskip
+
+\begin{exampleblock}{}\centering
+  \begin{tabular}{l|r}
+    結果 & 問題数 \\ \hline
+    到達可能 & 11 \\ 
+    到達不可能 & 10 \\
+    判定不能 & 69 \\ \hline
+\end{tabular}
+\end{exampleblock}
+
+  % \begin{table}[t]
+  %   \centering
+  %   \input{table/result.tex}
+  % \end{table}
   
   \begin{itemize}
     \item 到達可能は経路が存在するもの．
@@ -252,8 +287,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}\frametitle{到達可能インスタンスにおけるCPU時間の比較}
+\begin{frame}\frametitle{実験結果: 到達可能インスタンスにおけるCPU時間}
 
   \begin{table}[t]
     \centering
@@ -261,7 +295,7 @@
   \end{table}
 
   \begin{itemize}
-    \item 最速であったインスタンスの数・総CPU時間の両方で\alert{vrc3が優位性を示した}．
+    \item vrc3符号化はxxxxx，最速であったインスタンスの数・総CPU時間の両方で\alert{vrc3が優位性を示した}．
   \end{itemize}
   
 \end{frame}
@@ -274,28 +308,28 @@
 
   \begin{block}{まとめ}
     \begin{itemize}
-      \item $k$彩色遷移問題の遷移制約に対して，3種類の符号化を提案した．
+      \item $k$彩色遷移問題に対して，3種類の符号化を提案した．
       \begin{itemize}
-        \item アトムを追加することで，ルール数を大幅に削減することができた．
+      \item ASP の高い表現力を生かして，$k$彩色遷移問題を簡潔に記述
+      \item 特に，vrc3符号化xxxx
       \end{itemize}
-      \item 9個のグラフから90問のベンチマークを作成した．
+    \item \textit{COLOR04}~\footnotemark[1]
+      で公開されているグラフ点彩色問題をベースに，$k$彩色遷移問題のベ
+      ンチマーク問題を新たに90問作成した．
+      % \begin{itemize}
+      %   \item 実行可能解の総数が異なる問題から作成した．
+      % \end{itemize}
+    \item 独自に作成したベンチマーク問題を用い，3種のASP符号化の評価実験を行った．
       \begin{itemize}
-        \item 実行可能解の総数が異なる問題から作成した．
-      \end{itemize}
-      \item 提案した符号化に対して，評価実験を行った．
-      \begin{itemize}
-        \item ルール数が最少である符号化vrc3について，優位性が確かめられた．
+      \item vrc3符号化の優位性が確かめられた．
       \end{itemize}
     \end{itemize}
   \end{block}
   
   \begin{alertblock}{今後の課題}
     \begin{itemize}
-      \item vrc3をインクリメンタルASP解法に対応させる．
-      \item ベンチマーク環境の改善をはかる．
-      \begin{itemize}
-        \item 連結インスタンスの充実させる．
-      \end{itemize}
+      \item インクリメンタル ASP 解法を用いた高速化
+      \item ベンチマーク問題の充実
     \end{itemize}
   \end{alertblock}
 
