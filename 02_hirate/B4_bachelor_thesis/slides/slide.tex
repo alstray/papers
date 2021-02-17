@@ -121,9 +121,9 @@
     \item \structure{既存のベンチマーク問題集を用いた評価実験．}
       \begin{itemize}
       \item ベンチマーク問題は7種類，計517問．
-      \item ハミルトン閉路問題に対する実験．
-      \item コスト制約付きハミルトン路問題(全列挙)に対する実験．
-      \item 最短ハミルトン閉路問題に対する実験．
+      \item \alert{ハミルトン閉路問題に対する実験．}
+      \item \alert{コスト制約付きハミルトン路問題(全列挙)に対する実験．}
+      \item 最短ハミルトン閉路問題に対する実験．(本発表では省略)
       \end{itemize}
     \end{enumerate}
   \end{block}
@@ -142,7 +142,7 @@
   \begin{itemize}
   \item \alert{\textsf{undirected}符号化}
     \begin{itemize}
-    \item ハミルトン閉路問題を次数制約と連結制約で簡潔に表現した符号化．
+    \item ハミルトン閉路問題の次数制約と連結制約を簡潔に表現した符号化．
     \end{itemize}
   \item \alert{\textsf{directed}符号化}
     \begin{itemize}
@@ -202,7 +202,8 @@
 
 \begin{itemize}
 \item 1列目は問題の種類，２列目は問題数，
-  3列目以降は各符号化で解けた問題数をSAT，UNSAT，SAT+UNSAT 毎に示す．
+  3列目以降は各符号化で解けた問題数を\textsf{SAT}，\textsf{UNSAT}，
+  \textsf{SAT+UNSAT} (\textsf{S+U}) 毎に示す．
 \item \textsf{undirected} と \textsf{acyclicity} は，
   494問中490問を解き，\textsf{directed} よりも多くの問題を解いた．
 %% \item \textsf{SAT}に限定すると，\textsf{undirected} が，最も多くの問題を解いた．
@@ -232,9 +233,31 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{コスト制約付きハミルトン路問題の実験結果(CPU時間)}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/cost_table.tex}%\label{cost_table}
+\begin{figure}[h]
+  \def\@captype{table}
+  \begin{minipage}[c]{.48\textwidth}
+    \begin{center}
+      \scalebox{0.6}[0.6]{
+        \input{fig/cost_table.tex}
+      }
+    \end{center}
+
+  \end{minipage}
+  %
+  \hfill
+  %
+  \begin{minipage}[c]{.48\textwidth}
+    \centering
+    \includegraphics[width=0.9\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
+  \end{minipage}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{itemize}
 \item 1列目はコスト制約の閾値と最短距離からの倍率，2列目は解の総数，
@@ -257,7 +280,7 @@
       \item ハミルトン閉路問題とコスト制約付きハミルトン路問題について，
         \textsf{acyclicity}符号化の優位性が確認できた．
       \item 最短ハミルトン閉路問題については，
-        \textsf{undirected}符号化の優位性を確認した．
+        \textsf{undirected}符号化の優位性を確認した．(本発表では省略)
       \end{itemize}
     \end{enumerate}
   \begin{alertblock}{今後の課題}
