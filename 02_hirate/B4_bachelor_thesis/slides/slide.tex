@@ -99,7 +99,7 @@
   \begin{alertblock}{ハミルトン閉路問題に ASP を用いる利点}
     \begin{itemize}
     \item ASP 言語は表現力が高く，記号制約の記述が容易．
-    \item 組み込みの \#edge 宣言を使うことにより，有向グラフの非閉路性を簡潔に記述可能.
+    \item 組み込みの \#edge 宣言を使うことにより，有向グラフの非閉路性を簡潔に記述可能．
     \item 高速な解列挙が可能．
     \end{itemize}
   \end{alertblock}
@@ -255,10 +255,6 @@
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{itemize}
 \item 1列目はコスト制約の閾値と最短距離からの倍率，2列目は解の総数，
   3列目以降は各符号化が解くのに要したCPU時間を示す．
@@ -393,28 +389,30 @@
 
 \begin{frame}[noframenumbering]{符号化の拡張}
   
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[numbers=none]{code/obj_minimize.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[numbers=none]{code/cost_constraint.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[numbers=none]{code/cost_both.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
   \begin{itemize}
   \item 最短ハミルトン閉路問題への拡張
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/obj_minimize.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
     \begin{itemize}
     \item 目的関数を追加．
     \item ハミルトン閉路上の辺に付与された距離の総和を最小化．
     \end{itemize}
   \item コスト制約付きハミルトン閉路問題への拡張
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/cost_constraint.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
     \begin{itemize}
     \item コスト制約を追加．
     \item ハミルトン閉路上の辺の距離の総和が閾値以下である．
+    \end{itemize}
+  \item 有向グラフ化における距離の扱い．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/cost_both.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+    \begin{itemize}
+    \item 各辺$X–Y$の距離を弧$X \rightarrow Y$，$Y \rightarrow X$に付与．
+    \item 無向グラフを有向グラフ化する\textsf{acyclicity}と\textsf{directed}．
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -451,7 +449,7 @@
   %図~\ref{fig:USmap}に示されたグラフ．
   D.~E~.Knuth の教科書
   The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
-  に記載されている最短ハミルトン路問題の例.
+  に記載されている最短ハミルトン路問題の例．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -459,19 +457,19 @@
 \begin{frame}[noframenumbering]{ベンチマークサイズ}
 \begin{itemize}
 \item \textsf{color04} (127問)\\
-  辺の数: 11〜10000, 頂点の数: 20〜990000．
+  頂点数: 11〜10000, 辺の数: 20〜990000．
 \item \textsf{complete} (15問)\\
-  辺の数: 100〜1500, 頂点の数: 4950〜1124250．
+  頂点数: 100〜1500, 辺の数: 4950〜1124250．
 \item \textsf{knight} (11問)\\
-  辺の数: 64〜10000, 頂点の数: 168〜38808．
+  頂点数: 64〜10000, 辺の数: 168〜38808．
 \item \textsf{tsplib} (9問)\\
-  辺の数: 1000〜5000, 頂点の数: 1998〜9999．
+  頂点数: 1000〜5000, 辺の数: 1998〜9999．
 \item \textsf{grid} (12問)\\
-  辺の数: 36〜289, 頂点の数: 60〜544．
+  頂点数: 36〜289, 辺の数: 60〜544．
 \item \textsf{random} (320問)\\
-  辺の数: 100〜50000, 頂点の数: 319〜362828．
+  頂点数: 100〜50000, 辺の数: 319〜362828．
 \item \textsf{usmap} (1問)\\
-  辺の数: 48, 頂点の数:105 
+  頂点数: 48, 辺の数:105 
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
