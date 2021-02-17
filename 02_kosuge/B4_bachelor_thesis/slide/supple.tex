@@ -187,7 +187,7 @@
         $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
     \end{block}
     \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
-        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.\\
+        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
         \vspace{-3mm}
         \begin{eqnarray*}
             (x_1=1) \lor (x_2=1) \lor (x_3=1) \lor (x_4=1)\\
@@ -273,7 +273,7 @@
     \frametitle{高速化手法}
     \vspace{-3mm}
     \begin{exampleblock}{改良手法1の例}
-        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.\\
+        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
         \vspace{-3mm}
         \begin{eqnarray*}
             x_{11}+x_{21}+x_{31}=y_1\\
@@ -287,8 +287,8 @@
 \begin{frame}
     \frametitle{高速化手法}
     \vspace{-3mm}
-    \begin{exampleblock}{改良手法の例}
-        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.\\
+    \begin{exampleblock}{改良手法2の例}
+        $distinct(x_1, x_2, x_3)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
         \vspace{-3mm}
         \begin{eqnarray*}
             x_{11}+x_{21}+x_{31}+x_{41}=1\\
@@ -416,7 +416,7 @@
         {\tiny \input{table/result_channel} }
     \end{block}
     \begin{itemize}
-        \item N=11で間違えた解を求めた.
+        \item N=11でUNSATとなった.
         \item 色変数モデルでPB符号化の改良手法を用いると性能が低下した．
     \end{itemize}
     \input{tikz/line}\\
