@@ -1,9 +1,14 @@
-\begingroup
-\renewcommand{\arraystretch}{1.5}
-\begin{tabular}{l|c}\hline
-  符号化名 & 基礎化後のルール数(遷移制約) \\ \hline
-  vrc1 & $4|T|{|C|\choose 2}^{2}{|V|\choose 2}$ \\ \hline
-  vrc2 & $|T|\left(2{|C|\choose 2}|V| + 1\right)$ \\ \hline
-  vrc3 & $|T|(|CV| + 1)$ \\ \hline
+\scalebox{0.8}{
+\begin{tabular}{l|c|c} \hline
+  符号化名 & 特徴 & 遷移制約 \\ \hline
+  vrc1 & 基本となる符号化 & 一貫性制約のみを用いて表現  \\ \hline
+  vrc2 & アトムchangedを追加 & \begin{tabular}{c}
+    「遷移で色が変わる頂点は一つのみ」 \\
+    を個数制約も用いて表現
+  \end{tabular}  \\ \hline
+  vrc3 & アトムunchangedを追加 & \begin{tabular}{c}
+    「遷移で色が変わらない頂点は \\ $|V|-1$個のみ」 \\ 
+    を個数制約も用いて表現
+  \end{tabular} \\ \hline
 \end{tabular}
-\endgroup
+}
