@@ -125,57 +125,8 @@
     \end{exampleblock}
 \end{frame}
 
-\begin{frame}
-    \frametitle{既存のSMTソルバー}
-    \begin{itemize}
-        \item 既存のSMTソルバーとしては，OpenSMT,YICES,UCLID,CVC3,Z3などが挙げられる．\\
-        \item 今回使用したZ3はMicrosoft社によって開発されたもので，プログラム解析，テスト，検証などに使用されている．
-    \end{itemize}
-\end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SMT-LIB
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]\small
-    \frametitle{SMT-LIB}
-    \begin{itemize}
-        \item SMT-LIBは，SMTの研究開発の促進を目的とした国際的な取り組みである．
-        \item SMTソルバーで使用される背景理論の標準的な記述方法を提供している．
-        \item SMTソルバーのための共通の入出力言語を開発している．
-    \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SMT-LIB形式での記述方法
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]\small
-    \frametitle{SMT-LIBでの記述方法}
-    SMTソルバーを扱う際に使用した記述方法はsmt-lib2形式である．\\
-    変数や制約を宣言する際には以下のように宣言される．
-    \begin{exampleblock}{変数の宣言}
-        整数変数\verb|x|は以下のように宣言される．
-\begin{verbatim}
-(declare-const x Int)
-\end{verbatim}
-    \end{exampleblock}
-    \begin{exampleblock}{制約の宣言}
-        変数\verb|x|が0以上4以下であることは以下のように宣言される．
-\begin{verbatim}
-(assert (and (>= x 0) (<= x 4)))
-\end{verbatim}
-    \end{exampleblock}
-    \begin{exampleblock}{\distinct 制約の宣言}
-        $distinct(x,y,z)$は以下のように宣言される．
-\begin{verbatim}
-(assert (distinct x y z))
-\end{verbatim}
-    \end{exampleblock}
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 鳩の巣原理
 % at-least-one制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -197,48 +148,6 @@
         \end{eqnarray*}
 
     \end{exampleblock}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 鳩の巣原理のSMT符号化
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]\small
-    \frametitle{鳩の巣原理のSMT符号化}
-    鳩の巣原理を用いた高速化手法についてのSMT符号化を示す．\\
-    例として\verb|(distinct x_0 x_1 x_2 x_3)|は以下のように宣言される．\\
-    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
-    \begin{exampleblock}{}\scriptsize
-\begin{verbatim}
-(assert (distinct x_0 x_1 x_2 x_3))
-(assert (or (>= x_0 3) (>= x_1 3) (>= x_2 3) (>= x_3 3)))
-(assert (or (<= x_0 1) (<= x_1 1) (<= x_2 1) (<= x_3 1)))
-\end{verbatim}
-    \end{exampleblock}
-    2,3行目が高速化のために追加した制約である．\\
-    これにより，例えば\verb|x_0,x_1,x_2|にそれぞれ0,1,2が割り当てられた際に\verb|x_3|が3以上に決まるため，探索空間が削減される．
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% at-least-one制約のSMT符号化
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]\small
-    \frametitle{at-least-one制約のSMT符号化}
-    at-least-one制約を用いた高速化手法についてのSMT符号化を示す．\\
-    例として，\verb|(distinct x_0 x_1 x_2 x_3 x_4)|は以下のように宣言される．\\
-    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
-    \begin{exampleblock}{}\scriptsize
-\begin{verbatim}
-(assert (distinct x_0 x_1 x_2 x_3 x_4))
-(assert (or (= x_0 0) (= x_1 0) (= x_2 0) (= x_3 0) (= x_4 0)))
-(assert (or (= x_0 1) (= x_1 1) (= x_2 1) (= x_3 1) (= x_4 1)))
-(assert (or (= x_0 2) (= x_1 2) (= x_2 2) (= x_3 2) (= x_4 2)))
-(assert (or (= x_0 3) (= x_1 3) (= x_2 3) (= x_3 3) (= x_4 3)))
-(assert (or (= x_0 4) (= x_1 4) (= x_2 4) (= x_3 4) (= x_4 4)))
-\end{verbatim}
-    \end{exampleblock}
-    2行目以降が高速化のために追加した制約である．\\
-    これにより，例えば\verb|x_0,x_1,x_2,x_3|に0以外が割り当てられた際に\verb|x_4|が0になることが確定するので，探索空間が削減される．
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -300,6 +209,101 @@
 
     \end{exampleblock}
 \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 既存のSMTソルバー
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{既存のSMTソルバー}
+    \begin{itemize}
+        \item 既存のSMTソルバーとしては，OpenSMT,YICES,UCLID,CVC3,Z3などが挙げられる．\\
+        \item 今回使用したZ3はMicrosoft社によって開発されたもので，プログラム解析，テスト，検証などに使用されている．
+    \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SMT-LIB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\small
+    \frametitle{SMT-LIB}
+    \begin{itemize}
+        \item SMT-LIBは，SMTの研究開発の促進を目的とした国際的な取り組みである．
+        \item SMTソルバーで使用される背景理論の標準的な記述方法を提供している．
+        \item SMTソルバーのための共通の入出力言語を開発している．
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SMT-LIB形式での記述方法
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\small
+    \frametitle{SMT-LIBでの記述方法}
+    SMTソルバーを扱う際に使用した記述方法はsmt-lib2形式である．\\
+    変数や制約を宣言する際には以下のように宣言される．
+    \begin{exampleblock}{変数の宣言}
+        整数変数\verb|x|は以下のように宣言される．
+\begin{verbatim}
+(declare-const x Int)
+\end{verbatim}
+    \end{exampleblock}
+    \begin{exampleblock}{制約の宣言}
+        変数\verb|x|が0以上4以下であることは以下のように宣言される．
+\begin{verbatim}
+(assert (and (>= x 0) (<= x 4)))
+\end{verbatim}
+    \end{exampleblock}
+    \begin{exampleblock}{\distinct 制約の宣言}
+        $distinct(x,y,z)$は以下のように宣言される．
+\begin{verbatim}
+(assert (distinct x y z))
+\end{verbatim}
+    \end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 鳩の巣原理のSMT符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\small
+    \frametitle{鳩の巣原理のSMT符号化}
+    鳩の巣原理を用いた高速化手法についてのSMT符号化を示す．\\
+    例として\verb|(distinct x_0 x_1 x_2 x_3)|は以下のように宣言される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \begin{exampleblock}{}\scriptsize
+\begin{verbatim}
+(assert (distinct x_0 x_1 x_2 x_3))
+(assert (or (>= x_0 3) (>= x_1 3) (>= x_2 3) (>= x_3 3)))
+(assert (or (<= x_0 1) (<= x_1 1) (<= x_2 1) (<= x_3 1)))
+\end{verbatim}
+    \end{exampleblock}
+    2,3行目が高速化のために追加した制約である．\\
+    これにより，例えば\verb|x_0,x_1,x_2|にそれぞれ0,1,2が割り当てられた際に\verb|x_3|が3以上に決まるため，探索空間が削減される．
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% at-least-one制約のSMT符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]\small
+    \frametitle{at-least-one制約のSMT符号化}
+    at-least-one制約を用いた高速化手法についてのSMT符号化を示す．\\
+    例として，\verb|(distinct x_0 x_1 x_2 x_3 x_4)|は以下のように宣言される．\\
+    (\verb|x_i|$\in \{0,1,2,3,4\}$とする)
+    \begin{exampleblock}{}\scriptsize
+\begin{verbatim}
+(assert (distinct x_0 x_1 x_2 x_3 x_4))
+(assert (or (= x_0 0) (= x_1 0) (= x_2 0) (= x_3 0) (= x_4 0)))
+(assert (or (= x_0 1) (= x_1 1) (= x_2 1) (= x_3 1) (= x_4 1)))
+(assert (or (= x_0 2) (= x_1 2) (= x_2 2) (= x_3 2) (= x_4 2)))
+(assert (or (= x_0 3) (= x_1 3) (= x_2 3) (= x_3 3) (= x_4 3)))
+(assert (or (= x_0 4) (= x_1 4) (= x_2 4) (= x_3 4) (= x_4 4)))
+\end{verbatim}
+    \end{exampleblock}
+    2行目以降が高速化のために追加した制約である．\\
+    これにより，例えば\verb|x_0,x_1,x_2,x_3|に0以外が割り当てられた際に\verb|x_4|が0になることが確定するので，探索空間が削減される．
+\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PB符号化のSMT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -405,6 +409,7 @@
 
 \begin{frame}
     \frametitle{クイーングラフ彩色問題:N=11}
+    実験で求めたN=11の解を示す．
     \input{tikz/queen_graph_11}
 \end{frame}
 
