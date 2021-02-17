@@ -1,0 +1,50 @@
+\usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{graphicx}
+\usepackage{pxjahyper}
+\usepackage{minijs}
+\usepackage{otf}
+\usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usepackage{listings}
+%\usepackage{plistings}
+\def\lstlistingname{コード}
+\usetheme{Copenhagen}
+\setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
+%\setbeamertemplate{footline}[short title]
+\setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
+
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode
+  \hbox{
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}
+    \usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+    \textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+  \end{beamercolorbox}}
+  \vskip0pt
+}
+\makeatletter
+
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
