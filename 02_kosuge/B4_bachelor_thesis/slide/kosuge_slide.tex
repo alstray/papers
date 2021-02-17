@@ -173,8 +173,8 @@
                                 & 変数 & 制約 & 高速化手法 \\\hline \hline
             色変数モデル        & クイーンの色 & distinct制約 & \begin{tabular}{c} H1\\H2 \end{tabular}\\\hline
             位置変数モデル      & 配置される列 & distinct制約 & \begin{tabular}{c} H1\\H2 \end{tabular}\\\hline
-            0-1変数モデル       & クイーンの色 & \begin{tabular}{c} distinct制約の\\PB符号化 \end{tabular} & \begin{tabular}{c} PB2\\PB3 \end{tabular}\\\hline
-            ハイブリッドモデル  &\begin{tabular}{c} クイーンの色\\配置される列 \end{tabular} & \begin{tabular}{c} distinct制約の\\PB符号化 \end{tabular} & \begin{tabular}{c} PB2\\PB3 \end{tabular}\\
+            0-1変数モデル       & クイーンの色 & \begin{tabular}{c} distinct制約の\\PB符号化 \end{tabular} & \begin{tabular}{c} PBH1\\PBH2 \end{tabular}\\\hline
+            ハイブリッドモデル  &\begin{tabular}{c} クイーンの色\\配置される列 \end{tabular} & \begin{tabular}{c} distinct制約の\\PB符号化 \end{tabular} & \begin{tabular}{c} PBH1\\PBH2 \end{tabular}\\
         \end{tabular}
     \end{table}
 \end{block}
@@ -183,8 +183,8 @@
 {\footnotesize
 H1:  鳩の巣原理を用いたヒント制約\\
 H2:  at-least-one制約を用いたヒント制約\\
-PB2: PB符号化の改良手法1\\
-PB3: PB符号化の改良手法2
+PBH1: PB符号化の改良手法1\\
+PBH2: PB符号化の改良手法2
 
 }
 \end{frame}
@@ -291,11 +291,11 @@ PB3: PB符号化の改良手法2
     \end{itemize}
     \input{tikz/line}\\
     \vspace{-3mm}
-    {\tiny COL: 色変数モデル, POS: 位置変数モデル}\\
+    {\tiny COL: 色変数モデル, POS: 位置変数モデル, PB: 0-1変数モデル}\\
     \vspace{-3mm}
     {\tiny H1: 鳩の巣原理を用いたヒント制約, H2: at-least-one制約を用いたヒント制約, H3: H1+H2}\\
     \vspace{-3mm}
-    {\tiny PB1: 0-1変数モデル, PB2:0-1変数モデル+改良手法1, PB3:0-1変数モデル+改良手法2}\\
+    {\tiny PBH1: PB符号化の改良手法1, PBH2: PB符号化の改良手法2}\\
 \end{frame}
 
 
