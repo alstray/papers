@@ -48,15 +48,15 @@
   \begin{itemize}
     %\item 既存の組合せ問題の多くを組合せ遷移問題に拡張できる．
     \item 基となる問題が NP 完全である場合，その遷移問題の多くは，
-      \alert{PSPACE完全}であることが知られている~[xxx]．
+      \alert{PSPACE完全}であることが知られている~[伊藤 '18]．
     %\item \structure{持続可能なシステム}への応用が期待されている．
     \item 理論的な基盤が整備されつつある一方で，
       組合せ遷移問題の\alert{汎用的かつ効率的なアルゴリズムは見つかっていない}．
     \item 代表的な組合せ遷移問題
       \begin{itemize}
-      \item 命題論理の充足可能性判定問題(SAT)の遷移問題~[xxx]
-      \item 集合被覆問題の遷移問題~[xxx]
-      \item グラフ点彩色問題の遷移問題~[xxx] 
+      \item 命題論理の充足可能性判定問題(SAT)の遷移問題~[伊藤 '18]
+      \item 集合被覆問題の遷移問題~[Itoほか '11]
+      \item グラフ点彩色問題の遷移問題~[Paul Bonsmaほか '09]
       \end{itemize}
   \end{itemize}
   \begin{alertblock}{}\centering
@@ -77,7 +77,7 @@
     \item 問題の入力は，グラフ点彩色問題とその二つの実行可能解
       \structure{$\alpha$}(初期状態)と\structure{$\beta$}(目標状態)．
     \item $\alpha$から$\beta$への到達可能性を判定することが目的．
-    \item 各遷移で色が変化する頂点はただ1つのみ (遷移制約)．
+    \item 各遷移で色が変化する頂点はただ一つのみ (遷移制約)．
     \end{itemize}
   \end{block}
 
@@ -170,13 +170,7 @@
   \end{itemize}
 
   \begin{exampleblock}{}\centering
-    \begin{tabular}{l|p{8cm}}
-      符号化名 & 遷移制約 \\\hline
-      vrc1 & 違反する組み合わせで表現  \\ \hline
-      vrc2 & 遷移制約を ASP の個数制約も用いて表現\\\hline
-      vrc3 & 「各遷移で色が変化しない頂点は$|V|-1$個」を，
-             ASPの個数制約も用いて表現
-    \end{tabular}
+    \input{table/encoding.tex}
   \end{exampleblock}
 
   % \begin{table}
@@ -217,9 +211,11 @@
   \begin{itemize}
     \item \structure{ベンチマーク問題}: 独自に作成した$k$彩色遷移問題(90問)
       \begin{enumerate}
-      \item xxx
-      \item yyy
-      \item zzz
+      \item \textit{COLOR04}で公開されているグラフ点彩色問題のグラフ127個のうち，
+      彩色数が判明している44個を使用した~[Tamuraほか '09]．
+      \item 44個のグラフに対して，彩色数での実行可能解の総数を求めることが可能
+            かを調査した．
+      \item 総数を求められた9個のグラフから各10問ずつ，計90問のベンチマーク問題を作成した．
       \end{enumerate}
       % \begin{itemize}
       % \item \textit{COLOR04}で公開されている，グラフ点彩色問題Instances}に属するグラフから抜粋した9個を使用．
@@ -247,7 +243,8 @@
 
   \begin{itemize}
   \item 実行可能解の総数は，最少で120個，最大で約28億個である．
-  \item xxxx 90問
+  \item 求められた実行可能解から解をランダムで二つ選びベンチマーク問題を作成し，
+        各グラフから10問，計90問を作成した．
   \end{itemize}
 
 \end{frame}
@@ -262,12 +259,7 @@
 \bigskip
 
 \begin{exampleblock}{}\centering
-  \begin{tabular}{l|r}
-    結果 & 問題数 \\ \hline
-    到達可能 & 11 \\ 
-    到達不可能 & 10 \\
-    判定不能 & 69 \\ \hline
-\end{tabular}
+  \input{table/result.tex}
 \end{exampleblock}
 
   % \begin{table}[t]
@@ -276,9 +268,8 @@
   % \end{table}
   
   \begin{itemize}
-    \item 到達可能は経路が存在するもの．
-    \item 到達不可能は経路が存在しないことが確かめられたもの．
-    \item 判定不能は時間内で解くことができなかったもの．
+    \item 到達可能は時間内に解が見つかったことを意味する．
+    \item 到達不能は時間内に解が存在しないと確かめられたことを意味する．
     \item 本発表では到達可能インスタンスの結果を紹介する．
   \end{itemize}
 
@@ -295,7 +286,7 @@
   \end{table}
 
   \begin{itemize}
-    \item vrc3符号化はxxxxx，最速であったインスタンスの数・総CPU時間の両方で\alert{vrc3が優位性を示した}．
+    \item vrc3符号化は，最速であったインスタンスの数・総CPU時間の両方で優位性を示した．
   \end{itemize}
   
 \end{frame}
@@ -310,10 +301,10 @@
     \begin{itemize}
       \item $k$彩色遷移問題に対して，3種類の符号化を提案した．
       \begin{itemize}
-      \item ASP の高い表現力を生かして，$k$彩色遷移問題を簡潔に記述
-      \item 特に，vrc3符号化xxxx
+      \item ASP の高い表現力を生かして，$k$彩色遷移問題を簡潔に記述．
+      \item 特に，vrc3符号化は遷移制約を言い換えて個数制約を用いることで簡潔に記述している．
       \end{itemize}
-    \item \textit{COLOR04}~\footnotemark[1]
+    \item \textit{COLOR04}
       で公開されているグラフ点彩色問題をベースに，$k$彩色遷移問題のベ
       ンチマーク問題を新たに90問作成した．
       % \begin{itemize}

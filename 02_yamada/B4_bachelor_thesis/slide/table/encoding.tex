@@ -1,14 +1,7 @@
-\scalebox{0.8}{
-\begin{tabular}{l|c|c} \hline
-  符号化名 & 特徴 & 遷移制約 \\ \hline
-  vrc1 & 基本となる符号化 & 一貫性制約のみを用いて表現  \\ \hline
-  vrc2 & アトムchangedを追加 & \begin{tabular}{c}
-    「遷移で色が変わる頂点は一つのみ」 \\
-    を個数制約も用いて表現
-  \end{tabular}  \\ \hline
-  vrc3 & アトムunchangedを追加 & \begin{tabular}{c}
-    「遷移で色が変わらない頂点は \\ $|V|-1$個のみ」 \\ 
-    を個数制約も用いて表現
-  \end{tabular} \\ \hline
+\begin{tabular}{l|p{8cm}}
+  符号化名 & 遷移制約 \\\hline
+  vrc1 & 任意の二つの頂点に対し違反する組合わせを列挙することで表現  \\ \hline
+  vrc2 & 遷移制約を ASP の個数制約を用いて表現\\\hline
+  vrc3 & 「各遷移で色が変化しない頂点は$|V|-1$個」を，
+         ASPの個数制約を用いて表現
 \end{tabular}
-}

@@ -48,8 +48,8 @@
 
     \item グラフの形に制限を加えることにより，多項式時間で解決可能となるものが存在することがわかっている．[Paul Bonsmaほか '09]
     \begin{itemize}
-      \item 平面グラフであり，かつ$4 \le k \le 6$でないとき.
-      \item 2部平面グラフであり, かつ$k=4$でないとき.
+      \item 平面グラフであり，かつ$k \ge 6$のとき.
+      \item 2部平面グラフであり, かつ$k \ge 5$のとき.
     \end{itemize}
 
   \end{itemize}
@@ -102,13 +102,15 @@
 \begin{frame}\frametitle{遷移回数$t$の導入}
 
   \begin{itemize}
-    \item グラフ点彩色問題とその二つの実行可能解$\alpha$，$\beta$に加え， \structure{遷移回数$t$}を与える．
+    \item グラフ点彩色問題とその二つの実行可能解$\alpha$，$\beta$に加え， 
+          \structure{遷移回数$t$}を与える．
     \begin{itemize}
-      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かの判定問題へと変更. 
+      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かを判定する. 
     \end{itemize}
-    \item $t$を遷移回数の上限値まで大きくしていくことで，最終的に経路の存在について判定可能．
+    \item $t$を遷移回数の上限値まで大きくしていくことで，
+          最終的に経路の存在について判定可能である．
     \begin{itemize}
-      \item 途中で経路が存在すれば，本来の問題でも経路が存在．
+      \item 途中で経路が存在すれば，本来の問題でも経路が存在する．
       \item すべての$t$において経路が存在しないのであれば，本来の問題でも経路が存在しない．
     \end{itemize}
     \item $t$の上限値は\structure{グラフ点彩色問題の実行可能解の総数$-1$}．
@@ -120,14 +122,14 @@
 %% 実験環境
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{グラフの調査}
+\begin{frame}\frametitle{グラフの調査実験}
   全解列挙可能なグラフと色数の組合せを得るため, 以下の調査を行った.
   \begin{itemize}
     \item \structure{使用するグラフ}: 全44個
     \begin{itemize}
-      \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている, \textit{Graph Coloring Instances}に属するグラフから抜粋.
-      \item 選択基準は\structure{彩色数}が判明しているもの.[Tamuraほか '09]
+      \item \textit{COLOR04}
+      で公開されている，グラフ点彩色問題のグラフ．
+      \item 選択基準は\structure{彩色数}が判明しているもの~[Tamuraほか '09].
     \end{itemize}
     \item \structure{色数}: 各グラフの彩色数
 
@@ -142,7 +144,7 @@
 %% 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{到達不可能インスタンスにおけるCPU時間の比較}
+\begin{frame}\frametitle{実験結果:到達不可能インスタンスにおけるCPU時間}
 
   \begin{table}[t]
     \centering
@@ -159,7 +161,7 @@
 % 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{判定不能インスタンスにおける最大遷移回数の比較}
+\begin{frame}\frametitle{実験結果:判定不能インスタンスにおける最大遷移回数}
   
   \begin{table}[t]
     \centering
