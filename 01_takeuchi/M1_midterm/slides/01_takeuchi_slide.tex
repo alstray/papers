@@ -11,7 +11,7 @@
 % \usepackage{multirow}
 \usepackage{multicol}
 % \usepackage{url}
-\usepackage{listings,jlisting}
+% \usepackage{listings,jlisting}
 \usepackage{tikz}
 \usetikzlibrary{arrows,shapes}
 \usetikzlibrary{positioning}
@@ -57,14 +57,14 @@
 \renewcommand{\thefootnote}{\dag} % フットノート番号をダガーにする
 
 %%%% Code %%%%%%%%%
-\lstset{
- basicstyle=\ttfamily\color{black},
- keepspaces=true,
- escapechar=|,
- columns=[l]{fullflexible},
- commentstyle={\color{red}},
- stringstyle={\color{blue}},
-}
+% \lstset{
+%  basicstyle=\ttfamily\color{black},
+%  keepspaces=true,
+%  escapechar=|,
+%  columns=[l]{fullflexible},
+%  commentstyle={\color{red}},
+%  stringstyle={\color{blue}},
+% }
 %%%% My macro %%%%%
 \input{macro}
 \input{ovm_macro}
@@ -77,6 +77,372 @@
 \begin{document}
 \frame{\titlepage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{車両装備仕様問題}
+ \structure{\bf 車両装備仕様}とは，簡単に言うと，自動車のカタログに記載されている
+ \textbf{モデル/グレードと装備の一覧表}のことである．
+ \begin{itemize}
+  \item 車両の装備を決定するために，
+	現状では専門知識をもつ技術者の多大な労力が費やされている．
+  % \item 装備仕様決定の自動化・効率化は自動車メーカーにとって重要な課題の一つである．
+ \end{itemize}
+ \begin{block}{車両装備仕様問題 (組合せ最適化問題の一種)}
+  \begin{itemize}
+   % \item 装備タイプと装備オプションに対する
+   % 	 \structure{\bf 範囲制約}，
+   % 	 \structure{\bf 依存制約}，
+   % 	 \structure{\bf 燃費制約}
+   % 	 から構成される．
+   \item 装備および燃費に関する制約から構成される．
+   \item {\bf 予想販売台数の最大化}，{\bf 装備オプション数の最小化}など
+	 トレードオフの関係にある複数の目的関数のもとで最適な車両装備仕様を
+	 求めることが目的
+  \end{itemize}
+ \end{block}
+ \begin{alertblock}{CAFE方式(企業別平均燃費方式)}
+  \begin{itemize}
+   \item 車種別ではなくメーカー全体での出荷台数を加味した平均燃費を算出し，
+	 規制をかける方式
+   \item 燃費制約としてCAFE方式を用いた問題を\structure{\bf CAFE問題}と呼ぶ．
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CAFE問題の例}
 
+  \begin{columns}
+    \begin{column}{0.75\linewidth}
+      \scalebox{0.8}[0.8]{\input{ovm}}
+      \uncover<2>{
+      \begin{exampleblock}{}\centering
+        STD，DX，LXグレードの3車種を生産するとする．
+      \end{exampleblock}}
+    \end{column}
+    \begin{column}{0.25\linewidth}
+      \begin{footnotesize}
+        \begin{itemize}
+        \item プロダクトライン開発で用いられる可変性モデルによって記述
+        \item 6個の装備タイプ，19個の装備オプション
+        \item 各タイプの選択可能なオプション数はすべて1
+        \item 各オプションの数字は IWR 値と呼ばれ，直観的にはその重量
+        \item 5個の依存制約
+        \item \textsf{Sun Roof}以外は必須タイプ
+        \end{itemize}
+      \end{footnotesize}
+    \end{column}
+  \end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CAFE問題の解 {\normalsize (CAFE基準値: 8.5km/L)}}\small
+ \begin{exampleblock}{解の例}
+  \centering
+  \renewcommand{\arraystretch}{0.9}
+  %\tabcolsep = 5mm
+  \begin{tabular}{p{10mm}|p{25mm}|p{15mm}|p{15mm}|p{15mm}} 
+    \multicolumn{2}{l|}{装備仕様}  & 車種1 & 車種2 & 車種3 \\\hline
+    装備 & \textsf{Grade}   & \textsf{STD}    & \textsf{DX}     & \textsf{LX}\\
+    &\textsf{Drive\_Type}  & \textsf{2WD}    & \textsf{2WD}    & \textsf{4WD}\\
+    &\textsf{Engine}	  & \textsf{V6}     & \textsf{V6}     & \textsf{V6}\\
+    &\textsf{Tire}	  & \textsf{16inch} & \textsf{17inch} & \textsf{18inch}\\
+    &\textsf{Transmission} & \textsf{6AT}    & \textsf{HEV}    & \textsf{10AT}\\
+    &\textsf{Sun\_Roof}    & -               & -              & - 
+   \end{tabular}
+ \end{exampleblock}
+ \pause
+ 
+ \begin{block}{}
+  \centering
+  \renewcommand{\arraystretch}{0.9}
+  %\tabcolsep = 5mm
+  \begin{tabular}{p{38mm}|p{15mm}|p{15mm}|p{15mm}} 
+    IWR 値の総和    & 1,130  & 1,130   & 1,255 \\ %\hline
+    燃費(km/L)      & 8.8  & 8.8     & 8.0 \\ %\hline
+    予想販売台数    & 2,007   & 2,007   & 1,511  \\ \hline
+    平均燃費(km/L)  & \multicolumn{3}{c}{8.5} \\ 
+    予想販売台数(合計)  & \multicolumn{3}{c}{5,525} \\ 
+    オプション数 & \multicolumn{3}{c}{12}	
+  \end{tabular}
+ \end{block}
+ \vfill
+ \begin{itemize}
+ \item 車種3はCAFE基準値を下回っているが，
+       平均燃費は 8.581km/L となり，燃費制約を満たしている．
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{解集合プログラミング(Anwer Set Programming; ASP)}
+ \begin{itemize}
+ \item \structure{\bf ASPの言語}は，一階論理に基づく知識表現言語の一種である．
+ %\item \structure{\bf ASPのプログラム}は，ASPルールの有限集合である．
+ \item \structure{\bf ASPシステム}は，安定モデル意味論~[Gelfond and Lifschitz '88]
+   に基づく解集合を計算するシステムである．
+ \item 近年，SAT技術を利用した高速なASPシステムが開発され，
+   ロボット工学，システム検証，システム生物学
+   など様々な分野への実用的応用が急速に拡大している．
+  \item \structure{\bf Asprin言語}は，複数の目的関数およびそれらの間の
+	選好(preference)を記述できるようにASP言語をの拡張したものである．
+ \end{itemize}
+\vfill
+ \begin{alertblock}{CAFE問題に対してASPを用いる利点}
+   \begin{itemize} 
+    \item ASP言語の高い表現力により，各種制約を簡潔に記述できる．
+    \item 高速なASPシステムを利用できる．
+%    \item 解の最適性を保証でき，最適解の列挙も可能である．
+    \item Asprin言語の選好により，トレードオフの関係にある複数の目的関数のもとで，
+	  柔軟な最適値探索が可能である．
+   \end{itemize}
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{研究の概要}
+ \begin{alertblock}{目的}
+  ASPを多目的最適化問題へ応用する試みとして，ASPを基盤としたCAFE問題ソルバーを実現する．
+ \end{alertblock}
+ \begin{itemize}
+  \item CAFE問題のASP符号化の研究開発を中心に研究を進める．
+  \item 企業から提供を受けたベンチマーク問題を使って手法およびソルバーを評価し，
+	ASPの特長を活かした多目的最適化の利点・実用性を明らかにする．
+ \end{itemize}
+ \begin{block}{これまでの研究内容}
+  \begin{itemize}
+   \item \structure{\bf 単目的CAFE問題に関する研究(卒業研究)}
+	 \begin{itemize}
+	  \item {\bf 基本符号化}と{\bf 改良符号化}の2種類のASP符号化を考案
+	  \item 実用規模，より大規模な問題での{\bf 改良符号化の優位性}を確認
+	 \end{itemize}
+   \item \structure{\bf 多目的CAFE問題に関する研究}
+	 \begin{itemize}
+	  \item パレート最適解を求める{\bf Asprin符号化}を考案
+	  \item 小規模な問題で，{\bf パレート最適解を全列挙}することに成功
+	 \end{itemize}
+  \end{itemize}
+ 
+ \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{単目的CAFE問題に関する研究(卒業研究)}
+ \begin{itemize}
+  \item 予想販売台数の最大化を目的関数とする．
+ \end{itemize}
+ \begin{block}{2種類のASP符号化を考案}
+  \begin{itemize}
+   \item {\bf 基本符号化}
+	 \begin{itemize}
+	  \item CAFE問題の制約を{\bf ASPのルール17個}で簡潔に記述
+	 \end{itemize}
+   \item {\bf 改良符号化}
+	 \begin{itemize}
+	  \item IWR値の上下限を厳密に計算することにより，
+		{\bf 基礎化後のルール数を少なく}抑える．
+	 \end{itemize}
+  \end{itemize}
+  \end{block}
+ \begin{alertblock}{企業から提供された実データを用いた評価実験}
+  \begin{itemize}
+   \item CAFE問題(3問)に対して，5種類のCAFE基準値(8.5, 9.0, 9.5,
+	 10.0, 10.5km/L)を適用した問題インスタンス(全15問)  
+   \item どちらの符号化でも小規模な問題の最適解を求めることができた．
+   \item 実用規模およびより大規模な問題に対して，
+	 改良符号化が基本符号化より優れた結果を示し，その優位性が確認できた．
+  \end{itemize}
+ \end{alertblock}
 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{多目的CAFE問題に関する研究}
+ \begin{itemize}
+  \item 予想販売台数の最大化と装備オプション数の最小化の2つの目的関数をもつ．
+ \end{itemize}
+ \begin{block}{パレート最適解を求める符号化を考案}
+   \begin{itemize}
+    \item {\bf Asprin符号化}
+	  \begin{itemize}
+	   \item Asprin言語によって，
+		 パレート最適解をすべて求めるように記述
+	  \end{itemize}
+ \end{itemize}
+
+ \end{block}
+ \begin{exampleblock}{パレート最適解の例{\normalsize (CAFE基準値: 8.5km/L)}}
+    \centering
+  \tiny
+  \tabcolsep=1.5mm
+  \begin{tabular}{l|l|c|c|c||c|c|c||c|c|c||c|c|c}
+   \multicolumn{2}{l|}{} & \multicolumn{3}{c||}{解1} & \multicolumn{3}{c||}{解2} & \multicolumn{3}{c||}{解3} & \multicolumn{3}{c}{解4}\\ \hline
+   \multicolumn{2}{l|}{装備仕様} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3 \\ \hline
+   装備 & Grade & STD & DX & LX & STD & DX & LX & STD & DX & LX & STD & DX & LX \\
+       & Drive\_Type & 2WD & 2WD & \alert{4WD} & 2WD & 2WD & \alert{4WD} & 2WD & 2WD & \alert{2WD} & 2WD & 2WD & \alert{2WD}\\
+       & Engine & V6 & V6 & V6 & V6 & V6 & V6 & V6 & V6 & V6 & V6 & V6 & V6 \\
+       & Tire & 16 & 17 & 18 & 16 & 17 & 18 & 16 & 17 & 18 & 16 & 17 & 18 \\
+       & Transmission & \alert{6AT} & \alert{HEV} & 10AT & \alert{10AT} & \alert{HEV} & 10AT & \alert{10AT} & \alert{HEV} & 10AT & \alert{10AT} & \alert{10AT} & 10AT \\
+       & Sun\_Roof & - & - & - & - & - & - & - & - & - & - & - & - \\ \hline
+   \multicolumn{2}{l|}{予想販売台数(合計)}  & \multicolumn{3}{c||}{\bf 5,525} & \multicolumn{3}{c||}{\bf 5,475} & \multicolumn{3}{c||}{\bf 5,135} & \multicolumn{3}{c}{\bf 4,723} \\ 
+   \multicolumn{2}{l|}{オプション数} & \multicolumn{3}{c||}{\bf 12} & \multicolumn{3}{c||}{\bf 11} & \multicolumn{3}{c||}{\bf 10} & \multicolumn{3}{c}{\bf 9} \\
+   \multicolumn{14}{c}{}
+  \end{tabular}
+
+ \end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実行実験}
+ 
+ \begin{exampleblock}{小規模な問題での実験結果}
+  \centering
+  % \renewcommand{\arraystretch}{0.9}
+  % \tabcolsep = 0.9mm
+  \begin{tabular}{c|r|rr}
+   問題   & CAFE値  & パレート最適解 & CPU時間(秒) \\
+          & (km/L)  & の総数  &  \\ \hline
+   small  & 8.5   & 8             & 35.136     \\
+   small  & 9.0   & 5             & 1085.354   \\
+   small  & 9.5   & --            & Timeout    \\
+   small  & 10.0  & 1             & 1.863      \\
+   small  & 10.5  & 0             & 0.221      \\ 
+  \end{tabular}
+ \end{exampleblock}
+ \begin{itemize}
+  \item 5問中4問でパレート最適解を全列挙することに成功した．
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{まとめと今後の課題}
+ 解集合プログラミングを用いたCAFE問題の解法について，
+ 研究概要とこれまでの研究成果を述べた．
+ \begin{block}{これまでの研究内容}
+  \begin{itemize}
+   \item \structure{\bf 単目的CAFE問題に関する研究(卒業研究)}
+	 \begin{itemize}
+	  \item {\bf 基本符号化}と{\bf 改良符号化}の2種類のASP符号化を考案
+	  \item 実用規模，より大規模な問題での改良符号化の優位性を確認
+	 \end{itemize}
+   \item \structure{\bf 多目的CAFE問題に関する研究}
+	 \begin{itemize}
+	  \item パレート最適解を求める{\bf Asprin符号化}を考案
+	  \item 小規模な問題でのパレート最適解を全列挙することに成功
+	 \end{itemize}
+  \end{itemize}
+ \end{block}
+ \begin{alertblock}{今後の課題}
+  認証制約，
+  適用タイミング制約，
+  IWRテーブル制約
+  など，CAFE 問題に対する様々な追加制約に対応し，
+  ソルバーの実用性を高める．
+
+ \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{研究業績}
+ \begin{alertblock}{受賞}
+  \begin{itemize}
+   \item {\bf 学生奨励賞}\\
+	 竹内頼人, 田村直之, 番原睦則.
+	 車両装備仕様問題に対する解集合プログラミングの適用.
+	 日本ソフトウェア科学会第37回大会講演論文集,
+	 2020年9月9日. 
+  \end{itemize}
+ \end{alertblock}
+ \begin{block}{発表歴}
+   \begin{itemize}
+    \item 2020/9/3 NII共同研究 第1回研究会合
+    \item 2020/9/9 日本ソフトウェア科学会 第37回大会
+    \item 2020/10/16 企業とのCAFE問題に関する意見交換会
+   \end{itemize} 
+ \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\backupbegin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験環境}
+\begin{itemize}
+\item ベンチマーク問題(計15問)
+  \begin{itemize}
+  \item 企業から提供された問題(3問)に対して
+  \item 5通りのCAFE基準値$t\in\{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$を適用
+  \item 車種の数$n = 3$
+  \end{itemize}
+  \begin{exampleblock}\small
+    \centering
+    \begin{tabular}{ ll|r r r }
+      問題名 & サイズ &  \#装備タイプ & \#装備オプション& \#依存制約\\ \hline
+      small	 & 小規模   &   8 &   21  &   4	\\
+      medium & 実用規模 &  86 &  226  & 147	\\
+      big    & 大規模   & 315 & 1,337 &   0
+    \end{tabular}
+  \end{exampleblock}
+ \item ASPシステム
+       \begin{itemize}
+	\item 単目的CAFE問題: \textit{clingo-5.4.0}
+	\item 多目的CAFE問題: \textit{clingo-5.4.0} + \textit{asprin-3.1.1}
+       \end{itemize}
+ \item 制限時間
+       \begin{itemize}
+	\item 単目的CAFE問題: 1問あたり2時間
+	\item 多目的CAFE問題: 1問あたり3時間
+       \end{itemize}
+ \item 実験環境: Mac mini (3.2GHz, Intel Core i7, 64GB メモリ)
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{単目的CAFE問題の実験結果:予想販売台数}
+\begin{exampleblock}{}
+  \centering
+  \scriptsize
+  \renewcommand{\arraystretch}{1.1}
+  \tabcolsep = 7mm
+  \begin{tabular}{l|r|rr}
+  \lw{問題名} & CAFE  & \multicolumn{2}{c}{予想販売台数} \\ \cline{3-4}
+              & 基準値 & 基本符号化 & 改良符号化 \\\hline    
+   small & 8.5   & \alert{6,021*} & \alert{6,021*}       \\
+   small & 9.0   & \alert{5,007*} & \alert{5,007*}       \\
+   small & 9.5   & \alert{2,688*} & \alert{2,688*}       \\
+   small & 10.0  & \alert{1,318*} & \alert{1,318*}       \\
+   small & 10.5  & UNSAT          & UNSAT    \\\hline
+   medium & 8.5  & 6,010          & \alert{6,021}        \\
+   medium & 9.0  & \alert{5,595}  & \alert{5,595}        \\
+   medium & 9.5  & \alert{3,447}  & 3,430        \\
+   medium & 10.0 & 2,245          & \alert{2,250}        \\
+   medium & 10.5 & 1,690          & \alert{1,845}        \\\hline
+   big & 8.5     & -             & \alert{3,877}        \\
+   big & 9.0     & 1,038          & \alert{4,623}        \\
+   big & 9.5     & 688            & \alert{3,121}        \\
+   big & 10.0    & 1,634          & \alert{2,064}        \\
+   big & 10.5    & 538            & \alert{904}         \\\hline
+   \multicolumn{2}{l}{最適値・最良値の数} & \multicolumn{1}{r}{6} & \alert{13} \\
+  \end{tabular}
+\end{exampleblock}
+\vfill
+\begin{itemize}%\small
+\item 改良符号化が，より多くの問題に対して優れた結果を示した．
+\item 特に，大規模な問題に対する改良符号化の優位性が確認できた．
+ \end{itemize}	
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{単目的CAFE問題の実験結果: 求解までのCPU時間}
+  
+\begin{exampleblock}{}\centering 
+  \renewcommand{\arraystretch}{1.2}
+  \tabcolsep = 4mm
+  \begin{tabular}{cc|r|rr}
+    \lw{問題名} & \lw{結果} & CAFE  & \multicolumn{2}{c}{CPU時間(秒)} \\ \cline{4-5}
+             &  & 基準値 & 基本符号化 & 改良符号化 \\\hline
+    small  & OPT &  8.5  & 37.868         & \alert{23.318}  \\
+    small  & OPT &  9.0  & 48.965         & \alert{43.362}  \\
+    small  & OPT &  9.5  & \alert{95.110} & 173.172         \\
+    small  & OPT & 10.0  & 99.954         & \alert{0.343}   \\
+    small  & UNSAT   & 10.5  & 439.613        & \alert{0.080}   \\\hline
+   \multicolumn{3}{r}{平均}  & 144.302        & \alert{48.055}
+  \end{tabular}
+\end{exampleblock}
+\begin{itemize}
+\item 5問中4問に対して，改良符号化がより高速に解を求めている．
+%\item 平均では，改良符号化のCPU時間は基本符号化の約1/3であった．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CAFE問題ソルバーの構成}
+ \scalebox{0.9}{\centering\input{arch}}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backupend
 \end{document}
