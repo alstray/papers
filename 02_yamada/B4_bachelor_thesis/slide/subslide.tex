@@ -13,10 +13,10 @@
 \begin{frame}\frametitle{グラフ点彩色問題}
     
   \begin{block}{グラフ点彩色問題の定義}
-    与えられたグラフ$G=(V, E)$と色数$k$に対して, 以下の制約を満たす解が存在するかを判定する問題.
+    与えられたグラフ$G=(V, E)$と色数$k$に対して，以下の制約を満たす解が存在するかを判定する問題．
     \begin{itemize}
-      \item 各頂点は1つの色で塗られる.
-      \item $(u, v) \in E$である$u, v \in V$について, $u$と$v$は異なる色で塗られる.
+      \item 各頂点は1つの色で塗られる．
+      \item $(u, v) \in E$である$u, v \in V$について，$u$と$v$は異なる色で塗られる．
     \end{itemize}
   \end{block}
   
@@ -41,15 +41,15 @@
   \begin{itemize}
     \item 色数$k$によって問題の性質が異なることが知られている．
     \begin{itemize}
-      \item \structure{$k=2$}のとき，グラフGは2部グラフであり\structure{明らかに到達不能}．[L. Cerecedaほか '08]
-      \item \structure{$k=3$}のとき，\structure{クラスP}に属する．[L. Cerecedaほか '08]
-      \item \structure{$k \ge 4$}のとき，一般に\structure{\textbf{PSPACE完全}}となる．[Paul Bonsmaほか '09]
+      \item \structure{$k=2$}のとき，グラフGは2部グラフであり\structure{明らかに到達不能}~[L. Cerecedaほか '08]．
+      \item \structure{$k=3$}のとき，\structure{クラスP}に属する~[L. Cerecedaほか '08]．
+      \item \structure{$k \ge 4$}のとき，一般に\structure{\textbf{PSPACE完全}}となる~[Paul Bonsmaほか '09]．
     \end{itemize}
 
-    \item グラフの形に制限を加えることにより，多項式時間で解決可能となるものが存在することがわかっている．[Paul Bonsmaほか '09]
+    \item グラフの形に制限を加えることにより，多項式時間で解決可能となるものが存在することがわかっている~[Paul Bonsmaほか '09]．
     \begin{itemize}
-      \item 平面グラフであり，かつ$k \ge 6$のとき.
-      \item 2部平面グラフであり, かつ$k \ge 5$のとき.
+      \item 平面グラフであり，かつ$k \ge 6$のとき．
+      \item 2部平面グラフであり，かつ$k \ge 5$のとき．
     \end{itemize}
 
   \end{itemize}
@@ -78,8 +78,9 @@
 %% ASP符号化のルール数
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}\frametitle{ASP符号化のルール数}
+\begin{frame}\frametitle{ASP符号化の基礎化後のルール数}
   \begin{itemize}
+    \item 基礎化とは，変数を含む述語論理を変数を含まない命題論理へと変換することである．
     \item 遷移制約に関するルール数のみに着目する．
     \item $|T|$を遷移回数$t$, $|C|$を色数$k$, $|V|$をグラフ$G$の頂点数とする.
   \end{itemize}
@@ -90,7 +91,6 @@
   \end{table}
 
   \begin{itemize}
-    \item 基礎化とは，アトムに変数を代入し命題論理へと変換すること．
     \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の場合の数・色の選び方の場合の数・グラフの頂点の選び方の場合の数の乗算となる．
   \end{itemize}
 \end{frame}
@@ -123,7 +123,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}\frametitle{グラフの調査実験}
-  全解列挙可能なグラフと色数の組合せを得るため, 以下の調査を行った.
+  全解列挙可能なグラフと色数の組合せを得るため，以下の調査を行った．
   \begin{itemize}
     \item \structure{使用するグラフ}: 全44個
     \begin{itemize}
@@ -152,7 +152,7 @@
   \end{table}
 
   \begin{itemize}
-    \item vrc3$>$vrc2$>$vrc1の順によい性能を示した．
+    \item vrc3がすべてのベンチマーク問題において優位性を示した．
   \end{itemize}
   
 \end{frame}
@@ -193,6 +193,44 @@
     \end{itemize}
   \end{itemize}
   
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化コード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{vrc1符号化}
+  \begin{exampleblock}{}\centering
+     \lstinputlisting[numbers=left,%
+     basicstyle=\ttfamily\tiny]{code/vartex_recoloring1.lp}
+   \end{exampleblock}
+
+   \begin{itemize}
+     \item 遷移制約の直観的な意味は，
+    「各遷移で，任意の二つの頂点において双方の色が変化することはない」となる．
+   \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化コード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{vrc2符号化}
+  \begin{exampleblock}{}\centering
+     \lstinputlisting[numbers=left,%
+     basicstyle=\ttfamily\tiny]{code/vartex_recoloring2.lp}
+   \end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化コード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{vrc3符号化}
+  \begin{exampleblock}{}\centering
+     \lstinputlisting[numbers=left,%
+     basicstyle=\ttfamily\tiny]{code/vartex_recoloring3.lp}
+   \end{exampleblock}
 \end{frame}
 
 \backupend

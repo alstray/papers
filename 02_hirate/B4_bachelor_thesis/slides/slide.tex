@@ -51,6 +51,8 @@
     \begin{itemize}
     \item ハミルトン閉路問題に，距離の総和が所与の閾値以下
       (または以上)であることを制約条件として付加した問題．
+    \item この問題に対する解の全列挙については，
+      現在のところ効率の良い手法は開発されていない．
     \end{itemize}
   \end{itemize}
   \begin{alertblock}{}
@@ -288,7 +290,6 @@
     \end{itemize}
   \end{alertblock}
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[noframenumbering]{}
@@ -296,17 +297,100 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% \begin{frame}[noframenumbering]{\textit{clingo} のオプション}
-%%    \begin{itemize}
-%%      \item [\textit{frumpy}] 以前の\textit{clasp}のバージョンで使用されていたものと同様の保守的なデフォルト．
-%%      \item [\textit{jumpy}] より攻撃的なデフォルト．
-%%      \item [\textit{tweety}] 典型的なASPの問題を想定したデフォルト．
-%%      \item [\textit{trendy}] 構造的な問題を想定したデフォルト．
-%%      \item [\textit{crafty}] 細工された問題を対象としたデフォルト．
-%%      \item [\textit{handy}] 大規模な問題を対象としたデフォルト。
-%% %     \item \<ファイル\>:\ 設定ファイルを使用してソルバーを設定する。
-%%    \end{itemize}
-%% \end{frame}
+\begin{frame}[noframenumbering]{最短ハミルトン閉路問題の実験}
+  \begin{itemize}
+  \item \structure{比較する ASP 符号化}:
+    \begin{itemize}
+    \item \textsf{undirected}符号化
+    \item \textsf{directed}符号化
+    \item \textsf{acyclicity}符号化
+    \end{itemize}
+  \item \structure{ベンチマーク問題}: 2種類 計13問
+  \item \structure{制限時間}: 3時間/問
+%  \item \structure{オプション}: \textit{trendy}
+  \item \structure{ASP システム}: \textit{clingo-5.4.0}
+  \item \structure{実験環境}: Mac mini Intel Corei7 3.2GHz, 64GBメモリ
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{最短ハミルトン閉路問題の実験結果(最適値と最良値)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/min_table_tr.tex}%\label{min_table_tr}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item 1列目は問題，2列目は頂点数，3列目は辺の数，
+  4列目以降は各符号化が求めた最良値(または最適値)を示す．
+\item 最適値と最良値の数は，
+\textsf{undirected}符号化が10問でもっとも多く，
+その優位性が確認できた．
+\end{itemize}
+    
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ハミルトン閉路問題の実験考察}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/cyclesat_table2.tex}%label{sat_table2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/difins_table.tex}%label{difins_table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item \textsf{grid12}については，変数の数において，
+  \textsf{acyclicity}符号化が少ない値を示していたため，
+  要するCPUtimeを短縮できたと考える．
+\item \textsf{3-FullIns\_5}については，まだ考察中．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマーク詳細(1/2)}
+\begin{itemize}
+\item \textsf{color04} (127問)\\
+  グラフ彩色問題の国際競技会
+  COLOR02/03/04~\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
+  で使用された問題インスタンス．
+\item \textsf{complete} (15問)\\
+  SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
+  完全グラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{knight} (11問)\\
+%  \cite{DBLP:conf/sat/EenS03}で用いられた
+  $N\times N$の騎士巡回問題(Knight's Tour)のインスタンス．\\
+  $N=8,12,20,30,40,50,60,70,80,90,100$の11通り．
+\item \textsf{tsplib} (9問)\\
+  巡回セールスマン問題のポータルサイトTSPLIBに公開されている
+  インスタンス\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}．
+\end{itemize}  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマーク詳細(2/2)}
+\begin{itemize}
+\item \textsf{grid} (12問)\\
+  $N$次の正方グリッドグラフのインスタンス($6\leq N\leq 17$)．
+\item \textsf{random} (320問)\\
+  SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
+  ランダムグラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{usmap} (1問)\\
+  %図~\ref{fig:USmap}に示されたグラフ．
+  D.~E~.Knuth の教科書
+  The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
+  に記載されている最短ハミルトン路問題の例．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマークサイズ}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/bench_size.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[noframenumbering]{ASP を用いたハミルトン閉路問題の解法}
@@ -415,116 +499,6 @@
     \item 無向グラフを有向グラフ化する\textsf{acyclicity}と\textsf{directed}．
     \end{itemize}
   \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{ベンチマーク詳細(1/2)}
-\begin{itemize}
-\item \textsf{color04} (127問)\\
-  グラフ彩色問題の国際競技会
-  COLOR02/03/04~\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
-  で使用された問題インスタンス．
-\item \textsf{complete} (15問)\\
-  SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
-  完全グラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
-\item \textsf{knight} (11問)\\
-%  \cite{DBLP:conf/sat/EenS03}で用いられた
-  $N\times N$の騎士巡回問題(Knight's Tour)のインスタンス．\\
-  $N=8,12,20,30,40,50,60,70,80,90,100$の11通り．
-\item \textsf{tsplib} (9問)\\
-  巡回セールスマン問題のポータルサイトTSPLIBに公開されている
-  インスタンス\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}．
-\end{itemize}  
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{ベンチマーク詳細(2/2)}
-\begin{itemize}
-\item \textsf{grid} (12問)\\
-  $N$次の正方グリッドグラフのインスタンス($6\leq N\leq 17$)．
-\item \textsf{random} (320問)\\
-  SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
-  ランダムグラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
-\item \textsf{usmap} (1問)\\
-  %図~\ref{fig:USmap}に示されたグラフ．
-  D.~E~.Knuth の教科書
-  The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
-  に記載されている最短ハミルトン路問題の例．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{ベンチマークサイズ}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/bench_size.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-  
-%% \begin{itemize}
-%% \item \textsf{color04} (127問)\\
-%%   頂点数: 11〜10000, 辺の数: 20〜990000．
-%% \item \textsf{complete} (15問)\\
-%%   頂点数: 100〜1500, 辺の数: 4950〜1124250．
-%% \item \textsf{knight} (11問)\\
-%%   頂点数: 64〜10000, 辺の数: 168〜38808．
-%% \item \textsf{tsplib} (9問)\\
-%%   頂点数: 1000〜5000, 辺の数: 1998〜9999．
-%% \item \textsf{grid} (12問)\\
-%%   頂点数: 36〜289, 辺の数: 60〜544．
-%% \item \textsf{random} (320問)\\
-%%   頂点数: 100〜50000, 辺の数: 319〜362828．
-%% \item \textsf{usmap} (1問)\\
-%%   頂点数: 48, 辺の数:105 
-%% \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{最短ハミルトン閉路問題の実験}
-  \begin{itemize}
-  \item \structure{比較する ASP 符号化}:
-    \begin{itemize}
-    \item \textsf{undirected}符号化
-    \item \textsf{directed}符号化
-    \item \textsf{acyclicity}符号化
-    \end{itemize}
-  \item \structure{ベンチマーク問題}: 2種類 計13問
-  \item \structure{制限時間}: 3時間/問
-%  \item \structure{オプション}: \textit{trendy}
-  \item \structure{ASP システム}: \textit{clingo-5.4.0}
-  \item \structure{実験環境}: Mac mini Intel Corei7 3.2GHz, 64GBメモリ
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{最短ハミルトン閉路問題の実験結果(最適値と最良値)}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/min_table_tr.tex}%\label{min_table_tr}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{itemize}
-\item 最適値と最良値の数は，
-\textsf{undirected}符号化が10問でもっとも多く，
-その優位性が確認できた．
-\end{itemize}
-    
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{ハミルトン閉路問題の実験考察}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/cyclesat_table2.tex}%label{sat_table2}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/difins_table.tex}%label{difins_table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{itemize}
-\item \textsf{grid12}については，変数の数において，
-  \textsf{acyclicity}符号化が少ない値を示していたため，
-  要するCPUtimeを短縮できたと考える．
-\item \textsf{3-FullIns\_5}については，まだ考察中．
-\end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
