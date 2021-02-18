@@ -1,0 +1,281 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+\begin{frame}{~}
+ \centering
+ - 補足用 -
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 電気制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : 電気制約}
+ \begin{itemize}
+  \item \alert{電気制約}は，送電する電流$\cdot$電圧の適正範囲を保証する制約．
+  \begin{itemize}
+   \item 供給経路の各区間で許容電流を超えない．
+   \item 電気抵抗による電圧降下が許容範囲を超えない．
+   \item etc.
+  \end{itemize}
+  \item 電流と電圧が影響し合う\structure{実数ドメイン上の制約}によって表される．
+		% \begin{itemize}
+		%  		 \item 送電システム上の条件など．
+		% \end{itemize}
+  \item 実数ドメイン上の制約は，純粋なASPのみで扱うのは\alert{困難}．
+		\begin{itemize}
+		 \item 緩和問題として，変電所から供給できる家庭の数に上限をつける．
+		 \item ASPMT技術により，ASPで得られた解について，
+			   背景理論ソルバーと連携して実数ドメイン上の制約を調べる．
+		\end{itemize}
+ \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 基礎化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{補足 : ASPシステム}
+ 
+ \vspace{-0.5cm}
+
+ \begin{figure}[htbp]
+  \centering
+  \input{tikz/tikz-grounding}
+ \end{figure}
+
+ \vspace{-0.5cm}
+
+ \begin{exampleblock}{}
+  \begin{enumerate}
+   \item 一階ASPプログラムを基礎化ソルバーによって，
+		 命題ASPプログラムに\alert{基礎化}する．
+   \item 命題ASPプログラムについて，SAT技術を応用した解集合ソルバーが解集合を探索する．
+  \end{enumerate}
+ \end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ルール数の比較
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{基礎化後のルール数}
+  \begin{itemize}
+  \item グラフのノード数を$|V|$，根ノードの数を$|R|$とする．
+  \end{itemize}
+  \begin{table}[t]
+    \centering
+    \input{table/proposal}
+  \end{table}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 遷移問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森遷移問題の例}
+  \begin{itemize}
+  \item \structure{\bf 遷移制約}: 各ステップ$t$で変更可能な辺の数を
+    $d=2$個以下とする．
+  \end{itemize}
+\begin{exampleblock}{}
+ \begin{figure}[h]
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 3mm  
+  \centering
+  \begin{tabular}{ccc}
+   \onslide<1-> $t=0$ (スタート状態) & & \onslide<2> $t=1$\\
+   \onslide<1-> \scalebox{0.8}{\input{tikz/tikz-trans-1}}
+   & \onslide<2> \lw{$\Rightarrow$} & 
+	\onslide<2> \scalebox{0.8}{\input{tikz/tikz-trans-2}}\\
+   & & \onslide<2> \lower1ex\hbox{$\Downarrow$} \\
+   & & \\
+   \onslide<1-> \scalebox{0.8}{\input{tikz/tikz-trans-4}}
+   & \onslide<2> \lw{$\Leftarrow$} &
+   \onslide<2> \scalebox{0.8}{\input{tikz/tikz-trans-3}}\\
+   \onslide<1->$t= \only<1>{\ ?} \only<2>{\structure{\bf 3}} $ (ゴール状態) 
+   & & \onslide<2> $t=2$
+  \end{tabular}
+ \end{figure}
+\end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 根付き全域森問題の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森問題の例}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{入力例}
+	\centering
+	\input{tikz/tikz-input}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.05\textwidth}\centering
+      $\Rightarrow$
+    \end{column}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{解の例}
+        \centering
+        \input{tikz/tikz-out}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{itemize}
+  \item \structure{\bf 配電網とグラフの対応} \\
+	 \begin{center}
+      \begin{minipage}[c]{0.6\textwidth}
+	   \begin{block}{}
+		\centering
+		\begin{tabular}{c|ccc}
+		配電網 & 家庭 & スイッチ & 変電所 \\
+		\hline
+		グラフ & ノード & 辺 & 根
+		\end{tabular}
+	   \end{block}
+      \end{minipage}
+	 \end{center}\vfill
+   \item \structure{\bf 配電網問題のトポロジ制約}
+		 \begin{itemize}
+		  \item 停電(変電所と結ばれない家庭)
+		  \item 短絡(供給経路上のループ，複数の変電所と結ばれる家庭)
+		 \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験概要--根付き全域森
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験概要}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  提案手法の有効性を評価するために，以下の実験を行った．
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化:}
+    \begin{itemize}
+    \item 基本符号化
+    \item 改良符号化
+    \end{itemize}
+  \item \structure{\bf ベンチマーク問題:} 全85問
+    \begin{itemize}
+    \item DNET\footnote{https://github.com/takemaru/dnet}%
+      で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
+      16個，36個，\alert{\bf 468個})
+    \item \textit{Graph Coloring and its Generalizations}
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
+      グラフ彩色問題をベースに，独自に生成した 82問 
+      \footnote{各問題に対し，全ノードのうち1/5個をランダムに根として与えた．}\\
+      \alert{\bf (20 $\leq$ 辺数 $\leq$ 49,629)}
+    \end{itemize}
+  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+  \item \structure{\bf 制限時間:} 3600秒/問
+  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% カクタスプロット
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験結果(1/2) : カクタスプロット}
+ \begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.38]{fig/cactus.png}
+ \end{figure}\vfill
+
+\begin{itemize}
+ \item 改良符号化は，基本符号化と比較して，より多くの問題を高速に解いている．
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 辺の数の表
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験結果(2/2) : 解けた問題数による比較}
+
+\begin{table}[t]
+ \centering
+ \input{table/table}
+\end{table}\vfill
+
+\begin{itemize}
+\item 辺の数が4,000を超える問題では，改良符号化がより多くの問題を解いている．
+\item 改良符号化は，辺の数が40,000を超える問題も解けている．
+\item 大規模な問題に対する改良符号化の優位性が確認できた．
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験内容--遷移問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験概要}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  提案手法の有効性を評価するために，以下の実験を行った．
+  \vfill
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化:}
+    \begin{itemize}
+    \item シングルショット符号化
+    \item マルチショット符号化
+    \end{itemize}
+  \item \structure{\bf ベンチマーク問題:} 全30問
+    \begin{itemize}
+    \item DNET\footnote{https://github.com/takemaru/dnet}
+      で公開されている実用規模の配電網問題(\textsf{fukui-tepco}，
+      スイッチ数 468，変電所の数 72)をベース
+    \item 実行可能解の中から，スタート状態を5つ，ゴール状態を6つをラン
+      ダムに選択して使用
+    \end{itemize}
+  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
+  \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPのコード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{補足 : 根付き全域森 基本符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[frame=single,label=code:roop,%
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/srf1.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{frame}
+
+\begin{frame}[fragile]{補足 : 遷移問題 シングルショット符号化}
+
+\begin{multicols*}{2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[frame=single,label=code:roop,%
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\tiny]{code/trans-const.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{multicols*}
+\end{frame}
+
+\begin{frame}[fragile]{補足 : 遷移問題 マルチショット符号化}
+\begin{multicols*}{2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[frame=single,label=code:incmode,% 
+xleftmargin=1zw,%
+xrightmargin=1zw,%
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\tiny]{code/dnet-trans.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\end{multicols*}
+\end{frame}
+
+\backupend
