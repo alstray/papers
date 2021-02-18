@@ -51,8 +51,8 @@
     \begin{itemize}
     \item ハミルトン閉路問題に，距離の総和が所与の閾値以下
       (または以上)であることを制約条件として付加した問題．
-    \item この問題に対する解の全列挙については，
-      現在のところ効率の良い手法は開発されていない．
+    %% \item この問題に対する解の全列挙については，
+    %%   現在のところ効率の良い手法は開発されていない．
     \end{itemize}
   \end{itemize}
   \begin{alertblock}{}
@@ -237,11 +237,18 @@
 \begin{frame}{コスト制約付きハミルトン路問題の実験結果(CPU時間)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{block}{}
+  \centering
+  解の全列挙に要した CPU 時間．
+\end{block}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
   \def\@captype{table}
   \begin{minipage}[c]{.48\textwidth}
     \begin{center}
-      \scalebox{0.6}[0.6]{
+      \scalebox{0.7}[0.7]{
         \input{fig/cost_table.tex}
       }
     \end{center}
@@ -251,8 +258,8 @@
   \hfill
   %
   \begin{minipage}[c]{.48\textwidth}
-    \centering
-    \includegraphics[width=0.9\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
+    \raggedleft
+    \includegraphics[width=0.7\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
   \end{minipage}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
