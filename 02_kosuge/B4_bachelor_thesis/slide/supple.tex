@@ -18,58 +18,6 @@
     - 補足用 -
 \end{frame}
 
-\newcommand{\rgeq}{\rotatebox[origin=c]{90}{$\geq$}}
-\newcommand{\req}{\rotatebox[origin=c]{90}{$=$}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% distinct制約のPB符号化
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\small
-    \frametitle{\distinct 制約のPB符号化}
-    \begin{block}{ \distinct 制約のPB符号化}
-        $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
-        $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
-            \vspace{-3mm}
-            \begin{cases}
-                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
-                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
-            \end{cases}\label{eq:pb_2}
-        \end{eqnarray*}
-    \end{block}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-    \begin{exampleblock}{n-1=u-l}
-        \begin{displaymath}
-        \begin{array}{c|cccc}
-                & l      & \cdots & u      &       \\\hline
-         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
-         \vdots & \vdots & \ddots & \vdots & \vdots\\
-         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
-                & \req   & \cdots & \req   &       \\
-                & 1      & \cdots & 1      &
-        \end{array}
-        \end{displaymath}
-    \end{exampleblock}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-    \begin{exampleblock}{otherwise}
-        \begin{displaymath}
-        \begin{array}{c|cccc}
-                & l      & \cdots & u      &       \\\hline
-         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
-         \vdots & \vdots & \ddots & \vdots & \vdots\\
-         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
-                & \rgeq  & \cdots & \rgeq  &       \\
-                & 1      & \cdots & 1      &
-        \end{array}
-        \end{displaymath}
-    \end{exampleblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 色変数モデル
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,7 +60,104 @@
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% at-least-one制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{高速化手法}
+    \vspace{-3mm}
+    \begin{block}{at-least-one制約を用いたヒント制約(H2)}
+        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
+        \vspace{-3mm}
+        $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
+    \end{block}
+    \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
+        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            (x_1=1) \lor (x_2=1) \lor (x_3=1) \lor (x_4=1)\\
+            (x_1=2) \lor (x_2=2) \lor (x_3=2) \lor (x_4=2)\\
+            (x_1=3) \lor (x_2=3) \lor (x_3=3) \lor (x_4=3)\\
+            (x_1=4) \lor (x_2=4) \lor (x_3=4) \lor (x_4=4)
+        \end{eqnarray*}
 
+    \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \textit{Sugar}での実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\textit{Sugar}での実験結果}
+計測したCPU時間は以下の通りである.
+\begin{block}{}
+    {\tiny \input{table/result_csp} }
+\end{block}
+\begin{itemize}
+\item \textit{Sugar}でもヒント制約の有効性を確認した．
+\item 色変数モデルでヒント1とヒント2を同時に使用した場合が一番性能が良かった．
+\end{itemize}
+\input{tikz/line}\\
+{\footnotesize
+使用ソルバー: \textit{Sugar}(ver.2.3.3)\\
+実験環境: Mac mini, 3.2GHz, 64GB メモリ\\
+制限時間: 1問あたり2時間\\
+}
+\end{frame}
+
+\newcommand{\rgeq}{\rotatebox[origin=c]{90}{$\geq$}}
+\newcommand{\req}{\rotatebox[origin=c]{90}{$=$}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% distinct制約のPB符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\small
+    \frametitle{\distinct 制約のPB符号化}
+    \begin{block}{ \distinct 制約のPB符号化}
+        $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
+        $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
+            \vspace{-3mm}
+            \begin{cases}
+                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
+                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
+            \end{cases}\label{eq:pb_2}
+        \end{eqnarray*}
+    \end{block}
+    \vspace{-3mm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+    \begin{exampleblock}{n-1=u-l}
+        \begin{displaymath}
+        \begin{array}{c|cccc}
+                & l      & \cdots & u      &       \\\hline
+         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
+         \vdots & \vdots & \ddots & \vdots & \vdots\\
+         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
+                & \req   & \cdots & \req   &       \\
+                & 1      & \cdots & 1      &
+        \end{array}
+        \end{displaymath}
+    \end{exampleblock}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+    \begin{exampleblock}{otherwise}
+        \begin{displaymath}
+        \begin{array}{c|cccc}
+                & l      & \cdots & u      &       \\\hline
+         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
+         \vdots & \vdots & \ddots & \vdots & \vdots\\
+         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
+                & \rgeq  & \cdots & \rgeq  &       \\
+                & 1      & \cdots & 1      &
+        \end{array}
+        \end{displaymath}
+    \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
 
 
 
@@ -163,30 +208,6 @@
     \end{exampleblock}
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% at-least-one制約
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{高速化手法}
-    \vspace{-3mm}
-    \begin{block}{at-least-one制約を用いたヒント制約(H2)}
-        $distinct(x_1 ... x_n)$について, $x_i \in \{l, l+1, ..., u\}$かつ$u-l=n-1$であるときに以下の制約を追加する.\\
-        \vspace{-3mm}
-        $$\bigvee_{i=1}^n x_i=a \; (a \in \{l, l+1, ..., u\})$$
-    \end{block}
-    \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
-        $distinct(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
-        \vspace{-3mm}
-        \begin{eqnarray*}
-            (x_1=1) \lor (x_2=1) \lor (x_3=1) \lor (x_4=1)\\
-            (x_1=2) \lor (x_2=2) \lor (x_3=2) \lor (x_4=2)\\
-            (x_1=3) \lor (x_2=3) \lor (x_3=3) \lor (x_4=3)\\
-            (x_1=4) \lor (x_2=4) \lor (x_3=4) \lor (x_4=4)
-        \end{eqnarray*}
-
-    \end{exampleblock}
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 高速化手法2
@@ -467,26 +488,6 @@
 \end{frame}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \textit{Sugar}での実験結果
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-\frametitle{\textit{Sugar}での実験結果}
-計測したCPU時間は以下の通りである.
-\begin{block}{}
-    {\tiny \input{table/result_csp} }
-\end{block}
-\begin{itemize}
-\item \textit{Sugar}でもヒント制約の有効性を確認した．
-\item 色変数モデルでヒント1とヒント2を同時に使用した場合が一番性能が良かった．
-\end{itemize}
-\input{tikz/line}\\
-{\footnotesize
-使用ソルバー: \textit{Sugar}(ver.2.3.3)\\
-実験環境: Mac mini, 3.2GHz, 64GB メモリ\\
-制限時間: 1問あたり2時間\\
-}
-\end{frame}
 
 
 
