@@ -21,45 +21,74 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 色変数モデル
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{色変数モデル}
-    \begin{columns}
-        \begin{column}{0.3\textwidth}
-    \input{tikz/queen_graph_col}
-        \end{column}
-        \begin{column}{0.7\textwidth}
-    {\scriptsize
-        \alert{クイーンの色}を整数変数とした制約モデル\\
-        \setlength{\abovedisplayskip}{1pt} % 上部のマージン
-        \setlength{\belowdisplayskip}{1pt} % 下部のマージン
-        \begin{block}{}
-            \begin{itemize}
-                \item 集合$\bf N$,$\bf U$,$\bf D$を次のように定義する．
-                    \begin{eqnarray*}
-                        \bf N &=& \{0,1,...,N-1\}\\
-                        \bf U &=& \{0,1,2,...,2N-2\}\\
-                        \bf D &=& \{1-N,2-N,...,N-1\}
-                    \end{eqnarray*}
-                \item $\bf N$は行$i$, 列$j$クイーンの色$k$の取り得る値の集合．\\
-                \item $\bf U$は$i+j$の取り得る値の集合． 右上がり対角線に対応する.\\
-                \item $\bf D$は$i-j$の取り得る値の集合． 右下がり対角線に対応する.\\
-                \item 位置$(i, j)$に配置されたクイーンの色を整数変数$c_{ij} \in \bf N (i, j \in \bf N)$で表す
-                \item \alert{各行}, \alert{各列}, \alert{各右上がり対角線}, \alert{各右下がり対角線}に配置されるクイーンの色がそれぞれ互いに異なることから以下の制約が得られる
-            \end{itemize}
-            \vspace{-0.5\baselineskip}           %余白
-            \begin{eqnarray*}
-& distinct\{c_{ij} | j \in \bf N\} \; & (i \in \bf N)\\
-& distinct\{c_{ij} | i \in \bf N\} \; & (j \in \bf N)\\
-& distinct\{c_{ij} | i, j \in \bf N,  i+j=u\} \; & (u \in \bf U)\\
-& distinct\{c_{ij} | i, j \in \bf N,  i-j=d\} \; & (d \in \bf D)
-            \end{eqnarray*}
-        \end{block}
-    }
-        \end{column}
-    \end{columns}
+\begin{frame}\frametitle{色変数モデル(COL)}
+    $N$次クイーングラフ彩色問題に対して，集合$\bm{U},\bm{D}$を
+  次のように定義する．
+\begin{eqnarray*}
+  % \bm{N} &=& \{0,1,\ldots,N-1\}\\
+  \bm{U} &=& \{0,1,2,\ldots,2N-2\}\\
+  \bm{D} &=& \{1-N,2-N,\ldots,N-1\}
+\end{eqnarray*}
+\vskip -0.5em
+\begin{itemize}
+% \item $\bm{N}$は，行番号$i$, 列番号$j$, クイーンの色$k$の取り得る値の集合
+\item $\bm{U}$は，$i+j$の取り得る値の集合，右上がりの対角線に対応
+\item $\bm{D}$は，$i-j$の取り得る値の集合，右下がりの対角線に対応
+\end{itemize}
+\begin{exampleblock}{$N$次クイーングラフ彩色問題の定式化}
+  \[
+    \begin{array}{lr}
+      c_{ij}\in\bm{N} & (i,j\in\bm{N})\\
+     distinct\{c_{ij} \mid j \in \bm{N}\} & (i \in \bm{N})\\
+     distinct\{c_{ij} \mid i \in \bm{N}\} & (j \in \bm{N})\\
+     distinct\{c_{ij} \mid i, j \in \bm{N}, i+j=u\} & (u \in \bm{U})\\
+     distinct\{c_{ij} \mid i, j \in \bm{N}, i-j=d\} & (d \in \bm{D})
+    \end{array}
+  \]
+\end{exampleblock}
+\begin{itemize}
+\item 整数変数$c_{ij}$ の値は，行$i$，列$j$に配置されるクイーンの色を表す．
+\end{itemize}
 \end{frame}
-
-
+% \begin{frame}
+%     \frametitle{色変数モデル}
+%     \begin{columns}
+%         \begin{column}{0.3\textwidth}
+%     \input{tikz/queen_graph_col}
+%         \end{column}
+%         \begin{column}{0.7\textwidth}
+%     {\scriptsize
+%         \alert{クイーンの色}を整数変数とした制約モデル\\
+%         \setlength{\abovedisplayskip}{1pt} % 上部のマージン
+%         \setlength{\belowdisplayskip}{1pt} % 下部のマージン
+%         \begin{block}{}
+%             \begin{itemize}
+%                 \item 集合$\bf N$,$\bf U$,$\bf D$を次のように定義する．
+%                     \begin{eqnarray*}
+%                         \bf N &=& \{0,1,...,N-1\}\\
+%                         \bf U &=& \{0,1,2,...,2N-2\}\\
+%                         \bf D &=& \{1-N,2-N,...,N-1\}
+%                     \end{eqnarray*}
+%                 \item $\bf N$は行$i$, 列$j$クイーンの色$k$の取り得る値の集合．\\
+%                 \item $\bf U$は$i+j$の取り得る値の集合． 右上がり対角線に対応する.\\
+%                 \item $\bf D$は$i-j$の取り得る値の集合． 右下がり対角線に対応する.\\
+%                 \item 位置$(i, j)$に配置されたクイーンの色を整数変数$c_{ij} \in \bf N (i, j \in \bf N)$で表す
+%                 \item \alert{各行}, \alert{各列}, \alert{各右上がり対角線}, \alert{各右下がり対角線}に配置されるクイーンの色がそれぞれ互いに異なることから以下の制約が得られる
+%             \end{itemize}
+%             \vspace{-0.5\baselineskip}           %余白
+%             \begin{eqnarray*}
+% & distinct\{c_{ij} | j \in \bf N\} \; & (i \in \bf N)\\
+% & distinct\{c_{ij} | i \in \bf N\} \; & (j \in \bf N)\\
+% & distinct\{c_{ij} | i, j \in \bf N,  i+j=u\} \; & (u \in \bf U)\\
+% & distinct\{c_{ij} | i, j \in \bf N,  i-j=d\} \; & (d \in \bf D)
+%             \end{eqnarray*}
+%         \end{block}
+%     }
+%         \end{column}
+%     \end{columns}
+% \end{frame}
+%
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % at-least-one制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,51 +141,31 @@
 % distinct制約のPB符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\small
-    \frametitle{\distinct 制約のPB符号化}
-    \begin{block}{ \distinct 制約のPB符号化}
+    \frametitle{\distinct 制約の疑似ブール符号化}
+    \begin{block}{}
         $distinct(x_1 ... x_n) \; (x_i \in \{l, l+1, ..., u\}, n-1 \leq u-l)$は
         $x_{ij} \in \{0,1\} \; (x_{ij}=1 \Leftrightarrow x_i=j)$を導入して以下のように表される．
-        \vspace{-3mm}
         \begin{eqnarray*}
-            \sum_{j=l}^{u} x_{ij}=1 \; (i \in \{1,2,\ldots,n\}) \label{eq:pb_1}\\
-            \vspace{-3mm}
-            \begin{cases}
-                \sum_{i=1}^{n} x_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\}) & (n-1=u-l) \\
-                \sum_{i=1}^{n} x_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\}) & (otherwise)
-            \end{cases}\label{eq:pb_2}
+            x_{i\ell}+\ldots+x_{iu}    &   =  & 1 \qquad (i \in \{1,2,\ldots,n\})\\
+            x_{1j}+\ldots+x_{nj}  & \leq & 1 \qquad (j \in \{l,l+1,\ldots,u\})
         \end{eqnarray*}
     \end{block}
-    \vspace{-3mm}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-    \begin{exampleblock}{n-1=u-l}
+    \begin{exampleblock}{}
         \begin{displaymath}
-        \begin{array}{c|cccc}
-                & l      & \cdots & u      &       \\\hline
-         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
-         \vdots & \vdots & \ddots & \vdots & \vdots\\
-         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
-                & \req   & \cdots & \req   &       \\
-                & 1      & \cdots & 1      &
-        \end{array}
+            \begin{array}{ccc}
+                        & \begin{array}{ccc}\ell      & \cdots & u \end{array}     &       \\
+                \begin{array}{c}x_1\\\vdots\\x_n\end{array} & \left(
+                    \begin{array}{ccc}
+                        x_{1\ell} & \cdots & x_{1u}\\
+                        \vdots    & \ddots & \vdots\\
+                        x_{n\ell} & \cdots & x_{nu}
+                    \end{array}
+                \right) & \begin{array}{c}=1\\\vdots\\=1\end{array}\\
+                        & \begin{array}{ccc}\rgeq       & \cdots & \rgeq \end{array}     &       \\
+                        & \begin{array}{ccc}1      & \cdots & 1 \end{array}     &       
+            \end{array}
         \end{displaymath}
     \end{exampleblock}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-    \begin{exampleblock}{otherwise}
-        \begin{displaymath}
-        \begin{array}{c|cccc}
-                & l      & \cdots & u      &       \\\hline
-         x_1    & x_{1l} & \cdots & x_{1u} & =1    \\
-         \vdots & \vdots & \ddots & \vdots & \vdots\\
-         x_n    & x_{nl} & \cdots & x_{nu} & =1    \\
-                & \rgeq  & \cdots & \rgeq  &       \\
-                & 1      & \cdots & 1      &
-        \end{array}
-        \end{displaymath}
-    \end{exampleblock}
-        \end{column}
-    \end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 0-1変数モデル
@@ -179,28 +188,18 @@
 % ハイブリッドモデル
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]\small
-    \frametitle{ハイブリッドモデル}
-    色・位置変数モデルと0-1変数モデルを組み合わせたモデル\\
-    % 整数変数を用いる色変数モデルと位置変数モデルに\distinct 制約のPB符号化とその高速化手法を
-    % 実装する
-    \setlength{\abovedisplayskip}{1pt} % 上部のマージン
-    \setlength{\belowdisplayskip}{1pt} % 下部のマージン
-    \begin{block}{}
+    \frametitle{色変数モデルと0-1変数モデルのハイブリッドモデル}
+    \begin{itemize}
+        \item 色変数モデルの整数変数と0-1変数モデルの0-1変数をチャネリング制約を用いて組み合わせたモデル．
+        \item このモデルでは{\distinct}制約については疑似ブール符号化を用いて解く．
+    \end{itemize}
+    \begin{block}{チャネリング制約}
         \begin{itemize}
-            \item \distinct 制約を解く際にチャネリング制約を追加し求める整数変数を0-1変数に変換してから解く
-            \item 追加した制約は以下のものである．
-                $$ c_{ijk}=1 \Rightarrow c_{ij}=k \; (i,j,k \in \bf N)$$
-                $$ c_{ij}=k \Rightarrow c_{ijk}=1 \; (i,j,k \in \bf N)$$
+            \item 整数変数$c_{ij}\in\bm{N} \;\; (i,j\in\bm{N})$と0-1変数$c_{ijk}\in\bm{N} \;\; (i,j,k\in\bm{N})$を用意する．
+            \item 追加したチャネリング制約は以下のものである．
+                $$ c_{ijk}=1 \Leftrightarrow c_{ij}=k \; (i,j,k \in \bf N)$$
         \end{itemize}
     \end{block}
-    例えば，$i,j,k=0$の時に
-    上記の制約はsmt-lib2形式では以下のように宣言できる．
-    \begin{exampleblock}{}
-\begin{verbatim}
-(assert (=> (= c_0_0_0 1) (= c_0_0 0)))
-(assert (=> (= c_0_0 0) (= c_0_0_0 1)))
-\end{verbatim}
-    \end{exampleblock}
 \end{frame}
 
 
