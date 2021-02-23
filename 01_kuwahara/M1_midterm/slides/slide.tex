@@ -1,50 +1,23 @@
-% Cread by Banbara on Dec. 19 2019
-\documentclass[11pt,dvipdfmx,handout]{beamer}
+% Cread by Banbara on Feb 22nd, 2021
+% \documentclass[11pt,dvipdfmx,handout]{beamer}
+\documentclass[11pt,dvipdfmx]{beamer}
 
-%\documentclass[a4paper,12pt]{jarticle}
-%\usepackage{beamerarticle}
-
-%%%% Packages %%%%%
- \usepackage{graphicx}
-% \usepackage{amsmath,amssymb,amsthm}
-% \usepackage{multirow}
-% \usepackage{url}
-% \usepackage{tikz}
-% \usepackage{alltt}
-\usepackage{bm}
-% \usepackage{listings,jlisting}
-% \usepackage{listings}
-% \lstset{
-%  basicstyle=\ttfamily\scriptsize,
-%  keepspaces=true,
-%  escapechar=|,
-%  columns=[l]{fullflexible}
-% }
-\usepackage{tikz}
-\usetikzlibrary{positioning}
-
-%%%% Fonts %%%%%
-\renewcommand{\kanjifamilydefault}{\gtdefault}
-% \usepackage{otf} % otfパッケージ
-\usepackage[deluxe]{otf} 
-\usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
-% \usepackage[T1]{fontenc} % 8bit フォント
-% \usepackage{minijs}
-% \usepackage{textcomp} % 欧文フォントの追加
-% \usepackage[utf8]{inputenc} % 文字コードをUTF-8
-
-%%%% Beamer %%%%%
+%%% Beamer
+%\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}
 \usetheme{Madrid}
-\useinnertheme{rectangles}
-%\useoutertheme{smoothbars}
-\setbeamercolor{enumerate}{fg=white, bg=black}
-\usefonttheme{professionalfonts}
-\setbeamertemplate{frametitle}[default][center]
+% \usetheme{Warsaw}
+%\renewcommand{\kanjifamilydefault}{\gtdefault}
+\usefonttheme{structurebold}
+%\usefonttheme{professionalfonts}
+\setbeamertemplate{blocks}[shadow=true,rounded]
+% \setbeamercolor{structure}{fg=blue!60!black}
+\setbeamercolor{structure}{fg=blue!50!black}
+\setbeamercolor{item projected}{fg=black,bg=blue!20!white}
+%\setbeamercolor{alerted text}{fg=red!80!black}
+\setbeamercolor{alerted text}{fg=red!70!black}
 \setbeamertemplate{navigation symbols}{}
-% \setbeamercovered{transparent} % 好みに応じてどうぞ
+\useoutertheme[subsection=false]{miniframes}
 \setbeamertemplate{footline}[frame number]
-\setbeamercolor{page number in head/foot}{fg=black} % ページ数を表示する
-\setbeamertemplate{navigation symbols}{}
 \newcommand{\backupbegin}{
    \newcounter{framenumberappendix}
    \setcounter{framenumberappendix}{\value{framenumber}}
@@ -52,155 +25,136 @@
 \newcommand{\backupend}{
    \addtocounter{framenumberappendix}{-\value{framenumber}}
    \addtocounter{framenumber}{\value{framenumberappendix}} 
-}% ページ表示（補助スライドを除く）
-\usepackage{appendixnumberbeamer}
-% \setbeamerfont{footline}{size=\normalsize,series=\bfseries}
-\setbeamerfont{footline}{size=\scriptsize,series=\mdseries}
-\setbeamercolor{footline}{fg=black,bg=black}
-\setbeamertemplate{blocks}[rounded][shadow=true]
-\setbeamertemplate{items}[ball]
-% \setbeamertemplate{enumerate items}[default]
-% \setbeamerfont{alerted text}{series=\bfseries}
+}
+
+%%%% Packages
+\usepackage{graphicx}
+\usepackage{bm}
 
 %%%% My macro %%%%%
 \input{macro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{解集合プログラミングに基づく\\系統的探索と確率的局所探索の統合的手法}
+\title{解集合プログラミングに基づく系統的探索と確率的局所探索の統合的手法}
 \author{桑原 和也}
 %\institute{名古屋大学工学部電気電子・情報学科情報コース}
-\date{2020年度中間発表\\2021年2月24日}
+\date{2020年度 修士中間発表\\2021年2月24日}
 \institute{番原研究室}
 \begin{document}
 \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
-  \begin{itemize}
-  \item \structure{\bf ASP言語}は，一階論理に基づく宣言的知識表現言語である．
-  \item \structure{\bf ASPソルバー}は，安定モデル意味論~[Gelfond and Lifschitz '88]
-    に基づく解集合を計算するプログラムである．
-  \item 応用の一つとして，時間割問題などの求解困難な組合せ最適化問題に対し，
-  未解決問題の最適値決定に成功している.
-  \end{itemize}
-  \begin{alertblock}{組合せ最適化問題に対してASPを用いる利点}
-    \begin{itemize}
- %   \item ASP言語の高い表現力により，各制約を表現する論理プログラムを
- %    モジュール化して容易に切り替え可能である．
-    \item ASP言語の高い表現力により，記号的制約を簡潔に記述できる．
-    \item 系統的探索 (分枝限定法) なので，解の最適性を保証できる．
-%    \item 様々な最適化手法や探索ヒューリスティックスを試せる．
-    \item 探索ヒューリスティクスを試せる．
-      \begin{itemize}
-      \item 探索時に優先的に割り当てる値を指定できる．
-      \end{itemize}
-    \item API を利用して，メタヒューリスティクスを実装できる．
-    \end{itemize}
+% \begin{frame}{xxx}
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{解集合プログラミング}
+  \begin{alertblock}{}\centering
+    \alert{\bf 解集合プログラミング} (Answer Set Programming; ASP) は，
+    論理プログラミングから派生した宣言的プログラミングパラダイム
   \end{alertblock}
+  \bigskip
+  \begin{itemize}
+  \item \structure{ASP 言語}は，命題表現に限られる SAT を拡張し，
+    述語表現を許した宣言的知識表現言語の一種である．
+  \item \structure{ASPシステム}は，安定モデル意味論~[Gelfond and Lifschitz '88]
+    に基づく解集合を計算するシステムである．
+  \item 近年，SAT ソルバーを応用した高速 ASP システムが実現され，
+    AI 分野の諸問題への実用的応用が急速に拡大している．
+  \item ごく最近では，時間割問題などの求解困難な
+    \alert{\bf 組合せ最適化問題}に対し，
+    未解決問題の最適値決定を含む優れた結果を示している．
+  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{時間割問題}
-  \begin{block}{}\centering
-    求解困難な組合せ最適化問題の一種である．
+\begin{frame}{組合せ最適化問題に対してASPを用いる利点と欠点}
+  \begin{alertblock}{利点}
+    \begin{itemize}
+    \item ASP言語の高い表現力により，記号制約を簡潔に記述できる．
+    \item 系統的探索(分枝限定法)なので，\alert{\bf 解の最適性を保証}できる．
+    \item 探索ヒューリスティックスを簡単に試せる(\textsf{\#heuristic宣言})．
+    %   \begin{itemize}
+    %   \item 探索時に優先的に割り当てる値を指定できる．
+    %   \end{itemize}
+    \item インクリメンタル ASP 解法を利用して，メタヒューリスティックスを実装できる．
+    \end{itemize}
+  \end{alertblock}
+  \bigskip
+  \begin{block}{欠点}
+    \begin{itemize}
+    \item ASP システムの基礎化\footnotemark[1]
+      と呼ばれる処理がボトルネックとなり，
+      \structure{スケーラビリティが低下}する．
+    \item 大規模な問題に対して，確率的局所探索と比べて，解の品質が劣る
+      場合がある．
+    \end{itemize}
   \end{block}
-  \begin{itemize}
-    % \item 現状では，実行可能で質の高い時間割を作成するために
-    %   多くの人間の労力が費やされている．
-  \item 時間割に関する国際会議 PATAT および
-    \alert{\bf 国際的な時間割競技会}が開催され，
-    時間割ソルバーの性能向上に貢献している．
-    \begin{itemize}
-    \item 教育時間割
-      \begin{itemize}
-      \item \alert{\bf カリキュラムベース・コース時間割 (CB-CTT)}
-      \item ポストエンロールメント・コース時間割
-      \item 試験時間割
-      \end{itemize}
-    \item 輸送時間割
-    \item 従業員時間割
-    \item スポーツ時間割
-    \end{itemize}
-  %\item 本発表では，最も研究が盛んな CB-CTT を対象とする.
-  \begin{block}{カリキュラムベース・コース時間割 (CB-CTT)}
-  %\item CB-CTT は，以下のように定式化される．
-    \begin{itemize}
-    \item 必ず満たすべき\structure{\bf ハード制約}と, 
-    できるだけ満たしたい\structure{\bf 重み付きソフト制約}から構成される．
-    \item 違反するソフト制約の重み (ペナルティ) の総和の最小化が目的．
-    \end{itemize}
-   \end{block}
-  \end{itemize}
+  \footnotetext[1]{変数つきプログラムを変数なしプログラムに変換する処理}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの研究における問題点}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{カリキュラムベース・コース時間割問題 (CB-CTT)}
   \begin{itemize}
-  \item ASP による CB-CTT の解法は，
-    最も成功した ASP 応用事例の一つとして知られている~[Banbara+ '13, '16, '18]．
+  \item CB-CTT は代表的な教育時間割問題の一つである．
+  \item 必ず満たすべき\structure{\bf ハード制約}と, 
+    できるだけ満たしたい\structure{\bf 重み付きソフト制約}から構成される．
+  \item 違反するソフト制約の重みの総和の最小化が目的となる．
+  \end{itemize}
+
+  \begin{alertblock}{ASPの優れた点}
     \begin{itemize}
-    \item ベンチマーク問題305問のうち，
-      182問で既知の最良値と同じかより良い値が求められている．
-  \item %系統的探索であることを活かして，
-  最適値が未知であった51問の問題で最適値決定にも成功している．
- %   \begin{itemize}
- %   \item 305問中51問で最適値が求められている．
- %   \end{itemize}
-     \end{itemize}
-  \begin{alertblock}{既存ASP解法の問題点}
+    \item 系統的探索であることを活かして，最適値が未知であった51問の最
+      適値決定に成功している~[Banbara+ '19]．
+%    \item CB-CTT は，ASP の最も成功した応用事例の一つとして知られる
+      % \begin{itemize}
+      % \item ベンチマーク問題305問のうち，
+      %   182問で既知の最良値と同じかより良い値が求められている．
+      % \end{itemize}
+  \end{itemize}    
+  \end{alertblock}
+
+  \begin{block}{改善を要する点}
     \begin{itemize}
-    \item %系統的探索をベースにしたものであり，
-    ソフト制約が多く含まれるような問題集において，
-      局所的探索より性能が劣っている場合がみられる．
+    \item ソフト制約が多く含まれるような問題集において，
+      確率的局所探索より，解の品質が劣っている．
      \item 既知の最良値との比の平均値は
        \begin{itemize}
        \item ソフト制約が少ない問題集 (UD1) では $+19.83\%$
        \item ソフト制約が多い問題集 (UD5) では $+100.17\%$
        \end{itemize}
     \end{itemize}
-  \end{alertblock}
-  \begin{block}{}\centering
-   問題規模に対するスケーラビリティに限界がある.
   \end{block}
-  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究概要}
- \begin{alertblock}{研究目的}
-    ASP 技術を用いて，
-   系統的探索と確率的局所探索を統合的かつ効率的に
-   扱う探索手法およびソルバーの実現を目指す．
- \end{alertblock}
+  \begin{alertblock}{研究目的}\centering
+    ASP 技術を用いて，系統的探索と確率的局所探索を統合的かつ効率的に扱
+    う探索手法およびシステムの実現を目指す．
+  \end{alertblock}
 
- \begin{exampleblock}{研究の方針}
   \begin{itemize}
-  \item 近似解法の一種である
-  \alert{巨大近傍探索} (Large Neighborhood Search; LNS) [Pisinger 2010]に
-  着想を得た，
-  \alert{優先度付き巨大近傍探索} (Large Neighborhood Prioritized Search; LNPS) [坡山'18]
-  をベースに探索手法に関する研究開発を進める．
-  \item 時間割問題等の重要な応用研究を通じて，
-  提案手法およびソルバーを評価する．
+  \item \structure{方針}:
+    先行研究の\structure{優先度付き巨大近傍探索 (LNPS)}~[坡山ほか '18]
+    をベースに，ASP に適した探索手法に関する研究開発を進める．
   \end{itemize}
- \end{exampleblock}
+
+  \begin{block}{研究内容}
+    \begin{enumerate}
+    \item LNPS のプロトタイプシステムの実装 (卒業研究)
+    \item \alert{\bf LNPS の インクリメンタル ASP 解法を用いた実装}
+    \item \alert{\bf カリキュラムベース・コース時間割問題を用いた評価実験}
+%    \item LNPS の改良 (今後の課題)
+    \end{enumerate}
+  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{研究概要}
- \begin{block}{研究内容}
-  \begin{itemize}
-   \item 高速 ASP ソルバー \textit{clingo} 上に，LNPS アルゴリズムを実装．
-   \item LNPS の性能に重要な役割を果たす destroy 演算について，４種類
-     の手法を実装．
-    \begin{itemize}
-     \item 卒業研究から新たに１種類の手法を実装．
-    \end{itemize}
-   \item 国際時間割競技会で使用された CB-CTT の問題集を用いて実験を行
-     なった．
-  \end{itemize}
- \end{block}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{LNPS: 優先度付き大域近傍探索 [坡山'18]}
+\begin{frame}{LNPS: 優先度付き巨大近傍探索 [坡山・番原・田村 '18]}
+  \begin{alertblock}{}\centering
+    組合せ最適化問題の最適値探索において，
+    暫定解に含まれる変数の値割り当ての一部をランダムに選んで取り
+    消し，他の値割り当てをなるべく維持したままで解を再探索する反復手法
+  \end{alertblock}
+  \pause
   \begin{block}{\small LNPS のアルゴリズム}
     \begin{enumerate}
       \compress
-      \item 初期解を $x$ と置き，最良解 $x* := x$ とする．
+      \item 初期解を $x$ と置き，暫定解 $x* := x$ とする．
       \item 以下の destroy と re-searchで $x$ から得られた解を $x_t$ と置く．
       \begin{itemize}
         \compress
@@ -211,48 +165,137 @@
       \begin{itemize}
         \item 例えば「$x_t$ が $x$ より改善された解なら」という更新条件を用いる．
       \end{itemize}
-      \item $x_t$ が最良解 $x*$ より改善された解なら，$x* := x_t$ とする．
+      \item $x_t$ が暫定解 $x*$ より改善された解なら，$x* := x_t$ とする．
       \item 終了条件が満たされるまで，2〜4 を繰り返す．
       \begin{itemize}
         \item 例えば繰り返し回数や制限時間などを終了条件に用いる．
       \end{itemize}
-      \item 最良解 $x*$ を返す．
+      \item 暫定解 $x*$ を返す．
     \end{enumerate}
   \end{block}
-
   % \begin{itemize}
   % % \item 運搬経路問題 (Vehicle Routing Problem)
   % %  等に対して有効性が示されている
   % %  Large Neighborhood Search (LNS) [Shaw '98, Ropke and Pisinger '10]
   % %  をベース
   % \end{itemize}
-  \begin{alertblock}{}\centering
-    問題に応じて，\alert{\bf 適切な destroy 演算を設計}することが重要
-  \end{alertblock}
+  % \begin{alertblock}{}\centering
+  %   問題に応じて，\alert{\bf 適切な destroy 演算を設計}することが重要
+  % \end{alertblock}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASP 上での LNPS の実装}
- %\begin{exampleblock}{ASP 上での LNPS の実行}
- \begin{tikzpicture}
-  \node[draw,rectangle,fill=red!30,text centered,text width=3cm,minimum height=1.2cm](a){最適化を行う ASP プログラム};
-  \node[draw,rectangle,fill=cyan!40,text centered,text width=2.9cm,minimum height=1.7cm,right=of a](c){ASP システム};
-  \node[draw,rectangle,fill=cyan!40,text centered,text width=2.9cm,minimum height=1.0cm,below=0.0cm of c,align=center](d){Python \\インターフェース};
-  \node[draw,rectangle,fill=red!30,text centered,text width=3cm,minimum height=1.1cm,below=0.7cm of d](b){LNPS プログラム};
-  \node[draw,rectangle,fill=yellow!40,text centered,text width=2.5cm,minimum height=0.8cm,right=of c](e){問題の解};
-  \draw[->,line width=1pt](a)--(c);
-  \draw[->,line width=1pt](b)--(d);
-  \draw[->,line width=1pt](c)--(e);
- \end{tikzpicture}
- %\end{exampleblock}
- \begin{exampleblock}{}
- \begin{itemize}
-  \item 最適化を行う ASP プログラムに適用して，
-  	  LNPS による探索を可能にするシステムを実現した.
-  \item LNPS は Python で実装し，
-  	  ASP システムの Python インターフェースを利用して実行している.
- \end{itemize}
- \end{exampleblock}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{LNPS の インクリメンタル ASP 解法を用いた実装}
+
+  \begin{block}{提案システム}\centering
+    系統的探索と確率的局所探索を統合的に扱う LNPS システムを，
+    ASPシステム{\clingo}の python インターフェースを用いて実装した．
+  \end{block}
+
+  \begin{itemize}
+  \item {\clingo}の\structure{インクリメンタル ASP 解法}を用いることで，
+    LNPS の反復処理を，ASPシステムを複数回起動することなく，1回だけ起
+    動し動的にアトムを追加・削除しながら繰返し解くことで実現している．
+  \item {\clingo}の\structure{\textsf{\#heuristic宣言}}を用いることで，
+    LNPS の値割当てをなるべく維持したままの再探索 (re-search) を自然に実
+    装している．
+  \end{itemize}
+
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験概要}
+  提案するLNPSシステムの有効性を評価するために，実験を行った．
+  \bigskip
+  \begin{itemize}
+  \item CB-CTTベンチマーク問題 (全21問)
+    \begin{itemize}
+    \item ソフト制約が最も多い問題集 (UD5) を使用
+    \end{itemize}
+  \item 比較に用いたシステム
+    \begin{itemize}
+    \item 既存のASPシステム{\clingo}
+    \item 提案手法\structure{\bf R-\bm{$N$}}: LNPS + random $N$ ($N=0, 3, 5$)
+    \item 提案手法\structure{\bf DP}: LNPS + day-period
+    \item 提案手法\structure{\bf DR}: LNPS + day-room
+    \item 提案手法\structure{\bf SR-\bm{$N$}}: LNPS + swap-room $N$ ($N=5, 10$)
+    \end{itemize}
+  % \item パラメータ
+  %  \begin{itemize}
+  %   \item 初期解探索の切り上げ : conflict 250万 または restart 5,000
+  %   \item re-search の切り上げ : conflict 3万
+  %  \end{itemize}
+  \item ASP システム：\textit{clingo-5.4.0}
+  \item 制限時間 : 1時間/問
+  \item 実験環境 : Mac mini (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{実験結果: 得られた最適値と最良値}
+  \begin{tableA}
+    \input{tables/m1_mid_value}
+  \end{tableA}
+  \begin{itemize}
+  \item 提案手法は，既存のASPより，多くの問題でより良い解を生成した．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{他のアプローチとの比較}
+  \begin{tableB}
+    \input{tables/m1_mid_comparison2}
+  \end{tableB}
+  \begin{itemize}
+  \item comp09 について，既知の最良値を更新することに成功した． 
+  \end{itemize}
+  \footnotetext[1]{先行研究による既知の上界を表す．}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{まとめと今後の課題}
+  ASP に基づく系統的探索と確率的局所探索の統合的手法について，
+  研究概要とこれまでの成果について述べた．
+
+  \begin{itemize}
+%    \item \structure{LNPS のプロトタイプシステムの実装 (卒業研究)}
+    \item \structure{LNPS の インクリメンタル ASP 解法を用いた実装}
+      \begin{itemize}
+      \item LNPS アルゴリズムを，
+        ASPシステム{\clingo}のインクリメンタル ASP 解法
+        と\#heuristic宣言を用いて，簡潔に実装
+      \end{itemize}
+    \item \structure{カリキュラムベース・コース時間割問題を用いた評価実験}
+      \begin{itemize}
+      \item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を
+        示した．
+      \item 提案手法は，既存ASP手法と比較して，21問中20問で同じかより
+        良い解を得ることができた．
+      \item \textsf{comp09}について，\alert{\bf 既知の最良値を更新}することに成功した．
+      \end{itemize}
+    \end{itemize}
+
+\begin{alertblock}{今後の課題}
+  \begin{itemize}
+  \item \textit{clingo} の最新 Python インターフェース を用いた LNPS の実装
+%  \item 新たな destroy 演算の考案
+    %\begin{itemize}
+    %\item 暫定解から違反の原因となる値割当てを取り消す方法
+    %\end{itemize}
+  \item アダプティブ LNPS への拡張
+    %\begin{itemize}
+    %\item 複数のdestroy演算を動的に切換える方法の考案
+    %\end{itemize}
+  \item 他の時間割問題への適用
+    % \begin{itemize}
+   % \item \footnotesize 問題のサイズによる適切なdestroyの割合の決定
+   %\item \footnotesize 問題のサイズによらないdestroy演算の実装
+    %\end{itemize}
+    %\item 実装したdestroy演算が意図通りの働きをしているかの検証
+  % \item destroy演算を組み合わせる手法の考案・評価
+  % \item 他の時間割問題，および組合せ最適化問題での実験
+  \end{itemize}
+\end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 補助スライド
+\appendix
+\backupbegin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{destroy 演算}
   %\begin{itemize}
@@ -286,376 +329,7 @@
   \end{enumerate}
   \end{block}
  \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験概要}
-  \begin{itemize}
-  \item 提案手法の有効性を評価するために比較実験を行った．
-    \begin{itemize}
-    \item 既存ASP~[Banbara+ '18]
-    \item 提案手法
-      \begin{itemize}
-      \item \structure{\bf R-\bm{$N$}}: LNPS + random $N$ ($N=0, 3, 5, 7, 10$)
-      \item \structure{\bf DP}: LNPS + day-period
-      \item \structure{\bf DR}: LNPS + day-room
-      \item \structure{\bf SR-\bm{$N$}}: LNPS + swap-room $N$ ($N=5, 10$)
-      \end{itemize}
-    \end{itemize}
-  \item パラメータ
-   \begin{itemize}
-    \item 初期解探索の切り上げ : conflict 250万 または restart 5,000
-    \item re-search の切り上げ : conflict 3万
-   \end{itemize}
-  \item CB-CTTベンチマーク問題 (全21問)
-    \begin{itemize}
-    \item ソフト制約が多い問題集 (UD5) を用いる．
-    \end{itemize}
-  \item ASP システム：\textit{clingo-5.4.0}
-  \item 制限時間 : 1時間/問
-  \item 実験環境 : Mac mini (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newenvironment{tableA}{%
-%  \scriptsize
-%  \tabcolsep = 2mm
-  \renewcommand{\arraystretch}{0.8}
-  \begin{tabular}[t]{c||r|r|r|r|r|r|r|r}
-    \lw{問題名} & \lw{既存ASP} & \multicolumn{5}{c}{提案手法}\\\cline{3-9}
-     &  & R-0 & R-3 & R-5 & DP & DR & SR-5 & SR-10\\\hline
-    }{%
-    \hline
-  \end{tabular}
-}
-
-\newenvironment{tableB}{%
-%  \scriptsize
-  \tabcolsep = 2mm
-  \renewcommand{\arraystretch}{0.815}						
-  \begin{tabular}[t]{c||r|r}\hline
-    Instance & 既存ASP & 提案手法 \\\hline
-    }{%
-    \hline
-  \end{tabular}
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{実験結果 : 得られた最適値・最良値}
-
-\begin{table}[tbp]\scriptsize
-  \label{table:bench:result1}
-  \centering
-  \begin{tableA}
-    \input{tables/m1_mid_value}
-  \end{tableA}
-\end{table}
-\begin{itemize}
-\item 提案手法の SR-5 と SR-10 が良い性能を示した．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{比較結果 : 既知の最良値を1とした場合の比}
-\begin{table}[tbp]\scriptsize
-  \label{table:bench:result3}
-  \centering
-  \begin{tableB}
-    \input{tables/m1_mid_ratio2}
-  \end{tableB}
-\end{table}
-\begin{itemize}
-\item 提案手法の SR-5 と SR-10 が，既知の最良値により近い解を生成
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{比較結果 : 既知の最良値を1とした場合の比}
-\begin{table}[tbp]\scriptsize
-  \label{table:bench:result2}
-  \centering
-  \begin{tableA}
-    \input{tables/m1_mid_ratio}
-  \end{tableA}
-\end{table}
-\begin{itemize}
-\item 提案手法の SR-5 と SR-10 が，既知の最良値により近い解を生成
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめと今後の課題}
-  %優先度付き大域近傍探索(LNPS)をASP上に実装し，CB-CTT に適用・評価した．
-\begin{block}{}
-\begin{itemize}
-\item ASP 上で LNPS の実装を行った.
- \begin{itemize}
-  \item 最適化を行う任意の ASP プログラムに適用可能.
- \end{itemize}
-\item CB-CTTに対する4種類のdestroy演算を実装
-  \begin{itemize}
-  \item ASPの\texttt{\#heuristic}宣言を用いて簡潔に実装できることを確認.
-  \end{itemize}
-\item  CB-CTTのソフト制約が多い問題集(UD5)での実験・評価
-  \begin{itemize}
-  \item  提案手法は，既存ASP解法と比較して，
-  21問中20問で同じかより良い解を得ることができ，提案手法の有効性が確認できた.
-  \item destroy 演算 swap-room $N$ が特に良い性能を示した.
-  \end{itemize}
-\end{itemize}
-\end{block}
-    
-\begin{alertblock}{今後の課題}
-  \begin{itemize}
-  \item \textit{clingo} の最新 Python インターフェース を用いた LNPS の実装
-  \item 新たな destroy 演算の考案
-    %\begin{itemize}
-    %\item 暫定解から違反の原因となる値割当てを取り消す方法
-    %\end{itemize}
-  %\item アダプティブなLNPS
-    %\begin{itemize}
-    %\item 複数のdestroy演算を動的に切換える方法の考案
-    %\end{itemize}
-  \item 他の時間割問題への適用
-    % \begin{itemize}
-   % \item \footnotesize 問題のサイズによる適切なdestroyの割合の決定
-   %\item \footnotesize 問題のサイズによらないdestroy演算の実装
-    %\end{itemize}
-    %\item 実装したdestroy演算が意図通りの働きをしているかの検証
-  % \item destroy演算を組み合わせる手法の考案・評価
-  % \item 他の時間割問題，および組合せ最適化問題での実験
-  \end{itemize}
-\end{alertblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 補助スライド
-\appendix
-\backupbegin
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{研究業績}
-  \begin{block}{}
-  \end{block}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{制約と問題集 (カリキュラムベース・コース時間割)}
-  % \begin{itemize}
-  % \item \structure{シナリオ}とはソフト制約の集合である．
-  %   % \item ITC2007競技会ではUD2が使用された．
-  % \end{itemize}
-  \begin{block}{}\small
-    \begin{center}
-      \begin{tabular}{l|ccccc}%\hline
-        制約                      &  UD1  &  UD2  &  UD3  &  UD4  &  UD5  \\
-        \hline
-        $H_1$. Lectures           &  H    &  H    &  H    &  H    &  H    \\
-        $H_2$. Conflicts          &  H    &  H    &  H    &  H    &  H    \\
-        $H_3$. RoomOccupancy      &  H    &  H    &  H    &  H    &  H    \\
-        $H_4$. Availability       &  H    &  H    &  H    &  H    &  H    \\
-        $S_1$. RoomCapacity       &  1    &  1    &  1    &  1    &  1    \\
-        $S_2$. MinWorkingDays     &  5    &  5    &  -    &  1    &  5    \\
-        $S_3$. IsolatedLectures   &  1    &  2    &  -    &  -    &  1    \\
-        $S_4$. Windows            &  -    &  -    &  4    &  1    &  2    \\
-        $S_5$. RoomStability      &  -    &  1    &  -    &  -    &  -    \\
-        $S_6$. StudentMinMaxLoad  &  -    &  -    &  2    &  1    &  2    \\
-        $S_7$. TravelDistance     &  -    &  -    &  -    &  -    &  2    \\
-        $S_8$. RoomSuitability    &  -    &  -    &  3    &  H    &  -    \\
-        $S_9$. DoubleLectures     &  -    &  -    &  -    &  1    &  -  
-      \end{tabular}
-    \end{center}
-  \end{block}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{教室に関するソフト制約}
- \begin{block}{}
- \begin{itemize}
-  \item \structure{\bf day-period}
-   \begin{itemize}
-    \item ランダムに曜日($D$)と時限($P$)を選び，
-    暫定解から$D$曜$P$限の値割当てをすべて取り消す．
-    \item 教室に関するソフト制約のペナルティを減らすことが狙い．
-   \end{itemize}
-  \end{itemize}
- \end{block}
- \begin{enumerate}
-  \item \alert{RoomCapacity}
-   \begin{itemize}
-    \item 各科目について, 受講者数が使用する教室の収容可能人数を超えてはいけない. 
-    違反した場合, 超過人数に応じたペナルティが課される. 
-   \end{itemize}
-  \item RoomStability
-   \begin{itemize}
-    \item 同一科目のすべての講義は, 同一教室で開講される. 
-    違反した場合, 異なる教室数 (最初の教室は除く) に応じたペナルティが課される.
-   \end{itemize}
-  \item \alert{TravelDistance}
-   \begin{itemize}
-    \item 各課程について, 同一曜日に異なる建物の教室で開講される連続した講義が
-    あると違反となり, 建物間の移動毎にペナルティが課される.
-   \end{itemize}
-  \item RoomSuitability
-   \begin{itemize}
-    \item 各科目の講義は, 開講不可能な教室で開講されることはない. 
-    違反した講義毎にペナルティが課される. 
-   \end{itemize}
- \end{enumerate}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{時限に関するソフト制約}
- \begin{block}{}
- \begin{itemize}
-  \item \structure{\bf day-room}
-   \begin{itemize}
-    \item ランダムに曜日($D$)と教室($R$)を選び，
-    暫定解から$D$曜日の$R$教室の値割当てをすべて取り消す．
-    \item 時限に関するソフト制約のペナルティを減らすことが狙い．
-   \end{itemize}
-  \end{itemize}
- \end{block}
- \begin{enumerate}
-  \item \alert{IsolatedLectures}
-   \begin{itemize}
-    \item  同一課程に属する講義は, 連続した時限に開講される. 
-    同一曜日に同一課程に属する他のどの講義とも隣接していない (孤立した) 講義が
-    ある場合に違反となり, 孤立した講義毎にペナルティが課される.
-    \end{itemize}
-  \item \alert{Windows}
-   \begin{itemize}
-    \item 同一課程に属する講義は, 空き時限なしで開講される. 
-    同一曜日に同一課程に属する2つの講義の間に空き時限が
-    ある場合に違反となり, 空き時限の長さに応じたペナルティが課される.   
-    \end{itemize}
-  \item DoubleLectures
-   \begin{itemize}
-    \item 連続講義の形態をとる科目は, 同一曜日に複数の講義がある場合, 
-    それらは連続した時限に同一教室で開講される. 
-    違反した講義毎にペナルティが課される.   
-    \end{itemize}
- \end{enumerate}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{day-periodによるdestroy}
- \begin{block}{}
- \begin{itemize}
-  \item \structure{\bf day-period}
-   \begin{itemize}
-    \item ランダムに曜日($D$)と時限($P$)を選び，
-    暫定解から$D$曜$P$限の値割当てをすべて取り消す．
-    \item 教室に関するソフト制約のペナルティを減らすことが狙い．
-   \end{itemize}
-  \end{itemize}
- \end{block}
-  \begin{exampleblock}{}\scriptsize
-    \begin{center}
-     \begin{tabular}{c}
-      \begin{minipage}{5.4cm}
-       \begin{center}        
-        \begin{tabular}{c|l|c}%\hline
-                     &~~~~~~~~~~~~~1時限目& ... \\\cline{1-3}
-         \vdots  &                                          &   \\\cline{1-3}
-                     &  \structure{教室A : アルゴリズム}     & \\
-       水曜日  &  \structure{教室B : コンパイラ}         &   \\
-                    &  \structure{教室C : プログラミング}   &  \\\cline{1-3}
-       \vdots &                                          &  \\
-        \end{tabular}
-      \end{center}
-     \end{minipage}    
-     \begin{minipage}{4.1cm}
-      \begin{center}
-       \begin{tabular}{rl}%\hline
-       収容人数 : & \alert{教室A~~30人}\\
-       & 教室B~~50人\\
-       & 教室C~~70人\\
-       受講者数 : & \alert{アルゴリズム 60人}\\
-       & コンパイラ 40人\\
-       & プログラミング 30人\\
-      \end{tabular}
-     \end{center}
-    \end{minipage}    
-   \end{tabular}
-   \end{center}
-  \end{exampleblock}
-  \begin{itemize}
-   \item \small destroy で曜日として水曜日, 時限として1限を選ぶとする. 
-   \item \small 同一曜日, 同一時限の講義間での教室の交換を促すことで, 
-   教室に関するソフト制約違反の改善を狙う. 
-   \begin{itemize}
-    \item アルゴリズムとプログラミングの教室を
-    交換することで, 収容人数オーバーを改善することができる. 
-   \end{itemize}
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{day-roomによるdestroy}
- \begin{block}{}
- \begin{itemize}
-  \item \structure{\bf day-room}
-   \begin{itemize}
-    \item ランダムに曜日($D$)と教室($R$)を選び，
-    暫定解から$D$曜日の$R$教室の値割当てをすべて取り消す．
-    \item 時限に関するソフト制約のペナルティを減らすことが狙い．
-   \end{itemize}
-  \end{itemize}
- \end{block}
-  \begin{exampleblock}{}\scriptsize
-    \begin{center}
-      \begin{tabular}{c|l|l|l}%\hline
-                     &~~~~~~~~~~~~~1時限目& ~~~~~~~~~~~~2時限目&~~~~~~~~~~~~3時限目\\\hline
-         \vdots  &                                          &   \\\hline
-                     &  \structure{教室A : アルゴリズム}     &  教室A :  & \structure{教室A : オートマトン} \\
-       水曜日  &  教室B : コンパイラ         &  教室B : 数値解析 & 教室B : パターン認識 \\
-                    &  教室C : プログラミング   &  教室C : データベース & 教室C : \\\hline
-       \vdots &                                          &  &  \\
-      \end{tabular}
-    \end{center}
-  \end{exampleblock}
-    \begin{itemize}
-   \item \small destroy で曜日として水曜日, 教室として教室Aを選ぶとする. 
-   \item \small 同一曜日, 同一教室の講義間での時限の交換を促すことで, 
-   時限に関するソフト制約違反の改善を狙う. 
-    \begin{itemize}
-     \item アルゴリズムとオートマトンが同一課程に属する場合, 
-     オートマトンを2限に移すことで, 特定のソフト制約違反を
-     改善することができる. 
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{swap-room $N$ による destroy}
- \begin{block}{}
- \begin{itemize}
-  \item \structure{\bf swap-room $N$}
-   \begin{itemize}
-    \item 暫定解からランダムに$N$\%の値割り当てを選び，
-    曜日と時限はそのままで，割り当てられている教室の情報を取り消す．
-   \end{itemize}
-  \end{itemize}
- \end{block}
- \begin{exampleblock}{アトム}
-  \begin{itemize}
-   \item \structure{\bf assigned($C,R,D,P$).}
-   \begin{itemize}
-    \item 講義$C$が曜日$D$の時限$P$に教室$R$で開講されることを表す.
-   \end{itemize}
-   \item \structure{\bf assigned($C,D,P$).}
-   \begin{itemize}
-    \item 講義$C$が曜日$D$の時限$P$に開講されることを表す.
-   \end{itemize}
-  \end{itemize}
- \end{exampleblock}
- \begin{itemize}
-  \item assigned($C,D,P$) を$0$\%取り消し ($100$\%再利用)，
-  assigned($C,R,D,P$) を$N$\%取り消す.
-  \begin{itemize}
-   \item assigned($C,R,D,P$)が取り消されても，
-   assigned($C,D,P$) が再利用によって優先的に割り当てられるため，
-   該当する講義を同じ曜日・時限に優先的に割り当てながら，
-   教室についてのみの変更を促す.
-  \end{itemize}
- \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CB-CTT に対する既存ASPの結果~[Banbara+ '18]}
-  \centering
-  \scriptsize
-  \begin{tableC}
-    \input{tables/data_comparison}
-  \end{tableC}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{LNS (Large Neighborhood Search)}
   \begin{block}{LNS のアルゴリズム~[Pisinger 2010]}
     \begin{enumerate}
@@ -686,40 +360,74 @@
           良い性能を示すことが報告されている．
   \end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{LNPS (Large Neighborhood Prioritized Search)}
-%   LNSでは，取り消された変数に対してのみ再割当てが行われ，他の変数の値は変化しない．
-%   \begin{block}{LNPS}
-%     % \alert{値割当てをなるべく維持したままでの再探索}で解の再構築の操作を
-%     % 置き換えることにより，取り消されなかった変数への再割当てを許す．
-%     解の再構築の操作を，
-%     \alert{値割当てをなるべく維持したままでの再探索}に置き換えることで，
-%     取り消されなかった変数への再割当てを許す．
-%     \begin{itemize}
-%       \item ASPでは，解の再構築は系統的探索で行うことができる．
-%       \begin{itemize}
-%         \item 系統的探索の場合，再構築で値割り当てを固定する必要はない．
-%         \item ASPシステムは学習節を保持するので，再探索のコストが小さい．
-%       \end{itemize}
-%       \item どの割当てに対してdestroyを行うかに依存しすぎない探索を行える．
-%       \item 値割当てをなるべく維持したままでの再探索が自然に実現できる．
-%       \begin{itemize}
-%         \item ASP の探索ヒューリスティックスの機能を利用する．
-%       \end{itemize}
-%     \end{itemize}
-%   \end{block}
-% \end{frame}
+\begin{frame}{時間割問題}
+  \begin{block}{}\centering
+    求解困難な組合せ最適化問題の一種である．
+  \end{block}
+  \begin{itemize}
+    % \item 現状では，実行可能で質の高い時間割を作成するために
+    %   多くの人間の労力が費やされている．
+  \item 時間割に関する国際会議 PATAT および
+    \alert{\bf 国際的な時間割競技会}が開催され，
+    時間割ソルバーの性能向上に貢献している．
+    \begin{itemize}
+    \item 教育時間割
+      \begin{itemize}
+      \item \alert{\bf カリキュラムベース・コース時間割 (CB-CTT)}
+      \item ポストエンロールメント・コース時間割
+      \item 試験時間割
+      \end{itemize}
+    \item 輸送時間割
+    \item 従業員時間割
+    \item スポーツ時間割
+    \end{itemize}
+  \item 本発表では，最も研究が盛んな CB-CTT を対象とする．
+  \item CB-CTT は，以下のように定式化される．
+    \begin{itemize}
+    \item 必ず満たすべき\structure{\bf ハード制約}と, 
+    できるだけ満たしたい\structure{\bf 重み付きソフト制約}から構成される．
+    \item 違反するソフト制約の重み (ペナルティ) の総和の最小化が目的．
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{制約と問題集 (カリキュラムベース・コース時間割)}
+  % \begin{itemize}
+  % \item \structure{シナリオ}とはソフト制約の集合である．
+  %   % \item ITC2007競技会ではUD2が使用された．
+  % \end{itemize}
+  \begin{block}{}\small
+    \begin{center}
+      \begin{tabular}{l|ccccc}%\hline
+        制約                      &  UD1  &  UD2  &  UD3  &  UD4  &  UD5  \\
+        \hline
+        $H_1$. Lectures           &  H    &  H    &  H    &  H    &  H    \\
+        $H_2$. Conflicts          &  H    &  H    &  H    &  H    &  H    \\
+        $H_3$. RoomOccupancy      &  H    &  H    &  H    &  H    &  H    \\
+        $H_4$. Availability       &  H    &  H    &  H    &  H    &  H    \\
+        $S_1$. RoomCapacity       &  1    &  1    &  1    &  1    &  1    \\
+        $S_2$. MinWorkingDays     &  5    &  5    &  -    &  1    &  5    \\
+        $S_3$. IsolatedLectures   &  1    &  2    &  -    &  -    &  1    \\
+        $S_4$. Windows            &  -    &  -    &  4    &  1    &  2    \\
+        $S_5$. RoomStability      &  -    &  1    &  -    &  -    &  -    \\
+        $S_6$. StudentMinMaxLoad  &  -    &  -    &  2    &  1    &  2    \\
+        $S_7$. TravelDistance     &  -    &  -    &  -    &  -    &  2    \\
+        $S_8$. RoomSuitability    &  -    &  -    &  3    &  H    &  -    \\
+        $S_9$. DoubleLectures     &  -    &  -    &  -    &  1    &  -  
+      \end{tabular}
+    \end{center}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CB-CTT に対する既存ASPの結果~[Banbara+ '18]}
+  \centering
+  \scriptsize
+  \begin{tableC}
+    \input{tables/data_comparison}
+  \end{tableC}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{frame}{既存解法（制限時間30分）からの解の改善率}
-%  \centering
-% \includegraphics[width=12cm]{improve.png}
-%\end{frame}
-%
-%\begin{frame}{初期解と既存の最良値を含めた比較}
-%  \centering
-% \includegraphics[width=12cm]{comp.png}
-%\end{frame}
 \backupend
 \end{document}
 

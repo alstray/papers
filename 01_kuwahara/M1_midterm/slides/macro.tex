@@ -33,6 +33,29 @@
 \newcommand{\lw}[1]{\smash{\lower1.ex\hbox{#1}}}
 \newcommand{\llw}[1]{\smash{\lower3.ex\hbox{#1}}}
 
+\newenvironment{tableA}{%
+  \scriptsize
+%  \tabcolsep = 2mm
+  \renewcommand{\arraystretch}{0.8}
+  \begin{tabular}[t]{c||r|r|r|r|r|r|r|r}
+    \lw{問題名} & \lw{既存ASP} & \multicolumn{5}{c}{提案手法}\\\cline{3-9}
+     &  & R-0 & R-3 & R-5 & DP & DR & SR-5 & SR-10\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
+
+\newenvironment{tableB}{%
+  \scriptsize
+  \tabcolsep = 2mm
+  \renewcommand{\arraystretch}{0.815}						
+  \begin{tabular}[t]{c||r|r|r}\hline
+    問題名 & 既知の最良値\footnotemark[1] & 既存ASP & 提案手法ベスト\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
+
 \newenvironment{tableC}{%
   \scriptsize
   \renewcommand{\arraystretch}{0.9}
