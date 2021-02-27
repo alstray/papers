@@ -1,20 +1,14 @@
 \section{実行実験}
-提案手法の有効性を評価するために，実行実験を行った．
-ベンチマーク問題(表~\ref{tab:bench})には，企業から提供を受けた小規模(small)・
-中規模(medium)・大規模(big)のCAFE問題(3問)に対して，
-5種類のCAFE基準値(8.5, 9.0, 9.5, 10.0, 10.5km/L)を適用した
-問題インスタンス(合計15問)を使用した．また，求めたい装備仕様の個数は3とした．
-
 %----------------------------------------------
-\begin{table}[tb]
+\begin{table}[t]\centering
   \caption{ベンチマーク問題}
-  \centering
-  %\renewcommand{\arraystretch}{0.9}
-  \tabcolsep = 0.9mm
-  \begin{tabular}{crrrr} \bhline
-    問題名 & タイプ数	& オプション数	& 要求制約数 	\\\hline
-    small	    & 8		& 21	& 4	  	        \\
-    medium    & 86	& 229	& 147	  	        \\
+  \vskip 1em
+  % \renewcommand{\arraystretch}{0.9}
+  % \tabcolsep = 0.9mm
+  \begin{tabular}{lrrrr}\hline
+    問題名 & \#装備タイプ	& \#装備オプション	& \#依存制約 	\\\hline
+    small   & 8		& 21	& 4	  	        \\
+    medium  & 86	& 229	& 147	  	        \\
     big	    & 315	& 1,337	& 0	          	\\\hline
     & & & \\
   \end{tabular}
@@ -22,39 +16,51 @@
 \end{table}
 %----------------------------------------------
 
-ASPシステムには，{\clingo}-5.4.0と，{\asprin}-3.1.1を利用した．
-実験環境は，Mac OS(3.2GHz Intel Core i7, 64GB メモリ)である．
-{\asprin}はすべての最適な解集合を探索するように設定し，
-一問あたりの制限時間は10800秒(3時間)とした．
-
-表\ref{tab:result}に小規模な問題での実験結果を示す．
-左の列から順に，問題名，CAFE基準値，得られた最適解の個数，CPU時間となっている．
-記号`$\ast$'付きの最適解の個数は，
-全列挙が完了しておりこれ以上最適解が存在しないことを表す．
-制限時間内に最適解の全列挙が完了しなかった場合は，CPU時間の欄にTime Outと示し，
-それまでに求めることができた最適解の個数を表す．
-また，{\bf UNSAT}は制約を満たす実行可能解(装備仕様)が存在しないことを意味する．
-
-実験の結果，小規模な問題では，5問中4問に対して最適解の全列挙あるいはUNSATを得ることに成功した．
-しかし，中・大規模な問題では，
-すべての問題インスタンスに対して最適解を得ることができなかった．
-
-
-
 %----------------------------------------------
-\begin{table}[tb]
- \caption{実験結果}
- \centering
- %\renewcommand{\arraystretch}{0.9}
- \tabcolsep = 0.9mm
- \begin{tabular}{c|r|rr} \bhline
-  問題名 & CAFE & 最適解の数　& CPU時間(秒) \\ \hline
-  small  & 8.5   & {\bf 8*}             & 35.136            \\
-  small  & 9.0   & {\bf 5*}             & 1085.354          \\
-  small  & 9.5   & 0             & Time Out          \\
-  small  & 10.0  & {\bf 1*}             & 1.863             \\
-  small  & 10.5  & {\bf UNSAT}         & 0.221             \\ \hline
- \end{tabular}
- \label{tab:result}
+\begin{table}[t]\centering
+  \caption{実験結果: CPU時間}
+  \vskip 1em  
+  % \renewcommand{\arraystretch}{0.9}
+  % \tabcolsep = 0.9mm
+  \begin{tabular}{cr|rr}\hline
+    \lw{問題名} & CAFE & パレート   & \lw{CPU時間(秒)} \\
+           & 基準値$t$ & 最適解の数 &  \\ \hline
+    small  & 8.5   & 8*      &   35.136     \\
+    small  & 9.0   & 5*      & 1085.354     \\
+    small  & 9.5   & --       & $timeout$    \\
+    small  & 10.0  & 1*      &    1.863     \\
+    small  & 10.5  & 0*      &    0.221     \\\hline
+  \end{tabular}
+  \label{tab:result}
 \end{table}
 %----------------------------------------------
+
+提案ソルバーの有効性を評価するために，多目的 CAFE 問題のパレート
+最適解を全列挙する実行実験を行った．
+ベンチマーク問題には，企業から提供を受けた3問を使用した(表~\ref{tab:bench}参照)．
+small は小規模な問題，
+medium は現実規模の問題，
+big は大規模な問題である．
+各問題に対して，
+5種類の CAFE 基準値$t = 8.5, 9.0, 9.5, 10.0, 10.5$km/Lを適用し，
+計15問に対して実験を行なった．車種の数は$n=3$とした．
+ASPシステムには{\asprin}-3.1.1を利用し，
+1問あたりの制限時間は3時間とした．
+実験環境は，Mac OS, 3.2GHz Intel Core i7, 64GB メモリである．
+
+表~\ref{tab:result}に小規模な問題smallの実験結果を示す．
+左の列から順に，問題名，CAFE基準値$t$，得られたパレート最適解の数，
+解の全列挙に要した CPU 時間となっている．
+記号`$\ast$'は，パレート最適解の全列挙に成功したことを意味する．
+逆に，記号`--'は，パレート最適解が一つも得られなかったことを意味する．
+%
+実験の結果，5問中3問に対して，パレート最適解を全列挙することができた．
+また，$t=10.5$の場合のパレート最適解の数は0であり，実行可能解が存在し
+ないことが確認できた．
+medium と big については，実行可能解は得られたものの，パレート最適解を
+得ることはできなかった．
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:

@@ -1,16 +1,14 @@
-%#BIBTEX pbibtex paper_jsai2021
+% 2021-02-27 Banbara
 %%\documentstyle[twocolumn,jsaiac]{jarticle}
 %%\documentstyle[twocolumn,jsaiac]{j-article}
 \documentclass[twocolumn]{jarticle}
-
 \usepackage{jsaiac}
 \usepackage [dvipdfmx]{graphicx}
-
 \usepackage{listings}
 \usepackage{plistings}
 \def\lstlistingname{コード}
-
 \usepackage{url}
+
 \newcommand{\bhline}{\noalign{\hrule height 1.5pt}}  % 表のための太いライン
 
 %%% For ASP
@@ -32,6 +30,7 @@
 \newcommand{\nbody}[1]{\neglits{\body{#1}}}
 %\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
 \newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
+\newcommand{\lw}[1]{\smash{\lower1.5ex\hbox{#1}}}
 
 \input{00_data}
 \input{01_introduction}
@@ -43,3 +42,8 @@
 \bibliographystyle{jsai}
 \bibliography{jsai2021}
 \end{document}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:

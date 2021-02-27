@@ -9,7 +9,7 @@
 %%英文は以下を使用
 %\title{Style file for manuscripts of JSAI 20XX}
 
-\jaddress{竹内頼人，名古屋大学 大学院情報学研究科，住所，電話番号，Fax番号，takeuchi.raito@nagoya-u.jp}
+\jaddress{竹内頼人 \texttt{takeuchi.raito@nagoya-u.jp}}
 
 \author{%
 \jname{竹内 頼人\first}
@@ -39,35 +39,19 @@
 %\session{0A0-00}%% <-- 講演ID（必須)
 
 \begin{abstract}
-Vehicle equipment specification is, in a nutshell, 
-a combination of model/grade and equipments listed in the automobile catalog.
-Multi-objective Vehicle Equipment Specification Problem (MVESP) is the problem
-that computes optimal vehicle equipment specifications based on trade-off 
-multiple objective functions while it satisfies equipments and fuel economy 
-constraints from given the number of model/grade, a set of equipment types, 
-a set of equipment options and so on.
-In this paper, we discuss the method to enumerate all pareto optimal answers 
-of MVESP based on the fuel economy constraint called Corporate Average Fuel Economy 
-(CAFE) Standards with Answer Set Programming (ASP).
-In our method, the problem instance represented by Orthogonal Variability Model
-(OVM) is converted to a set of facts and combined with ASP encoding 
-to solve MVESP, and then we compute answers with fast ASP system.
-As a result of running experiments using benchmark problems provided by a company, 
-we succeeded in enumerating all pareto optimal answers for small-scale problems.
-
-% 車両装備仕様とは，簡単に言うと，自動車のカタログに記載されている
-% モデル/グレードと装備の組合せのことである．
-% 多目的車両装備仕様問題は，与えられたモデル/グレードの個数，装備タイプ
-% の集合，装備オプションの集合などから，装備および燃費に関する制約を満た
-% しつつ，予想販売台数の最大化や装備オプション数の最小化など，トレードオ
-% フの関係にある複数の目的関数のもとで最適な車両装備仕様を求める問題である．
-% 本発表では，CAFE 方式と呼ばれる燃費制約に基づく多目的車両装備仕様問題
-% (多目的 CAFE 問題)に対して，解集合プログラミングを用いてパレート最適解
-% を列挙する方法について述べる．提案手法は，可変性モデルで表現された問題
-% インスタンスを ASP のファクト形式に変換した後，それらファクトと多目的
-% CAFE 問題を解くための ASP 符号化と結合し，高速 ASP システムを用いて解
-% を求める．企業から提供されたベンチマーク問題を用いた実行実験の結果，小
-% 規模な問題についてパレート最適解を全列挙することができた．
+Answer Set Programming (ASP) is an approach to declarative problem
+solving, combining a rich yet simple modeling language with high
+performance solving capacities. We here develop an ASP-based approach
+to Multi-Objective Vehicle Equipment Specification Problem (MO-VESP).
+%
+The resulting system reads a MO-VESP instance of OVM format and
+converts it into a set of ASP facts. In turn, these facts are combined
+with a first-order encoding for MO-VESP solving, which can
+subsequently be solved by the ASP solver {\asprin}.
+%
+In our experiments,
+we succeeded in enumerating all Pareto optimal solutions for a
+small-scale problem.
 \end{abstract}
 
 %\setcounter{page}{1}
@@ -77,7 +61,12 @@ we succeeded in enumerating all pareto optimal answers for small-scale problems.
 \def\JBibTeX{\leavevmode\lower .6ex\hbox{J}\kern-0.15em\BibTeX}
 \def\LaTeXe{\LaTeX\kern.15em2$_{\textstyle\varepsilon}$}
 
-
 \begin{document}
 \maketitle
 
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
+
+% LocalWords:  VESP OVM
