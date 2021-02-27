@@ -11,7 +11,7 @@ email: takeuchi.raito@nagoya-u.jp
      - 日本語
        名古屋大学
      - 英語
-       Univ. of Nagoya
+       Nagoya University
    - 連絡先住所
      - 居住国
        日本
@@ -64,7 +64,7 @@ email: takeuchi.raito@nagoya-u.jp
        - 日本語
 	 名古屋大学
        - English
-	 Univ. of Nagoya
+	 Nagoya University
      - 部署名1・学部
        情報学研究科 情報システム学専攻
      - 部署名2・研究室名等
@@ -73,6 +73,7 @@ email: takeuchi.raito@nagoya-u.jp
        番原睦則
      - 指導教員メールアドレス
        banbara@nagoya-u.jp
+
 
 ** 著者・所属機関
    - 著者情報
@@ -102,14 +103,16 @@ email: takeuchi.raito@nagoya-u.jp
 	 名古屋大学
 
      - 所属機関情報
-       1 名古屋大学   Univ. of Nagoya
-       2 神戸大学     Univ. of Kobe
+       1 名古屋大学   Nagoya University
+       2 神戸大学     Kobe University
        
 ** 講演情報
    - 発表希望テーマ
      - 該当分野
        - 第一希望
+         GS-1 基礎・理論
        - 第二希望
+       	 OS-13 AIと制約プログラミング
      - 発表言語
        [X] 日本語
    - キーワード(最大5つ)
@@ -118,7 +121,7 @@ email: takeuchi.raito@nagoya-u.jp
      3. 車両装備仕様問題(Vehicle Equipment Specification Problem)
      4. CAFE方式(Corporate Average Fuel Economy Standards)
      5. 可変性モデル(Orthogonal Variability Model)
-   - 発表方法
+- 発表方法
      [X] 口頭発表
    - 演題情報
      - タイトル
