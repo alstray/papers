@@ -66,6 +66,17 @@
   \end{tabular}
 }
 
+\newenvironment{tableB}{%
+ % \scriptsize
+ % \tabcolsep = 2mm
+  \renewcommand{\arraystretch}{0.8}						
+  \begin{tabular}[t]{c||r|r|r|r|r}\hline
+    \lw{問題名} & \lw{既知の最良値} & \multicolumn{2}{c|}{既存ASP} & \multicolumn{2}{c}{提案ベスト}\\\cline{3-6}
+     & & 値 & 最良値との比 & 値 & 最良値との比\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
 
 %%% Local Variables:
 %%% mode: japanese-latex
