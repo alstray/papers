@@ -1,20 +1,56 @@
 \begin{abstract}
-本発表では，SAT の発展形の一つである解集合プログラミング (Answer Set
-Programming; ASP) 技術を用い，組合せ最適化問題に対して系統的探索と確率
-的局所探索を統合的に適用する手法を提案する．
+In this publication,
+I suggest technique to apply systematic and stochastic local search 
+for combinatorial optimization problem 
+by using Answer Set Programming,
+one of the developed form of SAT. %%
+The suggestion is based on 
+Large Neighborhood Search,
+a kind of approximate solution method.
+LNS is iterative solution method,
+that cancels a part of assignment of variables 
+included in the solution at random 
+and rebuild solution 
+by reassign only the variables. %%
+In the suggestion, 
+I permit reassignment to the variable 
+that was not canceled 
+by replacing rebuilding solution 
+with re-search that maintained assignment 
+if possible. %%
+In this way, 
+I can perform the search 
+that does not depend too much 
+which assignment you cancel. %%
+I implemented suggestion technique 
+on ASP solver clingo 
+and evaluate performance 
+using benchmarks of the 
+International Timetabling Competition (all 21 problems). %%
+As a result, 
+the suggestion was able to get 
+a better solution for many problems 
+in comparison with normal ASP. %%
+In addition, 
+I succeeded in updating the known best value 
+at one problem.
 
-提案手法は，近似解法の一種である巨大近傍探索 (Large Neighborhood
-Search; LNS) のアイデアをベースにしている．LNS は解に含まれる変数の値
-割当ての一部をランダムに選んで取り消し，その変数のみに対して再割当てを
-行うことで解を再構築する反復解法である．提案手法では，解の再構築の操作
-を，値割当てをなるべく維持したままでの再探索に置き換えることで，取り消
-されなかった変数への再割当てを許す．これによって，どの値割当てを取り消
-すかに依存しすぎない探索を行うことができる．
+%本発表では，SAT の発展形の一つである解集合プログラミング (Answer Set
+%Programming; ASP) 技術を用い，組合せ最適化問題に対して系統的探索と確率
+%的局所探索を統合的に適用する手法を提案する．
 
-提案手法を ASP ソルバー clingo 上に実装し，国際時間割競技会の問題集(全
-21問)を用いて性能評価を行った．その結果，提案手法は，通常の ASP 解法と
-比較して，多くの問題に対してより良い解を得ることができた．また，1問に
-ついて，既知の最良値を更新することに成功した．
+%提案手法は，近似解法の一種である巨大近傍探索 (Large Neighborhood
+%Search; LNS) のアイデアをベースにしている．LNS は解に含まれる変数の値
+%割当ての一部をランダムに選んで取り消し，その変数のみに対して再割当てを
+%行うことで解を再構築する反復解法である．提案手法では，解の再構築の操作
+%を，値割当てをなるべく維持したままでの再探索に置き換えることで，取り消
+%されなかった変数への再割当てを許す．これによって，どの値割当てを取り消
+%すかに依存しすぎない探索を行うことができる．
+
+%提案手法を ASP ソルバー clingo 上に実装し，国際時間割競技会の問題集(全
+%21問)を用いて性能評価を行った．その結果，提案手法は，通常の ASP 解法と
+%比較して，多くの問題に対してより良い解を得ることができた．また，1問に
+%ついて，既知の最良値を更新することに成功した．
 \end{abstract}
 
 %\setcounter{page}{1}
