@@ -1,5 +1,68 @@
 \begin{abstract}
-TODO
+  In this paper, we describe an approach to integrating
+  systematic and stochastic local search based on
+  Answer Set Programming (ASP).
+  %
+  We propose a heuristic method suitable for ASP, 
+  called Large Neighborhood Prioritized Search (LNPS).
+  In LNPS, an initial solution is gradually improved by destroying
+  and re-searching the solution one after another.
+  %
+  The resulting system reads and combines a problem instance of ASP
+  facts and first-order encoding for problem solving,
+  which is subsequently solved by LNPS algorithm implemented using
+  Python interface of ASP solver {\clingo}.
+  %
+  We establish the competitiveness of our approach by empirically contrasting 
+  {\clingo} and more dedicated implementations, 
+  through curriculum-based course timetabling.
+
+
+%   solving the CCT problems
+% based on Answer Set Programming (ASP; [4]). The resulting catnap
+% system accepts a CCT instance in fact format and combines it with a
+% first-order ASP encoding for CCT solving, which is subsequently solved
+% by an o↵-the-shelf ASP system, in our case clingo. Our approach draws
+% upon distinct advantages of the high-level approach of ASP, such as
+% expressive language, extensible encodings, flexible multi-criteria
+% optimization, etc. However, the question is whether catnap’s
+% high-level approach matches the performance of state-of-the-art CCT
+% solving techniques. We address this question by empirically
+% contrasting catnap with dedicated implementations. From an ASP
+% perspective, we gain insights into advanced modeling techniques for
+% CCT. catnap’s encoding for CCT solving has the following features:
+% (a) a series of compact ASP encodings, (b) easy extension for CCT
+% under limiting resources, and (c) easy extension of CCT with soft
+% constraints.
+
+% In the sequel, we assume some familiarity with ASP, its semantics as
+% well as its basic language constructs. Our encodings are given in the
+% language of gringo series 4. Although we provide a brief introduction
+% to CCT in the next section, we refer the reader to the literature [17]
+% for a broader perspective.
+
+
+
+
+%   Answer Set Programming (ASP) is an approach to declarative problem
+% solving, combining a rich yet simple modeling language with high
+% performance solving capacities.
+% %
+% We here develop an ASP-based approach to
+% \textit{Curriculum-Based Course Timetabling} (CB-CTT),
+% one of the most widely studied course timetabling problems.
+% The resulting {\asap} system reads a CB-CTT instance 
+% of a standard input format and converts it into a set of ASP facts.
+% In turn, these facts are combined with a first-order encoding for CB-CTT solving, 
+% which can subsequently be solved by any off-the-shelf ASP systems.
+% %
+% We establish the competitiveness of our approach by empirically
+% contrasting it to the best known bounds obtained so far via
+% dedicated implementations. 
+% %
+% Furthermore, we extend the {\asap} system to multi-objective course timetabling
+% and consider \textit{minimal perturbation problems}.
+
 %   In this publication,
 % I suggest technique to apply systematic and stochastic local search 
 % for combinatorial optimization problem 
