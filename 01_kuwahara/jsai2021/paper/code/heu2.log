@@ -1,11 +1,11 @@
-% clingo heu.lp -n 0
+% clingo heu.lp -n 0 --heu=domain
 clingo version 5.4.0
 Reading from heu.lp
 Solving...
 Answer: 1
-
-Answer: 2
 b
-Answer: 3
+Answer: 2
 a
+Answer: 3
+
 SATISFIABLE
