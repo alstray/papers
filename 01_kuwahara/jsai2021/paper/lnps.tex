@@ -1,50 +1,71 @@
-\section{優先度付き巨大近傍探索 (Large Neighborhood Prioritized Search; LNPS)}
+\section{優先度付き巨大近傍探索}
 
-\subsection{LNPS の概要}
-LNS では，取り消された変数に対してのみ再割当てが行われ，
-他の変数に対する値割り当ては変化しない．
-そこで，LNS における解の再構築の操作を，
-値割当てをなるべく維持したままでの再探索に置き換え，
-取り消されなかった変数への再割当ても許す，
-優先度付き巨大近傍探索 (Large Neighborhood Prioritized Search; LNPS) を提案する．
-
-詳細は後述するが，
-今回実装に用いた
-解集合プログラミング (Answer Set Programming; ASP) 技術によって，
-値割当てをなるべく維持したままでの再探索が自然に実現できる．
-また，ASP では解の再探索を系統的探索で行うことができる．
-
-
-\subsection{LNPS のアルゴリズム}
-LNPS のアルゴリズムを以下の Algorythm 2 に示す．
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[htb]
-%\centering
+\begin{figure}[tb]\centering
 \begin{tabular}{l}\hline
-\textbf{Algorythm 2} Large neighborhood Prioritized search\\ \hline
-%\begin{tabbing}
+\textbf{Algorythm} Large Neighborhood Prioritized Search\\\hline
  ~1: input: a feasible solution $x$ \\
- ~2: $x^b$ = $x$; \\
+ ~2: $x^{*} :=  x$; \\
  ~3: \bf{repeat} \\
- ~4: \quad \quad $x^t$ = re-search($d(x)$); \\
- ~5: \quad \quad \textbf{if} accept($x^t$,$x$) \textbf{then} \\
- ~6: \quad \quad \quad \quad $x$ = $x^t$; \\
+ ~4: \quad \quad $x^{t} := re\mathchar`-search(destroy(x))$; \\
+ ~5: \quad \quad \textbf{if} $accept(x^{t}, x)$ \textbf{then} \\
+ ~6: \quad \quad \quad \quad $x := x^{t}$; \\
  ~7: \quad \quad \textbf{end if} \\
- ~8: \quad \quad \textbf{if} $c(x^t)$ \verb|<| $c(x^b)$ \textbf{then} \\
- ~9: \quad \quad \quad \quad $x^b$ = $x^t$; \\
+ ~8: \quad \quad \textbf{if} $c(x^{t}) < c(x^{*})$ \textbf{then} \\
+ ~9: \quad \quad \quad \quad $x^{*} := x^{t}$; \\
 10: \quad \quad \textbf{end if} \\
 11: \textbf{until} stop criterion is met \\
-12: \textbf{return} $x^b$ \\ \hline
-%\end{tabbing}
+12: \textbf{return} $x^{*}$ \\ \hline
 \end{tabular}
-\end{table}\\
+\caption{LNPSアルゴリズム}
+\label{algo:lnps}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-LNS とは 4 行目だけが異なっており，
-LNPS では，以下の destroy と re-search で $x$ から得られた解を $x^t$ とする．
-\begin{itemize}
-\item destroy : $x$ から値割当ての一部を取り消し $x′$ とする．
-\item re-search : $x′$ の値割当てをなるべく維持したまま解を再探索する．
-\end{itemize}
 
-値割り当てを固定しない再探索の実現によって，
-暫定解のどの値割り当てを取り消すかに依存しすぎない探索を行うことが可能である．
+提案する優先度付き巨大近傍探索(LNPS)は，
+メタ戦略の一種である巨大近傍探索(LNS~\cite{Pisinger10})
+を基に，組合せ最適化問題に対して，
+系統的探索と確率的局所探索を統合的に適用するよう拡張した手法である．
+%
+図~\ref{algo:lnps}に LNPS のアルゴリズムを示す．
+\begin{enumerate}\compress
+\item 初期解を$x$と置き，暫定解$x^{*} := x$ とする(1--2行目)．
+\item \label{lnps:repeat_start}
+  以下の$destroy$と$re\mathchar`-search$で$x$から得られた解を$x^{t}$
+  と置く(4行目)．
+  \begin{itemize}\compress
+  \item $destroy$は$x$から値割当ての一部を取り消し$x'$とする．
+  \item $re\mathchar`-search$は$x'$の値割当てをなるべく維持したまま再探索する．
+  \end{itemize}
+\item 受理条件$accept$を満たしていたら$x := x^{t}$とする(5--7行目)．
+  \begin{itemize}\compress
+  \item 例えば，「$x^{t}$が$x$より改善された解なら」という条件を用いる．
+  \end{itemize}
+\item \label{lnps:repeat_end}
+  $x^{t}$が暫定解$x^{*}$より改善された解なら，$x^{*} := x^{t}$とする(8--10行目)．
+\item 終了条件が満たされるまで，
+  ステップ~\ref{lnps:repeat_start}〜\ref{lnps:repeat_end}を繰り返す(11行目)．
+  \begin{itemize}\compress
+  \item 例えば，矛盾回数や制限時間などを終了条件に用いる．
+  \end{itemize}
+\item 暫定解$x^{*}$を返す(12行目)．
+\end{enumerate}
+
+基となる LNS は，解に含まれる変数の値割当ての一部をランダムに選んで取
+り消し，その変数のみに対して再割当てを行うことで解を再構築($repair$)する．
+解の再構築には貪欲法等が用いられ，一般に解の最適性を保証できない．
+LNS の応用としては，巡回セールスマン問題を一般化した
+運搬経路問題 (Vehicle Routing Problem)
+に対する有効性が示されている~\cite{Pisinger10}．
+
+提案手法 LNPS では，LNS の再構築($repair$)を，値割当てをなるべく維持し
+たままでの再探索($re\mathchar`-search$)に置き換えることで，
+取り消されなかった変数への再割当てを許す．
+これによって，どの値割当てを取り消すかに依存しすぎない探索を行うことが
+できる点が特長である．
+また，反復の終了条件を適切に設定することで解の最適性も保証できる．
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
