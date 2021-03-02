@@ -1,9 +1,10 @@
 \section{ASP ソルバー 上での LNPS の実装}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{arch}
+%\input{arch}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-提案手法 LNPS を 高速 ASP ソルバー{\clingo}上に実装した．
-提案ソルバーは，
+提案手法 LNPS を 高速 ASP ソルバー
+{\clingo}~\footnote{\url{https://potassco.org/clingo/}}
+上に実装した．提案ソルバーは，
 ASP ファクト形式の問題インスタンスと
 問題を解く ASP 符号化を入力とし，
 LNPS アルゴリズムを用いて解を求める(図~\ref{fig:arch}参照)．
@@ -26,7 +27,7 @@ captionpos=b,frame=single,label=code:heu.lp,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/heu.lp}
+basicstyle=\ttfamily\small]{code/heu.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \lstinputlisting[float=t,caption={%
 \code{\#heuristic}文を無効にした実行例},%
@@ -34,7 +35,7 @@ captionpos=b,frame=single,label=code:heu.log,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/heu.log}
+basicstyle=\ttfamily\small]{code/heu.log}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \lstinputlisting[float=t,caption={%
 \code{\#heuristic}文を有効にした実行例},%
@@ -42,7 +43,7 @@ captionpos=b,frame=single,label=code:heu2.log,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/heu2.log}
+basicstyle=\ttfamily\small]{code/heu2.log}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 1行目のルールは，選択子を使ってアトム
@@ -62,9 +63,9 @@ basicstyle=\ttfamily\footnotesize]{code/heu2.log}
 解の探索において優先度の高いアトムから順に値が割当てられている
 ことがわかる．
 
-LNPS の実装では，この \code{#heuristic}文を利用して，
-$destroy$で値割当てを取り消されなかった変数に対して，
-優先的に同じ値を割当てる．
+LNPS の実装では，
+$destroy$で値割当てを取り消されなかった変数に対し，
+\code{#heuristic}文を利用して優先的に同じ値を割当てる．
 これにより，値割当てをなるべく維持したままでの解の再探索
 ($re\mathchar`-search$)を{\clingo}の系統的探索を用いて
 自然に実装できる．
@@ -72,11 +73,13 @@ $destroy$で値割当てを取り消されなかった変数に対して，
 \textbf{マルチショット ASP 解法.}
 ASP ソルバー{\clingo}は，
 同様の探索失敗を防ぐために獲得した学習節を保持することで，無駄な探索を
-行うことなく，ルールを追加・削除したプログラムを連続的に解くことができ
-る．このマルチショット ASP 解法は，別名インクリメンタル ASP 解法とも呼
-ばれ，モデル検査やプランニングに利用されている．
+行うことなく，ルールを追加・削除した論理プログラムを連続的に解くことが
+できる．
+このマルチショット ASP 解法は，別名インクリメンタル ASP 解法とも呼
+ばれ，モデル検査やプランニング分野の諸問題に応用されている．
 
-LNPS の実装では，この解法を利用することで，
+LNPS の実装では，
+{\clingo}の Python インターフェースを介してこの解法を利用することで，
 $destroy$と$re\mathchar`-search$の反復実行を簡潔に実装できる．
 動的なルールの削除は，\code{#external}文を利用して実装されるが，
 詳細は省略する．

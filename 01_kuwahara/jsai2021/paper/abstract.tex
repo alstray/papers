@@ -1,6 +1,6 @@
 \begin{abstract}
   In this paper, we describe an approach to integrating
-  systematic and stochastic local search based on
+  systematic search and stochastic local search based on
   Answer Set Programming (ASP).
   %
   We propose a heuristic method suitable for ASP, 
@@ -16,105 +16,6 @@
   We establish the competitiveness of our approach by empirically contrasting 
   {\clingo} and more dedicated implementations, 
   through curriculum-based course timetabling.
-
-
-%   solving the CCT problems
-% based on Answer Set Programming (ASP; [4]). The resulting catnap
-% system accepts a CCT instance in fact format and combines it with a
-% first-order ASP encoding for CCT solving, which is subsequently solved
-% by an o↵-the-shelf ASP system, in our case clingo. Our approach draws
-% upon distinct advantages of the high-level approach of ASP, such as
-% expressive language, extensible encodings, flexible multi-criteria
-% optimization, etc. However, the question is whether catnap’s
-% high-level approach matches the performance of state-of-the-art CCT
-% solving techniques. We address this question by empirically
-% contrasting catnap with dedicated implementations. From an ASP
-% perspective, we gain insights into advanced modeling techniques for
-% CCT. catnap’s encoding for CCT solving has the following features:
-% (a) a series of compact ASP encodings, (b) easy extension for CCT
-% under limiting resources, and (c) easy extension of CCT with soft
-% constraints.
-
-% In the sequel, we assume some familiarity with ASP, its semantics as
-% well as its basic language constructs. Our encodings are given in the
-% language of gringo series 4. Although we provide a brief introduction
-% to CCT in the next section, we refer the reader to the literature [17]
-% for a broader perspective.
-
-
-
-
-%   Answer Set Programming (ASP) is an approach to declarative problem
-% solving, combining a rich yet simple modeling language with high
-% performance solving capacities.
-% %
-% We here develop an ASP-based approach to
-% \textit{Curriculum-Based Course Timetabling} (CB-CTT),
-% one of the most widely studied course timetabling problems.
-% The resulting {\asap} system reads a CB-CTT instance 
-% of a standard input format and converts it into a set of ASP facts.
-% In turn, these facts are combined with a first-order encoding for CB-CTT solving, 
-% which can subsequently be solved by any off-the-shelf ASP systems.
-% %
-% We establish the competitiveness of our approach by empirically
-% contrasting it to the best known bounds obtained so far via
-% dedicated implementations. 
-% %
-% Furthermore, we extend the {\asap} system to multi-objective course timetabling
-% and consider \textit{minimal perturbation problems}.
-
-%   In this publication,
-% I suggest technique to apply systematic and stochastic local search 
-% for combinatorial optimization problem 
-% by using Answer Set Programming,
-% one of the developed form of SAT. %%
-% The suggestion is based on 
-% Large Neighborhood Search,
-% a kind of approximate solution method.
-% LNS is iterative solution method,
-% that cancels a part of assignment of variables 
-% included in the solution at random 
-% and rebuild solution 
-% by reassign only the variables. %%
-% In the suggestion, 
-% I permit reassignment to the variable 
-% that was not canceled 
-% by replacing rebuilding solution 
-% with re-search that maintained assignment 
-% if possible. %%
-% In this way, 
-% I can perform the search 
-% that does not depend too much 
-% which assignment you cancel. %%
-% I implemented suggestion technique 
-% on ASP solver clingo 
-% and evaluate performance 
-% using benchmarks of the 
-% International Timetabling Competition (all 21 problems). %%
-% As a result, 
-% the suggestion was able to get 
-% a better solution for many problems 
-% in comparison with normal ASP. %%
-% In addition, 
-% I succeeded in updating the known best value 
-% at one problem.
-
-%本発表では，SAT の発展形の一つである解集合プログラミング (Answer Set
-%Programming; ASP) 技術を用い，組合せ最適化問題に対して系統的探索と確率
-%的局所探索を統合的に適用する手法を提案する．
-
-%提案手法は，近似解法の一種である巨大近傍探索 (Large Neighborhood
-%Search; LNS) のアイデアをベースにしている．LNS は解に含まれる変数の値
-%割当ての一部をランダムに選んで取り消し，その変数のみに対して再割当てを
-%行うことで解を再構築する反復解法である．提案手法では，解の再構築の操作
-%を，値割当てをなるべく維持したままでの再探索に置き換えることで，取り消
-%されなかった変数への再割当てを許す．これによって，どの値割当てを取り消
-%すかに依存しすぎない探索を行うことができる．
-
-%提案手法を ASP ソルバー clingo 上に実装し，国際時間割競技会の問題集(全
-%21問)を用いて性能評価を行った．その結果，提案手法は，通常の ASP 解法と
-%比較して，多くの問題に対してより良い解を得ることができた．また，1問に
-%ついて，既知の最良値を更新することに成功した．
 \end{abstract}
 
 %\setcounter{page}{1}
