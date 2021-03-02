@@ -47,7 +47,7 @@
 \item 終了条件が満たされるまで，
   ステップ~\ref{lnps:repeat_start}〜\ref{lnps:repeat_end}を繰り返す(11行目)．
   \begin{itemize}\compress
-  \item 例えば，矛盾回数や制限時間などを終了条件に用いる．
+  \item 例えば，反復回数や制限時間などを終了条件に用いる．
   \end{itemize}
 \item 暫定解$x^{*}$を返す(12行目)．
 \end{enumerate}
@@ -64,7 +64,7 @@ LNS の応用としては，巡回セールスマン問題を一般化した
 取り消されなかった変数への再割当てを許す．
 これによって，どの値割当てを取り消すかに依存しすぎない探索を行うことが
 できる点が特長である．
-また，反復の終了条件を適切に設定することで解の最適性も保証できる．
+また，再探索($re\mathchar`-search$)の終了条件を適切に設定することで解の最適性も保証できる．
 
 %%% Local Variables:
 %%% mode: japanese-latex
