@@ -104,11 +104,11 @@ $FE_{g}$と$SV_{g}$に対応している．
 \code{more(weight)},
 \code{pareto}
 などいくつかの選好タイプはあらかじめ用意されている．
-あとは，以下の\code{#optimize}文によって，
+あとは，\code{#optimize(}$s$\code{)}と記述することによって，
 選好名称\code{s}について最適な解集合を得ることができる．
-\begin{center}
-  \code{#optimize(}$s$\code{).}
-\end{center}
+% \begin{center}
+%   \code{#optimize(}$s$\code{).}
+% \end{center}
 
 コード\ref{code:basic.lp}の31行目の\code{#preference}文は，
 予想販売台数の最大化を\code{max_sv}という名称で定義している．
@@ -123,7 +123,7 @@ $FE_{g}$と$SV_{g}$に対応している．
 最後に，41行目の\code{#optimize}文の要素に\code{all}を与えることによっ
 て，多目的 CAFE 問題のパレート最適解を得る．
 
-図~\ref{tab:prt_ans}に，
+図~\ref{aaaa}に，
 問題インスタンス (図~\ref{fig:ovm})，
 車種数$n=3$，
 CAFE 基準値$t=8.5$に対して，
@@ -136,7 +136,7 @@ CAFE 基準値$t=8.5$に対して，
 ASP 言語の表現力の高さを活かし，
 多目的 CAFE 問題の制約と目的関数を簡潔に表現できる．
 特に，\code{#preference}文を利用することにより，
-複数の目的関数を定義・組合せ，柔軟な最適化が可能な点が大きな特長である．
+複数の目的関数を定義し組み合わせることで，柔軟な最適化が可能な点が大きな特長である．
 
 %----------------------------------------
 
@@ -156,8 +156,8 @@ ASP 言語の表現力の高さを活かし，
     予想販売台数(合計)  & \multicolumn{3}{c||}{5,525} & \multicolumn{3}{c||}{5,475} & \multicolumn{3}{c||}{5,135} & \multicolumn{3}{c}{4,723} \\ 
    装備オプション数 & \multicolumn{3}{c||}{12} & \multicolumn{3}{c||}{11} & \multicolumn{3}{c||}{10} & \multicolumn{3}{c}{9} \\ \hline
   \end{tabular}
-  \label{tab:prt_ans}
   \caption{多目的 CAFE 問題(図~\ref{fig:ovm})のパレート最適解全列挙}
+  \label{aaaa}
 \end{figure*}
 
 
