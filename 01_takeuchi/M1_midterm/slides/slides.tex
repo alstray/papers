@@ -79,12 +79,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{車両装備仕様問題}
  \structure{\bf 車両装備仕様}とは，簡単に言うと，自動車のカタログに記載されている
- \textbf{モデル/グレードと装備の一覧表}のことである．
- \begin{itemize}
-  \item 車両の装備を決定するために，
-	現状では専門知識をもつ技術者の多大な労力が費やされている．
-  % \item 装備仕様決定の自動化・効率化は自動車メーカーにとって重要な課題の一つである．
- \end{itemize}
+ \textbf{車種(モデル/グレード)と装備の一覧表}のことである．
+ % \begin{itemize}
+ %  \item 車両の装備を決定するために，
+ % 	現状では専門知識をもつ技術者の多大な労力が費やされている．
+ %  % \item 装備仕様決定の自動化・効率化は自動車メーカーにとって重要な課題の一つである．
+ % \end{itemize}
  \begin{block}{車両装備仕様問題 (組合せ最適化問題の一種)}
   \begin{itemize}
    % \item 装備タイプと装備オプションに対する
@@ -94,17 +94,20 @@
    % 	 から構成される．
    \item 装備および燃費に関する制約から構成される．
    \item {\bf 予想販売台数の最大化}，{\bf 装備オプション数の最小化}など
-	 トレードオフの関係にある複数の目的関数のもとで最適な車両装備仕様を
+	 トレードオフの関係にある複数の目的関数のもとで，最適な車両装備仕様を
 	 求めることが目的
   \end{itemize}
  \end{block}
  \begin{alertblock}{CAFE方式(企業別平均燃費方式)}
   \begin{itemize}
-   \item 車種別ではなくメーカー全体での出荷台数を加味した平均燃費を算出し，
+   \item 車種別ではなくメーカー全体で，出荷台数を加味した平均燃費を算出し
 	 規制をかける方式
-   \item 燃費制約としてCAFE方式を用いた問題を\structure{\bf CAFE問題}と呼ぶ．
+   \item 日本では，2020年度からの燃費基準として採用されている．
   \end{itemize}
  \end{alertblock}
+ \begin{itemize}
+  \item 本研究では，CAFE方式に基づく車両装備仕様問題(\structure{\bf CAFE問題})を対象とする．
+ \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CAFE問題の例}
@@ -178,32 +181,35 @@
  \item 近年，SAT技術を利用した高速なASPシステムが開発され，
    ロボット工学，システム検証，システム生物学
    など様々な分野への実用的応用が急速に拡大している．
-  \item \structure{\bf Asprin言語}は，複数の目的関数およびそれらの間の
-	選好(preference)を記述できるようにASP言語を拡張したものである．
+  % \item \structure{\bf Asprin言語}は，複数の目的関数およびそれらの間の
+  % 	選好(preference)を記述できるようにASP言語を拡張したものである．
  \end{itemize}
 \vfill
  \begin{alertblock}{CAFE問題に対してASPを用いる利点}
    \begin{itemize} 
     \item ASP言語の高い表現力により，各種制約を簡潔に記述できる．
     \item 高速なASPシステムを利用できる．
-%    \item 解の最適性を保証でき，最適解の列挙も可能である．
-    \item Asprin言語の選好により，トレードオフの関係にある複数の目的関数のもとで，
-	  柔軟な最適値探索が可能である．
+    \item 多目的最適化や，解集合の間の選好順序を記述できるように拡張された
+	  \alert{\bf Asprinシステム}[Brewka 15]を利用できる．
+    % \item 解の最適性を保証でき，最適解の列挙も可能である．
+    % \item Asprin言語の選好により，トレードオフの関係にある複数の目的関数のもとで，
+    % 	  柔軟な最適値探索が可能である．
    \end{itemize}
  \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究の概要}
  \begin{alertblock}{目的}
-  ASPを多目的最適化問題へ応用する試みとして，ASPを基盤としたCAFE問題ソルバーを実現する．
- \end{alertblock}
- \begin{itemize}
-  \item CAFE問題のASP符号化の研究開発を中心に研究を進める．
-  \item 企業から提供を受けたベンチマーク問題を使って手法およびソルバーを評価し，
-	ASPの特長を活かした多目的最適化の利点・実用性を明らかにする．
- \end{itemize}
- \begin{block}{これまでの研究内容}
   \begin{itemize}
+   \item   ASPを多目的最適化問題へ応用する試みとして，
+	   ASPを基盤とした高速CAFE問題ソルバーを実現する．
+   \item 企業から提供を受けたベンチマーク問題を使ってソルバーを評価し，
+	 ASPの特長を活かした多目的最適化の利点・実用性を明らかにする．
+   % \item CAFE問題のASP符号化の研究開発を中心に研究を進める．
+  \end{itemize}
+ \end{alertblock}
+ \begin{block}{これまでの研究内容}
+  \begin{enumerate}
    \item \structure{\bf 単目的CAFE問題に関する研究(卒業研究)}
 	 \begin{itemize}
 	  \item {\bf 基本符号化}と{\bf 改良符号化}の2種類のASP符号化を考案
@@ -211,32 +217,33 @@
 	 \end{itemize}
    \item \structure{\bf 多目的CAFE問題に関する研究}
 	 \begin{itemize}
-	  \item パレート最適解を求める{\bf Asprin符号化}を考案
+	  \item パレート最適解を求める{\bf 拡張符号化}を考案
 	  \item 小規模な問題で，{\bf パレート最適解を全列挙}することに成功
 	 \end{itemize}
-  \end{itemize}
+  \end{enumerate}
  
  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{単目的CAFE問題に関する研究(卒業研究)}
- \begin{itemize}
-  \item 予想販売台数の最大化を目的関数とする．
- \end{itemize}
- \begin{block}{2種類のASP符号化を考案}
+ \begin{block}{}\centering
+  目的関数は，予想販売台数の最大化
+ \end{block}
+ % \begin{block}{}
   \begin{itemize}
    \item {\bf 基本符号化}
 	 \begin{itemize}
-	  \item CAFE問題の制約を{\bf ASPのルール17個}で簡潔に記述
+	  \item CAFE問題の制約を{\bf ASPのルール17個}で簡潔に記述できることを確認した．
 	 \end{itemize}
    \item {\bf 改良符号化}
 	 \begin{itemize}
-	  \item IWR値の上下限を厳密に計算することにより，
-		{\bf 基礎化後のルール数を少なく}抑える．
+	  \item IWR値の上下限を厳密に計算し，
+		{\bf 基礎化後のルール数を少なく}抑えるよう工夫されており，
+		大規模な問題での有効性が期待できる．
 	 \end{itemize}
   \end{itemize}
-  \end{block}
- \begin{alertblock}{企業から提供された実データを用いた評価実験}
+  % \end{block}
+ \begin{exampleblock}{企業から提供された実データを用いた評価実験}
   \begin{itemize}
    \item CAFE問題(3問)に対して，5種類のCAFE基準値(8.5, 9.0, 9.5,
 	 10.0, 10.5km/L)を適用した問題インスタンス(全15問)  
@@ -244,24 +251,23 @@
    \item 実用規模およびより大規模な問題に対して，
 	 改良符号化が基本符号化より優れた結果を示し，その優位性が確認できた．
   \end{itemize}
- \end{alertblock}
+ \end{exampleblock}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{多目的CAFE問題に関する研究}
- \begin{itemize}
-  \item 予想販売台数の最大化と装備オプション数の最小化の2つの目的関数をもつ．
- \end{itemize}
- \begin{block}{パレート最適解を求める符号化を考案}
-   \begin{itemize}
-    \item {\bf Asprin符号化}
-	  \begin{itemize}
-	   \item Asprin言語によって，
-		 パレート最適解をすべて求めるように記述
-	  \end{itemize}
- \end{itemize}
-
+ \begin{block}{}\centering
+  目的関数は，予想販売台数の最大化と装備オプション数の最小化
  \end{block}
+ \begin{itemize}
+  \item {\bf 拡張符号化}
+	\begin{itemize}
+	 \item 改良符号化をベースに，多目的CAFE問題のパレート最適解を計算できるように拡張
+	       されている．
+	 \item 2つの目的関数からなる多目的最適化をASPのルール5個で簡潔に記述できることを
+	       確認した．
+	\end{itemize}
+ \end{itemize}
  \begin{exampleblock}{パレート最適解の例{\normalsize (CAFE基準値: 8.5km/L)}}
     \centering
   \tiny
@@ -283,9 +289,42 @@
  \end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実行実験}
- 
- \begin{exampleblock}{小規模な問題での実験結果}
+\begin{frame}{実験概要}
+ \begin{itemize}
+  \item 考案した拡張符号化の有効性を評価するために，実行実験を行った．
+% 問題の規模がわかるように	
+ \end{itemize}
+
+\begin{itemize}
+\item ベンチマーク問題(計15問)
+  \begin{itemize}
+  \item 企業から提供された問題(3問)に対して
+  \item 5通りのCAFE基準値$t\in\{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$を適用
+  \item 車種の数$n = 3$
+  \end{itemize}
+  \begin{exampleblock}\small
+    \centering
+    \begin{tabular}{ ll|r r r }
+      問題名 & サイズ &  \#装備タイプ & \#装備オプション& \#依存制約\\ \hline
+      small	 & 小規模   &   8 &   21  &   4	\\
+      medium & 実用規模 &  86 &  226  & 147	\\
+      big    & 大規模   & 315 & 1,337 &   0
+    \end{tabular}
+  \end{exampleblock}
+ \item ASPシステム
+       \begin{itemize}
+	\item \textit{clingo-5.4.0} + \textit{asprin-3.1.1}
+       \end{itemize}
+ \item 制限時間
+       \begin{itemize}
+	\item 1問あたり3時間
+       \end{itemize}
+ \item 実験環境: Mac mini (3.2GHz, Intel Core i7, 64GB メモリ)
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{小規模な問題での実験結果}
+ \begin{exampleblock}{}
   \centering
   % \renewcommand{\arraystretch}{0.9}
   % \tabcolsep = 0.9mm
@@ -301,6 +340,7 @@
  \end{exampleblock}
  \begin{itemize}
   \item 5問中4問でパレート最適解を全列挙することに成功した．
+  \item medium 以上の問題では暫定的な解は得られたが，最適解は得られなかった．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -311,13 +351,13 @@
   \begin{itemize}
    \item \structure{\bf 単目的CAFE問題に関する研究(卒業研究)}
 	 \begin{itemize}
-	  \item {\bf 基本符号化}と{\bf 改良符号化}の2種類のASP符号化を考案
-	  \item 実用規模，より大規模な問題での改良符号化の優位性を確認
+	  \item {\bf 基本符号化}と{\bf 改良符号化}の2種類のASP符号化を考案した．
+	  \item 実用規模，より大規模な問題での改良符号化の優位性を確認した．
 	 \end{itemize}
    \item \structure{\bf 多目的CAFE問題に関する研究}
 	 \begin{itemize}
-	  \item パレート最適解を求める{\bf Asprin符号化}を考案
-	  \item 小規模な問題でのパレート最適解を全列挙することに成功
+	  \item パレート最適解を求める{\bf 拡張符号化}を考案した．
+	  \item 小規模な問題でのパレート最適解を全列挙することに成功した．
 	 \end{itemize}
   \end{itemize}
  \end{block}
@@ -341,48 +381,22 @@
 	 2020年9月9日. 
   \end{itemize}
  \end{alertblock}
- \begin{block}{発表歴}
+ \begin{block}{今後の発表予定}
+  \begin{itemize}
+   \item 竹内頼人, 田村直之, 番原睦則. 解集合プログラミングを用いた多目的車両装備仕様問題の解法. 2021年度人工知能学会全国大会(第35回), 2020年6月. 
+  \end{itemize}
+ \end{block}
+ \begin{exampleblock}{研究会等での口頭発表}
    \begin{itemize}
     \item 2020/9/3 NII共同研究 第1回研究会合
-    \item 2020/9/9 日本ソフトウェア科学会 第37回大会
+    % \item 2020/9/9 日本ソフトウェア科学会 第37回大会
     \item 2020/10/16 企業とのCAFE問題に関する意見交換会
    \end{itemize} 
- \end{block}
+ \end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 \backupbegin
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験環境}
-\begin{itemize}
-\item ベンチマーク問題(計15問)
-  \begin{itemize}
-  \item 企業から提供された問題(3問)に対して
-  \item 5通りのCAFE基準値$t\in\{8.5, 9.0, 9.5, 10.0, 10.5km/L\}$を適用
-  \item 車種の数$n = 3$
-  \end{itemize}
-  \begin{exampleblock}\small
-    \centering
-    \begin{tabular}{ ll|r r r }
-      問題名 & サイズ &  \#装備タイプ & \#装備オプション& \#依存制約\\ \hline
-      small	 & 小規模   &   8 &   21  &   4	\\
-      medium & 実用規模 &  86 &  226  & 147	\\
-      big    & 大規模   & 315 & 1,337 &   0
-    \end{tabular}
-  \end{exampleblock}
- \item ASPシステム
-       \begin{itemize}
-	\item 単目的CAFE問題: \textit{clingo-5.4.0}
-	\item 多目的CAFE問題: \textit{clingo-5.4.0} + \textit{asprin-3.1.1}
-       \end{itemize}
- \item 制限時間
-       \begin{itemize}
-	\item 単目的CAFE問題: 1問あたり2時間
-	\item 多目的CAFE問題: 1問あたり3時間
-       \end{itemize}
- \item 実験環境: Mac mini (3.2GHz, Intel Core i7, 64GB メモリ)
-\end{itemize}
-\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{単目的CAFE問題の実験結果:予想販売台数}
 \begin{exampleblock}{}
