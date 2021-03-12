@@ -32,6 +32,7 @@
 \usepackage{bm}
 \usepackage{listings}
 \usepackage{plistings}
+\usepackage{alltt}
 
 %%%% My macro %%%%%
 \input{macro}
@@ -250,7 +251,7 @@
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{探索ヒューリスティックス (1/3)}
+\begin{frame}{\textsf{\#heuristic}文 (1/3)}
 \begin{exampleblock}{コード例}
 \lstinputlisting[frame=none,label=code:heu.lp,%
 numbers=none,%
@@ -274,7 +275,7 @@ basicstyle=\ttfamily\small]
 %\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{探索ヒューリスティックス (2/3)}
+\begin{frame}{\textsf{\#heuristic}文 (2/3)}
 \begin{exampleblock}{\textsf{\#heuristic}文を無効にした実行例}
 \lstinputlisting[frame=none,label=code:heu.lp,%
 numbers=none,%
@@ -286,7 +287,7 @@ basicstyle=\ttfamily\small]
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{探索ヒューリスティックス (3/3)}
+\begin{frame}{\textsf{\#heuristic}文 (3/3)}
 \begin{exampleblock}{\textsf{\#heuristic}文を有効にした実行例}
 \lstinputlisting[frame=none,label=code:heu.lp,%
 numbers=none,%
@@ -301,68 +302,78 @@ basicstyle=\ttfamily\small]
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{clingo の Python interface を用いた LNPS の実装}
-\begin{exampleblock}{CB-CTTを解く際に宣言される\#heuristic文の例}
-\lstinputlisting[frame=single,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]
-{code/heu2.lp}
+\begin{frame}{\textsf{\#heuristic}文を用いた LNPS の re-search の実装}
 
-\begin{itemize}
- \item \small $assigned(C,R,D,P)$ は CB-CTT 特有のアトム
-  \begin{itemize}
-   \item 直感的には，
-   講義 C が D 曜 P 限に教室 R で開講されることを表す．
-  \end{itemize}
- \end{itemize}
+\begin{exampleblock}{}\small
+\begin{alltt}
+  \#heuristic \alert{\(p(t_{1},\ldots,t_{n})\)} : heuristic(\alert{\(p(t_{1},\ldots,t_{n})\)},W,\structure{T}). [W,true]
+\end{alltt}
 \end{exampleblock}
-\bigskip
-\begin{block}{}
+\vfill 
 \begin{itemize}
-\item \small この\#heuristic文は，アトム $heuristic(assigned(C,R,D,P),W,M,t)$ が
-存在するとき，優先度 $W$ で，$assigned(C,R,D,P)$ に $M$ を割り当てることを
-表している．
-\item \small LNPS プログラムでは暫定解を解析して動的に，
-アトム $heuristic(assigned(C,R,D,P),W,M,t)$ を追加・削除することで，
-優先的な値割り当てを管理している．
+  \item アトム\alert{$p(t_{1},\ldots,t_{n})$}は暫定解を表す．
+  \item 補助アトム
+    {\tt heuristic(\alert{\(p(t_{1},\ldots,t_{n})\)},W,\structure{T})}
+    は，各反復\structure{\texttt{T}}において，
+    \alert{$p(t_{1},\ldots,t_{n})$}に優先度\texttt{W}で真を割当ること
+    を意味する．
+  \item インクリメンタルASP解法を用いて，
+    補助アトム{\tt heuristic(\alert{\(p(t_{1},\ldots,t_{n})\)},W,\structure{T})}
+    を，動的に追加・削除することで，
+    \alert{$p(t_{1},\ldots,t_{n})$}への値割り当てをなるべく維持したま
+    まで解を再探索を実現している．
 \end{itemize}
-\end{block}
+
+% numbers=none,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\scriptsize]
+% {code/heu2.lp}
+
+% \begin{itemize}
+%  \item \small $assigned(C,R,D,P)$ は CB-CTT 特有のアトム
+%   \begin{itemize}
+%    \item 直感的には，
+%    講義 C が D 曜 P 限に教室 R で開講されることを表す．
+%   \end{itemize}
+%  \end{itemize}
+% \end{exampleblock}
+% \bigskip
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{実験概要}
   提案するLNPSシステムの有効性を評価するために，実験を行った．
   \bigskip
   \begin{itemize}
-  \item CB-CTTベンチマーク問題 (全21問)
+  \item \structure{CB-CTTベンチマーク問題}
     \begin{itemize}
+    \item 国際時間割競技会ITC-2007の問題(全21問)
     \item ソフト制約が最も多い問題集 (UD5) を使用
     \end{itemize}
-  \item 比較した手法
+  \item \structure{比較した手法}
     \begin{itemize}
     \item 既存手法: ASP ソルバー{\clingo}
     \item 提案手法: LNPS を{\clingo} 上に実装
     \end{itemize}
-   \item パラメータ
+   \item \structure{LNPSのパラメータ}
     \begin{itemize}
-     \item 初期解探索の切り上げ : conflict 250万 または restart 5,000
-     \item re-search の切り上げ : conflict 3万
+    \item 初期解探索の打切り:
+      \#conflict $\geq$ 2,500,000 $\lor$ \#restart $\geq$ 5,000
+     \item re-search の切り上げ:\# conflict $\geq$ 30,000
     \end{itemize}
-  \item ASP 符号化：{\teaspoon} 符号化
-  \item ASP システム：\textit{clingo-5.4.0}
-  \item 制限時間 : 1時間/問
-  \item 実験環境 : Mac OS (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
+  \item \structure{CB-CTT のASP 符号化}: {\teaspoon} 符号化~[Banbara+'19]
+  \item \structure{ASP システム}: \textit{clingo-5.4.0}
+  \item \structure{制限時間}: 1時間/問
+  \item \structure{実験環境}: Mac OS (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CB-CTT に対する destroy 演算子}
-  %\begin{itemize}
-  %\item CB-CTT に関する既存研究[Kieferほか'16]を参考に，
-    %4種類のdestroy演算を実装した．
-  %\end{itemize}
+\begin{block}{}\centering
+CB-CTT に関する既存研究~[Kieferほか'16]を参考に，
+4種類の\textsf{destroy}演算を実装した．    
+\end{block}
 
-  \begin{block}{}
     \begin{enumerate}
     \item \structure{\bf Random $N$ (R-$N$)}
       \begin{itemize}
@@ -387,7 +398,6 @@ basicstyle=\ttfamily\scriptsize]
     ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
    \end{itemize}
   \end{enumerate}
-  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{実験結果: 得られた最適値と最良値}
@@ -396,6 +406,7 @@ basicstyle=\ttfamily\scriptsize]
   \end{tableA}
   \begin{itemize}
   \item 提案手法は，既存のASPより，多くの問題でより良い解を生成した．
+  \item 提案手法の中では，\textsf{Swap-Room} が良い性能を示した．
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -406,7 +417,8 @@ basicstyle=\ttfamily\scriptsize]
   \end{tableB}
   \end{center}
   \begin{itemize}
-  \item 提案手法は，既知の最良値に大幅に近づけることができた． 
+      \item 提案手法 LNPS は，既知の最良値との比を +26\% まで大幅に改善
+      \item 1問について，\alert{\bf 既知の最良値を更新}することに成功
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -435,7 +447,7 @@ basicstyle=\ttfamily\scriptsize]
 
 \begin{alertblock}{今後の課題}
   \begin{itemize}
-  \item \textit{clingo} の最新 Python インターフェース を用いた LNPS の実装
+%  \item \textit{clingo} の最新 Python インターフェース を用いた LNPS の実装
 %  \item 新たな destroy 演算の考案
     %\begin{itemize}
     %\item 暫定解から違反の原因となる値割当てを取り消す方法
