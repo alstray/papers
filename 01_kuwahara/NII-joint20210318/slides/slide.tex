@@ -339,22 +339,20 @@ basicstyle=\ttfamily\scriptsize]
     \begin{itemize}
     \item ソフト制約が最も多い問題集 (UD5) を使用
     \end{itemize}
-  \item 比較に用いたシステム
+  \item 比較した手法
     \begin{itemize}
-    \item 既存のASPシステム{\clingo}
-    \item 提案手法\structure{\bf R-\bm{$N$}}: LNPS + random $N$ ($N=0, 3, 5$)
-    \item 提案手法\structure{\bf DP}: LNPS + day-period
-    \item 提案手法\structure{\bf DR}: LNPS + day-room
-    \item 提案手法\structure{\bf SR-\bm{$N$}}: LNPS + swap-room $N$ ($N=5, 10$)
+    \item 既存手法: ASP ソルバー{\clingo}
+    \item 提案手法: LNPS を{\clingo} 上に実装
     \end{itemize}
    \item パラメータ
     \begin{itemize}
      \item 初期解探索の切り上げ : conflict 250万 または restart 5,000
      \item re-search の切り上げ : conflict 3万
     \end{itemize}
+  \item ASP 符号化：{\teaspoon} 符号化
   \item ASP システム：\textit{clingo-5.4.0}
   \item 制限時間 : 1時間/問
-  \item 実験環境 : Mac mini (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
+  \item 実験環境 : Mac OS (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -422,16 +420,16 @@ basicstyle=\ttfamily\scriptsize]
       \begin{itemize}
       \item LNPS アルゴリズムを，
         ASPシステム{\clingo}のインクリメンタル ASP 解法
-        と\#heuristic宣言を用いて，簡潔に実装
+        と\textsf{\#heuristic}文を用いて，簡潔に実装
       \end{itemize}
     \item \structure{カリキュラムベース・コース時間割問題を用いた評価実験}
       \begin{itemize}
-      \item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を
-        示した．
-      \item 既知の最良値との比の平均値について，
-      既存ASPが +437\% であったのに対し，
-      提案手法では +26\% に抑えられた．
-      \item \textsf{comp09}について，\alert{\bf 既知の最良値を更新}することに成功した．
+      %\item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を示した．
+      \item 既知の最良値との比について，
+      通常の ASP 解法が +437\% であったのに対し，
+      提案手法 LNPS は，
+      その比を +26\% まで大幅に改善できた．
+      \item さらに，1 問について，\alert{\bf 既知の最良値を更新}することに成功した．
       \end{itemize}
     \end{itemize}
 

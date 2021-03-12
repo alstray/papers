@@ -37,9 +37,9 @@
   \scriptsize
 %  \tabcolsep = 2mm
   \renewcommand{\arraystretch}{0.78}
-  \begin{tabular}[t]{c||r|r|r|r|r|r|r|r}\hline
-    \lw{問題名} & \lw{既存ASP} & \multicolumn{7}{c}{提案手法}\\\cline{3-9}
-     &  & R-0 & R-3 & R-5 & DP & DR & SR-5 & SR-10\\\hline
+  \begin{tabular}[t]{c|r|rrrrrrr}
+    \lw{問題名} & 既存手法 & \multicolumn{7}{c}{提案手法 LNPS}\\\cline{3-9}
+     & \multicolumn{1}{c|}{ASP} & \textsf{R-0} & \textsf{R-3} & \textsf{R-5} & \textsf{DP} & \textsf{DR} & \textsf{SR-5} & \textsf{SR-10}\\\hline
     }{%
     \hline
   \end{tabular}
@@ -49,7 +49,7 @@
   \scriptsize
  % \tabcolsep = 2mm
   \renewcommand{\arraystretch}{0.6}						
-  \begin{tabular}[t]{c||r|r|r|r|r}\hline
+  \begin{tabular}[t]{c|r|rr|rr}
     \lw{問題名} & \lw{既知の最良値($\sharp$)} & \multicolumn{2}{c|}{既存手法 ASP} & \multicolumn{2}{c}{提案手法 LNPS}\\\cline{3-6}
      & & 最良値 & $\sharp$ との比 (\%) & 最良値 & $\sharp$ との比 (\%)\\\hline
     }{%
