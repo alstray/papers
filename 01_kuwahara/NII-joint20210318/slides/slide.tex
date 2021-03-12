@@ -71,7 +71,7 @@
     \begin{itemize}
     \item ASP言語の高い表現力により，記号制約を簡潔に記述できる．
     \item 系統的探索(分枝限定法)なので，\alert{\bf 解の最適性を保証}できる．
-    \item 探索ヒューリスティックスを簡単に試せる(\textsf{\#heuristic宣言})．
+    \item 探索ヒューリスティックスを簡単に試せる(\textsf{\#heuristic}文)．
     %   \begin{itemize}
     %   \item 探索時に優先的に割り当てる値を指定できる．
     %   \end{itemize}
@@ -81,11 +81,11 @@
   \bigskip
   \begin{block}{欠点}
     \begin{itemize}
+    \item 大規模な問題に対して，確率的局所探索と比べて，
+      \structure{解の精度が劣る}場合がある．
     \item ASP システムの基礎化\footnotemark[1]
       と呼ばれる処理がボトルネックとなり，
-      \structure{スケーラビリティが低下}する．
-    \item 大規模な問題に対して，確率的局所探索と比べて，解の品質が劣る
-      場合がある．
+      スケーラビリティが低下する．
     \end{itemize}
   \end{block}
   \footnotetext[1]{変数つきプログラムを変数なしプログラムに変換する処理}
@@ -206,18 +206,24 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASP ソルバー 上での LNPS の実装}
-  \centering
+\centering
+\begin{alertblock}{}\footnotesize\centering
+  提案ソルバーは，
+  任意のASP ファクト形式の問題インスタンスと問題を解く ASP 符号化を入力とし，
+  LNPS アルゴリズムを用いて解を求める．
+\end{alertblock}
+\vfill
   \thicklines
   \setlength{\unitlength}{1.28pt}
-  \scriptsize
+  \begin{scriptsize}
   \begin{picture}(280,57)(4,-10)
     \put(  0, 20){\dashbox(50,24){\shortstack{組合せ最適化問題\\のインスタンス}}}
     \put( 60, 20){\framebox(50,24){変換器}}
     \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
     \put(120,-10){\dashbox(50,24){\shortstack{ASP符号化\\(論理プログラム)}}}
-    \put(180,-10){\framebox(50,54){}}
+    \alert{\put(180,-10){\framebox(50,54){}}}
     \put(185, 25){\framebox(40,12){ASPソルバー}}
-    \put(185, -5){\framebox(40,12){LNPS}}
+    \alert{\put(185, -5){\framebox(40,12){LNPS}}}
     % \put(180, 20){\framebox(50,24){ASPシステム}}
     \put(240, 20){\dashbox(30,24){問題の解}}
     \put( 50, 32){\vector(1,0){10}}
@@ -230,83 +236,69 @@
     \put(215, 24){\vector(0,-1){17}}
     %\put(188, 50){提案ソルバー}
   \end{picture}  
-  \begin{block}{}
-  提案ソルバーは，
-  ASP ファクト形式の問題インスタンスと問題を解く ASP 符号化を入力とし，
-  LNPS アルゴリズムを用いて解を求める．
-    \begin{itemize}
-     \item ASPシステム{\clingo}の python インターフェースを用いて実装した．
-   \end{itemize}
-  \end{block}
-
- \begin{exampleblock}{実装に用いた ASP 技術例}
+\end{scriptsize}
+\small
   \begin{itemize}
+     \item ASPシステム{\clingo}の python インターフェースを用いて実装した．
+  \item \structure{探索ヒューリスティックス(\textsf{\#heuristic}文)} : 
+    LNPS の値割当てをなるべく維持したままの再探索 (re-search) を，
+    {\clingo}の系統的探索で自然に実装している．
   \item \structure{インクリメンタル ASP 解法} : 
     LNPS の反復処理を，ASPシステムを複数回起動することなく，1回だけ起
-    動し動的にアトムを追加・削除しながら繰返し解くことで実現している．
-  \item \structure{\textsf{\#heuristic宣言}} : 
-    LNPS の値割当てをなるべく維持したままの再探索 (re-search) を自然に実
-    装している．
+    動し動的にアトムを追加・削除しながら繰返し解くことで実装している．
   \end{itemize}
- \end{exampleblock}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{探索ヒューリスティックス (1/3)}
-\lstinputlisting[frame=single,label=code:heu.lp,%
+\begin{exampleblock}{コード例}
+\lstinputlisting[frame=none,label=code:heu.lp,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]
+basicstyle=\ttfamily\small]
 {code/heu.lp}
+\end{exampleblock}
 
-\begin{block}{}
+%\begin{block}{}
 \begin{itemize}
 \item 1行目のルールは，選択子を使ってアトム$a$ と $b$ を導入している．
 \item 2行目のルールは，$a$ と $b$ が同時に成り立たないことを表している．
  \begin{itemize}
   \item このプログラム例の解集合は\{\},\{$a$\},\{$b$\}の3つである．
  \end{itemize}
-\item 3行目の \#heuristic文は，優先度1で $a$ に真を割当てることを表している．
+\item 3行目の \textsf{\#heuristic}文は，優先度1で $a$ に真を割当てることを表している．
 \item 同様に，4行目は優先度2で $b$ に真を割当てることを表している．
 %\item アトムに対するデフォルトの優先度は0である．
 \end{itemize}
-\end{block}
+%\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{探索ヒューリスティックス (2/3)}
-\lstinputlisting[frame=single,label=code:heu.lp,%
+\begin{exampleblock}{\textsf{\#heuristic}文を無効にした実行例}
+\lstinputlisting[frame=none,label=code:heu.lp,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]
+basicstyle=\ttfamily\small]
 {code/heu.log}
+\end{exampleblock}
 
-\begin{block}{}
-\begin{itemize}
-\item \#heuristic文を無効にした実行例を示している．
-\item 始めに出力されている解は\{\}である．
-\end{itemize}
-\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{探索ヒューリスティックス (3/3)}
-\lstinputlisting[frame=single,label=code:heu.lp,%
+\begin{exampleblock}{\textsf{\#heuristic}文を有効にした実行例}
+\lstinputlisting[frame=none,label=code:heu.lp,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]
+basicstyle=\ttfamily\small]
 {code/heu2.log}
+\end{exampleblock}
 
-\begin{block}{}
 \begin{itemize}
-\item \#heuristic文を有効にした実行例を示している．
-\item 始めに出力されている解は\{$b$\}である．
- \begin{itemize}
-  \item 優先度の高い $b$ から順に値が割り当てられている．
- \end{itemize}
+\item 優先度の高いアトムから順に，値割当が行われていることがわかる．
 \end{itemize}
-\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{clingo の Python interface を用いた LNPS の実装}
