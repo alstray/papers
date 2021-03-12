@@ -30,6 +30,8 @@
 %%%% Packages
 \usepackage{graphicx}
 \usepackage{bm}
+\usepackage{listings}
+\usepackage{plistings}
 
 %%%% My macro %%%%%
 \input{macro}
@@ -37,9 +39,8 @@
 \title{解集合プログラミングに基づく系統的探索と確率的局所探索の統合的
   手法に関する一考察}
 \author{桑原 和也}
-%\institute{名古屋大学工学部電気電子・情報学科情報コース}
+\institute{名古屋大学大学院情報学研究科 番原研究室}
 \date{NII 共同研究 第3回打合\\2021年3月18日}
-\institute{番原研究室}
 \begin{document}
 \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,8 +113,8 @@
 
   \begin{block}{改善を要する点}
     \begin{itemize}
-    \item ソフト制約が多く含まれるような問題集において，
-      確率的局所探索より，解の品質が劣っている．
+    \item ソフト制約が多く含まれるような問題集では，
+      確率的局所探索が，多くの問題に対してより高精度な解を求めている．
      \item 既知の最良値との比の平均値は
        \begin{itemize}
        \item ソフト制約が少ない問題集 (UD1) では $+19.83\%$
@@ -137,9 +138,9 @@
 
   \begin{block}{研究内容}
     \begin{enumerate}
-    \item LNPS のプロトタイプシステムの実装 (卒業研究)
-    \item \alert{\bf LNPS の インクリメンタル ASP 解法を用いた実装}
-    \item \alert{\bf カリキュラムベース・コース時間割問題を用いた評価実験}
+    %\item LNPS のプロトタイプシステムの実装 (卒業研究)
+    \item LNPS の インクリメンタル ASP 解法を用いた実装
+    \item カリキュラムベース・コース時間割問題を用いた評価実験
 %    \item LNPS の改良 (今後の課題)
     \end{enumerate}
   \end{block}
@@ -162,14 +163,14 @@
         \item \alert{\bf destroy} は $x$ から値割当ての一部を\structure{取り消し} $x'$ とする．
         \item re-search は $x'$ の値割当てをなるべく維持したまま再探索する．
       \end{itemize}
-      \item 更新条件を満たしていたら $x := x_t$ とする．
+      \item 受理条件を満たしていたら $x := x_t$ とする．
       \begin{itemize}
         \item 例えば「$x_t$ が $x$ より改善された解なら」という更新条件を用いる．
       \end{itemize}
       \item $x_t$ が暫定解 $x*$ より改善された解なら，$x* := x_t$ とする．
       \item 終了条件が満たされるまで，2〜4 を繰り返す．
       \begin{itemize}
-        \item 例えば繰り返し回数や制限時間などを終了条件に用いる．
+        \item 繰り返し回数や制限時間などを終了条件に用いる．
       \end{itemize}
       \item 暫定解 $x*$ を返す．
     \end{enumerate}
@@ -186,41 +187,156 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{LNPS アルゴリズム (擬似コード)}
-
+\centering
+\begin{tabular}{l}\hline
+\textbf{Algorythm} Large Neighborhood Prioritized Search\\\hline
+ ~1: input: a feasible solution $x$ \\
+ ~2: $x^{*} :=  x$; \\
+ ~3: \bf{repeat} \\
+ ~4: \quad \quad $x^{t} := re\mathchar`-search(destroy(x))$; \\
+ ~5: \quad \quad \textbf{if} $accept(x^{t}, x)$ \textbf{then} \\
+ ~6: \quad \quad \quad \quad $x := x^{t}$; \\
+ ~7: \quad \quad \textbf{end if} \\
+ ~8: \quad \quad \textbf{if} $c(x^{t}) < c(x^{*})$ \textbf{then} \\
+ ~9: \quad \quad \quad \quad $x^{*} := x^{t}$; \\
+10: \quad \quad \textbf{end if} \\
+11: \textbf{until} stop criterion is met \\
+12: \textbf{return} $x^{*}$ \\ \hline
+\end{tabular}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASP ソルバー 上での LNPS の実装}
-\alert{TODO: 構成図を貼る}
-  \begin{block}{提案システム}\centering
-    系統的探索と確率的局所探索を統合的に扱う LNPS システムを，
-    ASPシステム{\clingo}の python インターフェースを用いて実装した．
+  \centering
+  \thicklines
+  \setlength{\unitlength}{1.28pt}
+  \scriptsize
+  \begin{picture}(280,57)(4,-10)
+    \put(  0, 20){\dashbox(50,24){\shortstack{組合せ最適化問題\\のインスタンス}}}
+    \put( 60, 20){\framebox(50,24){変換器}}
+    \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
+    \put(120,-10){\dashbox(50,24){\shortstack{ASP符号化\\(論理プログラム)}}}
+    \put(180,-10){\framebox(50,54){}}
+    \put(185, 25){\framebox(40,12){ASPソルバー}}
+    \put(185, -5){\framebox(40,12){LNPS}}
+    % \put(180, 20){\framebox(50,24){ASPシステム}}
+    \put(240, 20){\dashbox(30,24){問題の解}}
+    \put( 50, 32){\vector(1,0){10}}
+    \put(110, 32){\vector(1,0){10}}
+    \put(170, 32){\vector(1,0){10}}
+    \put(230, 32){\vector(1,0){10}}
+    \put(170, +2){\line(1,0){4}}
+    \put(174, +2){\line(0,1){30}}
+    \put(195,  7){\vector(0,1){17}}
+    \put(215, 24){\vector(0,-1){17}}
+    %\put(188, 50){提案ソルバー}
+  \end{picture}  
+  \begin{block}{}
+  提案ソルバーは，
+  ASP ファクト形式の問題インスタンスと問題を解く ASP 符号化を入力とし，
+  LNPS アルゴリズムを用いて解を求める．
+    \begin{itemize}
+     \item ASPシステム{\clingo}の python インターフェースを用いて実装した．
+   \end{itemize}
   \end{block}
 
+ \begin{exampleblock}{実装に用いた ASP 技術例}
   \begin{itemize}
-  \item {\clingo}の\structure{インクリメンタル ASP 解法}を用いることで，
+  \item \structure{インクリメンタル ASP 解法} : 
     LNPS の反復処理を，ASPシステムを複数回起動することなく，1回だけ起
     動し動的にアトムを追加・削除しながら繰返し解くことで実現している．
-  \item {\clingo}の\structure{\textsf{\#heuristic宣言}}を用いることで，
+  \item \structure{\textsf{\#heuristic宣言}} : 
     LNPS の値割当てをなるべく維持したままの再探索 (re-search) を自然に実
     装している．
   \end{itemize}
+ \end{exampleblock}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{探索ヒューリスティックス (1/3)}
+\lstinputlisting[frame=single,label=code:heu.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]
+{code/heu.lp}
 
+\begin{block}{}
+\begin{itemize}
+\item 1行目のルールは，選択子を使ってアトム$a$ と $b$ を導入している．
+\item 2行目のルールは，$a$ と $b$ が同時に成り立たないことを表している．
+ \begin{itemize}
+  \item このプログラム例の解集合は\{\},\{$a$\},\{$b$\}の3つである．
+ \end{itemize}
+\item 3行目の \#heuristic文は，優先度1で $a$ に真を割当てることを表している．
+\item 同様に，4行目は優先度2で $b$ に真を割当てることを表している．
+%\item アトムに対するデフォルトの優先度は0である．
+\end{itemize}
+\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{探索ヒューリスティックス (2/3)}
+\lstinputlisting[frame=single,label=code:heu.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]
+{code/heu.log}
 
+\begin{block}{}
+\begin{itemize}
+\item \#heuristic文を無効にした実行例を示している．
+\item 始めに出力されている解は\{\}である．
+\end{itemize}
+\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{探索ヒューリスティックス (3/3)}
+\lstinputlisting[frame=single,label=code:heu.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]
+{code/heu2.log}
 
+\begin{block}{}
+\begin{itemize}
+\item \#heuristic文を有効にした実行例を示している．
+\item 始めに出力されている解は\{$b$\}である．
+ \begin{itemize}
+  \item 優先度の高い $b$ から順に値が割り当てられている．
+ \end{itemize}
+\end{itemize}
+\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{clingo の Python interface を用いた LNPS の実装}
+\begin{exampleblock}{CB-CTTを解く際に宣言される\#heuristic文の例}
+\lstinputlisting[frame=single,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]
+{code/heu2.lp}
 
+\begin{itemize}
+ \item \small assigned(C,R,D,P) は CB-CTT 特有のアトム
+  \begin{itemize}
+   \item 直感的には，
+   講義 C が D 曜 P 限に教室 R で開講されることを表す．
+  \end{itemize}
+ \end{itemize}
+\end{exampleblock}
+\bigskip
+\begin{block}{}
+\begin{itemize}
+\item \small この\#heuristic文は，アトム $heuristic(assigned(C,R,D,P),W,M,t)$ が
+存在するとき，優先度 $W$ で，$assigned(C,R,D,P)$ に $M$ を割り当てることを
+表している．
+\item \small LNPS プログラムでは暫定解を解析して動的に，
+アトム $heuristic(assigned(C,R,D,P),W,M,t)$ を追加・削除することで，
+優先的な値割り当てを管理している．
+\end{itemize}
+\end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{実験概要}
@@ -239,11 +355,11 @@
     \item 提案手法\structure{\bf DR}: LNPS + day-room
     \item 提案手法\structure{\bf SR-\bm{$N$}}: LNPS + swap-room $N$ ($N=5, 10$)
     \end{itemize}
-  % \item パラメータ
-  %  \begin{itemize}
-  %   \item 初期解探索の切り上げ : conflict 250万 または restart 5,000
-  %   \item re-search の切り上げ : conflict 3万
-  %  \end{itemize}
+   \item パラメータ
+    \begin{itemize}
+     \item 初期解探索の切り上げ : conflict 250万 または restart 5,000
+     \item re-search の切り上げ : conflict 3万
+    \end{itemize}
   \item ASP システム：\textit{clingo-5.4.0}
   \item 制限時間 : 1時間/問
   \item 実験環境 : Mac mini (CPU : Intel Core i7 3.2GHz, メモリー : 64GB) 
@@ -251,7 +367,37 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CB-CTT に対する destroy 演算子}
+  %\begin{itemize}
+  %\item CB-CTT に関する既存研究[Kieferほか'16]を参考に，
+    %4種類のdestroy演算を実装した．
+  %\end{itemize}
 
+  \begin{block}{}
+    \begin{enumerate}
+    \item \structure{\bf Random $N$ (R-$N$)}
+      \begin{itemize}
+      \item 暫定解から変数の値割当ての N\%をランダムに選んで取り消す.
+      \end{itemize}
+    \item \structure{\bf Day-Period (DP)}
+      \begin{itemize}
+      \item 曜日 D と時限 P をランダムに 1 組選び，
+      暫定解から D 曜 P 限に関する変数の値割当てをすべて取り消す.
+      %\item 教室に関するソフト制約のペナルティを減らすことが狙い．
+   \end{itemize}
+  \item \structure{\bf Day-Room (DR)}
+   \begin{itemize}
+   \item 曜日 D と教室 R をランダムに 1 組選び，
+   暫定解から D 曜日の R 教室に関する変数の値割当てをすべて取り消す.
+   %\item 時限に関するソフト制約のペナルティを減らすことが狙い．
+   \end{itemize}
+  \item \structure{\bf Swap-Room $N$ (SR-$N$)}
+   \begin{itemize}
+    \item Random $N$ と同様に，
+    暫定解から変数の値割当ての $N$ \%をランダムに選んで取り消す．
+    ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
+   \end{itemize}
+  \end{enumerate}
+  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{実験結果: 得られた最適値と最良値}
@@ -291,8 +437,8 @@
       \item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を
         示した．
       \item 既知の最良値との比の平均値について，
-      既存ASPが +437.81\% であったのに対し，
-      提案手法では +26.27\% に抑えられた．
+      既存ASPが +437\% であったのに対し，
+      提案手法では +26\% に抑えられた．
       \item \textsf{comp09}について，\alert{\bf 既知の最良値を更新}することに成功した．
       \end{itemize}
     \end{itemize}
@@ -323,39 +469,7 @@
 % 補助スライド
 \appendix
 \backupbegin
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{destroy 演算}
-  %\begin{itemize}
-  %\item CB-CTT に関する既存研究[Kieferほか'16]を参考に，
-    %4種類のdestroy演算を実装した．
-  %\end{itemize}
-
-  \begin{block}{}
-    \begin{enumerate}
-    \item \structure{\bf random $N$}
-      \begin{itemize}
-      \item 暫定解から値割当ての$N$\%をランダムに取り消す．
-      \end{itemize}
-    \item \structure{\bf day-period}
-      \begin{itemize}
-      \item ランダムに曜日($D$)と時限($P$)を選び，
-        暫定解から$D$曜$P$限の値割当てをすべて取り消す．
-      %\item 教室に関するソフト制約のペナルティを減らすことが狙い．
-   \end{itemize}
-  \item \structure{\bf day-room}
-   \begin{itemize}
-   \item ランダムに曜日($D$)と教室($R$)を選び，
-     暫定解から$D$曜日の$R$教室の値割当てをすべて取り消す．
-   %\item 時限に関するソフト制約のペナルティを減らすことが狙い．
-   \end{itemize}
-  \item \alert{\bf swap-room $N$}
-   \begin{itemize}
-    \item 暫定解からランダムに$N$\%の値割り当てを選び，
-    曜日と時限はそのままで，割り当てられている教室の情報を取り消す．
-   \end{itemize}
-  \end{enumerate}
-  \end{block}
- \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{LNS (Large Neighborhood Search)}
   \begin{block}{LNS のアルゴリズム~[Pisinger 2010]}
