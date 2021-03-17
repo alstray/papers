@@ -157,23 +157,23 @@
   \begin{block}{\small LNPS のアルゴリズム}
     \begin{enumerate}
       \compress
-      \item 初期解を $x$ と置き，暫定解 $x* := x$ とする．
-      \item 以下の destroy と re-searchで $x$ から得られた解を $x_t$ と置く．
+      \item 初期解を $x$ と置き，暫定解 $x^{*} := x$ とする．
+      \item 以下の destroy と re-searchで $x$ から得られた解を $x^{t}$ と置く．
       \begin{itemize}
         \compress
         \item \alert{\bf destroy} は $x$ から値割当ての一部を\structure{取り消し} $x'$ とする．
         \item re-search は $x'$ の値割当てをなるべく維持したまま再探索する．
       \end{itemize}
-      \item 受理条件を満たしていたら $x := x_t$ とする．
+      \item 受理条件を満たしていたら $x := x^{t}$ とする．
       \begin{itemize}
-        \item 例えば「$x_t$ が $x$ より改善された解なら」という更新条件を用いる．
+        \item 例えば「$x^{t}$ が $x$ より改善された解なら」という更新条件を用いる．
       \end{itemize}
-      \item $x_t$ が暫定解 $x*$ より改善された解なら，$x* := x_t$ とする．
+      \item $x^{t}$ が暫定解 $x^{*}$ より改善された解なら，$x^{*} := x^{t}$ とする．
       \item 終了条件が満たされるまで，2〜4 を繰り返す．
       \begin{itemize}
         \item 繰り返し回数や制限時間などを終了条件に用いる．
       \end{itemize}
-      \item 暫定解 $x*$ を返す．
+      \item 暫定解 $x^{*}$ を返す．
     \end{enumerate}
   \end{block}
   % \begin{itemize}
@@ -477,24 +477,24 @@ CB-CTT に関する既存研究~[Kieferほか'16]を参考に，
   \begin{block}{LNS のアルゴリズム~[Pisinger 2010]}
     \begin{enumerate}
       \compress
-      \item 初期解を $x$ と置き，最良解 $x* := x$ とする．
-      \item 以下のdestroy と repairで $x$ から得られた解を $x_t$ と置く．
+      \item 初期解を $x$ と置き，最良解 $x^{*} := x$ とする．
+      \item 以下のdestroy と repairで $x$ から得られた解を $x^{t}$ と置く．
       \begin{itemize}
         \compress
 %        \item destroy は $x$ から一定の割合でランダムに値割当てを選択し $x'$ とする．
       \item destroy は $x$ から値割当ての一部を取り消し $x'$ とする．
       \item repair は $x'$ の\alert{値割当てを変化させずに解を再構築}する．
       \end{itemize}
-      \item 更新条件を満たしていたら $x := x_t$ とする．
+      \item 更新条件を満たしていたら $x := x^{t}$ とする．
       \begin{itemize}
-        \item 例えば「$x_t$ が $x$ より改善された解なら」という更新条件を用いる．
+        \item 例えば「$x^{t}$ が $x$ より改善された解なら」という更新条件を用いる．
       \end{itemize}
-      \item $x_t$ が最良解 $x*$ より改善された解なら，$x* := x_t$ とする．
+      \item $x^{t}$ が最良解 $x^{*}$ より改善された解なら，$x^{*} := x^{t}$ とする．
       \item 終了条件が満たされるまで，2〜4 を繰り返す．
       \begin{itemize}
         \item 例えば繰り返し回数や制限時間などを終了条件に用いる．
       \end{itemize}
-      \item 最良解 $x*$ を返す．
+      \item 最良解 $x^{*}$ を返す．
     \end{enumerate}
   \end{block}
   \begin{itemize}
