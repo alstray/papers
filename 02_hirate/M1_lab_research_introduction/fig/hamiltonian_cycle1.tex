@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+ \node(1)[draw,circle]{$1$};
+ \node[right of=1,node distance=1.5cm](2)[draw,circle]{$2$};
+ \node[right of=2,node distance=1.5cm](3)[draw,circle]{$3$};
+ \node[below of=1,node distance=1.5cm](4)[draw,circle]{$4$};
+ \node[right of=4,node distance=1.5cm](5)[draw,circle]{$5$};
+ \node[right of=5,node distance=1.5cm](6)[draw,circle]{$6$};
+ \node[below of=4,node distance=1.5cm](7)[draw,circle]{$7$};
+ \node[right of=7,node distance=1.5cm](8)[draw,circle]{$8$};
+ \node[right of=8,node distance=1.5cm](9)[draw,circle]{$9$};
+
+ \draw[red,ultra thick] (1) -- (2);
+ \draw[red,ultra thick] (2) -- (3);
+ \draw[red,ultra thick] (4) -- (5);
+ \draw (5) -- (6);
+ \draw[red,ultra thick] (7) -- (8);
+ \draw[red,ultra thick] (8) -- (9);
+
+ \draw (1) -- (4);
+ \draw[red,ultra thick] (4) -- (7);
+ \draw (2) -- (5);
+ \draw (5) -- (8);
+ \draw[red,ultra thick] (3) -- (6);
+ \draw[red,ultra thick] (6) -- (9);
+
+ \draw[red,ultra thick] (1) -- (5);
+ \draw (2) -- (6);
+ \draw (5) -- (9);
+\end{tikzpicture}

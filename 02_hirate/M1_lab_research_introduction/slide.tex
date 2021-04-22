@@ -1,0 +1,559 @@
+\documentclass[dvipdfmx,10pt]{beamer}
+
+\usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{listings,jlisting}%ソースコード貼り付けのため
+\usepackage{tikz}
+\usepackage{otf}
+\usepackage{multicol}%指定した区間で文章を２段組みにする(tikzについてならfigureで行けたかも)
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}} %% しおりが文字化けしないように
+\setbeamertemplate{navigation symbols}{} %% 右下のアイコンを消す
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+
+\usetheme{Warsaw}
+%\usetheme{Darmstadt}
+
+\setbeamertemplate{footline}[frame number] %% スライド下のバーを消してフレーム番号を表示
+\useoutertheme{shadow}                 %% 箱に影をつける
+\usefonttheme{professionalfonts}       %% 数式の文字を通常の LaTeX と同じにする
+
+\usepackage{graphicx,xcolor}%%文字の色
+%\usepackage{bm}
+\input{macro} % 自分用のマクロ
+
+\title{解集合プログラミングを用いた\\ハミルトン閉路問題の解法に関する研究}
+\author{252105160 平手 貴大}
+%\institute{番原研究室}
+\date{番原研究室研究紹介\\2021年4月23日}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{\maketitle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{ハミルトン閉路問題(Hamiltonian Cycle Problem)}
+  \begin{itemize}
+  \item \alert{ハミルトン閉路問題}
+    \begin{itemize}
+    \item 与えられたグラフの全頂点をちょうど一度ずつ
+      通る閉路が存在するかどうかを判定する問題．
+    \item 始点と終点が一致するという閉路の条件を
+      取り除けば，ハミルトン路問題となる．
+    \end{itemize}
+  \item \alert{最短ハミルトン閉路問題}
+    \begin{itemize}
+    \item グラフの辺に距離が付随しているときに
+      最短距離のハミルトン閉路を求める問題．
+    \end{itemize}
+  \item \alert{コスト制約付きハミルトン閉路問題}
+    \begin{itemize}
+    \item ハミルトン閉路問題に，距離の総和が所与の閾値以下
+      (または以上)であることを制約条件として付加した問題．
+    %% \item この問題に対する解の全列挙については，
+    %%   現在のところ効率の良い手法は開発されていない．
+    \end{itemize}
+  \end{itemize}
+  \begin{alertblock}{}
+    本研究では，無向グラフ上のハミルトン閉路問題
+    およびその関連問題を対象とする．    
+  \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{コスト制約付きハミルトン路問題[Knuth2015]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{figure}[tb]
+  \centering
+  \includegraphics[width=0.8\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
+%  \caption{D.~E.~Knuth の教科書にある最短ハミルトン路問題の例}
+  \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}  
+  \item 頂点数は48，辺の数が105，米国本土48州の隣接関係を表現．
+  \item 各辺に付与されている数字は，州都の間の距離(マイル)．
+  \end{itemize}
+  \begin{block}{}
+    WA から ME までの距離の総和がある閾値以下である
+    ハミルトン路を求める問題．
+  \end{block}
+  \begin{itemize}
+  \item WA から ME までのハミルトン路は 6,876,928 通り
+    あり，最短ハミルトン路は 11698 マイル．
+  \item 閾値を最短距離の 10\%増 (12,868 マイル) とした場合，
+    解の総数は 16180 個．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
+  \begin{itemize}
+  \item \alert{ASP 言語}は，一階論理に基づく知識表現言語の一種．
+  \item \alert{ASP システム}は，論理プログラムから
+    安定モデル意味論に基づく解集合を計算するシステム．
+  \item 近年，SAT 技術を応用した高速 ASP システムが開発され，
+    スケジューリング，プランニング，システム生物学，システム検証，
+    制約充足問題，制約最適化問題など様々な分野への実用的応用が急速に拡大している．
+  \end{itemize}
+
+  \begin{alertblock}{ハミルトン閉路問題に ASP を用いる利点}
+    \begin{itemize}
+    \item ASP 言語は表現力が高く，記号制約の記述が容易．
+    \item 組み込みの \#edge 宣言を使うことにより，有向グラフの非閉路性を簡潔に記述可能．
+    \item 高速な解列挙が可能．
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{研究目的}
+  \begin{alertblock}{研究目的}
+  ASP 技術を活用し，大規模なハミルトン閉路問題を
+    効率よく解くソルバーの実現を目指す．
+  \end{alertblock}
+  \begin{block}{研究内容}
+    \begin{enumerate}
+    \item \structure{ハミルトン閉路問題を解く3種類の ASP 符号化を考案．}
+      \begin{itemize}
+      \item \textsf{undirected}符号化, \textsf{directed}符号化, \textsf{acyclicity}符号化．
+      \item 最短ハミルトン閉路問題，コスト制約付きハミルトン閉路問題へ自然に拡張可能．
+      \end{itemize}
+    \item \structure{既存のベンチマーク問題集を用いた評価実験．}
+      \begin{itemize}
+      \item ベンチマーク問題は7種類，計517問．
+      \item \alert{ハミルトン閉路問題に対する実験．}
+      \item \alert{コスト制約付きハミルトン路問題(全列挙)に対する実験．}
+      \item 最短ハミルトン閉路問題に対する実験．(本発表では省略)
+      \end{itemize}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{ASP 符号化におけるハミルトン閉路問題の表現}
+  \begin{block}{ハミルトン閉路問題の表現}
+    与えられた無向グラフ$G= (V,E)$上に，以下の2つの制約を満たす
+    部分グラフ$G'= (V,E')$が存在するか判定する問題．
+    \begin{itemize}
+    \item $G'$の各頂点の次数が2．(\alert{次数制約})
+    \item $G'$が連結．(\alert{連結制約})
+    \end{itemize}
+  \end{block}
+  \begin{multicols}{2}
+   \pause
+   \begin{center}
+    \input{fig/hamiltonian_cycle}
+   \end{center}
+   \begin{center}
+   \end{center}
+  \end{multicols}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ASP 符号化におけるハミルトン閉路問題の表現}
+  \begin{block}{ハミルトン閉路問題の表現}
+    与えられた無向グラフ$G= (V,E)$上に，以下の2つの制約を満たす
+    部分グラフ$G'= (V,E')$が存在するか判定する問題．
+    \begin{itemize}
+    \item $G'$の各頂点の次数が2．(\alert{次数制約})
+    \item $G'$が連結．(\alert{連結制約})
+    \end{itemize}
+  \end{block}
+  \begin{multicols}{2}
+   \begin{center}
+    \input{fig/hamiltonian_cycle1}
+   \end{center}
+   \begin{center}
+    \input{fig/hamiltonian_cycle2}
+   \end{center}
+  \end{multicols}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{提案する ASP 符号化}
+  \begin{block}{ハミルトン閉路問題の表現}
+    与えられた無向グラフ$G= (V,E)$上に，以下の2つの制約を満たす
+    部分グラフ$G'= (V,E')$が存在するか判定する問題．
+    \begin{itemize}
+    \item $G'$の各頂点の次数が2．(\alert{次数制約})
+    \item $G'$が連結．(\alert{連結制約})
+    \end{itemize}
+  \end{block}
+  \begin{itemize}
+  \item \alert{\textsf{undirected}符号化}
+    \begin{itemize}
+    \item ハミルトン閉路問題の次数制約と連結制約を簡潔に表現した符号化．
+    \end{itemize}
+  \item \alert{\textsf{directed}符号化}
+    \begin{itemize}
+    \item \textsf{undirected}符号化をベースに，与えられた無向グラフを
+      有向グラフ化して解く符号化．
+    \end{itemize}
+  \item \alert{\textsf{acyclicity}符号化}
+    \begin{itemize}
+    \item \textsf{directed}符号化をベースに，連結制約に代わり
+      部分閉路を禁止する制約を使用．
+      \item \#edge を用いて，部分閉路を禁止する制約を簡潔に表現．
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{実験概要}
+  提案した ASP 符号化の性能を評価するために実験を行った．
+  \begin{itemize}
+  \item \structure{比較する ASP 符号化}:
+    \begin{itemize}
+    \item \textsf{undirected}符号化
+    \item \textsf{directed}符号化
+    \item \textsf{acyclicity}符号化
+    \end{itemize}
+  \item \structure{対象とする問題}:
+    \begin{enumerate}
+    \item ハミルトン閉路問題: 6種類 計494問
+      \begin{itemize}
+      \item \structure{制限時間}: 30分/問
+      %% \item \structure{オプション}: \textit{trendy}
+      %% \item \structure{ベンチマーク問題}:\\
+        %% \textsf{color04}，
+        %% \textsf{complete}，
+        %% \textsf{knight}，
+        %% \textsf{tsplib}，
+        %% \textsf{grid}，
+        %% \textsf{random}
+      \end{itemize}
+    \item コスト制約付きハミルトン路問題(解の全列挙): 計10問
+      \begin{itemize}
+      \item \structure{制限時間}: 3時間/問
+      %% \item \structure{オプション}: \textit{crafty}
+      %% \item \structure{ベンチマーク問題}: \textsf{usmap} (閾値: 10問)
+      \end{itemize}
+    \end{enumerate}
+  \item \structure{ASP システム}: \textit{clingo-5.4.0}
+  \item \structure{実験環境}: Mac mini Intel Corei7 3.2GHz, 64GBメモリ
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{ハミルトン閉路問題の実験結果(解けた問題数)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/cyclesat_table.tex}%label{sat_table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item 1列目は問題の種類，２列目は問題数，
+  3列目以降は各符号化で解けた問題数を\textsf{SAT}，\textsf{UNSAT}，
+  \textsf{SAT+UNSAT} (\textsf{S+U}) 毎に示す．
+\item \textsf{undirected} と \textsf{acyclicity} は，
+  494問中490問を解き，\textsf{directed} よりも多くの問題を解いた．
+%% \item \textsf{SAT}に限定すると，\textsf{undirected} が，最も多くの問題を解いた．
+%% \item \textsf{UNSAT}に限定すると，\textsf{directed} と \textsf{acyclicity} 符号化が，
+%%   \textsf{undirected} より1問多く解いた．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{ハミルトン閉路問題の実験結果(カクタスプロット)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tb]
+\begin{center}
+  \includegraphics[width=0.7\linewidth]{fig/cactus.png}
+%\caption{ハミルトン閉路問題: カクタスプロット (\textsf{SAT+UNSAT})}
+\label{cactus}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item \textsf{acyclicity}符号化は，
+  解けた問題数が同じ\textsf{undirected}符号化と比較して，
+  より高速に問題を解いていることが確認できた．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{コスト制約付きハミルトン路問題の実験結果(CPU時間)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{block}{}
+  \centering
+  解の全列挙に要した CPU 時間．
+\end{block}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+  \def\@captype{table}
+  \begin{minipage}[c]{.48\textwidth}
+    \begin{center}
+      \scalebox{0.7}[0.7]{
+        \input{fig/cost_table.tex}
+      }
+    \end{center}
+
+  \end{minipage}
+  %
+  \hfill
+  %
+  \begin{minipage}[c]{.48\textwidth}
+    \raggedleft
+    \includegraphics[width=0.7\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
+  \end{minipage}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+\begin{itemize}
+\item 1列目はコスト制約の閾値と最短距離からの倍率，2列目は解の総数，
+  3列目以降は各符号化が解くのに要したCPU時間を示す．
+\item \textsf{acyclicity}符号化が，より多くの問題を
+  高速に解き，平均CPU時間も最も短かった．
+\end{itemize}
+    
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{まとめ}
+    \begin{enumerate}
+    \item \structure{ハミルトン閉路問題を解く3種類の ASP 符号化を考案．}
+      \begin{itemize}
+      \item ASP の高い表現力を生かし，ハミルトン閉路問題を簡潔に記述できることが確認できた．
+      \end{itemize}
+    \item \structure{既存のベンチマーク問題集を用いた評価実験．}
+      \begin{itemize}
+      \item ハミルトン閉路問題とコスト制約付きハミルトン路問題について，
+        \textsf{acyclicity}符号化の優位性が確認できた．
+      \item 最短ハミルトン閉路問題については，
+        \textsf{undirected}符号化の優位性を確認した．(本発表では省略)
+      \end{itemize}
+    \end{enumerate}
+  \begin{alertblock}{今後の課題}
+    \begin{itemize}
+    \item ハミルトン閉路問題の連結制約を緩和し，
+      部分巡回路をインクリメンタルに
+      除去する手法[Soh2014]の実装．
+    \item 巡回セールスマン問題への拡張．
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{}
+  補足
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{最短ハミルトン閉路問題の実験}
+  \begin{itemize}
+  \item \structure{比較する ASP 符号化}:
+    \begin{itemize}
+    \item \textsf{undirected}符号化
+    \item \textsf{directed}符号化
+    \item \textsf{acyclicity}符号化
+    \end{itemize}
+  \item \structure{ベンチマーク問題}: 2種類 計13問
+  \item \structure{制限時間}: 3時間/問
+%  \item \structure{オプション}: \textit{trendy}
+  \item \structure{ASP システム}: \textit{clingo-5.4.0}
+  \item \structure{実験環境}: Mac mini Intel Corei7 3.2GHz, 64GBメモリ
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{最短ハミルトン閉路問題の実験結果(最適値と最良値)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/min_table_tr.tex}%\label{min_table_tr}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item 1列目は問題，2列目は頂点数，3列目は辺の数，
+  4列目以降は各符号化が求めた最良値(または最適値)を示す．
+\item 最適値と最良値の数は，
+\textsf{undirected}符号化が10問でもっとも多く，
+その優位性が確認できた．
+\end{itemize}
+    
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ハミルトン閉路問題の実験考察}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/cyclesat_table2.tex}%label{sat_table2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/difins_table.tex}%label{difins_table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item \textsf{grid12}については，変数の数において，
+  \textsf{acyclicity}符号化が少ない値を示していたため，
+  要するCPUtimeを短縮できたと考える．
+\item \textsf{3-FullIns\_5}については，まだ考察中．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマーク詳細(1/2)}
+\begin{itemize}
+\item \textsf{color04} (127問)\\
+  グラフ彩色問題の国際競技会
+  COLOR02/03/04~\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
+  で使用された問題インスタンス．
+\item \textsf{complete} (15問)\\
+  SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
+  完全グラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{knight} (11問)\\
+%  \cite{DBLP:conf/sat/EenS03}で用いられた
+  $N\times N$の騎士巡回問題(Knight's Tour)のインスタンス．\\
+  $N=8,12,20,30,40,50,60,70,80,90,100$の11通り．
+\item \textsf{tsplib} (9問)\\
+  巡回セールスマン問題のポータルサイトTSPLIBに公開されている
+  インスタンス\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}．
+\end{itemize}  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマーク詳細(2/2)}
+\begin{itemize}
+\item \textsf{grid} (12問)\\
+  $N$次の正方グリッドグラフのインスタンス($6\leq N\leq 17$)．
+\item \textsf{random} (320問)\\
+  SATソルバーを用いた既存研究~\cite{soh14:jelia2014}で提供された
+  ランダムグラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{usmap} (1問)\\
+  %図~\ref{fig:USmap}に示されたグラフ．
+  D.~E~.Knuth の教科書
+  The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
+  に記載されている最短ハミルトン路問題の例．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマークサイズ}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/bench_size.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ASP を用いたハミルトン閉路問題の解法}
+%%%%%%%%
+\begin{figure}[h]
+  \centering
+  \thicklines
+  \setlength{\unitlength}{1.0pt}
+  \small\footnotesize\scriptsize
+  \begin{picture}(280,57)(4,-10)
+    \put(  0, 20){\dashbox(50,24){\shortstack{HCP問題\\インスタンス}}}
+    \put( 60, 20){\framebox(50,24){変換器}}
+    \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
+    \put(120,-10){\dashbox(50,24){\shortstack{ASP符号化\\\tiny{(論理プログラム)}}}}
+    \put(180, 20){\framebox(50,24){ASPシステム}}
+    \put(240, 20){\dashbox(50,24){\shortstack{HCP問題\\の解}}}
+    \put( 50, 32){\vector(1,0){10}}
+    \put(110, 32){\vector(1,0){10}}
+    \put(170, 32){\vector(1,0){10}}
+    \put(230, 32){\vector(1,0){10}}
+    \put(170, +2){\line(1,0){4}}
+    \put(174, +2){\line(0,1){30}}
+  \end{picture}  
+%\caption{ASP を用いたハミルトン閉路問題(HCP)の解法}
+\label{fig:arch}
+\end{figure}
+%%%%
+
+\begin{itemize}
+\item 与えられたハミルトン閉路問題は ASP ファクトに変換．
+\item ASP ファクトはハミルトン閉路問題を解く ASP 符号化と結合．
+\item ASP システムによって解が計算される．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{グラフの ASP ファクト}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+\begin{center}
+\input{fig/graph_example.tex}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/graph_example.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textsf{undirected} 符号化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/hamilton1.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textsf{directed} 符号化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/hamilton2.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{\textsf{acyclicity} 符号化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[]{code/hamilton3.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{符号化の拡張}
+  
+  \begin{itemize}
+  \item 最短ハミルトン閉路問題への拡張
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/obj_minimize.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+    \begin{itemize}
+    \item 目的関数を追加．
+    \item ハミルトン閉路上の辺に付与された距離の総和を最小化．
+    \end{itemize}
+  \item コスト制約付きハミルトン閉路問題への拡張
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/cost_constraint.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+    \begin{itemize}
+    \item コスト制約を追加．
+    \item ハミルトン閉路上の辺の距離の総和が閾値以下である．
+    \end{itemize}
+  \item 有向グラフ化における距離の扱い．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[numbers=none]{code/cost_both.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+    \begin{itemize}
+    \item 各辺$X–Y$の距離を弧$X \rightarrow Y$，$Y \rightarrow X$に付与．
+    \item 無向グラフを有向グラフ化する\textsf{acyclicity}と\textsf{directed}．
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{参考文献}
+\bibliographystyle{jplain} % 参考文献スタイル
+\bibliography{aisat,bachelor}    % 参考文献リスト
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
