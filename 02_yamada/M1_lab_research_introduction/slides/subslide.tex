@@ -1,0 +1,235 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+\begin{frame}{~}
+ \centering
+ - 補足用 -
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASP符号化のルール数
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{ASP符号化の基礎化後のルール数}
+  \begin{itemize}
+    \item 基礎化とは，変数を含む述語論理を変数を含まない命題論理へと変換することである．
+    \item 遷移制約に関するルール数のみに着目する．
+    \item $|T|$を遷移回数$t$, $|C|$を色数$k$, $|V|$をグラフ$G$の頂点数とする.
+  \end{itemize}
+
+  \begin{table}[t]
+    \centering
+    \input{table/rule.tex}
+  \end{table}
+
+  \begin{itemize}
+    \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の場合の数・色の選び方の場合の数・グラフの頂点の選び方の場合の数の乗算となる．
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果: 到達不能インスタンスにおけるCPU時間}
+
+  \begin{table}[t]
+    \centering
+    \input{table/result_uncon}  
+  \end{table}
+
+  \begin{itemize}
+    \item unchangedがすべてのベンチマーク問題において優位性を示した．
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果: 判定不能インスタンスにおける最大遷移回数}
+  
+  \begin{table}[t]
+    \centering
+    \input{table/result_uk}
+  \end{table}
+
+  \begin{itemize}
+    \item グラフと色数ごとに分類している．
+    \item \structure{到達不能が確かめられた遷移回数$t$の最大値の平均値}を指標としている．
+    \item unchangedが優位性を示した．
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{実験結果: 考察}
+
+  \begin{itemize}
+    \item 結果によらず，\structure{unchanged$>$changed$>$originの順}によい性能を示した．
+    \item 要因として，\alert{ルール数の差}が考えられる．
+    \begin{itemize}
+      \item \textit{clingo}では与えられたASP言語を充足可能性判定問題へと変換して解く．
+      \item ルール数を少なくすることは，節数を少なくすることにつながる．
+      \item 節数が多い時，単位伝播やヒューリスティックによる変数選択時のオーバーヘッドが増加する．
+      \item ルール数を抑えることでオーバーヘッドの減少につながり，優位性を示したと考えられる．
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% k彩色遷移問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{$k$彩色遷移問題の性質}
+
+  \begin{itemize}
+    \item 色数$k$によって問題の性質が異なることが知られている．
+    \begin{itemize}
+      \item \structure{$k=2$}のとき，グラフGは2部グラフであり\structure{明らかに到達不能}~[Cereceda+ '08]．
+      \item \structure{$k=3$}のとき，\structure{クラスP}に属する~[Cereceda+ '08]．
+      \item \structure{$k \ge 4$}のとき，一般に\structure{\textbf{PSPACE完全}}となる~[Bonsma+ '09]．
+    \end{itemize}
+
+    \item グラフの形に制限を加えることにより，多項式時間で解決可能となるものが存在することがわかっている~[Bonsma+ '09]．
+    \begin{itemize}
+      \item 平面グラフであり，かつ$k \ge 7$のとき．
+      \item 2部平面グラフであり，かつ$k \ge 5$のとき．
+    \end{itemize}
+
+  \end{itemize}
+
+\end{frame}
+
+\begin{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PSPACE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{クラスPSPACE}
+  \begin{itemize}
+    \item 計算量のクラスの一つ.
+    \item 決定性チューリングマシンに多項式量のメモリを与えることで解決できる問題が属する.
+    \item 指数時間で解くことが可能．
+    \item P$\subseteq$NP$\subseteq$PSPACEであることはわかっている.
+    \begin{itemize}
+      \item ただし, 真に包含するかは未解決.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{遷移回数$t$の導入}
+
+  \begin{itemize}
+    \item グラフ点彩色問題とその二つの実行可能解$\alpha$，$\beta$に加え， 
+          \structure{遷移回数$t$}を与える．
+    \begin{itemize}
+      \item $t$回の遷移で$\alpha$から$\beta$へ遷移可能かを判定する. 
+    \end{itemize}
+    \item $t$を遷移回数の上限値まで大きくしていくことで，
+          最終的に経路の存在について判定可能である．
+    \begin{itemize}
+      \item 途中で経路が存在すれば，本来の問題でも経路が存在する．
+      \item すべての$t$において経路が存在しないのであれば，本来の問題でも経路が存在しない．
+    \end{itemize}
+    \item $t$の上限値は\structure{グラフ点彩色問題の実行可能解の総数$-1$}．
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験環境
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{グラフの調査実験}
+  全解列挙可能なグラフと色数の組合せを得るため，以下の調査を行った．
+  \begin{itemize}
+    \item \structure{使用するグラフ}: 全44個
+    \begin{itemize}
+      \item \textit{COLOR04}
+      で公開されている，グラフ点彩色問題のグラフ．
+      \item 選択基準は\structure{彩色数}が判明しているもの~[Tamura+ '09].
+    \end{itemize}
+    \item \structure{色数}: 各グラフの彩色数
+
+    \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{crafty, tweety}
+    \item \structure{制限時間}: 3600秒/問
+    \item \structure{環境}: Mac mini, 3.2GHz 6コア Intel Core i7, 64GB メモリ
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% グラフ点彩色問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{グラフ点彩色問題}
+    
+  \begin{block}{グラフ点彩色問題の定義}
+    与えられたグラフ$G=(V, E)$と色数$k$に対して，以下の制約を満たす解が存在するかを判定する問題．
+    \begin{itemize}
+      \item 各頂点は一つの色で塗られる．
+      \item $(u, v) \in E$である$u, v \in V$について，$u$と$v$は異なる色で塗られる．
+    \end{itemize}
+  \end{block}
+  
+  \begin{exampleblock}{グラフ点彩色問題の例($k=4$)}
+    \begin{columns}
+      \begin{column}{1.0\textwidth}
+        \centering
+        \input{tikz/graph0.tex}
+      \end{column}
+    \end{columns}
+  \end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化コード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{origin符号化}
+  \begin{exampleblock}{}\centering
+     \lstinputlisting[numbers=left,%
+     basicstyle=\ttfamily\tiny]{code/vartex_recoloring1.lp}
+   \end{exampleblock}
+
+   \begin{itemize}
+     \item 遷移制約の直観的な意味は，
+    「各遷移で，任意の二つの頂点において双方の色が変化することはない」となる．
+   \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化コード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{changed符号化}
+  \begin{exampleblock}{}\centering
+     \lstinputlisting[numbers=left,%
+     basicstyle=\ttfamily\tiny]{code/vartex_recoloring2.lp}
+   \end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 符号化コード
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}\frametitle{unchanged符号化}
+  \begin{exampleblock}{}\centering
+     \lstinputlisting[numbers=left,%
+     basicstyle=\ttfamily\tiny]{code/vartex_recoloring3.lp}
+   \end{exampleblock}
+\end{frame}
+
+\backupend

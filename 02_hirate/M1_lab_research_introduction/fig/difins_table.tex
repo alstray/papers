@@ -1,0 +1,14 @@
+\begin{table}[t]\tiny
+%  \caption{ハミルトン閉路問題: 内訳考察}
+  \label{difins_table}
+  \centering  
+  %\tabcolsep = 0.8mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{lrr||rrr||rrr}
+    問題 & 頂点数 & 辺の数 & \multicolumn{3}{c ||}{\textsf{undirected}} & \multicolumn{3}{c}{\textsf{acyclicity}}\\
+    & & & variables & constraints & result & variables & constraints & result\\
+    \hline
+    \textsf{grid12} & 169 & 312 & 2079 & 2485 & UNKN & 962 & 2036 & \alert{UNSAT}\\
+    \textsf{3-FullIns\_5} & 2030 & 33751 & 105280 & 141029 & \alert{SAT} & 71562 & 8256 & UNKN\\
+  \end{tabular}
+\end{table}
