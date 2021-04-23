@@ -1,0 +1,361 @@
+\documentclass [dvipdfmx,11pt]{beamer}
+\usepackage{bxdpx-beamer}
+\usepackage{pxjahyper}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{minijs}
+\usepackage{tikz}
+\usepackage{caption}
+%\usepackage{otf}
+%\renewcommand{\kanjifamilydefault}{\gtdefault}
+%%% Beamer
+%\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}
+%\usetheme{Madrid}
+%\usetheme{Copenhagen}
+\usetheme{Warsaw}
+% \renewcommand{\kanjifamilydefault}{\gtdefault}
+\usefonttheme{structurebold}
+%\usefonttheme{professionalfonts}
+\setbeamertemplate{blocks}[shadow=true,rounded]
+% \setbeamercolor{structure}{fg=blue!60!black}
+\setbeamercolor{structure}{fg=blue!50!black}
+\setbeamercolor{item projected}{fg=black,bg=blue!20!white}
+%\setbeamercolor{alerted text}{fg=red!80!black}
+\setbeamercolor{alerted text}{fg=red!70!black}
+\setbeamertemplate{navigation symbols}{}
+\useoutertheme[subsection=false]{miniframes}
+\setbeamertemplate{footline}[frame number]
+%%% Tikz
+\usetikzlibrary{intersections, calc, arrows}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}[circle]
+\setbeamersize{text margin left=1.5em,text margin right=1.5em}
+\setlength{\abovedisplayskip}{0pt} % 上部のマージン
+\setlength{\belowdisplayskip}{0pt} % 下部のマージン
+%
+%
+%
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+            \usebeamerfont{author in head/foot}\insertshortauthor
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+            \usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+            \textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+    \end{beamercolorbox}}%
+    \vskip0pt%
+}
+\makeatletter
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+    \newcounter{framenumberappendix}
+    \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+    \addtocounter{framenumberappendix}{-\value{framenumber}}
+    \addtocounter{framenumber}{\value{framenumberappendix}}
+}
+
+
+%%%%%%%%%%%% my macro %%%%%%%%%%%%%%%%%
+\newcommand{\distinct}{$distinct$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[]{SMTソルバーにおけるdistinct制約の高速化と\\クイーングラフ彩色問題への応用}
+\author{101730135~小菅脩司}
+\institute{番原研究室}
+\date{2021年度番原研究室研究紹介\\2021年4月23日}
+\begin{document}
+\begin{frame} {}
+    \titlepage
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \input{intro}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 背景理論付きSAT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{背景理論付きSAT {\large (Satisfiability Modulo Theories; SMT)}}
+  \begin{alertblock}{}
+    \alert{\bf SMT} は等号や算術，配列やリスト，ビットベクターなど様々な背景理論が
+    扱えるように，SAT を拡張・発展させた技術である．
+  \end{alertblock}
+  \bigskip
+  \begin{itemize}
+  \item SMT の特長は，背景理論を表現能力の高い述語論理で記述できるため，
+    問題を簡潔に記述できる点である．
+  \item 近年，Z3ソルバー (Microsoft Research) などの高速 SMT ソルバー
+    が開発され，プログラム検証，定理証明，制約充足問題など，様々な分野
+    への応用が急速に拡大している．
+  \item 一方で，\alert{\bf 制約充足問題}に対する SMT ソルバーの求解性
+    能は，SAT 型制約ソルバーと比べて劣るとの報告[Soh+2017]もあり，
+    改良の余地が残っている．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \distinct 制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{{\distinct}制約と制約充足問題}
+  \begin{alertblock}{}
+    \bm{$$distinct(x_{1},x_{2},\ldots, x_{n})$$}
+    {\distinct}制約は，整数上の変数$x_{i}$が互いに異なることを表す制約
+    である．
+  \end{alertblock}
+  \begin{itemize}
+  \item この制約は，
+    $$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$
+    を意味する．
+  \item {\distinct}制約は，時間割問題，グラフ彩色問題，組合せデザイン
+    など様々な制約充足問題に現れる．
+  \item そのような問題に対し，{\distinct}制約を効率良く解くことは重要
+    な研究課題である．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% クイーングラフ彩色問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{{\distinct}制約が現れる制約充足問題の例}
+  \begin{block}{クイーングラフ彩色問題}
+    $N$個ずつの$N$個のグループからなるクイーン (計$N^2$個) を，
+    $N\times N$のチェス盤に，同じグループのクイーン同士が互いに取られ
+    ないように配置する問題
+  \end{block}
+  \input{tikz/queen_graph}
+  \begin{itemize}
+  \item この問題は{\distinct}制約のみを用いて記述できる．
+  \item Knuthの教科書 The Art of Computer Programming でも
+    取り上げられている．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 研究概要
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{研究概要}
+  \begin{alertblock}{研究目的}
+    クイーングラフ彩色問題を題材とし，
+    SATの手法を参考に，
+    SMT の{\distinct}制約を
+    高速化するための様々な方法を実装し，比較評価する．
+  \end{alertblock}
+   %
+  \begin{block}{研究内容}
+    \begin{enumerate}
+    \item \structure{クイーングラフ彩色問題に対し，4種類のSMT符号化を実装}
+      \begin{itemize}
+      \item \alert{\bf 色変数モデル (COL)}
+      \item \alert{\bf 位置変数モデル (POS)}
+      \item 0-1変数モデル (PB)
+      \item ハイブリッドモデル (COL+PB, POS+PB)
+      \end{itemize}
+    \item \structure{SATの手法を参考に，\bm{\distinct}制約の高速化手法をSMTで実装}
+      \begin{itemize}
+      \item \alert{\bf 鳩の巣原理を用いたヒント制約 (H1)}
+      \item at-least-one 制約を用いたヒント制約 (H2)
+      \item {\distinct}制約の擬似ブール符号化 (O1, O2)
+      \end{itemize}
+    \item \structure{クイーングラフ彩色問題($5\leq N\leq 13$)を用いた評価実験}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 色変数モデルと位置変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{色変数モデル(COL)と位置変数モデル(POS)}
+
+  \begin{itemize}
+  \item \structure{色変数モデル(COL)}は，クイーンの色を整数変数とした
+    定式化
+  \item \structure{位置変数モデル(POS)}は，各行に配置されているクイー
+    ンの列番号を整数変数とした定式化
+  \end{itemize}
+  \begin{center}
+    \scalebox{0.7}{\input{tikz/queen_graph_pos}}
+  \end{center}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 位置変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{位置変数モデル(POS)}
+  $N$次クイーングラフ彩色問題に対して，集合$\bm{N}$を
+  次のように定義する．
+\begin{eqnarray*}
+  \bm{N} &=& \{0,1,\ldots,N-1\}
+\end{eqnarray*}
+\vskip -0.5em
+\begin{itemize}
+\item $\bm{N}$は，行番号$i$, 列番号$j$, クイーンの色$k$の取り得る値の集合
+% \item $\bm{U}$は，$i+j$の取り得る値の集合，右上がりの対角線に対応
+% \item $\bm{D}$は，$i-j$の取り得る値の集合，右下がりの対角線に対応
+\end{itemize}
+\begin{exampleblock}{$N$次クイーングラフ彩色問題の定式化}
+  \[
+    \begin{array}{lr}
+      y_{ik}\in\bm{N} & (i,k\in\bm{N})\\
+      distinct~\{y_{ik} \mid k\in\bm{N}\} & (i\in\bm{N})\\
+      distinct~\{y_{ik} \mid i\in\bm{N}\} & (k\in\bm{N})\\
+      distinct~\{y_{ik} + i\mid i\in\bm{N}\} & (k\in\bm{N})\\
+      distinct~\{y_{ik} - i\mid i\in\bm{N}\} & (k\in\bm{N})
+    \end{array}
+  \]  
+\end{exampleblock}
+\begin{itemize}
+\item 整数変数$y_{ik}$ の値は，色$k$のクイーンが行$i$で配置されている
+  列番号を表す．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 位置変数モデル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}
+%   \frametitle{位置変数モデル}
+% %  \input{tikz/queen_graph_pos}
+%   {\small
+%     各行に配置される\alert{クイーンの列番号}を整数変数とした制約モデル
+%   }
+%   {\footnotesize
+%     \setlength{\abovedisplayskip}{1pt} % 上部のマージン
+%     \setlength{\belowdisplayskip}{0pt} % 下部のマージン
+%     \begin{block}{}
+%       \setlength{\itemsep}{0pt}
+%       \setlength{\parskip}{0pt}
+%       \begin{itemize}
+%       \item 色$k$のクイーンが行$i$で配置されている列番号を整数変数$y_{ik} \in \bf N (i, k \in \bf N)$で表す
+%       \item 同一の\alert{行番号}に同色のクイーンが配置されないことより
+%         $$distinct\{y_{ik} | k \in \bf N\} \; (i \in \bf N)$$
+%       \item 同一の\alert{列番号}に同色のクイーンが配置されないことより
+%         $$distinct\{y_{ik} | i \in \bf N\} \; (k \in \bf N)$$
+%       \item \alert{右上がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
+%         $$distinct\{y_{ik}+i | i \in \bf N\} \; (k \in \bf N)$$
+%       \item \alert{右下がりの対角線上}に２つ以上の同色のクイーンが配置されないことより
+%         $$distinct\{y_{ik}-i | i \in \bf N\} \; (k \in \bf N)$$
+%       \end{itemize}
+%     \end{block}
+%   }
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 高速化手法1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{鳩の巣原理を用いたヒント制約(H1)~[田島・田村,2008]}
+  SAT符号化された{\distinct}制約に，鳩の巣原理を用いたヒントを加える
+  と求解速度が向上することが知られている．
+  \begin{block}{}
+    $distinct(x_{1},\ldots,x_{n})$について，$x_i \in
+    \{\ell,\ell+1,\ldots,u\}$であるとき，以下の2つの制約を追加する．
+    \[
+      \bigvee_{i=1}^{n}x_{i}\geq \ell+n-1 \qquad
+      \bigvee_{i=1}^{n}x_{i}\leq u-n+1
+    \]
+  \end{block}
+  \begin{exampleblock}{例}
+    $distinct(x_1, x_2, x_3)$について, $x_i \in \{1,2,3\}$であ
+    るとき，以下の制約が追加される．
+    \vspace{-3mm}
+    \begin{eqnarray*}
+      (x_1\geq 3) \lor (x_2 \geq 3) \lor (x_3 \geq 3)\\
+      (x_1\leq 1) \lor (x_2 \leq 1) \lor (x_3 \leq 1)
+    \end{eqnarray*}
+  \end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験概要2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験概要}
+  実装した SMT符号化および{\distinct}制約の高速化手法を評価するために，
+  以下の実験を行った．
+  \bigskip
+  \begin{itemize}
+  \item \structure{比較に用いた実装 (3種類，11個)}\footnote{%
+    予備実験で性能が悪かったハイブリッドモデル(計6個)は省略}
+    \begin{itemize}
+    \item 色変数モデル(4個): COL, COL+H1, COL+H2, COL+H1+H2
+    \item 0-1変数モデル(3個): PB, PB+O1, PB+O2
+    \item 位置変数モデル(4個): POS, POS+H1, POS+H2, POS+H1+H2
+    \end{itemize}
+  \item \structure{ベンチマーク問題}: $N$次クイーングラフ彩色問題 ($5\leq N\leq 13$)
+  \item \structure{SMTソルバー}: Z3 ver.4.8.9
+  \item \structure{制限時間}: 1問あたり2時間
+  \item \structure{実験環境}: Mac mini, 3.2GHz, 64GB メモリ
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{実験結果: 求解に要したCPU時間 (秒)}
+  \begin{block}{}\centering
+    {\tiny \input{table/result}}
+  \end{block}
+  \begin{itemize}
+  \item {\distinct}制約に対するヒントがない状態で比較すると，
+    位置変数モデル(POS)の性能が良い．
+  \item ヒントの有無で比較すると，ヒント有が$N=11$を解けていることか
+    ら，ヒントは有効に働いていることがわかる．
+  \item ヒントがある状態で見ると，位置変数モデル(POS)が，色変数モデル
+    (COL)より，CPU時間が短い．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% まとめ
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{まとめ}
+  \begin{enumerate}
+  \item \structure{クイーングラフ彩色問題に対し，4種類17個のSMT符号化を実装}
+    \begin{enumerate}
+      \item 色変数モデル (4個)%: 整数変数と{\distinct}制約\label{col}
+      \item 位置変数モデル (4個)%: 整数変数と{\distinct}制約\label{pos}
+      \item 0-1変数モデル (3個)%: 0-1変数と{\distinct}制約のPB符号化\label{zero-one}
+      \item ハイブリッドモデル (6個)%: \ref{col}と\ref{zero-one}，\ref{pos}と\ref{zero-one}
+    \end{enumerate}
+  \item \structure{クイーングラフ彩色問題($5\leq N\leq 13$)を用いた評価実験}
+    \begin{itemize}
+    \item {\distinct}制約にヒントがない場合は，位置変数モデルの性能が良い．
+    \item ヒントがある場合も，位置変数モデルの性能が良い．
+    \item SATで有効なヒントは，SMT でも有効であることが確認できた．
+    \item ハイブリッドモデルは，SMT では性能が悪かった．
+  \end{itemize}
+  \end{enumerate}
+  
+  \begin{alertblock}{今後の課題}
+    \begin{itemize}
+    \item SAT型制約ソルバーとの性能比較 (予備実験は完了)
+    \end{itemize}
+  \end{alertblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{11次クイーングラフ彩色問題の解}
+    実験で求めたN=11の解を示す．
+    \input{tikz/queen_graph_11}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%% 補助スライド
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{supple}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
