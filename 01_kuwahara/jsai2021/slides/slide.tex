@@ -39,8 +39,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{解集合プログラミングに基づく系統的探索と確率的局所探索の統合的
   手法に関する一考察}
-\author{桑原 和也}
-\institute{名古屋大学大学院情報学研究科}
+\author{桑原 和也$^{*1}$~
+田村 直之$^{*2}$~
+番原 睦則$^{*1}$}
+\institute{名古屋大学 大学院情報学研究科$^{*1}$~
+神戸大学 情報基盤センター$^{*2}$}
 \date{2021年度 人工知能学会全国大会\\2021年6月9日}
 \begin{document}
 \maketitle
@@ -76,15 +79,16 @@
     %   \begin{itemize}
     %   \item 探索時に優先的に割り当てる値を指定できる．
     %   \end{itemize}
-    \item インクリメンタル ASP 解法を利用して，メタ戦略を実装できる．
+    \item マルチショット ASP 解法を利用して，メタ戦略を実装できる．
     \end{itemize}
   \end{alertblock}
   \bigskip
   \begin{block}{欠点}
     \begin{itemize}
-    \item 大規模な問題に対して，確率的局所探索と比べて，
+    \item ASP の系統的探索は
+    大規模な問題に対して，
+    確率的局所探索と比べて，
       \structure{解の精度が劣る}場合がある．
-    \item a
     \end{itemize}
   \end{block}
 \end{frame}
@@ -280,6 +284,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CB-CTT に対する destroy 演算子}
 \begin{block}{}
+  \centering{\small CB-CTT に関する既存研究~[Kieferほか'16]を参考に実装}
     \begin{enumerate}
     \item \structure{\bf Random $N$ (R-$N$)}
       \begin{itemize}
@@ -298,22 +303,19 @@
    %\item 時限に関するソフト制約のペナルティを減らすことが狙い．
    \end{itemize}
   \end{enumerate}
-  \begin{itemize}
-   \item \small CB-CTT に関する既存研究~[Kieferほか'16]を参考に実装
-  \end{itemize}
 \end{block}
    
-\begin{block}{新規アイデア}
+\begin{alertblock}{新しく考案した destroy 演算子}
  \begin{enumerate}
  \setcounter{enumi}{3}
-  \item \alert{\bf Swap-Room $N$ (SR-$N$)}
+  \item \structure{\bf Swap-Room $N$ (SR-$N$)}
    \begin{itemize}
     \item \small Random $N$ と同様に，
     暫定解から変数の値割当ての $N$ \%をランダムに選んで取り消す．
     ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
    \end{itemize}
   \end{enumerate}
-\end{block}
+\end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{実験結果: 得られた最適値と最良値}
