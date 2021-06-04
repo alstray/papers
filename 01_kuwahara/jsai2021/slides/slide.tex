@@ -62,7 +62,7 @@
     述語表現を許した宣言的知識表現言語の一種である．
   \item \structure{ASPシステム}は，安定モデル意味論~[Gelfond and Lifschitz '88]
     に基づく解集合を計算するシステムである．
-  \item 近年，SAT ソルバーを応用した高速 ASP システムが実現され，
+  \item 近年，SAT ソルバーを応用した高速 ASP ソルバーが実現され，
     AI 分野の諸問題への実用的応用が急速に拡大している．
   \item ごく最近では，時間割問題などの求解困難な
     \alert{\bf 組合せ最適化問題}に対し，
@@ -70,10 +70,10 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{組合せ最適化問題に対してASPを用いる利点と欠点}
+\begin{frame}{組合せ最適化問題に対してASPを用いる利点と改善点}
   \begin{alertblock}{利点}
     \begin{itemize}
-    \item ASP言語の高い表現力により，記号制約を簡潔に記述できる．
+    \item ASP言語の\alert{\bf 高い表現力}により，記号制約を簡潔に記述できる．
     \item 系統的探索(分枝限定法)なので，\alert{\bf 解の最適性を保証}できる．
     \item 探索ヒューリスティクスを簡単に試せる(\textsf{\#heuristic}文)．
     %   \begin{itemize}
@@ -83,11 +83,9 @@
     \end{itemize}
   \end{alertblock}
   \bigskip
-  \begin{block}{欠点}
+  \begin{block}{改善点}
     \begin{itemize}
-    \item ASP の系統的探索は
-    大規模な問題に対して，
-    確率的局所探索と比べて，
+    \item \structure{大規模な問題}に対して，ASP の系統的探索は確率的局所探索と比べて，
       \structure{解の精度が劣る}場合がある．
     \end{itemize}
   \end{block}
@@ -166,7 +164,7 @@
       \begin{itemize}
         \compress
         \item \alert{\bf destroy} は $x$ から値割当ての一部を\structure{取り消し} $x'$ とする．
-        \item re-search は $x'$ の値割当てをなるべく維持したまま再探索する．
+        \item \alert{\bf re-search} は $x'$ の\structure{値割当てをなるべく維持したまま再探索}する．
       \end{itemize}
       \item 受理条件を満たしていたら $x := x^{t}$ とする．
       \begin{itemize}
@@ -212,11 +210,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASP ソルバー 上での LNPS の実装}
 \centering
-\begin{alertblock}{}\footnotesize\centering
-  提案ソルバーは，
-  任意のASP ファクト形式の問題インスタンスと問題を解く ASP 符号化を入力とし，
-  LNPS アルゴリズムを用いて解を求める．
-\end{alertblock}
+% \begin{alertblock}{}\footnotesize\centering
+%   提案ソルバーは，
+%   任意のASP ファクト形式の問題インスタンスと問題を解く ASP 符号化を入力とし，
+%   LNPS アルゴリズムを用いて解を求める．
+% \end{alertblock}
+\begin{block}{}\centering
+  ASPソルバー{\clingo}の python インターフェースを用いて実装した．
+\end{block}
 \vfill
   \thicklines
   \setlength{\unitlength}{1.28pt}
@@ -244,7 +245,6 @@
 \end{scriptsize}
 \small
   \begin{itemize}
-     \item ASPシステム{\clingo}の python インターフェースを用いて実装した．
   \item \structure{探索ヒューリスティクス(\textsf{\#heuristic}文)} : 
     LNPS の値割当てをなるべく維持したままの再探索 (re-search) を，
     {\clingo}の系統的探索で自然に実装している．
@@ -256,7 +256,7 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験概要}
-  提案するLNPSシステムの有効性を評価するために，実験を行った．
+  提案するLNPSアルゴリズムの有効性を評価するために実験を行った．
   \bigskip
   \begin{itemize}
   \item \structure{CB-CTTベンチマーク問題}
@@ -283,8 +283,8 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{CB-CTT に対する destroy 演算子}
-\begin{block}{}
-  \centering{\small CB-CTT に関する既存研究~[Kieferほか'16]を参考に実装}
+\begin{block}{既存研究~[Kieferほか'16]を参考に実装}
+  \centering
     \begin{enumerate}
     \item \structure{\bf Random $N$ (R-$N$)}
       \begin{itemize}
@@ -335,82 +335,83 @@
   \end{tableB}
   \end{center}
   \begin{itemize}
-      \item 提案手法 LNPS は，既知の最良値との比を +26\% まで大幅に改善
-      \item 1問について，\alert{\bf 既知の最良値を更新}することに成功
+      \item 既知の最良値との比を，+437\% から +26\% に\alert{\bf 大幅に改善}
+      \item \textsf{comp09}について，\alert{\bf 既知の最良値を更新}することに成功
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{追加実験1 (他のベンチマーク問題)}
-他のベンチマークに対しての有効性を評価するために，実験を行った．
-\begin{block}{}
-\begin{itemize}
-  \item \structure{CB-CTTベンチマーク問題}
-    \begin{itemize}
-    \item \alert{競技会で使用されていない問題(全40問)}
-   \item ソフト制約が最も多い問題集 (UD5) を使用
-   \end{itemize}
-  \end{itemize}
-  \end{block}
-  \begin{center}
-  \begin{tableD}
-    \input{tables/excomp_comparison}
-  \end{tableD}
-  \end{center}
+\begin{frame}{追加実験1 (予稿未記載，参考資料)}
   \begin{itemize}
-      \item 提案手法は，既存手法と比較して既知の最良値との比を改善
-      \item 新たに1問について，\alert{\bf 既知の最良値を更新}することに成功
+  \item CB-CTT ベンチマーク問題
+    \begin{itemize}
+    \item \textbf{ITC-2007以後に追加された問題(全40問)}
+    \item ソフト制約が最も多い問題集 (UD5) を使用
+    \end{itemize}
   \end{itemize}
-  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
+  \begin{exampleblock}{既知の最良値との比の平均 (\%)}
+  \begin{center}
+    \begin{tableD}
+      \input{tables/excomp_comparison}
+    \end{tableD}
+  \end{center}
+  \end{exampleblock}
+  \begin{itemize}
+  \item 提案手法は，既存手法と比較して既知の最良値との比を改善
+  \item 新たに，\textsf{test4}について，\alert{\bf 既知の最良値を更新}することに成功
+  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{追加実験2 (制約の少ない問題集)}
-制約の少ない問題集に対しての有効性を評価するために，実験を行った．
-\begin{block}{}
-\begin{itemize}
-  \item \structure{CB-CTTベンチマーク問題}
+\begin{frame}{追加実験2 (予稿未記載，参考資料)}
+  \begin{itemize}
+  \item CB-CTTベンチマーク問題
     \begin{itemize}
     \item 国際時間割競技会ITC-2007の問題(全21問)
-    \item \alert{ソフト制約の少ない問題集 (UD1〜4) を使用}
-   \end{itemize}
+    \item \textbf{ソフト制約: UD1, UD2, UD3, UD4}
+    \end{itemize}
   \end{itemize}
-  \end{block}
+  \begin{exampleblock}{既知の最良値との比の平均 (\%)}
   \begin{center}
-  \begin{tableE}
-    \input{tables/ud1234_comparison}
-  \end{tableE}
+    \begin{tableE}
+      \input{tables/ud1234_comparison}
+    \end{tableE}
   \end{center}
+  \end{exampleblock}
   \begin{itemize}
-      \item 提案手法は，全ての問題集において既知の最良値との比を改善
+  \item 提案手法は，UD5よりもソフト制約が少ないUD1〜UD4でも，
+    既存手法と比較して既知の最良値との比を改善
   \end{itemize}
-  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
+%  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめと今後の課題}
-  \begin{itemize}
-    \item \structure{優先度付き巨大近傍探索 (LNPS) の提案}
-     \begin{itemize}
-      \item メタ戦略の一種である LNS をベースに ASP に
-      適した探索手法を提案
-     \end{itemize}
-    \item \structure{LNPS の ASP ソルバー \textit{clingo} 上での実装}
-      \begin{itemize}
-      \item LNPS アルゴリズムを，
-        ASPシステム{\clingo}のマルチショット ASP 解法
-        と\textsf{\#heuristic}文を用いて，簡潔に実装
-      \end{itemize}
-    \item \structure{カリキュラムベース・コース時間割問題を用いた評価実験}
-      \begin{itemize}
-      %\item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を示した．
-      \item 既知の最良値との比について，
-      通常の ASP 解法と比較して，
-      提案手法 LNPS は，
-      複数の問題集においてその比を改善
-      %通常の ASP 解法が +437\% であったのに対し，
-      %提案手法 LNPS は，
-      %その比を +26\% まで大幅に改善
-      \item さらに，2 問について，\alert{\bf 既知の最良値を更新}することに成功
-      \end{itemize}
+  \begin{enumerate}
+  \item \structure{優先度付き巨大近傍探索 (LNPS) を提案}
+    \begin{itemize}
+    \item 系統的探索の長所(最適性の保証)と確率的局所探索の長所(解精度)
+      の両方を活かした探索
     \end{itemize}
+  \item \structure{LNPS を ASP ソルバー \textit{clingo} 上に実装}
+    \begin{itemize}
+    \item ASPシステム{\clingo}のマルチショット ASP 解法
+      と\textsf{\#heuristic}文を用いて簡潔に実装
+    \end{itemize}
+  \item \structure{カリキュラムベース・コース時間割問題を用いた評価実験}
+    \begin{itemize}
+      \item ソフト制約が多い問題集 (UD5) に対して，
+        既知の最良値との比を，+437\% から +26\% に\alert{\bf 大幅に改善}
+      \item \textsf{comp09}と\textsf{test4}の2問について，
+        \alert{\bf 既知の最良値を更新}することに成功
+%    \item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を示した．
+%    \item 既知の最良値との比について，
+%      通常の ASP 解法と比較して，
+%      提案手法 LNPS は，
+%      複数の問題集においてその比を改善
+%      % 通常の ASP 解法が +437\% であったのに対し，
+%      % 提案手法 LNPS は，
+%      % その比を +26\% まで大幅に改善
+%    \item さらに，2 問について，\alert{\bf 既知の最良値を更新}することに成功
+    \end{itemize}
+  \end{enumerate}
 
 \begin{alertblock}{今後の課題}
   \begin{itemize}
