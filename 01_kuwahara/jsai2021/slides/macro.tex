@@ -88,6 +88,30 @@
   \end{tabular}
 }
 
+\newenvironment{tableD}{%
+  %\scriptsize
+ % \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{0.6}						
+  \begin{tabular}[t]{|r|r|}\hline
+    \multicolumn{1}{|c|}{\small 既存手法 ASP\footnotemark[1]} & \multicolumn{1}{c|}{\small 提案手法 LNPS}\\%\cline{2-3}
+    \scriptsize{既知の最良値との比の平均 (\%)} & \scriptsize{既知の最良値との比の平均 (\%)}\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
+
+\newenvironment{tableE}{%
+  %\scriptsize
+ % \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{0.6}						
+  \begin{tabular}[t]{|c|r|r|}\hline
+    \lw{問題集} & \multicolumn{1}{c|}{\small 既存手法 ASP\footnotemark[1]} & \multicolumn{1}{c|}{\small 提案手法 LNPS}\\%\cline{2-3}
+    & \scriptsize{既知の最良値との比の平均 (\%)} & \scriptsize{既知の最良値との比の平均 (\%)}\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
