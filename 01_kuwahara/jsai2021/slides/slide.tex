@@ -340,6 +340,51 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{追加実験1 (他のベンチマーク問題)}
+他のベンチマークに対しての有効性を評価するために，実験を行った．
+\begin{block}{}
+\begin{itemize}
+  \item \structure{CB-CTTベンチマーク問題}
+    \begin{itemize}
+    \item \alert{競技会で使用されていない問題(全40問)}
+   \item ソフト制約が最も多い問題集 (UD5) を使用
+   \end{itemize}
+  \end{itemize}
+  \end{block}
+  \begin{center}
+  \begin{tableD}
+    \input{tables/excomp_comparison}
+  \end{tableD}
+  \end{center}
+  \begin{itemize}
+      \item 提案手法は，既存手法と比較して既知の最良値との比を改善
+      \item 新たに1問について，\alert{\bf 既知の最良値を更新}することに成功
+  \end{itemize}
+  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{追加実験2 (制約の少ない問題集)}
+制約の少ない問題集に対しての有効性を評価するために，実験を行った．
+\begin{block}{}
+\begin{itemize}
+  \item \structure{CB-CTTベンチマーク問題}
+    \begin{itemize}
+    \item 国際時間割競技会ITC-2007の問題(全21問)
+    \item \alert{ソフト制約の少ない問題集 (UD1〜4) を使用}
+   \end{itemize}
+  \end{itemize}
+  \end{block}
+  \begin{center}
+  \begin{tableE}
+    \input{tables/ud1234_comparison}
+  \end{tableE}
+  \end{center}
+  \begin{itemize}
+      \item 提案手法は，全ての問題集において既知の最良値との比を改善
+  \end{itemize}
+  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめと今後の課題}
   \begin{itemize}
     \item \structure{優先度付き巨大近傍探索 (LNPS) の提案}
@@ -357,10 +402,13 @@
       \begin{itemize}
       %\item 提案手法の中では，\structure{\bf SR-\bm{$N$}}が良い性能を示した．
       \item 既知の最良値との比について，
-      通常の ASP 解法が +437\% であったのに対し，
+      通常の ASP 解法と比較して，
       提案手法 LNPS は，
-      その比を +26\% まで大幅に改善
-      \item さらに，1 問について，\alert{\bf 既知の最良値を更新}することに成功
+      複数の問題集においてその比を改善
+      %通常の ASP 解法が +437\% であったのに対し，
+      %提案手法 LNPS は，
+      %その比を +26\% まで大幅に改善
+      \item さらに，2 問について，\alert{\bf 既知の最良値を更新}することに成功
       \end{itemize}
     \end{itemize}
 
@@ -482,7 +530,7 @@
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CB-CTT に対する既存ASPの結果~[Banbara+ '18]}
+\begin{frame}{CB-CTT に対する既存ASPの結果~[Banbara+ '19]}
   \centering
   \scriptsize
   \begin{tableC}
