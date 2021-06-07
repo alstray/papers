@@ -83,7 +83,7 @@
 \input{macro}
 \input{ovm_macro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{解集合プログラミングを用いた多目的車両装備仕様問題の解法}
+\title{解集合プログラミングを用いた\\多目的車両装備仕様問題の解法}
 \author{竹内頼人\inst{1} \and 田村直之\inst{2} \and 番原睦則\inst{1}}
 \institute{\inst{1}名古屋大学 大学院情報学研究科 \and \inst{2}神戸大学 情報基盤センター}
 \date{2021年度 人工知能学会全国大会（第35回）}
@@ -137,7 +137,7 @@
     \]
   \item 特長は，ある車種では燃費基準を達成できなくても，他の車種の燃費を
     向上させることで基準を達成することが可能な点．
-  \item 欧米で採用されており，日本でも2020年度から導入されている．
+  \item 欧米で採用されており，日本でも\structure{\bf 2020年度から導入されている}．
  \end{itemize}
  \footnotetext{本研究では，CAFE方式の計算方法として，単純化された式を扱っている．}
 \end{frame}
@@ -145,11 +145,11 @@
 \begin{frame}{多目的車両装備仕様問題}
  \begin{alertblock}{多目的車両装備仕様問題とは}
   \begin{itemize}
-   \item 組合せ問題の一種で，装備および燃費に関する制約をもつ．
+   \item 組合せ最適化問題の一種で，装備および燃費に関する制約をもつ．
    % \item 問題インスタンス，燃費テーブル，販売台数テーブル
    \item {\bf 予想販売台数の最大化}や{\bf 装備オプション数の最小化}など，
 	 トレードオフの関係にある複数の目的関数のもとで
-	 最適な車両装備仕様を求める．
+	 最適な車両装備仕様を求めることが目的
   \end{itemize}
  \end{alertblock}
  \begin{block}{制約}
@@ -299,20 +299,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{多目的CAFE問題ソルバーの構成}
  \scalebox{0.9}{\centering\input{arch}}
-    \begin{block}{多目的CAFE問題ソルバー}
-     \begin{itemize}
-      \item 単目的CAFE問題ソルバー[竹内 20]をもとに，多目的CAFE問題のパレート最適解を
-      計算できるように拡張されている．
-      \item ASPシステムとしては，{\asprin} システムを使用する．
-     \end{itemize}
-    \end{block}
- \begin{alertblock}{本ソルバーの特長}
+ \begin{itemize}
+  \item 多目的CAFE問題を解くためのASP符号化を\structure{\bf 新たに考案した}．
+	\begin{itemize}
+	 \item 先行研究[竹内 20]の単目的CAFE問題の符号化の自然な拡張
+	\end{itemize}
+ \end{itemize}
+ \begin{alertblock}{ASP符号化の特長}
   \begin{itemize}
-   \item 制約と目的関数を簡潔に記述することが可能
+   \item 多目的CAFE問題を簡潔に記述できる点
 	 \begin{itemize}
-	  \item 2つの目的関数からなる多目的最適化をASPのルール5個で記述
+	  \item 制約はASPのルール19個で，2つの目的関数はASPのルール5個で記述できた．
 	 \end{itemize}
-   \item 複数の目的関数を定義し組み合わせることで，柔軟な最適化が可能
+   \item ルールを追加するだけで新たな制約や目的関数を加えることができ，
+	 それらの柔軟な切り替え・組合せが可能である点
   \end{itemize}
  \end{alertblock}
 \end{frame}
@@ -389,12 +389,12 @@
    \end{center}
    $a_1,\dots,a_n$ のうち，
    $lb$個以上，$ub$個以下が成り立つことを意味する．
- \item \structure{\bf 重み付き個数制約}
-   \begin{center}
-     $t$ \code{= \#sum} \code{\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}}
-   \end{center}
-   $a_1,\dots,a_n$のうち，
-   成り立つアトムの重み和が項$t$に等しくなることを意味する．
+ % \item \structure{\bf 重み付き個数制約}
+ %   \begin{center}
+ %     $t$ \code{= \#sum} \code{\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}}
+ %   \end{center}
+ %   $a_1,\dots,a_n$のうち，
+ %   成り立つアトムの重み和が項$t$に等しくなることを意味する．
  \item \structure{\bf \code{\#preference}文}
        \begin{center}
 	\code{\#preference(}$s,t$\code{)\{}$e_1,\dots,e_n$\code{\}.}
@@ -448,33 +448,6 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{制約のASP符号化: 燃費制約}
-\begin{exampleblock}{}\small
-\begin{lstlisting}
-ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
-ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
-iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
-            LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
-fe(FE,G) :- iwr(S,G), fe_map(S,FE).
-sv(SV,G) :- iwr(S,G), sv_map(S,SV).
-:- not 0 #sum { (FE-t)*SV,FE,SV,G : fe(FE,G), sv(SV,G) }.
-\end{lstlisting}
-% lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
-% lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
-\end{exampleblock}
-\vfill
-\begin{itemize}
- \item アトム\code{iwr(S,G)}は，車種\code{G}に実装されるオプションのIWR値の
-       総和が\code{S}であることを表す．
- \item \code{fe(FE,G)}と\code{sv(SV,G)}は，
-       それぞれ車種\code{G}の燃費が\code{FE}，予想販売台数が\code{SV}
-       であることを表す．
- \item CAFE方式の制約式を以下のように変形し，
-       ASPの重み付き個数制約で表現している．ただし，$t$はCAFE基準値
-       \[\sum_{i=1}^{n} (FE_{i}-t)\cdot SV_{i} \geq 0\]
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{frame}[fragile]{制約のASP符号化}
 % \begin{exampleblock}{範囲制約}\small
 % \begin{lstlisting}
@@ -507,27 +480,27 @@ sv(SV,G) :- iwr(S,G), sv_map(S,SV).
 \begin{frame}[fragile]{目的関数のASP符号化}
 \begin{exampleblock}{}\small
 \begin{lstlisting}
- (8)  #preference (max_sv, more(weight)) { SV,G :: sv(SV,G) }.
- (9)  used_v(V) :- v(V,G).
- (10) #preference (min_op, less(weight)) { 1,V :: used_v(V) }.
- (11) #preference (all, pareto) { **max_sv; **min_op}.
- (12) #optimize(all). 
+ (3) #preference (max_sv, more(weight)) { SV,G :: sv(SV,G) }.
+ (4) #preference (min_op, less(weight)) { 1,V :: used_v(V) }.
+ (5) #preference (all, pareto) { **max_sv; **min_op}.
+ (6) #optimize(all). 
 \end{lstlisting}
 \end{exampleblock}
 \begin{itemize}
- \item (8) 予想販売台数の最大化を\code{max\_sv}という名称で定義している．
- \item (9-10) 装備オプションの最小化を\code{min_op}という名称で定義している．
-       要素の\code{used\_v(V)}は，装備オプション\code{V}がいずれかの車種において
-       実装されたことを意味する補助アトムである．
- \item (11) \code{max\_sv}と\code{min\_op}の2目的のパレート最適化を\code{all}という
+ \item (3) 予想販売台数の最大化を\code{max\_sv}という名称で定義している．\\
+       アトム\code{sv(SV,G)}は，車種\code{G}の予想販売台数が\code{SV}であることを意味する． 
+ \item (4) 装備オプションの最小化を\code{min_op}という名称で定義している．\\
+       アトム\code{used\_v(V)}は，装備オプション\code{V}がいずれかの車種において
+       実装されたことを意味する．
+ \item (5) \code{max\_sv}と\code{min\_op}の2目的のパレート最適化を\code{all}という
        名称で定義している．
- \item (12) 選好名称\code{all}について最適化することで，多目的CAFE問題のパレート最適解を得る．
+ \item (6) 選好名称\code{all}について最適化することで，多目的CAFE問題のパレート最適解を得る．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験概要}
  \begin{itemize}
-  \item 考案した拡張符号化の有効性を評価するために，実行実験を行った．
+  \item 考案したASP符号化の有効性を評価するために，実行実験を行った．
 % 問題の規模がわかるように	
  \end{itemize}
 
@@ -576,25 +549,27 @@ sv(SV,G) :- iwr(S,G), sv_map(S,SV).
  \end{exampleblock}
  \begin{itemize}
   \item 5問中4問でパレート最適解を全列挙することに成功した．
-  \item medium 以上の問題では暫定的な解は得られたが，最適解は得られなかった．
+  \item medium 以上の問題ではパレート解は得られたが，最適解は得られなかった．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめ}
+ ASP に基づく多目的 CAFE 問題ソルバーの実装と評価について述べた.   
+ \begin{block}{研究内容}
  \begin{itemize}
-  \item ASP に基づく多目的 CAFE 問題ソルバーの実装と評価について述べた.   
   \item ASP 言語の表現力の高さを活かし，多目的 CAFE 問題の制約と
 	目的関数を簡潔に表現できることを確認した.
   \item 企業から提供を受けたベンチマーク問題を用いて評価実験を行った結果，
 	小規模な問題に対して，パレート 最適解を全列挙をすることができた.
  \end{itemize}
- \begin{block}{今後の課題}
-  \begin{itemize}
-   \item ソルバーの実用性を高めるために，制約や目的関数の追加を行う
-	 (例: Minimal perturbation)．
-   \item 実用規模の問題を解くために，ASP符号化の改良を行う．
-  \end{itemize}
  \end{block}
+
+ \begin{exampleblock}{今後の課題}
+  \begin{itemize}
+   \item ソルバーの高速化および大規模な問題への対応
+   \item ZEVクレジット制約の追加や，Minimal perturbation問題への拡張
+  \end{itemize}
+ \end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \appendix
@@ -607,29 +582,7 @@ sv(SV,G) :- iwr(S,G), sv_map(S,SV).
   \end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基礎化後のルール数}
- \begin{exampleblock}{}\centering 
-  \renewcommand{\arraystretch}{1.2}
-  \tabcolsep = 4mm
-  \begin{tabular}{crr} 
-   問題名    & 基本符号化       & 改良符号化    \\ \hline
-   small    &  83,520 (1.00)  & 32,855 (0.39) \\ 
-   medium   &  93,017 (1.00)  & 56,940 (0.61) \\
-   big	    & 155,654 (1.00)  & 42,190 (0.27) \\ 
-  \end{tabular}
- \end{exampleblock}
- \begin{itemize}
-  \item 改良符号化は，基本符号化と比較して，基礎化後のルール数を
-	少なく抑えられている．
-  \item 特にbigでは，70\%以上のルール数の削減に成功している．
- \end{itemize}
- % \begin{alertblock}{}
- %  このルール数の削減が，改良符号化の大規模問題に対する優位性につながっていると考えられる．
- % \end{alertblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{基本符号化: 依存制約(要求・排他)}
+\begin{frame}[fragile]{制約のASP符号化: 依存制約(要求・排他)}
  \begin{center} 
  \begin{tikzpicture}
  % Grade
@@ -664,24 +617,128 @@ sv(SV,G) :- iwr(S,G), sv_map(S,SV).
 \vfill
 \begin{exampleblock}{}
 \begin{lstlisting}
-  (8) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
-  (9) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
+  (a) :- require_v_v(V1,V2), v(V1,G), not v(V2,G).
+  (b) :- exclude_v_v(V1,V2), v(V1,G), v(V2,G).
 \end{lstlisting}
 \end{exampleblock}
 \vfill
 \begin{itemize}
-\item (8)
+\item (a)
   要求関係\code{require_v_v(V1,V2)}が与えられたとき，
   車種\code{G}がオプション\code{V1}を実装するならば，
   \code{G}は\code{V2}も実装しなければならない．
-\item (9)
+\item (b)
   排他関係\code{exclude_v_v(V1,V2)}が与えられたとき，
   車種\code{G}が\code{V1}と\code{V2}を
   同時に実装することはない．
 \end{itemize}
 \end{frame}
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{制約のASP符号化: 燃費制約}
+\begin{exampleblock}{}\small
+\begin{lstlisting}
+  (c) iwr(S,G) :- 
+         S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) }, group(G).
+  (d) fe(FE,G) :- iwr(S,G), fe_map(S,FE).
+  (e) sv(SV,G) :- iwr(S,G), sv_map(S,SV).
+  (f) :- not 0 #sum { (FE-t)*SV,FE,SV,G : fe(FE,G), sv(SV,G) }.
+\end{lstlisting}
+\end{exampleblock}
+\vfill
+\begin{itemize}
+\item (c)
+  アトム\code{iwr(S,G)}は，車種\code{G}に実装されるオプションのIWR値の
+  総和が\code{S}であることを表す．
+\item (d, e)
+  \code{fe(FE,G)}と\code{sv(SV,G)}は，
+  それぞれ車種\code{G}の燃費が\code{FE}，予想販売台数が\code{SV}
+  であることを表す．
+\item (f)
+  CAFE方式の制約式を以下のように変形し，
+  ASPの重み付き個数制約で表現している．ただし，$t$はCAFE基準値
+  \[\sum_{i=1}^{n} (FE_{i}-t)\cdot SV_{i} \geq 0\]
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{単目的CAFE問題における実験結果: 予想販売台数}
+\begin{itemize}%\small
+ \item 目的関数は，予想販売台数の最大化のみ
+\end{itemize}	
+\begin{exampleblock}{}
+  \centering
+  \scriptsize
+  \renewcommand{\arraystretch}{1.1}
+  \tabcolsep = 7mm
+  \begin{tabular}{l|r|r}
+  \lw{問題名} & CAFE  & 予想販売台数 \\ 
+              & 基準値 &   \\\hline    
+   small & 8.5   & 6,021*       \\
+   small & 9.0   & 5,007*       \\
+   small & 9.5   & 2,688*       \\
+   small & 10.0  & 1,318*       \\
+   small & 10.5  & UNSAT    \\\hline
+   medium & 8.5  & 6,021        \\
+   medium & 9.0  & 5,595        \\
+   medium & 9.5  & 3,430        \\
+   medium & 10.0 & 2,250        \\
+   medium & 10.5 & 1,845        \\\hline
+   big & 8.5     & 3,877        \\
+   big & 9.0     & 4,623        \\
+   big & 9.5     & 3,121        \\
+   big & 10.0    & 2,064        \\
+   big & 10.5    & 904        
+  \end{tabular}
+\end{exampleblock}
+\vfill
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile]{制約のASP符号化: 燃費制約}
+% \begin{exampleblock}{}\small
+% \begin{lstlisting}
+% ub_vp(UB,VP) :- UB = #max { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+% ub_iwr(S) :- S = #sum { UB,VP : ub_vp(UB,VP) }.
+% iwr(S,G) :- S = #sum { IWR,V : v(V,G), v_def(V,_,IWR) },
+%             LB <= S, S <= UB, lb_iwr(LB), ub_iwr(UB), group(G).
+% fe(FE,G) :- iwr(S,G), fe_map(S,FE).
+% sv(SV,G) :- iwr(S,G), sv_map(S,SV).
+% :- not 0 #sum { (FE-t)*SV,FE,SV,G : fe(FE,G), sv(SV,G) }.
+% \end{lstlisting}
+% % lb_vp(LB,VP) :- LB = #min { IWR,V : v_def(V,VP,IWR) }, vp_def(VP).
+% % lb_iwr(S) :- S = #sum { LB,VP : lb_vp(LB,VP), require_vp(VP) }.
+% \end{exampleblock}
+% \vfill
+% \begin{itemize}
+%  \item アトム\code{iwr(S,G)}は，車種\code{G}に実装されるオプションのIWR値の
+%        総和が\code{S}であることを表す．
+%  \item \code{fe(FE,G)}と\code{sv(SV,G)}は，
+%        それぞれ車種\code{G}の燃費が\code{FE}，予想販売台数が\code{SV}
+%        であることを表す．
+%  \item CAFE方式の制約式を以下のように変形し，
+%        ASPの重み付き個数制約で表現している．ただし，$t$はCAFE基準値
+%        \[\sum_{i=1}^{n} (FE_{i}-t)\cdot SV_{i} \geq 0\]
+% \end{itemize}
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{基礎化後のルール数}
+%  \begin{exampleblock}{}\centering 
+%   \renewcommand{\arraystretch}{1.2}
+%   \tabcolsep = 4mm
+%   \begin{tabular}{crr} 
+%    問題名    & 基本符号化       & 改良符号化    \\ \hline
+%    small    &  83,520 (1.00)  & 32,855 (0.39) \\ 
+%    medium   &  93,017 (1.00)  & 56,940 (0.61) \\
+%    big	    & 155,654 (1.00)  & 42,190 (0.27) \\ 
+%   \end{tabular}
+%  \end{exampleblock}
+%  \begin{itemize}
+%   \item 改良符号化は，基本符号化と比較して，基礎化後のルール数を
+% 	少なく抑えられている．
+%   \item 特にbigでは，70\%以上のルール数の削減に成功している．
+%  \end{itemize}
+%  % \begin{alertblock}{}
+%  %  このルール数の削減が，改良符号化の大規模問題に対する優位性につながっていると考えられる．
+%  % \end{alertblock}
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \backupend
 \end{document}
