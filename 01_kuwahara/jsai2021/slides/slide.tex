@@ -192,7 +192,7 @@
 \begin{frame}{LNPS アルゴリズム (擬似コード)}
 \centering
 \begin{tabular}{l}\hline
-\textbf{Algorythm} Large Neighborhood Prioritized Search\\\hline
+\textbf{Algorithm} Large Neighborhood Prioritized Search\\\hline
  ~1: input: a feasible solution $x$ \\
  ~2: $x^{*} :=  x$; \\
  ~3: \bf{repeat} \\
@@ -338,49 +338,6 @@
       \item 既知の最良値との比を，+437\% から +26\% に\alert{\bf 大幅に改善}
       \item \textsf{comp09}について，\alert{\bf 既知の最良値を更新}することに成功
   \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{追加実験1 (予稿未記載，参考資料)}
-  \begin{itemize}
-  \item CB-CTT ベンチマーク問題
-    \begin{itemize}
-    \item \textbf{ITC-2007以後に追加された問題(全40問)}
-    \item ソフト制約が最も多い問題集 (UD5) を使用
-    \end{itemize}
-  \end{itemize}
-  \begin{exampleblock}{既知の最良値との比の平均 (\%)}
-  \begin{center}
-    \begin{tableD}
-      \input{tables/excomp_comparison}
-    \end{tableD}
-  \end{center}
-  \end{exampleblock}
-  \begin{itemize}
-  \item 提案手法は，既存手法と比較して既知の最良値との比を改善
-  \item 新たに，\textsf{test4}について，\alert{\bf 既知の最良値を更新}することに成功
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{追加実験2 (予稿未記載，参考資料)}
-  \begin{itemize}
-  \item CB-CTTベンチマーク問題
-    \begin{itemize}
-    \item 国際時間割競技会ITC-2007の問題(全21問)
-    \item \textbf{ソフト制約: UD1, UD2, UD3, UD4}
-    \end{itemize}
-  \end{itemize}
-  \begin{exampleblock}{既知の最良値との比の平均 (\%)}
-  \begin{center}
-    \begin{tableE}
-      \input{tables/ud1234_comparison}
-    \end{tableE}
-  \end{center}
-  \end{exampleblock}
-  \begin{itemize}
-  \item 提案手法は，UD5よりもソフト制約が少ないUD1〜UD4でも，
-    既存手法と比較して既知の最良値との比を改善
-  \end{itemize}
-%  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめと今後の課題}
@@ -818,6 +775,49 @@ basicstyle=\ttfamily\small]
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{追加実験1 (予稿未記載，参考資料)}
+  \begin{itemize}
+  \item CB-CTT ベンチマーク問題
+    \begin{itemize}
+    \item \textbf{ITC-2007以後に追加された問題(全40問)}
+    \item ソフト制約が最も多い問題集 (UD5) を使用
+    \end{itemize}
+  \end{itemize}
+  \begin{exampleblock}{既知の最良値との比の平均 (\%)}
+  \begin{center}
+    \begin{tableD}
+      \input{tables/excomp_comparison}
+    \end{tableD}
+  \end{center}
+  \end{exampleblock}
+  \begin{itemize}
+  \item 提案手法は，既存手法と比較して既知の最良値との比を改善
+  \item 新たに，\textsf{test4}について，\alert{\bf 既知の最良値を更新}することに成功
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{追加実験2 (予稿未記載，参考資料)}
+  \begin{itemize}
+  \item CB-CTTベンチマーク問題
+    \begin{itemize}
+    \item 国際時間割競技会ITC-2007の問題(全21問)
+    \item \textbf{ソフト制約: UD1, UD2, UD3, UD4}
+    \end{itemize}
+  \end{itemize}
+  \begin{exampleblock}{既知の最良値との比の平均 (\%)}
+  \begin{center}
+    \begin{tableE}
+      \input{tables/ud1234_comparison}
+    \end{tableE}
+  \end{center}
+  \end{exampleblock}
+  \begin{itemize}
+  \item 提案手法は，UD5よりもソフト制約が少ないUD1〜UD4でも，
+    既存手法と比較して既知の最良値との比を改善
+  \end{itemize}
+%  \footnotetext[1]{得られた値は先行研究~[Banbara+ '19]から引用}
+\end{frame}
+
 \backupend
 \end{document}
 
