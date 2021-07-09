@@ -24,7 +24,7 @@ corresponding author: yes
 Title:  
 
 解集合プログラミングに基づく組合せ遷移ソルバーの実装方式に関する考察
-(A Study on ASP-based Combinatorial Reconfiguration Solver)
+(A Study on ASP-based Implementation of Combinatorial Reconfiguration Solver)
 
 Abstruct(200-400字程度):  
 
