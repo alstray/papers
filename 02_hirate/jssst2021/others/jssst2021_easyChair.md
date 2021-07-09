@@ -19,7 +19,7 @@ First name:	剛秀
 Last name:	宋
 Email: soh@lion.kobe-u.ac.jp
 Country/region:	Japan
-Organization:   神戸大学情報基盤センター 
+Organization:   神戸大学 情報基盤センター 
 Web page: 	なし
 corresponding author :yes
 presenter no
@@ -56,8 +56,8 @@ Abstract:
 ハミルトン閉路問題，コスト制約付きハミルトン閉路問題の解法について述べ
 る．ハミルトン閉路問題を解く ASP 符号化として，undirected, directed,
 acyclicity の3つを考案した．これらの符号化は，ハミルトン閉路問題を次数
-制約と連結制約の二つで簡潔に表現している．特に，acyclicity 符号化は，
-連結制約を ASP の組込み非閉路制約で表現し，他の二つと比較して，基礎化
+制約と連結制約の2つで簡潔に表現している．特に，acyclicity 符号化は，
+連結制約を ASP の組込み非閉路制約で表現し，他の2つと比較して，基礎化
 後の制約数を少なく抑えることができる点が特長である．最短ハミルトン閉路
 問題とコスト制約付きハミルトン閉路問題については，考案した3つの符号化
 に目的関数とコスト制約をそれぞれ追加することで自然に拡張できる．最後に，
