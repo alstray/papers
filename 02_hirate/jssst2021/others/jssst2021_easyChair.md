@@ -14,7 +14,27 @@ Web page:	なし
 corresponding author: yes
 presenter: yes
 
-## Author 2 
+## Author 2
+First name:	剛秀
+Last name:	宋
+Email: soh@lion.kobe-u.ac.jp
+Country/region:	Japan
+Organization:   神戸大学情報基盤センター 
+Web page: 	なし
+corresponding author :yes
+presenter no
+
+## Author 3
+First name:	直之
+Last name: 	田村
+Email: tamura@kobe-u.ac.jp
+Country/region: Japan  
+Organization: 	神戸大学 情報基盤センター
+Web page:     	なし
+corresponding author: yes
+presenter: no
+
+## Author 4
 First name:	睦則
 Last name:	番原
 Email:*	banbara@nagoya-u.jp
@@ -58,7 +78,7 @@ acyclicity の3つを考案した．これらの符号化は，ハミルトン�
 大会同時投稿を希望するか: no
 高橋奨励賞の対象か: no
 学生奨励賞の対象か: yes
-発表を避けたい日時: なし
+発表を避けたい日時: 9/1（水）15:00-17:00
 
 --
 END
