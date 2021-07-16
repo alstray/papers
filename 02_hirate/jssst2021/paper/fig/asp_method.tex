@@ -1,0 +1,42 @@
+\begin{figure}[tp]
+\tikz{
+  %1ノード目
+  \path[draw=black, fill=blue!20, rounded corners=5pt]%線の設定
+  node[at={(0.75,0.75)}] {ハミルトン閉路問題(HCP)}%文字を入れる
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;%外周
+  %2ノード目
+  \path[draw=black, fill=blue!20, rounded corners=5pt, shift={(3,0)}]
+  node[at={(0.75,0.75)}] {
+    \begin{tabular}{c}
+      HCPのASPファクト
+    \end{tabular}
+  }
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  %3ノード目文字が複数行
+  \path[draw=black, fill=green!20, rounded corners=5pt, shift={(6,0)}]
+  node[at={(0.75,0.75)}] {
+    \begin{tabular}{c}
+      {\clingo}
+    \end{tabular}
+  }
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  %4ノード目文字が複数行
+  \path[draw=black, fill=blue!20, rounded corners=5pt, shift={(9,0)}]
+  node[at={(0.75,0.75)}] {解集合}
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  %5ノード目文字が複数行
+  \path[draw=black, fill=red!20, rounded corners=5pt, shift={(3,-3)}]
+  node[at={(0.75,0.75)}] {
+    \begin{tabular}{c}
+      HCPを解くASP符号化
+    \end{tabular}
+  }
+  (0,0) --(1.5,0) --(1.5,1.5) --(0,1.5) --cycle;
+  \draw[arrows=->] (1.5,0.75) --(3.0,0.75);
+  \draw[arrows=->,shift={(3,0)}] (1.5,0.75) --(3.0,0.75);
+  \draw[arrows=->,shift={(6,0)}] (1.5,0.75) --(3.0,0.75);
+  \draw[arrows=->] (4.5,-2.25) --(6.0,0.5);
+}
+\caption{ASP を用いたハミルトン閉路問題の解法}
+\label{aspmethod}
+\end{figure}
