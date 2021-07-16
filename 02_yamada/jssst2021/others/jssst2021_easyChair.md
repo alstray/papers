@@ -10,15 +10,27 @@ Country/region: Japan
 Organization: 名古屋大学 大学院情報学研究科
 Web page: なし
 corresponding author: yes
+presenter: yes
 
 ## Author2
+First name: 真一
+Last name：湊
+Email: minato@i.kyoto-u.ac.jp
+Country/region: Japan
+Organization: 京都大学 大学院情報学研究科
+Web page: なし
+corresponding author: no
+presenter: no
+
+## Author3
 First name: 睦則
 Last name: 番原
 Email: banbara@nagoya-u.jp
 Country/region: Japan  
 Organization: 名古屋大学 大学院情報学研究科
-Web page: 
+Web page: なし
 corresponding author: yes
+presenter: no
 
 ## Title and Abstruct
 Title:  
