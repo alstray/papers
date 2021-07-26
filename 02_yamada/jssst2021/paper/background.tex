@@ -27,7 +27,7 @@ PSPACE (\cite{Kuriyama13:ieice})は問題の複雑性を表すクラスの一つ
 まったばかりであり，組合せ遷移問題を解く汎用ソルバーの研究開発は重要な
 研究課題の一つである．
 
-\textbf{$k$彩色遷移問題.}
+\subsection{$k$彩色遷移問題}
 $k$彩色遷移問題(\cite{BC2009:tcs})とは\textbf{グラフ点彩色問題}を基とした組合せ遷移問題であり， 
 色数$k$のグラフ点彩色問題と二つの彩色が与えられたとき，
 一方の彩色から他方の彩色へ，各遷移過程において色が変化する頂点はただ一つ
@@ -98,6 +98,27 @@ $G$の$k$彩色の二つの実行可能解$\alpha$(初期状態)，$\beta$(目�
 遷移制約について，$t=0$と$t=1$では頂点1の色のみが変化していることがわかる． 
 同様に，$t=1$から$t=2$，$t=2$から$t=3$においても一つの頂点のみ色が変化している． 
 また各$t$において，グラフ点彩色問題の定義を満たしていることがわかる．
+
+\newcommand{\lw}[1]{\smash{\lower-8.ex\hbox{#1}}}
+\begin{figure*}[tbp]
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 3mm  
+  \centering
+  \begin{tabular}{ccc}
+    $t=0$ (初期状態) & & $t=1$\\
+    \scalebox{0.8}{\input{tikz/start}}
+    & \lw{$\Rightarrow$} & 
+    \scalebox{0.8}{\input{tikz/trans1}}\\
+    & & $\Downarrow$\\
+    & & \\
+    \scalebox{0.8}{\input{tikz/trans2}}
+    & \lw{$\Leftarrow$} &
+    \scalebox{0.8}{\input{tikz/goal}}\\
+    $t=3$ (目標状態) & & $t=2$
+  \end{tabular}
+  \caption{遷移系列の例}
+  \label{fig:ans_varrecol}
+\end{figure*}
 
 \begin{comment}
   
