@@ -1,5 +1,5 @@
 ﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ハミルトン閉路問題および関連問題のASP符号化}\label{chap:proposal}
+\section{ハミルトン閉路問題のASP符号化}\label{chap:proposal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %%%%
@@ -27,32 +27,30 @@
 \end{figure*}
 %%%%
 
-%\input{fig/asp_method}
-
-ASP を用いたハミルトン閉路問題および関連問題の解法について述べる．
-図~\ref{fig:arch}に，解法の流れを示す．
-与えられたハミルトン閉路問題は ASP ファクトに変換され，
-ハミルトン閉路問題を解く ASP 符号化と結合され，
-ASP システムによって解が計算される．
-本論文では，ASP システムとして{\clingo}を用いる．
+図~\ref{fig:arch}に，ASP を用いたハミルトン閉路問題の解法を示す．
+これは，
+与えられた問題を ASP ファクト形式に変換し，
+ハミルトン閉路問題を解く論理プログラム(ASP 符号化)と結合した後，
+ASP システムを用いて解を計算する一般的な解法である．
+本節では，ハミルトン閉路問題のインスタンスを記述するための ASP ファクト
+形式を説明した後，ハミルトン閉路問題を解くための3つの ASP 符号化
+\textsf{undirected}, \textsf{directed}, \textsf{acyclicity}
+について述べる．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{ASPファクト形式}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[tb]
-\begin{center}
+\begin{figure}[t]
+\centering
 \input{fig/graph_example}
-\caption{入力となる重み付き無向グラフの例}
+\caption{重み付き無向グラフの例}
 \label{graphexample}
-\end{center}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-図~\ref{graphexample}のASPファクト表現},%
+グラフ(図~\ref{graphexample})のASPファクト表現},%
 captionpos=b,frame=single,label=code:graph_example.lp,%
 numbers=none,%
 breaklines=true,%
@@ -60,47 +58,16 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/graph_example.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-本節では，最短ハミルトン閉路問題の例にとって，
+最短ハミルトン閉路問題を例にとって，
 入力となる重み付き無向グラフ(図~\ref{graphexample})の
-ASP ファクト形式について説明する．
-%
-このグラフは，頂点数が6，辺の数が7であり，辺に付けられた値は距離を表す．
-コード~\ref{code:graph_example.lp}に，ASPファクト形式を示す．
+ASP ファクト形式をコード~\ref{code:graph_example.lp}に示す．
 %
 アトム\code{node/1}は頂点，\code{edge/2}は辺，\code{cost/3}は距離を表す．
-例えば，\code{cost(1,2,3)}は，辺\code{edge(1,2)}の距離が3であることを
-表している．
+例えば，\code{cost(1,2,3)}は，頂点\code{1} と頂点\code{2}の距離が
+\code{3}であることを示している．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{ハミルトン閉路問題の ASP 符号化}\label{hamiltonianasp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-ハミルトン閉路問題は，与えられたグラフの全頂点をちょうど一度ずつ通る閉
-路(ハミルトン閉路)が存在するかどうかを判定する問題である．
-$G=(V,E)$にハミルトン閉路が存在する必要十分条件は，
-以下の2つの制約を満たす部分グラフ$G'=(V,E')$が存在することである．
-
-\begin{itemize}
-\item $G'$の各頂点の次数が2 (次数制約)
-\item $G'$が連結である (連結制約)
-\end{itemize}
-
-本論文では，前者を\textbf{次数制約}，後者を\textbf{連結制約}と呼ぶ．
-ハミルトン路問題は，ハミルトン閉路問題から始点と終点が一致するという閉
-路の条件を取り除いたものである．
-ハミルトン路問題では，次数制約は以下のように変わる．
-
-\begin{itemize}
-\item 始点と終点の次数が1，他の頂点の次数が2
-\end{itemize}
-
-以下では，ハミルトン閉路問題に対する3つの ASP 符号化
-\textsf{undirected}，\textsf{directed}，\textsf{acyclicity}
-を提案する．
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{\textsf{undirected}符号化}
+\subsection{\textsf{undirected}符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,12 +77,28 @@ captionpos=b,frame=single,label=code:hamilton1.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/hamilton1.lp}
+basicstyle=\ttfamily\scriptsize]{code/hamilton1.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+グラフ$G=(V,E)$にハミルトン閉路が存在する必要十分条件は，
+以下の2つの制約を満たす部分グラフ$G'=(V,E')$が存在することである．
+\begin{itemize}
+\item $G'$の各頂点の次数が2 (次数制約)
+\item $G'$が連結である (連結制約)
+\end{itemize}
+ハミルトン路の場合，次数制約は
+「始点と終点の次数が1，他の頂点の次数が2」となる．
 
 \textsf{undirected}符号化は，ハミルトン閉路問題の次数制約と連結制約を，
 ASP の一貫性制約で表した基本的な符号化である．
-コード~\ref{code:hamilton1.lp}に，\textsf{undirected}符号化を示す．
+コード~\ref{code:hamilton1.lp}に\textsf{undirected}符号化を示す．
+
+\vskip 3em
+
+
+
+
+
 この符号化は，ハミルトン閉路問題とハミルトン路問題の両方に対応している．
 符号化中の\code{s}は始点の頂点番号，\code{t}は終点の頂点番号を表し，こ
 れらは実行時に与えられる．
