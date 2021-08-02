@@ -1,10 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%\section{実行実験} \label{chap:experiment}
+\section{実行実験} \label{chap:experiment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-\section{ベンチマーク}
+\subsection{ベンチマーク}
 \ref{chap:proposal}章で提案した3種の符号化を評価するにあたり，ベンチマークを作成した．
-評価には，ステップ数の最大値となる全解数を求めることが可能な
+評価には，実行可能解の総数を求めることが可能な
 グラフ$G$と色数$k$の組合せが必要となる．
 そこで初めに，ベンチマークに使用可能なグラフと色数について調査を行った．
 調査するグラフとして，
@@ -44,7 +44,45 @@ basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
 その中からランダムで2個の解を抽出した．
 そして各グラフごとに10問ずつ，計90問のベンチマークを生成した．
 
-\section{実行実験}
+\subsection{ASP ファクト}
+\begin{comment}
+  \section{ASP ファクト形式}
+  問題の入力として与えられるグラフ，色数，初期状態，目標状態のうち，
+  グラフ，初期状態，目標状態はASP ファクトとして与えられる．
+  図~\ref{fig:ex_graph}のグラフをファクト形式で表したものをコード~\ref{code:graph.lp}に示す．
+  
+  \lstinputlisting[float=t,caption={%
+  図~\ref{fig:ex_graph}のファクト表現 (\code{graph.lp})},%
+  captionpos=b,frame=single,label=code:graph.lp,%
+  numbers=left,%
+  breaklines=true,%
+  columns=fullflexible,keepspaces=true,%
+  basicstyle=\ttfamily\scriptsize]{code/graph.lp}
+  
+  1～2行目ではそれぞれ頂点の数と辺の数を宣言している．
+  4行目ではアトム\code{node}によって頂点1から頂点4を定義している．
+  6行目ではアトム\code{edge}によって辺を定義している．
+  \code{edge(X,Y)}は頂点\code{X}と頂点\code{Y}間に辺が存在することを意味する．
+  
+  次に， 図~\ref{fig:recol_s}，~\ref{fig:recol_g}の初期状態と目標状態をファクト形式で表したものを
+  コード~\ref{code:path.lp}に示す．
+  
+  \lstinputlisting[float=t,caption={%
+  図~\ref{fig:recol_s}，図~\ref{fig:recol_g}のファクト表現 (\code{path.lp})},%
+  captionpos=b,frame=single,label=code:path.lp,%
+  numbers=left,%
+  breaklines=true,%
+  columns=fullflexible,keepspaces=true,%
+  basicstyle=\ttfamily\scriptsize]{code/path.lp}
+  
+  1行目ではアトム\code{start}によって初期状態を定義している．
+  \code{start(X,C)}は初期状態において頂点\code{X}が色\code{C}で塗られることを意味する．
+  2行目ではアトム\code{goal}によって目標状態を定義している．
+  \code{goal(X,C)}は目標状態において頂点\code{X}が色\code{C}で塗られることを意味する．
+  \end{comment}
+
+\begin{comment}
+\subsection{実行実験}
 次に，3種の符号化の評価実験を行った．
 ベンチマークは，前節で生成した90問を用いた．
 制限時間は1時間とした．
@@ -143,6 +181,7 @@ vrc3で確かめられた最大値の平均値となっている．
 性能差が生じたと考えられる．
 
 %\input{table/result_unknown}
+\end{comment}
 
 %%% Local Variables:
 %%% mode: latex

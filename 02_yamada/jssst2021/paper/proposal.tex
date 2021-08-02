@@ -1,132 +1,190 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%\chapter{$k$彩色遷移問題のASP符号化} \label{chap:proposal}
+\section{解集合プログラミングに基づく組合せ遷移ソルバー} \label{chap:proposal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-\section{ASP ファクト形式}
-問題の入力として与えられるグラフ，色数，初期状態，目標状態のうち，
-グラフ，初期状態，目標状態はASP ファクトとして与えられる．
-図~\ref{fig:ex_graph}のグラフをファクト形式で表したものをコード~\ref{code:graph.lp}に示す．
+本研究では，解集合プログラミングに基づく組合せ遷移ソルバーを2種類提案する．
+提案手法では，組合せ遷移問題の基本的な入力である
+基となる組合せ問題と二つの実行可能解に加え，ステップ長$l$も与える．
+本来の問題では
+「ある組合せ問題における，
+与えられた二つの実行可能解の到達可能性」
+を解くのに対し，ステップ長を加えた場合は
+「ある組合せ問題における，
+ステップ長$l$での与えられた二つの実行可能解の到達可能性」
+を解くことになる．
+基となる組合せ問題の実行可能解の総数を$S$とすると，
+$0 \le l \le S-1$として問題を解くことで
+元の組合せ遷移問題の到達可能性が求まる．
+一つでも到達可能である$l$が存在すれば元の問題でも到達可能となる．
+また，すべての$l$で到達不能であれば元の問題でも到達不能となる．
 
+\subsection{基本ソルバー} \label{sec:based_solver}
+
+提案する基本ソルバーは，組合せ遷移問題をASPファクト形式で表したファイルと
+問題を解くための論理プログラム，及び$S$が与えられたとき，
+ステップ長$l$の値を変化させならがASPシステムを繰り返し起動し
+問題を解き到達可能性を出力する．
+組合せ遷移問題を解く論理プログラムの例として，
+$k$彩色遷移問題を解く2種類の符号化
+\code{changed}と\code{unchanged}をそれぞれ
+コード\ref{code:gcrp_cc_changed.lp}と
+コード\ref{code:gcrp_cc_unchanged.lp}に示す．
+
+%コード名にccを入れる？入れない？
 \lstinputlisting[float=t,caption={%
-図~\ref{fig:ex_graph}のファクト表現 (\code{graph.lp})},%
-captionpos=b,frame=single,label=code:graph.lp,%
+基本ソルバーにおいて$k$彩色遷移問題を解く\code{changed}符号化 (\code{gcrp_cc_changed.lp})},%
+captionpos=b,frame=single,label=code:gcrp_cc_changed.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/graph.lp}
-
-1～2行目ではそれぞれ頂点の数と辺の数を宣言している．
-4行目ではアトム\code{node}によって頂点1から頂点4を定義している．
-6行目ではアトム\code{edge}によって辺を定義している．
-\code{edge(X,Y)}は頂点\code{X}と頂点\code{Y}間に辺が存在することを意味する．
-
-次に， 図~\ref{fig:recol_s}，~\ref{fig:recol_g}の初期状態と目標状態をファクト形式で表したものを
-コード~\ref{code:path.lp}に示す．
+basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed.lp}
 
 \lstinputlisting[float=t,caption={%
-図~\ref{fig:recol_s}，図~\ref{fig:recol_g}のファクト表現 (\code{path.lp})},%
-captionpos=b,frame=single,label=code:path.lp,%
+基本ソルバーにおいて$k$彩色遷移問題を解く\code{unchanged}符号化 (\code{gcrp_cc_unchanged.lp})},%
+captionpos=b,frame=single,label=code:gcrp_cc_unchanged.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/path.lp}
+basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged.lp}
 
-1行目ではアトム\code{start}によって初期状態を定義している．
-\code{start(X,C)}は初期状態において頂点\code{X}が色\code{C}で塗られることを意味する．
-2行目ではアトム\code{goal}によって目標状態を定義している．
-\code{goal(X,C)}は目標状態において頂点\code{X}が色\code{C}で塗られることを意味する．
-
-\section{ASP 符号化}
-$k$彩色遷移問題の制約は主に基となった組合せ問題の制約と遷移制約からなる．
-本研究では遷移制約の記述が異なる3種の符号化を提案した．
-また，本来与えられる入力に加え遷移回数$t$を与えるようにした．
-本来の問題では「グラフ$G$，色数$k$における初期状態から目標状態への経路の存在」を解いていたのに対し，
-遷移回数を加えることで
-「グラフ$G$，色数$k$における遷移回数$t$での初期状態から目標状態への経路の存在」を解くことになる．
-ここで$t$の最大値を$T_{limit}$とする．
-$T_{limit}$は遷移回数の最大値であり，
-これは解空間グラフの頂点数$-1$，すなわち組合せ問題の全解数$-1$となる．
-$t=1, 2, \dots T_{limit}$のすべてで経路が存在しないのであれば本来の問題でも経路は存在しない．
-一方で，ある$t$で経路が存在するのであれば本来の問題でも経路は存在する．
-
-初めに，基本となる\code{vrc1}符号化をコード~\ref{code:vrc1.lp}に示す．
-\code{color(X,C,T)}は\code{T}回の遷移をした状態(以下ステップ\code{T})
-において頂点\code{X}が色\code{C}で塗られることを意味する．
+コード\ref{code:gcrp_cc_changed.lp}において，
 1行目では定数を用いて色\code{1}から色\code{c}までを定義している．
-2行目では定数を用いてステップ\code{0}からステップ\code{t}までを定義している．
-4～5行目では一貫性制約を用いて初期状態と目標状態を定義している．
-4行目のルールは「\code{start(X,C)}ならば\code{color(X,C,0)}である」を意味する．
-同様に，5行目のルールは「\code{goal(X,C)}ならば\code{color(X,C,t)}である」を意味する．
-9～10行目は各ステップにおいてグラフ点彩色問題の定義を満たすためのルールを記述している．
-9行目のルールは「各ステップにおいて，各頂点は一つの色で塗られる」を意味する．
-10行目のルールは
-「各ステップにおいて，辺で結ばれた頂点\code{X}と\code{Y}は同じ色で塗られない」を意味する．
-14～15行目は遷移制約を表したルールである．
-「ステップ\code{T-1}と\code{T}($1 \leq T \leq t$)において，
-ある2つの頂点\code{X}と\code{Y}が変化することはない」
+2行目では定数を用いてステップ\code{0}からステップ\code{l}までを定義している．
+5行目では一貫性制約を用いて初期状態を定義しており，
+「\code{start(X,C)}ならば\code{color(X,C,0)}である」を意味する．
+8～9行目では，各ステップにおいてグラフ点彩色問題の制約を満たすことを，
+基数制約を用いて定義している．
+8行目は「各ステップにおいて，各頂点は一つの色で塗られる」
 を意味する．
-
-\lstinputlisting[float=t,caption={%
-$k$彩色遷移問題の論理プログラム (\code{vrc1.lp})},%
-captionpos=b,frame=single,label=code:vrc1.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring1.lp}
-
-次に，コード~\ref{code:vrc1.lp}に新しいアトムを加え，遷移制約に関するルールを変更した
-\code{vrc2}符号化と\code{vrc3}符号化をそれぞれコード~\ref{code:vrc2.lp}とコード~\ref{code:vrc3.lp}に示す．
-これらのコードは，1～13行目はコード~\ref{code:vrc1.lp}と同じである．
-
-\lstinputlisting[float=t,caption={%
-$k$彩色遷移問題の論理プログラム (\code{vrc2.lp})},%
-captionpos=b,frame=single,label=code:vrc2.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring2.lp}
-
-\lstinputlisting[float=t,caption={%
-$k$彩色遷移問題の論理プログラム (\code{vrc3.lp})},%
-captionpos=b,frame=single,label=code:vrc3.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/vartex_recoloring3.lp}
-
-コード~\ref{code:vrc2.lp}ではアトム\code{changed}を使用している．
-14～15行目が遷移制約を表すルールである．
-\code{changed(X,T)}は
-「ステップ\code{T-1}とステップ\code{T}において頂点\code{X}の色が異なる」を意味し，
-14行目でそれを定義している．
-15行目では一貫性制約と個数制約を用いて
+9行目は「各ステップにおいて，
+辺で結ばれた二つの頂点で色\code{C}で塗られる頂点は一つ以下」
+を意味する．
+12～13行目では遷移制約を定義している．
+12行目で定義している\code{changed(X, T)}は，
+「ステップ\code{T-1}とステップ\code{T}で頂点\code{X}の色が
+変化した」を意味する．
+13行目では一貫性制約と個数制約を用いて
 「各ステップで色が変化する頂点は一つ」という制約を表している．
+16行目では一貫性制約を用いて目標状態を定義しており，
+「\code{goal(X,C)}ならば\code{color(X,C,l)}である」を意味する．
 
-コード~\ref{code:vrc3.lp}ではアトム\code{unchanged}を使用している．
-14～15行目が遷移制約を表すルールである．
-\code{unchanged(X,T)}は
-「ステップ\code{T-1}とステップ\code{T}において頂点\code{X}の色が同じ」を意味し，
-14行目でそれを定義している．
-15行目では一貫性制約と個数制約を用いて
+コード\ref{code:gcrp_cc_unchanged.lp}は，
+遷移制約の表し方がコード\ref{code:gcrp_cc_changed.lp}
+と異なる．
+12行目で定義している\code{unchanged(X, T)}は，
+「ステップ\code{T-1}とステップ\code{T}で頂点\code{X}の色が
+変化しなかった」を意味する．
+13行目では一貫性制約と個数制約を用いて
 「各ステップで色が変化しない頂点は\code{N-1}個」という制約を表している．
-ここで，\code{N}はグラフ$G$の頂点数である．
+ここで\code{N}はグラフの頂点数である．
 
-各符号化における遷移制約を表す基礎化後のルール数を表~\ref{tab:rule}に示す．
-基礎化とは，各アトムの変数に代入を行い命題変数とすることである．
-基礎化後のルール数は基となるアトムの変数の組合せより求められる．
-本研究で用いる符号化の場合，$($色(\code{C})の選択方法の数$)*($
-頂点(\code{V})の選択方法の数$)*($遷移回数(\code{T})の選択方法の数$)$となる．
-表~\ref{tab:rule}において，$|T|$は遷移回数，$|C|$は色数，$|V|$はグラフ$G$の頂点数を表す．
-アトムを追加した\code{vrc2}，\code{vrc3}ではルール数が減少していることがわかる．
-特に\code{vrc3}はルール数が最少であり，
-大規模な問題に対する有効性が期待できる．
+基本ソルバーでは，ASP システムの起動や
+ルールの\textbf{基礎化}による
+オーバーヘッドが大きいという問題がある．
+基礎化とは，一階述語論理に代入を行い
+命題論理へと変換することをいう．
+コード\ref{code:gcrp_cc_changed.lp}と
+コード\ref{code:gcrp_cc_unchanged.lp}において，
+ある$l$で生成される節集合から
+目標状態を定義する制約を除いたものを
+$C(l)$とすると，
+\begin{align}
+  C(l) \: \in \: C(l') \: (l \: < \: l')
+\end{align}
+となるため，同じ節を何度も生成することになる．
 
-\begin{table}[tb]
+\subsection{改良ソルバー}
+
+\begin{figure}[tb]
   \centering
-  \caption{各符号化の遷移制約を表す基礎化後のルール数}
-  \input{table/rule}
-  \label{tab:rule}
-\end{table}
+  \begin{tabular}{l}\hline
+    \textbf{Algorythm} improved solver\\\hline
+    %~1: input: a problem $P$ \\
+    ~2: input: $stop$, $min$, $max$ \\
+    ~3: launch ASP system $S$; \\
+    ~4: $step := 0$; \\
+    ~5: $ret := None$; \\
+    ~6: \bf{repeat} \\
+    ~7: \quad \quad generate a empty list $parts$; \\
+    ~8: \quad \quad $append\_list(parts, "check", step)$; \\
+    ~9: \quad \quad $append\_list(parts, "step", step)$; \\
+    10: \quad \quad \textbf{if} $step > 0$ \textbf{then} \\
+    11: \quad \quad \quad \quad $assign\_false(S, "query", step-1)$; \\
+    12: \quad \quad \textbf{else} \\
+    13: \quad \quad \quad \quad $append\_list(parts, "base", step)$; \\
+    14: \quad \quad \textbf{end if} \\
+    15: \quad \quad $ground(S, parts)$; \\
+    16: \quad \quad $assign\_true(S, "query", step)$; \\
+    17: \quad \quad $ret := solve(S)$; \\
+    18: \quad \quad $step := step+1$; \\
+    19: \textbf{until} $step > max$ or $ret == stop$ and $step \ge min$\\
+    20: close $S$; \\
+    21: \textbf{if} $ret == stop$ and $step \ge min$ \textbf{then} \\
+    22: \quad \quad \textbf{return} REACHABLE \\
+    23: \textbf{else} \\
+    24: \quad \quad \textbf{return} UNREACHABLE \\
+    25: \textbf{end if} \\ \hline
+  \end{tabular}
+  \caption{改良ソルバーのアルゴリズム}
+  \label{algo:inc_solver}
+\end{figure}
+
+\lstinputlisting[float=tb,caption={%
+\clingo のPythonAPIを用いた改良ソルバー (\code{core.lp})},%
+captionpos=b,frame=single,label=code:core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/core.lp}
+
+\ref{sec:based_solver}節で述べた問題点を改善するために
+改良ソルバーを提案した．
+改良ソルバーでは \clingo のインクリメンタルサーチモードを用いる．
+改良ソルバーのアルゴリズムを図\ref{algo:inc_solver}に示す．
+\begin{enumerate}
+  \item 終了条件と，ステップ数の下限と上限を与える．
+  \item ASPシステムを起動する．
+  \item $step$と$ret$の値を初期化する．
+  \item 空のリスト$parts$を生成する．
+  $parts$は基礎化するものを記憶するためのものである．
+  \item 論理プログラム内において，
+  \code{check}ブロックと\code{step}ブロックに
+  割り振られたステップ数$step$のルールを$parts$に加える．
+
+  \begin{itemize}
+    \item \code{check}ブロックには，主に目標状態に関するルールが記述される．
+    \item \code{step}ブロックには，主に各ステップで満たされるべきルールが記述される．
+  \end{itemize}
+
+  \item $step \ge 0$のとき，ステップ数$step-1$で基礎化された
+  命題変数\code{query(step-1)}を偽とする．そうでないとき，
+  \code{base}ブロックに割り振られたルールを$parts$に加える．
+
+  \begin{itemize}
+    \item \code{base}ブロックには，
+    ステップ数に関わらず成り立つルールが記述される．
+    \item ファクト形式のファイルなどの，ブロックが明記されてないルールも
+    \code{base}ブロックとみなされる．
+  \end{itemize}
+
+  \item $parts$内のルールについて，$step$を代入し基礎化する．
+  \item ステップ数$step$で基礎化された命題変数\code{query(step)}を
+  真とする．
+  \item ASP システムにより問題を解く．
+  \item 終了条件を満たすまで，ステップ4～9を繰り返す．
+  \item 結果を出力する．
+  \item ASPシステムを終了する．
+\end{enumerate}
+$min = 0, max = l_{ub}$とすることで，基本ソルバーと同様に
+到達可能性を判定できる．
+
+コード\ref{code:core.lp}は，\clingo の PythonAPI を用いて実装したものである．
+ステップ1とステップ11に該当する箇所は省略している．
+17～21行目がステップ6に，22行目がステップ7に，23行目がステップ8に，
+それぞれ対応している．
 
 %%% Local Variables:
 %%% mode: latex
