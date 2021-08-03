@@ -1,50 +1,83 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{実行実験} \label{chap:experiment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\ref{chap:proposal}章で提案した2種のソルバーの評価実験を行った．
+ベンチマークには$k$彩色遷移問題を用いた．
+コード\ref{code:gcrp_example.lp}は，
+$k$彩色遷移問題のファクト表現である．
+1～7行目はグラフのファクト表現である．
+\code{n(4).}は頂点数が4個であることを，
+\code{e(4).}は辺が4本であることを意味する．
+%4～7行目は\ref{code:color.lp}内のグラフのファクト表現と同じである．
+4～7行目は頂点と辺の存在をファクトとして表している．
+9～10行目では初期状態をファクトとして表している．
+\code{start(X, C)}は初期状態において頂点\code{X}が
+色\code{C}で塗られることを意味する．
+12～13行目では目標状態をファクトとして表している．
+\code{goal(X, C)}は目標状態において頂点\code{X}が
+色\code{C}で塗られることを意味する．
+%ファクト形式にどこで触れるか？
 
-\subsection{ベンチマーク}
-\ref{chap:proposal}章で提案した3種の符号化を評価するにあたり，ベンチマークを作成した．
+\lstinputlisting[float=tb,caption={%
+$k$彩色遷移問題のファクト表現 (\code{gcrp_example.lp})},%
+captionpos=b,frame=single,label=code:gcrp_example.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/gcrp_example.lp}
+
+\subsection{ベンチマークの作成}
+\begin{table*}[t]
+  \centering
+  \caption{彩色数における全解数が判明したグラフ}
+  \label{tab:bench_graph}
+  \input{table/graph}
+\end{table*}
+
 評価には，実行可能解の総数を求めることが可能な
-グラフ$G$と色数$k$の組合せが必要となる．
-そこで初めに，ベンチマークに使用可能なグラフと色数について調査を行った．
+グラフ$G$と色数$k$の組合せが必要である．
+したがって，初めにベンチマークに使用可能なグラフと色数について調査を行った．
 調査するグラフとして，
 Graph Coloring and its Generalization\footnote{https://mat.tepper.cmu.edu/COLOR04/}
 で公開されているグラフ彩色問題127問のうち，
 \textbf{彩色数}が判明している44問~\cite{DBLP:journals/constraints/TamuraTKB09}を用いた．
-彩色数とは， グラフを彩色可能な色数の最小値である．
+彩色数とはグラフを彩色可能な色数の最小値である．
 
-44問のグラフに対して，色数を彩色数としたときに全解数を求めることが可能か調査を行った．
-%また，色数を彩色数-1としたときにUNSATになるかについても調査した．
+44問のグラフに対して，
+色数を彩色数としたときに全解数を求めることが可能か調査を行った．
 調査にあたり，各グラフを ASP ファクト形式にしたうえで{\clingo}を使用した．
 グラフ点彩色問題を解くのに用いた論理プログラムをコード~\ref{code:gcp.lp}に示す．
-コード~\ref{code:gcp.lp}は，コード~\ref{code:color.lp}からグラフに関するファクトを除いたものである．
+コード~\ref{code:gcp.lp}は，
+コード~\ref{code:color.lp}からグラフに関するファクトを除いたものである．
 それぞれの制限時間は1時間とした．
 {\clingo}のバージョンは5.4.0，オプションは\textsl{tweety}と\textsl{crafty}を用いた．
 調査環境はMac Mini，3.2GHz 6コア Intel Core i7，64GBメモリである．
 
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 グラフ彩色問題の論理プログラム (\code{gcp.lp})},%
 captionpos=b,frame=single,label=code:gcp.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
-
-\begin{table}[tb]
-  \centering
-  \caption{彩色数における全解数が判明したグラフ}
-  \input{table/graph}
-  \label{tab:bench_graph}
-\end{table}
 
 結果，9つのグラフにおいて全解数を求めることができた．
 全解数が判明したものについて，表~\ref{tab:bench_graph}に示す．
 全解数が100万個未満のグラフについては，全ての解からランダムで2個の解を抽出した．
 一方，全解数が100万個以上存在するものについては出力する解の個数を10万個に制限し，
 その中からランダムで2個の解を抽出した．
-そして各グラフごとに10問ずつ，計90問のベンチマークを生成した．
+そして各グラフごとに10問ずつ，計90問のベンチマークを作成した．
 
-\subsection{ASP ファクト}
+\subsection{実行実験}
+90問のベンチマークを利用して2種のソルバーとそれぞれ2種の符号化，
+計4通りに対して評価実験を行った．
+
 \begin{comment}
   \section{ASP ファクト形式}
   問題の入力として与えられるグラフ，色数，初期状態，目標状態のうち，
