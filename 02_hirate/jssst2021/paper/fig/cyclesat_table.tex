@@ -1,20 +1,22 @@
 \begin{table*}[t]\scriptsize
-  \centering  
+  \centering
   %\tabcolsep = 0.8mm
   \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{lr||rrr||rrr||rrr}
-    問題種類 & 問題数 &\multicolumn{3}{c ||}{\textsf{undirected}} & \multicolumn{3}{c ||}{\textsf{directed}} & \multicolumn{3}{c}{\textsf{acyclicity}}\\
-     &  &  &  & {\tiny \textsf{SAT+}} &  &  & {\tiny \textsf{SAT+}} &  &  & {\tiny \textsf{SAT+}}\\
-     &  & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{UNSAT}}\\
-    \hline
-    \textsf{color04} & 127 & 95 & 31 & 126 & 93 & 31 & 124 & 94 & 31 & 125\\
-    \textsf{complete} & 15 & 15 & 0 & 15 & 15 & 0 & 15 & 15 & 0 & 15\\
-    \textsf{knight} & 11 & 11 & 0 & 11 & 11 & 0 & 11 & 11 & 0 & 11\\
-    \textsf{tsplib} & 9 & 9 & 0 & 9 & 9 & 0 & 9 & 9 & 0 & 9\\
-    \textsf{grid} & 12 & 6 & 3 & 9 & 6 & 4 & 10 & 6 & 4 & 10\\
-    \textsf{random} & 320 & 169 & 151 & 320 & 168 & 151 & 319 & 169 & 151 & 320\\
-    \hline
-    合計 & 494 & 305 & 185 & 490 & 302 & 186 & 488 & 304 & 186 & 490
+  \begin{tabular}{lr||r|r|r}
+    頂点数 & 問題数 & \textsf{undirected符号化} & \textsf{directed符号化} & \textsf{acyclicity符号化}\\
+   \hline
+    $\:\:\:\:\:\,\, 0 \leq |V| < 1000$  & 171   & 156   & \textcolor{red}{171}   & 155  \\
+    $1000 \leq |V| < 2000$  & 165   & 120   & \textcolor{red}{158}   & 124  \\
+    $2000 \leq |V| < 3000$  & 177   & 125   & \textcolor{red}{162}   & 73   \\
+    $3000 \leq |V| < 4000$  & 185   & 104   & \textcolor{red}{148}   & 42   \\
+    $4000 \leq |V| < 5000$  & 128   & 92    & \textcolor{red}{104}   & 28   \\
+    $5000 \leq |V| < 6000$  & 80    & 63    & \textcolor{red}{68}    & 23   \\
+    $6000 \leq |V| < 7000$  & 55    & 39    & \textcolor{red}{43}    & 21   \\
+    $7000 \leq |V| < 8000$  & 28    & 12    & \textcolor{red}{14}    & 5    \\
+    $8000 \leq |V| < 9000$  & 10    & 2     & \textcolor{red}{5}     & 1    \\
+    $9000 \leq |V| < 10000$ & 2     & \textcolor{red}{2}     & \textcolor{red}{2}     & 1    \\
+   \hline
+    合計 & 1001 & 715   & \textcolor{red}{875}   & 473  
   \end{tabular}
   \vskip .5em
   \caption{ハミルトン閉路問題: 解けた問題数}
