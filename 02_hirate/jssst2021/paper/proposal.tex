@@ -1,9 +1,18 @@
-﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tb]
+\centering
+\input{fig/graph_example}
+\caption{重み付き無向グラフの例}
+\label{graphexample}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{ハミルトン閉路問題のASP符号化}\label{chap:proposal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %%%%
-\begin{figure*}[ht]
+\begin{figure*}[t]
   \centering
   \thicklines
   \setlength{\unitlength}{1.2pt}
@@ -42,14 +51,8 @@ ASP システムを用いて解を計算する一般的な解法である．
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[t]
-\centering
-\input{fig/graph_example}
-\caption{重み付き無向グラフの例}
-\label{graphexample}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[%
+float=t,caption={%
 グラフ(図~\ref{graphexample})のASPファクト表現},%
 captionpos=b,frame=single,label=code:graph_example.lp,%
 numbers=none,%
@@ -75,7 +78,7 @@ ASP ファクト形式をコード~\ref{code:graph_example.lp}に示す．
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 \textsf{undirected}符号化},%
 captionpos=b,frame=single,label=code:hamilton1.lp,%
 numbers=left,%
@@ -125,7 +128,7 @@ ASP の一貫性制約と個数制約を使って表した基本的な符号化�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 \textsf{directed}符号化},%
 captionpos=b,frame=single,label=code:hamilton2.lp,%
 numbers=left,%
@@ -160,7 +163,7 @@ $v\rightarrow u$を対応させることで有向グラフ化して解く符号�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 \textsf{acyclicity}符号化},%
 captionpos=b,frame=single,label=code:hamilton3.lp,%
 numbers=left,%
@@ -184,7 +187,7 @@ basicstyle=\ttfamily\footnotesize]{code/hc_acyclicity.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 目的関数},%
 captionpos=b,frame=single,label=code:obj_minimize.lp,%
 numbers=none,%
@@ -192,7 +195,7 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/obj_minimize.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 補助ルール},%
 captionpos=b,frame=single,label=code:cost_both.lp,%
 numbers=none,%
@@ -200,7 +203,6 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/cost_both.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 最短ハミルトン閉路問題のASP符号化は，これまで説明した各符号化に，
 目的関数を追加することで実現できる．
@@ -222,7 +224,7 @@ basicstyle=\ttfamily\footnotesize]{code/cost_both.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 コスト制約},%
 captionpos=b,frame=single,label=code:cost_constraint.lp,%
 numbers=none,%
