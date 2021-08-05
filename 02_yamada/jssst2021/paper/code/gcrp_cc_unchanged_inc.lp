@@ -14,5 +14,4 @@ unchanged(X, t) :- color(X, C, t), color(X, C, t-1), t >= 1.
 :- not N-1 { unchanged(X, t) } N-1 , n(N), t >= 1.
 
 #program check(t).
-
 :- not color(X, C, t), goal(X, C), query(t).

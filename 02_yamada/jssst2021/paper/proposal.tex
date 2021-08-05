@@ -5,7 +5,8 @@
 
 本研究では，解集合プログラミングに基づく組合せ遷移ソルバーを2種類提案する．
 提案するソルバーの構成図を図\ref{fig:arch}に示す．
-それぞれのソルバーは組合せ遷移ソルバー内の仕組みが異なる．
+提案する2種のソルバーは組合せ遷移ソルバー内の仕組みが異なる．
+ASP システムには{\clingo}を利用する．
 提案手法では，組合せ遷移問題の基本的な入力である
 基となる組合せ問題と二つの実行可能解に加え，ステップ長$l$も与える．
 本来の問題では
@@ -20,6 +21,32 @@ $0 \le l \le M-1$として問題を解くことで
 元の組合せ遷移問題の到達可能性が求まる．
 一つでも到達可能である$l$が存在すれば元の問題でも到達可能となる．
 また，すべての$l$で到達不能であれば元の問題でも到達不能となる．
+
+組合せ遷移問題のインスタンスは ASP ファクト形式で与えられる．
+コード\ref{code:gcrp_example.lp}は，
+$k$彩色遷移問題のファクト表現である．
+1～7行目はグラフのファクト表現である．
+\code{n(4).}は頂点数が4個であることを，
+\code{e(4).}は辺が4本であることを意味する．
+%4～7行目は\ref{code:color.lp}内のグラフのファクト表現と同じである．
+4～7行目は頂点と辺の存在をファクトとして表している．
+9～10行目では初期状態をファクトとして表している．
+\code{start(X, C)}は初期状態において頂点\code{X}が
+色\code{C}で塗られることを意味する．
+12～13行目では目標状態をファクトとして表している．
+\code{goal(X, C)}は目標状態において頂点\code{X}が
+色\code{C}で塗られることを意味する．
+
+\lstinputlisting[float=tb,caption={%
+$k$彩色遷移問題のファクト表現 (\code{gcrp_example.lp})},%
+captionpos=b,frame=single,label=code:gcrp_example.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/gcrp_example.lp}
 
 \subsection{基本ソルバー} \label{sec:based_solver}
 
@@ -98,12 +125,133 @@ basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged.lp}
 目標状態を定義する制約を除いたものを
 $C(l)$とすると，
 \begin{align}
-  C(l) \: \in \: C(l') \: (l \: < \: l')
+  C(l) \: \subseteq \: C(l') \: (l \: < \: l')
 \end{align}
 となるため，同じ節を何度も生成することになる．
 
 \subsection{改良ソルバー}
 
+\lstinputlisting[float=tb,caption={%
+\clingo のPythonAPIを用いた改良ソルバー (\code{core.lp})},%
+captionpos=b,frame=single,label=code:core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/core.lp}
+
+\ref{sec:based_solver}節で述べた問題点を改善するために
+改良ソルバーを提案した．
+改良ソルバーでは{\clingo}のインクリメンタルサーチモードを用いる．
+コード\ref{code:core.lp}は，{\clingo}の 
+PythonAPI\footnote{https://potassco.org/clingo/python-api/5.4/} 
+を用いて実装したものである．
+4～5行目で定義されている関数\code{get}は，
+入力があった場合は入力を取得し，そうでない場合は
+デフォルトで設定されている値を取得する．
+8～9行目ではソルバーの停止条件となる2個の変数を定義している．
+8行目では\code{core_stop}を定義している．
+\code{core_stop}は\code{SAT}, \code{UNSAT}, \code{UNKNOWN}
+のいずれかを取る．
+\code{core_stop}は別の論理プログラム内で定義されている場合は
+\code{core_stop}から値を取得し，
+定義されていない場合は\code{SAT}となる．
+ソルバーは，{\clingo}が
+\code{core_stop}と同じ結果を出力するまで
+インクリメンタルに問題を解き続ける．
+9行目ではステップ長の上限値となる値\code{core_max}を定義している．
+\code{core_max}は論理プログラムで定義される\code{core_max}
+から値を取得する．
+値が与えられなかった場合は\code{Null}となり，
+ステップ長の上限値は指定されない．
+このとき，停止条件は\code{core_stop}のみに依存する．
+\code{core_max}を$M-1$とすることで，
+基本ソルバーと同様に到達可能性を判定できる．
+
+11～25行目では，ステップ長を1ずつ増加させながら繰り返し問題を解いている．
+11行目で定義されている\code{step}はステップ長のカウンタである．
+\code{ret}は{\clingo}の実行結果を受け取る変数である．
+12～14行目のループの条件は，
+2個の条件が同時に成り立つことを求めている．
+一つ目の条件は「ステップ長が定義されているならば上限値を超えていない」
+を意味する．
+二つ目の条件は「前回の結果が停止条件と同じではない」
+を意味する．
+15行目で定義している\code{parts}は，
+基礎化するルールを記憶するためのものである．
+16～17行目では，\code{parts}にルールを追加している．
+16行目では，\code{check}ブロックに書かれているルールについて，
+ステップ長を表す変数に\code{step}の数値を代入する，ということを
+追加している．
+17行目では，\code{step}ブロックに書かれているルールについて，
+16行目と同様のことを行っている．
+18行目～22行目は\code{step}の値によって挙動が変わる．
+\code{step}$ > 0$のときは，前の段階で割当てられた
+\code{query(step-1)}の割当てを偽に変更する．
+% cleanupの説明ができていない可能性あり．
+そうでないときは，\code{base}に書かれているルールを\code{parts}に
+加える．
+23行目では\code{parts}に記憶されているものを基礎化し命題論理における
+節として生成する．
+24行目では\code{query(step)}に真を割当て，{\clingo}が問題を解く時に
+割当てが変更されないようにしている．
+25行目では問題を解き\code{ret}に結果を代入し，
+その後\code{step}を増加させる．
+
+27～33行目では出力を行う．
+27行目ではステップ長を出力する．
+到達可能のときは得られた解のステップ長が出力される．
+これは最短のステップ長でもある．
+到達不能のときは$M-1$が出力される．
+28行目以降は到達可能性の結果の出力である．
+\code{step}が$0$ではなく，
+かつ\code{ret}の中身が\code{core_stop}と等しい時には
+到達可能であることを意味する\code{REACHABLE}を出力する．
+そうでないときには，到達不能を意味する\code{UNREACHABLE}
+を出力する．
+
+36～37行目では，\code{check}ブロック内にある\code{qurey(t)}を
+\code{external}変数として定義している．
+これは19行目や24行目の操作を行うのに必要となる．
+
+\lstinputlisting[float=tb,caption={%
+基本ソルバーにおいて$k$彩色遷移問題を解く\code{unchanged}符号化 (\code{gcrp_cc_unchanged_inc.lp})},%
+captionpos=b,frame=single,label=code:gcrp_cc_unchanged_inc.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp}
+
+組合せ遷移問題を解く ASP 符号化も，
+改良ソルバーに対応させる必要がある．
+コード\ref{code:gcrp_cc_unchanged.lp}の\code{unchanged}符号化
+を対応させた\code{unchanged_inc}符号化をコード\ref{code:gcrp_cc_unchanged_inc.lp}
+に示す．
+変更点は以下の通りである．
+\begin{itemize}
+  \item 1行目の\code{#const}では，\code{core_max}の値を\code{l}として宣言している．
+  \begin{itemize}
+    \item \code{core_stop}については宣言していないため\code{SAT}となる．
+  \end{itemize}
+
+  \item ルールを\code{base}などのブロックに割当てるための記述を追加している．
+  5～6行目が\code{base}に，10～14目が\code{step}に，17行目が\code{check}に
+  割当てられている．
+
+  \item ステップを表すファクト\code{t(0..l)}を削除した．
+  \item 目標状態を表すルールに\code{query(t)}を追加した．
+  \begin{itemize}
+    \item \code{query(t)}に偽を割当てることで，前の段階で生成された
+    一貫性制約が成り立たないようにしている．
+  \end{itemize}
+\end{itemize}
+
+\begin{comment}
 \begin{figure}[tb]
   \centering
   \begin{tabular}{l}\hline
@@ -137,22 +285,8 @@ $C(l)$とすると，
   \caption{改良ソルバーのアルゴリズム}
   \label{algo:inc_solver}
 \end{figure}
-
-\lstinputlisting[float=tb,caption={%
-\clingo のPythonAPIを用いた改良ソルバー (\code{core.lp})},%
-captionpos=b,frame=single,label=code:core.lp,%
-xrightmargin=1zw,% 
-xleftmargin=1zw,% 
-numbersep=5pt,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/core.lp}
-
-\ref{sec:based_solver}節で述べた問題点を改善するために
-改良ソルバーを提案した．
-改良ソルバーでは \clingo のインクリメンタルサーチモードを用いる．
 改良ソルバーのアルゴリズムを図\ref{algo:inc_solver}に示す．
+
 \begin{enumerate}
   \item 終了条件と，ステップ数の下限と上限を与える．
   \item ASPシステムを起動する．
@@ -191,39 +325,7 @@ basicstyle=\ttfamily\scriptsize]{code/core.lp}
   \item 結果を出力する．
   \item ASPシステムを終了する．
 \end{enumerate}
-$min = 0, max = l_{ub}$とすることで，基本ソルバーと同様に
-到達可能性を判定できる．
-
-コード\ref{code:core.lp}は，\clingo の PythonAPI を用いて実装したものである．
-ステップ1とステップ11に該当する箇所は省略している．
-17～21行目がステップ6に，22行目がステップ7に，23行目がステップ8に，
-それぞれ対応している．
-
-\lstinputlisting[float=tb,caption={%
-基本ソルバーにおいて$k$彩色遷移問題を解く\code{unchanged}符号化 (\code{gcrp_cc_unchanged_inc.lp})},%
-captionpos=b,frame=single,label=code:gcrp_cc_unchanged_inc.lp,%
-xrightmargin=1zw,% 
-xleftmargin=1zw,% 
-numbersep=5pt,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp}
-
-
-組合せ遷移問題を解く ASP 符号化も，
-改良ソルバーに対応させる必要がある．
-コード\ref{code:gcrp_cc_unchanged.lp}の\code{unchanged}符号化
-を対応させたものをコード\ref{code:gcrp_cc_unchanged_inc.lp}
-に示す．
-変更点は以下の通りである．
-\begin{itemize}
-  \item 図\ref{algo:inc_solver}内の$max$などに対応する
-  値を宣言する記述を追加した．（1行目）
-  \item ステップを表すファクト\code{t(0..l)}を削除した．
-  \item \code{base}などのブロックを宣言する記述を追加した．
-  \item 目標状態を表すルールに\code{query(t)}を追加した．
-\end{itemize}
+\end{comment}
 
 %%% Local Variables:
 %%% mode: latex
