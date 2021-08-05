@@ -7,7 +7,7 @@
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ハミルトン閉路問題のASP符号化}\label{chap:proposal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
@@ -38,7 +38,7 @@
 
 図~\ref{fig:arch}に，ASP を用いたハミルトン閉路問題の解法を示す．
 これは，
-与えられた問題を ASP ファクト形式に変換し，
+与えられた問題インスタンスを ASP ファクト形式に変換し，
 ハミルトン閉路問題を解く論理プログラム(ASP 符号化)と結合した後，
 ASP システムを用いて解を計算する一般的な解法である．
 本節では，ハミルトン閉路問題のインスタンスを記述するための ASP ファクト
@@ -87,6 +87,17 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/hc_undirected.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+\textsf{directed}符号化},%
+captionpos=b,frame=single,label=code:hamilton2.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]{code/hc_directed.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 グラフ$G=(V,E)$にハミルトン閉路が存在する必要十分条件は，
 以下の2つの制約を満たす部分グラフ$G'=(V,E')$が存在することである．
 \begin{itemize}
@@ -104,7 +115,7 @@ ASP の一貫性制約と個数制約を使って表した基本的な符号化�
 \item 1行目のルールは，各辺\code{edge(X,Y)}に対して，その辺がハミルト
   ン閉路に含まれるかどうかを意味するアトム\code{in(X,Y)}を選択子を使っ
   て導入している．
-\item 次数制約は3行目のルールで表される．
+\item 次数制約は2行目のルールで表される．
   このルールは，各頂点\code{node(X)}に対して，
   その次数が2に等しくなることを個数制約を使って表している．
 \item 連結制約は4--7行目のルールで表される．
@@ -126,16 +137,6 @@ ASP の一貫性制約と個数制約を使って表した基本的な符号化�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\textsf{directed}符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=tb,caption={%
-\textsf{directed}符号化},%
-captionpos=b,frame=single,label=code:hamilton2.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/hc_directed.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \textsf{directed}符号化は，\textsf{undirected}符号化をベースに，
 与えられた無向グラフの各辺$u-v$に対して，2つの弧$u\rightarrow v$と
@@ -159,7 +160,7 @@ $v\rightarrow u$を対応させることで有向グラフ化して解く符号�
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{\textsf{acyclicity}符号化}
+\subsection{\textsf{acyclicity}符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -186,6 +187,25 @@ basicstyle=\ttfamily\footnotesize]{code/hc_acyclicity.lp}
 \subsection{最短ハミルトン閉路問題}\label{minexpl}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
+最短ハミルトン閉路問題のASP符号化は，これまで説明した各符号化に，
+目的関数を追加することで実現できる．
+\textsf{undirected}符号化の場合は，
+コード~\ref{code:obj_minimize.lp}のルールを追加すればよい．
+%
+この\code{#minimize}宣言は，
+ハミルトン閉路に含まれる各辺\code{X}~--~\code{Y}の距離\code{C}
+の総和を最小化することを意味する．
+%
+\textsf{directed}と\textsf{acyclicity}符号化については，
+無向グラフの各辺\code{edge(X,Y)}に対して，2つの弧\code{in(X,Y)}と
+\code{in(Y,X)}を導入している．
+そのため，\code{#minimize}宣言に加えて，
+コード~\ref{code:cost_both.lp}の補助ルールを追加する必要がある．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\subsection{コスト制約付きハミルトン閉路問題}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
 目的関数},%
@@ -203,26 +223,6 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/cost_both.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-最短ハミルトン閉路問題のASP符号化は，これまで説明した各符号化に，
-目的関数を追加することで実現できる．
-\textsf{undirected}符号化の場合は，
-コード~\ref{code:obj_minimize.lp}のルールを追加すればよい．
-%
-この\code{#minimize}宣言は，
-ハミルトン閉路に含まれる各辺\code{X}~--~\code{Y}の距離\code{C}
-の総和を最小化することを意味する．
-%
-\textsf{directed}と\textsf{acyclicity}符号化については，
-無向グラフの各辺\code{edge(X,Y)}に対して，2つの弧\code{in(X,Y)}と
-\code{in(Y,X)}を導入している．
-そのため，上記の\code{#minimize}宣言に加えて，
-コード~\ref{code:cost_both.lp}の補助ルールを追加する必要がある．
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\subsection{コスト制約付きハミルトン閉路問題}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
 コスト制約},%

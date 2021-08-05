@@ -2,6 +2,16 @@
 \section{はじめに}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.7\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
+  \caption{D.~E.~Knuth の教科書にある米国本土48州の隣接関係を表すグラフ}
+  \label{fig:USmap}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \textbf{ハミルトン閉路問題} (Hamiltonian Cycle Problem; HCP) は，
 与えられたグラフの全頂点をちょうど一度ずつ通る閉路が存在するかどうかを
 判定する問題である\cite{hirata15:book}．
@@ -76,13 +86,14 @@ ASP の組込み非閉路制約~\cite{bomanson16:acyclicity}で表現した符�
 に拡張できる．
 
 考案した符号化の有効性を評価するために，
-Flinders Hamiltonian Cycle Project で公開されている
+Flinders Hamiltonian Cycle Project (FHCP) で公開されている
 HCPインスタンス(全1001問)~\cite{haythorpe19:fhcp}を用いて実験を行った．
 この問題集は FHCP Challenge と呼ばれる国際競技会で使用された
 頂点数が 66個から9,528個の HCP インスタンスから構成されている．
 実験の結果，
 \textsf{directed}符号化が 875 問と最も多くの問題を解き，
-他の符号化と比較して，その優位性が確認できた．
+他の符号化と比較してその優位性が確認できた．
+
 
 %%% Local Variables:
 %%% mode: latex
