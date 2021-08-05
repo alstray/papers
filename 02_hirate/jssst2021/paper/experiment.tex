@@ -11,7 +11,8 @@
 \item \textsf{fhcp} (1001問)\\
   Jerzy Filar と Vladimir Ejov が主導する
   チームプロジェクト Flinders Hamiltonian Cycle Project
-  \footnote{\url{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}}
+%  \footnote{\href{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}{リンク}}
+%  \footnote{\url{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}}
   が提供するハミルトン閉路問題のグラフインスタンス．\cite{haythorpe19:fhcp}
 \item \textsf{grid} (6問)\\
   $2N+1$次の正方グリッドグラフのインスタンス($3\leq N\leq 8$)．
@@ -72,7 +73,7 @@
 %% \textsf{directed}符号化よりも高速に解いていた．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{最短ハミルトン閉路問題}
+\subsection{最短ハミルトン路問題}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,17 +84,19 @@
 本節では，最短ハミルトン閉路問題の実験結果について述べる．
 {\clingo}のオプションは\textit{trendy}を使用し，
 一問あたりの時間制限を3時間とした．
-ベンチマーク問題は，\textsf{grid}と\textsf{usmap}の合計13問である．
+ベンチマーク問題は，\textsf{grid}と\textsf{usmap}の合計7問である．
 
 %--
 表\ref{min_table_tr}に，各符号化で得られた最適値と最良値を示す．
 各問題毎に，最も良かった値を赤字で示している．
 *マークは，最適値を表している．
 最適値と最良値の数は，
-\textsf{undirected}符号化が10問，
-\textsf{directed}符号化が7問，
-\textsf{acyclicity}符号化が4問であり，
+\textsf{undirected}符号化が5問，
+\textsf{directed}符号化が3問，
+\textsf{acyclicity}符号化が3問であり，
 \textsf{undirected}符号化の優位性が確認できた．
+なお，全ての符号化で最適値を求めることのできた2問においても，
+\textsf{undirected}符号化がもっとも高速に解を求めていた．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{コスト制約付きハミルトン路問題}
