@@ -2,29 +2,37 @@
 \section{実行実験}\label{chap:experiment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-本章では，前章で提案した3つの符号化
-\textsf{undirected}，\textsf{directed}，\textsf{acyclicity}
+考案した3つの符号化
+%\textsf{undirected}，\textsf{directed}，\textsf{acyclicity}
 の性能を評価するために実行実験を行った．
-%
-実験に使用したベンチマーク問題集(計1008問)は，以下の通りである．
+実験に使用したベンチマーク問題は以下の通りである．
+
 \begin{itemize}
-\item \textsf{fhcp} (1001問)\\
-  Jerzy Filar と Vladimir Ejov が主導する
-  チームプロジェクト Flinders Hamiltonian Cycle Project
-%  \footnote{\href{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}{リンク}}
-%  \footnote{\url{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}}
-  が提供するハミルトン閉路問題のグラフインスタンス．\cite{haythorpe19:fhcp}
-\item \textsf{grid} (6問)\\
-  $2N+1$次の正方グリッドグラフのインスタンス($3\leq N\leq 8$)．
-\item \textsf{usmap} (1問)\\
-  図~\ref{fig:USmap}に示されたグラフ．
-  D.~E~.Knuth の教科書
-  The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
-  に記載されている最短ハミルトン路問題の例.
+\item \textbf{ハミルトン閉路問題 (1001問)}\\
+  Flinders Hamiltonian Cycle Project で公開されている
+  HCPインスタンス(全1001問)を使用した~\cite{haythorpe19:fhcp}．
+%  \footnote{{\tt https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}}
+  この問題集は FHCP Challenge と呼ばれる国際競技会で使用された
+  頂点数が 66個から9,528個の HCP インスタンスから構成されている．
+  すべてのインスタンスはハミルトン閉路が存在する\textsf{SAT}インスタン
+  スである．
+\item \textbf{最短ハミルトン路問題 (7問)}\\
+  図~\ref{fig:USmap}に示した米国本土48州の隣接グラフに基づく問題インス
+  タンス(1問)と，
+  $2N+1$次の正方グリッドグラフに基づく問題インスタンス
+  (6問，$3\leq N\leq 8$)を使用した．
+\item \textbf{コスト制約付きハミルトン路問題(全列挙)}\\
+  図~\ref{fig:USmap}に示した米国本土48州の隣接グラフに基づく問題インス
+  タンスを使用した．
+  コード~\ref{code:cost_constraint.lp}に示したコスト制約の
+  閾値\code{c}として，
+  最短距離(11698マイル)の$N$倍となる10個の値，
+  $N=1.00,1.01,1.02,1.05,1.1,1.2,1.3,1.4,1.5,1.6$
+  を使用した．
 \end{itemize}
 
-使用した ASP システムは{\clingo}のバージョン5.5.0である．
-実験環境は，Mac mini Intel Corei7 3.2GHz 64GBメモリである．
+ASP システムには，{\clingo}のバージョン5.5.0 を使用し，
+実験環境は Mac OS (Intel Corei7 3.2GHz 64GBメモリ)である．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{ハミルトン閉路問題の実験結果}
@@ -44,33 +52,32 @@
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%--
-本節では，ハミルトン閉路問題の実験結果について述べる．
-{\clingo}のオプションは\textit{trendy}を使用し，一問あたりの時間制限を30分とした．
-ベンチマーク問題は，\textsf{fhcp}の1001問である．
-
-%--
-表~\ref{sat_table}に，各符号化で解けた問題数を，問題の頂点数毎に示す．
-左から，問題の頂点数，問題数，各符号化で解けた問題数を示している．
-%
+表~\ref{sat_table}に，ハミルトン閉路問題の解けた問題数を示す．
+左から，HCPインスタンスの頂点数の範囲，問題数，
+各符号化で解けた問題数を示している．
+各範囲おいて，最もよい結果をボールド体で示している．
+% 
 解けた問題数は，
-\textsf{undirected}符号化が715問，
-\textsf{directed}符号化が875問，
-\textsf{acyclicity}符号化が473問であり，
-\textsf{directed}がもっとも多くの問題を解いた．
-\textsf{directed}は，どの頂点数においても同様に，
-安定した性能の良さを示した．
+\textsf{undirected}符号化が 715 問，
+\textsf{directed}符号化が 875 問，
+\textsf{acyclicity}符号化が 473 問であり，
+\textsf{directed}符号化がもっとも多くの問題を解いた．
+\textsf{directed}符号化は，どの頂点数の範囲においても他の符号化と同じ
+かより多くの問題を解いており，その優位性が確認できた．
+
 図~\ref{cactus}に，カクタスプロットを示す．
 縦軸は問題を解くのに要した CPU 時間，横軸は解けた問題数を表す．
 グラフが右によるほど多くの問題を解けたことを示し，
 下によるほどより速く解けたことを示す．
 図~\ref{cactus}より，\textsf{directed}符号化が，
-他の2つの符号化と比較して，より多くの問題を高速に解いていることが確認できた．
-%% しかし，一部\textsf{undirected}符号化が\textsf{directed}符号化を下回る
-%% 部分が確認できる．
-%% 実際に，一部の問題では\textsf{undirected}符号化が
-%% \textsf{directed}符号化よりも高速に解いていた．
+他の2つの符号化と比較して，より多くの問題を高速に解いていることが確認できる．
+
+今回の実験では，
+ASPシステム{\clingo}のオプションは\textit{trendy}を使用し，
+1問あたりの時間制限は30分とした．
+また，\textsf{directed}と\textsf{acyclicity}符号化については，
+個数制約の上限(コード\ref{code:hamilton2.lp}と\ref{code:hamilton3.lp}の1行目)
+を省略したものを使用した．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{最短ハミルトン路問題}
@@ -80,23 +87,22 @@
 \input{fig/min_table_tr.tex}%\label{min_table_tr}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%--
-本節では，最短ハミルトン閉路問題の実験結果について述べる．
-{\clingo}のオプションは\textit{trendy}を使用し，
-一問あたりの時間制限を3時間とした．
-ベンチマーク問題は，\textsf{grid}と\textsf{usmap}の合計7問である．
-
-%--
-表\ref{min_table_tr}に，各符号化で得られた最適値と最良値を示す．
-各問題毎に，最も良かった値を赤字で示している．
+表\ref{min_table_tr}に，最短ハミルトン路問題について，
+各符号化で得られた目的関数の値を示す．
+ASPシステム{\clingo}のオプションは\textit{trendy}を使用し，
+1問あたりの時間制限は3時間とした．
+% 
+各問題ごとに，最も良かった値をボールド体で示している．
 *マークは，最適値を表している．
 最適値と最良値の数は，
 \textsf{undirected}符号化が5問，
 \textsf{directed}符号化が3問，
 \textsf{acyclicity}符号化が3問であり，
-\textsf{undirected}符号化の優位性が確認できた．
-なお，全ての符号化で最適値を求めることのできた2問においても，
-\textsf{undirected}符号化がもっとも高速に解を求めていた．
+\textsf{undirected}符号化が2問ではあるが，
+他の符号化より精度高い解を生成した．
+grid6 と US48 については，3つの符号化すべてで最適値を得ることができた．
+最適値を得るのに要した CPU 時間は，最も速かった\textsf{undirected}符号
+化で，grid6 は???秒，US48 は???秒であった．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{コスト制約付きハミルトン路問題}
@@ -106,29 +112,17 @@
 \input{fig/cost_table.tex}%\label{cost_table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%--
-本節では，第~\ref{chap:background}章でも説明した
-コスト制約付きハミルトン路問題(全列挙)の実験結果について述べる．
-{\clingo}のオプションは\textit{crafty}を使用し，
-一問あたりの時間制限を3時間とした．
-ベンチマーク問題は，D.~E~.Knuth の教科書
-The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
-に記載されているグラフを使用した(図~\ref{fig:USmap}参照)．
-このグラフは，米国本土48州の隣接関係を表しており，
-頂点数は48，辺の数は105である．
-この問題の最短距離は 11698 である(表~\ref{min_table_tr}参照)．
-今回の実験では，
-コスト制約を最短距離のN倍以下
-($N=1.00,1.01,1.02,1.05,1.1,1.2,1.3,1.4,1.5,1.6$)として，解の全列挙を
-行った．
-
-%--
-表~\ref{cost_table}に，各符号化が解の全列挙に要した CPU 時間を示す．
+表~\ref{cost_table}に，
+図~\ref{fig:USmap}に示した米国本土48州の隣接グラフに基づく
+コスト制約付きハミルトン路問題について，
+各符号化が解の全列挙に要した CPU 時間を示す．
+ASPシステム{\clingo}のオプションは\textit{crafty}を使用し，
+1問あたりの時間制限を3時間とした．
 表の1列目はコスト制約の閾値と最短距離からの倍率，2列目は解の総数を表している．
-各閾値毎に，最も良かった値を赤字で示している．
-表より，
-\textsf{acyclicity}符号化が，他の符号化と比較して，より多くの問題を
-高速に解いていることがわかる．また，平均CPU時間も最も短い．
+各閾値ごとに，最も良かった値をボールド体で示している．
+表より，\textsf{acyclicity}符号化が，他の符号化と比較して，より多くの
+問題を高速に解いていることがわかる．また，平均CPU時間も最も短い．
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Local Variables:
