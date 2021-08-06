@@ -38,146 +38,85 @@ Graph Coloring and its Generalization\footnote{https://mat.tepper.cmu.edu/COLOR0
 そして各グラフごとに10問ずつ，計90問のベンチマークを作成した．
 
 \subsection{実行実験}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[scale=0.9]{fig/cactus.eps}
+  \caption{評価実験の結果のカクタスプロット}
+  \label{fig:cactus}
+\end{figure*}
+
+% 案: 平均時間と合計数だけ本文中にのせ，詳細は付録とする
+\begin{table*}[t]
+  \centering
+  %\scriptsize
+  \tiny
+  \caption{CPUTimeに基づく比較}
+  \label{tab:result_time}
+  \input{table/time.tex}
+\end{table*}
+
 90問のベンチマークを利用して2種のソルバーとそれぞれ2種の符号化，
 計4通りに対して評価実験を行った．
-
-\begin{comment}
-  \section{ASP ファクト形式}
-  問題の入力として与えられるグラフ，色数，初期状態，目標状態のうち，
-  グラフ，初期状態，目標状態はASP ファクトとして与えられる．
-  図~\ref{fig:ex_graph}のグラフをファクト形式で表したものをコード~\ref{code:graph.lp}に示す．
-  
-  \lstinputlisting[float=t,caption={%
-  図~\ref{fig:ex_graph}のファクト表現 (\code{graph.lp})},%
-  captionpos=b,frame=single,label=code:graph.lp,%
-  numbers=left,%
-  breaklines=true,%
-  columns=fullflexible,keepspaces=true,%
-  basicstyle=\ttfamily\scriptsize]{code/graph.lp}
-  
-  1～2行目ではそれぞれ頂点の数と辺の数を宣言している．
-  4行目ではアトム\code{node}によって頂点1から頂点4を定義している．
-  6行目ではアトム\code{edge}によって辺を定義している．
-  \code{edge(X,Y)}は頂点\code{X}と頂点\code{Y}間に辺が存在することを意味する．
-  
-  次に， 図~\ref{fig:recol_s}，~\ref{fig:recol_g}の初期状態と目標状態をファクト形式で表したものを
-  コード~\ref{code:path.lp}に示す．
-  
-  \lstinputlisting[float=t,caption={%
-  図~\ref{fig:recol_s}，図~\ref{fig:recol_g}のファクト表現 (\code{path.lp})},%
-  captionpos=b,frame=single,label=code:path.lp,%
-  numbers=left,%
-  breaklines=true,%
-  columns=fullflexible,keepspaces=true,%
-  basicstyle=\ttfamily\scriptsize]{code/path.lp}
-  
-  1行目ではアトム\code{start}によって初期状態を定義している．
-  \code{start(X,C)}は初期状態において頂点\code{X}が色\code{C}で塗られることを意味する．
-  2行目ではアトム\code{goal}によって目標状態を定義している．
-  \code{goal(X,C)}は目標状態において頂点\code{X}が色\code{C}で塗られることを意味する．
-  \end{comment}
-
-\begin{comment}
-\subsection{実行実験}
-次に，3種の符号化の評価実験を行った．
-ベンチマークは，前節で生成した90問を用いた．
-制限時間は1時間とした．
-ただし，各グラフ，色数，初期状態，目標状態に対して$t=1, 2, \dots$と増やしていくものに対する制限時間である．
+今回の実験で用いる{\clingo}の仕様上，
+定数として与えられる最大値は$2^31$となる．
+これはグラフmyciel4の彩色数における実行可能解の総数より小さい．
+そのため，改良ソルバーでmyciel4に関する問題を解く場合は
+ステップ長の上限値として$2^31$を与えた．
+このとき，より短いステップにおいて到達可能である場合は
+判定可能である．
+1問あたりの制限時間は1時間とした．
 {\clingo}のバージョンは5.4.0，オプションは\textsl{jumpy}を用いた．
 調査環境はMac Mini，3.2GHz 6コア Intel Core i7，64GBメモリである．
 
-得られた結果の分類と数を表~\ref{tab:result}に示す．
-連結はある$t$で経路が存在したものである．
-部分的非連結はある$t' < T_{limit}$までは経路が存在しないことが確かめられたものである．
-非連結は$T_{limit}$までに経路が存在せず，その問題では経路が存在しないと確かめられたものである．
+実験の結果，到達可能であると判定できたものが11問，
+到達不可能であると判定できたものが60問存在した．
+図\ref{fig:cactus}は実験結果をカクタスプロットとして表したものである．
+図\ref{fig:cactus}は縦軸がCPU時間，横軸が解けた問題数を表し，
+右下にあるグラフほどより速く，より多くの問題が解けたことを意味する．
+左側に寄っている二つが基本ソルバーの結果であり，
+右側に寄っている二つが改良ソルバーの結果である．
+改良ソルバーがより速く，多くの問題を解いてることがわかる．
+また，それぞれのソルバーで\code{changed}符号化と\code{unchanged}
+を比較すると，\code{unchanged}符号化がより良い性能を
+示している．
 
-\begin{table}
-  \centering
-  \caption{結果ごとのインスタンス数}
-  \input{table/result.tex}
-  \label{tab:result}
-\end{table}
+表\ref{tab:result_time}は，4種の実験における CPU 時間
+を表にしたものである．
+左から順にインスタンス名，到達可能性，4種のCPU 時間となっている．
+到達可能であるものはREACHABLE，到達不能であるものはUNREACHABLEとしている．
+CPU 時間は左から順に基本ソルバーにおける\code{changed}符号化，
+\code{unchanged}符号化，改良ソルバーにおける\code{changed}符号化，
+\code{unchanged}符号化となっている．
+また下2行は解けた問題におけるCPU時間の平均と解けた問題数である．
+特に改良ソルバーにおける\code{unchanged_inc}が最も多くの問題を解いていた．
+これは他のものが解いた問題すべてを含んでいる．
+平均時間についても改良ソルバーによるものが基本ソルバーによるものより速く，
+\code{changed}符号化と\code{unchanged}符号化では\code{unchanged}符号化のほうが
+速かった．
 
-次に結果が連結であるものについて，
-かかった CPU 時間を各符号化ごとにまとめたものを表~\ref{tab:result_con}に示す．
-各行はインスタンスごとに分けられている．
-インスタンス名はグラフ名，色数，識別番号により構成される．
-例えばインスタンス名が1-FullIns\_3\_col4\_1ならば，
-グラフ名が1-FullIns\_3，色数が4，識別番号が1であることを意味する．
-また，最終行は各符号化ごとにもっとも早く解いたインスタンスの合計を表している．
-各列は左から順にインスタンス名，グラフの頂点数，辺数，経路が存在した最小の遷移回数，
-\code{vrc1}での CPU 時間，\code{vrc2}での CPU 時間，
-\code{vrc3}での CPU 時間となっている．
-このとき各 CPU 時間は，$t=1, 2, \dots $遷移回数までにおける CPU 時間の合計となっている．
-各インスタンスに対して最速で解いたものを色付きで示している．
+本実験により改良ソルバーの手法の有効性が確認できた．
+また，\code{unchanged}符号化の有効性も確認できた．
+これは基礎化によって生成される節数の差によるものと考えられる．
+基本ソルバーを例とする．
+2種の符号化において差は遷移制約のみである．
+ステップ長の上限値を$L$，色数を$C$，グラフの頂点数を$V$とすると，
+\code{changed}符号化の遷移制約を基礎化したときの節数が
+$L(2 {}_{C}C_{2} V + 1)$
+であるのに対し，
+\code{unchanged}符号化の同条件の節数は
+$L(CV + 1)$
+である．
+生成される節数の数が少ない場合，
+基礎化におけるオーバーヘッドや命題論理として
+解くときのオーバーヘッドが減少することが考えられる．
+結果，\code{unchanged}符号化が良い結果を示したと考えられる．
 
-\begin{table}
-  \centering
-  \caption{連結インスタンスにおける経路発見までのCPU時間の合計}
-  \input{table/result_con}
-  \label{tab:result_con}
-\end{table}
-
-次に結果が非連結のものについて述べる.
-かかった CPU 時間を各符号化ごとにまとめたものを表~\ref{tab:result_uncon}に示す．
-各行はインスタンスごとに分けられている．
-また，最終行は各符号化ごとにもっとも早く解いたインスタンスの合計を表している．
-各列は左から順にインスタンス名，グラフの頂点数，辺数，
-\code{vrc1}での CPU 時間，\code{vrc2}での CPU 時間，
-\code{vrc3}での CPU 時間となっている．
-このとき各 CPU 時間は，$t=1, 2, \dots T_{limit}$における CPU 時間の合計となっている．
-また，CPU 時間の TO は制限時間を超え判定できなかったことを示す．
-各インスタンスに対して最速で解いたものを色付きで示している．
-
-
-\begin{table}[htbp]
-  \centering
-  \caption{非連結インスタンスにおける到達不能判定までのCPU時間}
-  \input{table/result_uncon.tex}
-  \label{tab:result_uncon}
-\end{table}
-
-次に結果が部分的非連結であるものについて述べる．
-比較の指標として，
-各インスタンスで非連結であることが確かめられた遷移回数の最大値を用いる．
-このとき，グラフと色数が同じであるインスタンスは，
-初期状態と目標状態の組合せに関係なく同じ程度の数値を示す傾向が見られた．
-従って，グラフと色数が同じであるインスタンスの最大値の平均を表~\ref{tab:ave_unknown}に示す．
-%また，加工前のデータは付録内の表~\ref{tab:result_unknown}に示す．
-
-表~\ref{tab:ave_unknown}では，各行はグラフと色数の組合せを表している．
-また，最終行は各符号化ごとにもっとも長い遷移回数まで確かめられたインスタンスの合計を表している．
-各列は左から順にグラフ名と色数，グラフの頂点数，辺数，部分的非連結であったインスタンス数，
-vrc1で確かめられた最大値の平均値，vrc2で確かめられた最大値の平均値，
-vrc3で確かめられた最大値の平均値となっている．
-各インスタンス群に対して最長の遷移回数まで確かめられたものを色付きで示している．
-
-\begin{table}[htbp]
-  \centering
-  \caption{部分的非連結インスタンスにおける最長遷移回数の平均値}
-  \input{table/result_uk_ave.tex}
-  \label{tab:ave_unknown}
-\end{table}
-
-すべての分類において\code{vrc3}$>$\code{vrc2}$>$
-\code{vrc1}の順に優れた結果を出した．
-ただし連結インスタンスにおいては1秒未満で解けたものも多く，
-\code{vrc2}と\code{vrc3}で大きな差がついたのは3問にとどまった．
-また，グラフqueen6\_6とqueen7\_7
-から生成したインスタンスでは，
-\code{vrc2}が著しく悪い性能を示した．
-
-\code{vrc3}が有効であった要因の一つとして，表~\ref{tab:rule}で
-示した基礎化後のルール数の差が考えられる．
-{\clingo}ではルールを基礎化して充足可能性判定問題として解く．
-ここで基礎化後のルール数は充足可能性判定問題における節数に関係してくる．
-充足可能性判定問題において節数が多いことは，単位伝播や変数選択ヒューリスティックにおける
-オーバーヘッドが大きくなることにつながる．
-結果として基礎化後のルール数が多いほどオーバーヘッドも大きいことになり，
-性能差が生じたと考えられる．
-
-%\input{table/result_unknown}
-\end{comment}
+本実験で求解できなかった問題に着目すると，
+1-Fullins\_3, myciel3, myciel4の3個のグラフから生成された
+ベンチマークのみであった．
+これらのグラフは実行可能解の総数が多いという特徴がある．
+これは組合せ遷移問題としての解の探索空間の大きさを意味するため，
+特に到達可能ではないときの難しさに影響したと考えられる．
 
 %%% Local Variables:
 %%% mode: latex
