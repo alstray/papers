@@ -3,31 +3,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \ref{chap:proposal}章で提案した2種のソルバーの評価実験を行った．
 ベンチマークには$k$彩色遷移問題を用いた．
-コード\ref{code:gcrp_example.lp}は，
-$k$彩色遷移問題のファクト表現である．
-1～7行目はグラフのファクト表現である．
-\code{n(4).}は頂点数が4個であることを，
-\code{e(4).}は辺が4本であることを意味する．
-%4～7行目は\ref{code:color.lp}内のグラフのファクト表現と同じである．
-4～7行目は頂点と辺の存在をファクトとして表している．
-9～10行目では初期状態をファクトとして表している．
-\code{start(X, C)}は初期状態において頂点\code{X}が
-色\code{C}で塗られることを意味する．
-12～13行目では目標状態をファクトとして表している．
-\code{goal(X, C)}は目標状態において頂点\code{X}が
-色\code{C}で塗られることを意味する．
-%ファクト形式にどこで触れるか？
-
-\lstinputlisting[float=tb,caption={%
-$k$彩色遷移問題のファクト表現 (\code{gcrp_example.lp})},%
-captionpos=b,frame=single,label=code:gcrp_example.lp,%
-xrightmargin=1zw,% 
-xleftmargin=1zw,% 
-numbersep=5pt,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/gcrp_example.lp}
 
 \subsection{ベンチマークの作成}
 \begin{table*}[t]
@@ -49,23 +24,11 @@ Graph Coloring and its Generalization\footnote{https://mat.tepper.cmu.edu/COLOR0
 44問のグラフに対して，
 色数を彩色数としたときに全解数を求めることが可能か調査を行った．
 調査にあたり，各グラフを ASP ファクト形式にしたうえで{\clingo}を使用した．
-グラフ点彩色問題を解くのに用いた論理プログラムをコード~\ref{code:gcp.lp}に示す．
-コード~\ref{code:gcp.lp}は，
-コード~\ref{code:color.lp}からグラフに関するファクトを除いたものである．
+グラフ点彩色問題を解く論理プログラムとして，
+コード~\ref{code:color.lp}からグラフのファクト表現を除いたものを利用とした．
 それぞれの制限時間は1時間とした．
 {\clingo}のバージョンは5.4.0，オプションは\textsl{tweety}と\textsl{crafty}を用いた．
 調査環境はMac Mini，3.2GHz 6コア Intel Core i7，64GBメモリである．
-
-\lstinputlisting[float=tb,caption={%
-グラフ彩色問題の論理プログラム (\code{gcp.lp})},%
-captionpos=b,frame=single,label=code:gcp.lp,%
-xrightmargin=1zw,% 
-xleftmargin=1zw,% 
-numbersep=5pt,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/gcp.lp}
 
 結果，9つのグラフにおいて全解数を求めることができた．
 全解数が判明したものについて，表~\ref{tab:bench_graph}に示す．
