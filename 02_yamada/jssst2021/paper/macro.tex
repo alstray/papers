@@ -1,27 +1,28 @@
 ﻿%%% Packages
+\usepackage{comments}
 \usepackage[dvipdfmx]{graphicx}
-\usepackage{lineno}
-%\usepackage{bm}
-%\usepackage{array}
-\usepackage{url}
-\usepackage{alltt}
-\usepackage{ascmac}
+\usepackage{bm}
 \usepackage{tikz}
-\usepackage{subfigure}
-%\usepackage{subcaption}
-%\usepackage{longtable}
-\usepackage{seqsplit}
-\usepackage{appendix}
-\usepackage{comment}
 \usetikzlibrary{arrows,shapes}
 \usetikzlibrary{positioning}
+%\usepackage{lineno}
+%\usepackage{array}
+%\usepackage{url}
+%\usepackage{alltt}
+%\usepackage{ascmac}
+%\usepackage{subfigure}
+%\usepackage{subcaption}
+%\usepackage{longtable}
+%\usepackage{seqsplit}
+%\usepackage{appendix}
+%\usepackage{comment}
+%\usepackage{amsmath}
+
 \usepackage{listings}
 \usepackage{plistings}
-\usepackage{amsmath}
-\newcommand{\bhline}{\noalign{\hrule height 1pt}}
-\def\lstlistingname{コード}
-\def\lstlistlistingname{コード目次}
-%\renewcommand{\bibname}{参考文献}
+%\newcommand{\bhline}{\noalign{\hrule height 1pt}}
+%\def\lstlistingname{コード}
+%\def\lstlistlistingname{コード目次}
 
 %%% For ASP
 \newcommand{\asap}{\textit{teaspoon}}
@@ -33,12 +34,12 @@
 \newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
 \newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
 \newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
-%\newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+\newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
 \newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
 \newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
 \newcommand{\pbody}[1]{\poslits{\body{#1}}}
 \newcommand{\nbody}[1]{\neglits{\body{#1}}}
-%\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
 \newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
 
 %%% Local Variables:

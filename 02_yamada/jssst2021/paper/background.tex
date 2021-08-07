@@ -1,137 +1,86 @@
-\section{組合せ遷移問題} \label{chap:background}
-組合せ遷移問題 (Combinatorial Reconfiguration Problems~\cite{Ito18:tohoku})
-はある組合せ問題とその二つの実行可能解が与えられたとき，一方の実行可能解
-から他方の実行可能解へ，\textbf{遷移制約}を満たしつつ，
+\section{組合せ遷移問題と\bm{$k$}彩色遷移問題}\label{chap:background}
+
+\textbf{組合せ遷移問題}
+(Combinatorial Reconfiguration Problems;
+CoRe\cite{core:ItoDHPSUU11,core:Nishimura18,core:Heuvel13})
+とは，基となる組合せ問題とその2つの実行可能解が与えられたとき，
+一方の実行可能解から他方の実行可能解へ，遷移制約を満たしつつ，
 実行可能解のみを経由して到達できるかを判定する問題である．
-組合せ遷移問題を定義することは，
-基となる組合せ問題が形成する\textbf{解空間グラフ}を定義することに等しい．
-解空間グラフの頂点は，基となる組合せ問題の実行可能解である． 
-また，解空間グラフの辺は，遷移制約が成立つ二つの実行可能解に対応する頂点の間に存在する．
-本論文では，このようにして定義される解空間グラフ上の二つの頂点間の到達可能性についてを対象とする．
+組合せ遷移問題は，基となる組合せ問題の実行可能解が形成する解空間グラフ
+を用いて定義される．解空間グラフの頂点は実行可能解を，
+辺は遷移制約に関する実行可能解の間の隣接関係を表す．
+つまり，組合せ問題が実行可能解が存在するかを判定するのに対し，
+組合せ遷移問題は，解空間グラフにおいて2つの頂点間の到達可能性を判定
+することが目的となる．
 
-組合せ遷移問題の基となる組合せ問題には，
-充足可能性判定問題(SAT)~\cite{sat_core:2009}，集合被覆問題~\cite{Ito:2011}，グラフ点彩色問題などが存在する．
-このような組合せ遷移問題の中には \textbf{PSPACE 完全}であるものも存在する． 
-PSPACE~\cite{Kuriyama13:ieice}は問題の複雑性を表すクラスの一つであり，
-属する問題は指数時間で解くことが可能である． 
-現在，P $\subseteq$ NP $\subseteq$ PSPACEであることが知られている．
+計算困難性について，組合せ遷移問題はクラス PSPACE に属する問題である．
+基の組合せ問題が NP 完全であるとき，その遷移問題の多くは PSPACE 完全に
+なることが知られている．代表的なものとしては，
+命題論理の充足可能性判定問題(SAT)，
+集合被覆問題，
+独立点集合，
+グラフ点彩色問題を基とする組合せ遷移問題などがある\cite{%
+  core:gcp:BonsmaC09,%
+  core:gcp:CerecedaHJ11,%
+  core:sat:GopalanKMP09,%
+  core:ItoDHPSUU11%
+}．
 
-実社会において，組合せ遷移問題は持続可能なシステムへの応用が期待されている． 
-解空間グラフ上において二つの頂点に経路があるならば，
-組合せ問題における制約を満たしたまま，ある状態から他方の状態へと遷移可能である． 
-これは，システムの正常性を維持したまま，異なる状態へと変化可能であることを意味する．
+グラフ点彩色問題を基とする組合せ遷移問題は，
+\textbf{\bm{$k$}彩色遷移問題}
+($k$-coloring reconfiguration problem)
+ともよばれ盛んに研究されている%
+\cite{core:gcp:BonsmaC09,core:gcp:CerecedaHJ11}．
+$k$彩色遷移問題は，
+色数$k$のグラフ点彩色問題と2つの実行可能解が与えられたとき，
+一方の実行可能解から他方の実行可能解へ，1回の遷移において色が変化する
+頂点はただ1つのみという遷移制約を満たしつつ，実行可能解のみを経由して
+到達できるかを判定する問題である~\footnote{%
+色数$k$のグラフ点彩色問題とは，与えられた有限無向グラフについて，隣接
+する頂点が同色にならないように各頂点を彩色するとき，グラフが$k$色以下
+で彩色可能かどうかを判定する問題である．}．
+$k$彩色遷移問題では，グラフの形や色数に制限を加えることで多項式時間で
+解ける問題が存在するが，一般に$k \ge 4$において PSPACE 完全である．
 
-組合せ遷移問題の研究は，理論計算機科学の分野を中心に，2000年以降急
-速に研究が発展し，理論的な基盤が整備されつつある．
-しかしながら，組合せ遷移問題のアルゴリズム開発等の実践的な研究はまだ始
-まったばかりであり，組合せ遷移問題を解く汎用ソルバーの研究開発は重要な
-研究課題の一つである．
-
-\subsection{$k$彩色遷移問題}
-$k$彩色遷移問題~\cite{BC2009:tcs}とは\textbf{グラフ点彩色問題}を基とした組合せ遷移問題であり， 
-色数$k$のグラフ点彩色問題と二つの彩色が与えられたとき，
-一方の彩色から他方の彩色へ，各遷移過程において色が変化する頂点はただ一つ
-という遷移制約を満たしつつ，実行可能解のみを経由し到達できるかを判定する問題である．
-グラフ点彩色問題はグラフ$G=(V, E)$と色数$k$が与えられたとき，
-辺で結ばれた頂点同士が異なる色になるように各頂点に一つの色を割当てることが可能かの判定問題である． 
-例として，図~\ref{fig:ex_graph}のグラフを$k=3$で彩色するとする．
-頂点の枠内に書かれた数字は識別番号であり，四つの頂点と四つの辺を持つ．
-実行可能解の一つを図~\ref{fig:graph_col}に示す．
-頂点1と4は赤色，頂点2は青色，頂点3は黄色で塗られている．
-また辺で結ばれた頂点は異なる色で塗られていることがわかる．
-
-\begin{figure}[tb]
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
   \centering
-  \begin{tabular}{c}
-    
-    \begin{minipage}{0.45\hsize}
-      \centering
-      \input{tikz/ex_graph}
-      \caption{グラフ}
-      \label{fig:ex_graph}
-    \end{minipage}
-
-    \begin{minipage}{0.45\hsize}
-      \centering
-      \input{tikz/col3_graph}
-      \caption{$k=3$における彩色例}
-      \label{fig:graph_col}
-    \end{minipage}
-
-  \end{tabular}  
+  \scalebox{0.7}{\input{tikz/graph}}
+  \quad
+  \scalebox{0.7}{\input{tikz/graph_colored}}
+  \caption{色数$k=3$のグラフ点彩色問題の入力例(左)と実行可能解(右)}
+  \label{fig:graph}
 \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%
 
-$k$彩色遷移問題ではグラフ$G$と色数$k$に加え，
-$G$の$k$彩色の二つの実行可能解$\alpha$(初期状態)，$\beta$(目標状態)が与えられる． 
-このとき，その他の実行可能解は与えられない． 
-解空間グラフの頂点は，$G$の$k$彩色における実行可能解となる．
-また，遷移制約はある一つの頂点においてのみ色が異なる実行可能解の間で成立ち，
-解空間グラフの辺は遷移制約が成立つ場合にのみ存在する．
-以上の条件において，解空間グラフ上での
-初期状態に対応する頂点と目標状態に対応する頂点との到達可能性が問われる． 
-例として，グラフを図~\ref{fig:ex_graph}，$k=4$，
-初期状態を図~\ref{fig:recol_s}，目標状態を図~\ref{fig:recol_g}とする．
-
-\begin{figure}[tb]
-  \centering
-  \begin{tabular}{c}
-
-    \begin{minipage}{0.45\hsize}
-      \centering
-      \input{tikz/start}
-      \caption{初期状態}
-      \label{fig:recol_s}
-    \end{minipage}
-
-    \begin{minipage}{0.45\hsize}
-      \centering
-      \input{tikz/goal}
-      \caption{目標状態}
-      \label{fig:recol_g}
-    \end{minipage}
-    
-  \end{tabular}
-\end{figure}
-
-解となる遷移系列を図~\ref{fig:ans_varrecol}に示す．
-この遷移系列では遷移回数は3回となっている．
-遷移制約について，$t=0$と$t=1$では頂点1の色のみが変化していることがわかる． 
-同様に，$t=1$から$t=2$，$t=2$から$t=3$においても一つの頂点のみ色が変化している． 
-また各$t$において，グラフ点彩色問題の定義を満たしていることがわかる．
-
-\newcommand{\lw}[1]{\smash{\lower-8.ex\hbox{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[t]
-  %\renewcommand{\arraystretch}{0.9}
-  \tabcolsep = 3mm  
-  \centering
-  \begin{tabular}{ccc}
-    $t=0$ (初期状態) & & $t=1$\\
-    \scalebox{0.8}{\input{tikz/start}}
-    & \lw{$\Rightarrow$} & 
-    \scalebox{0.8}{\input{tikz/trans1}}\\
-    & & $\Downarrow$\\
-    & & \\
-    \scalebox{0.8}{\input{tikz/trans2}}
-    & \lw{$\Leftarrow$} &
-    \scalebox{0.8}{\input{tikz/goal}}\\
-    $t=3$ (目標状態) & & $t=2$
+  \newcommand{\lw}[1]{\smash{\lower-10.ex\hbox{#1}}}
+  \begin{tabular}[t]{ccccccc}
+    $t=0$ && $t=1$ && $t=2$ && $t=3$ \\
+    \scalebox{0.7}{\input{tikz/gcrp_t0}} &
+    \lw{$\Rightarrow$} &
+    \scalebox{0.7}{\input{tikz/gcrp_t1}} &
+    \lw{$\Rightarrow$} &
+    \scalebox{0.7}{\input{tikz/gcrp_t2}} &
+    \lw{$\Rightarrow$} &
+    \scalebox{0.7}{\input{tikz/gcrp_t3}} \\
+    スタート状態 &&&&&& ゴール状態
   \end{tabular}
-  \caption{遷移系列の例}
-  \label{fig:ans_varrecol}
+  \caption{到達可能な$k=4$彩色遷移問題の例}
+  \label{fig:gcrp}
 \end{figure*}
+% start(1,4). start(2,2). start(3,3). start(4,1).
+% goal(1,3). goal(2,4). goal(3,2). goal(4,1).
+% 1->R, 2->B, 3->Y, 4->G
+%%%%%%%%%%%%%%%%%%%%%%%%
 
-$k$彩色遷移問題の難しさは，色数$k$によって変化することが知られている． 
-\begin{itemize}
-  \item $k = 2$のとき，グラフは2部グラフであり明らかに経路は存在しない． \cite{CHM2011:JGT}
-  \item $k = 3$のとき，多項式時間で判定可能である． \cite{CHM2011:JGT}
-  \item $k \geq 4$のとき，PSPACE 完全である． \cite{BC2009:tcs}
-\end{itemize}
-また，グラフと色数に制限を加えた場合，多項式時間で解けるものが存在する． \cite{BC2009:tcs}
-\begin{itemize}
-  \item グラフが平面グラフであり$k \geq 7$のとき，多項式時間で解くことが可能である．
-  \item グラフが平面2部グラフであり$k \geq 5$のとき，多項式時間で解くことが可能である．
-\end{itemize}
-しかしながら，汎用的かつ効率的なアルゴリズムはいまだ発見されていない．
+図~\ref{fig:graph}に，色数$k=3$のグラフ点彩色問題の例とその実行可能解を示す．
+図~\ref{fig:gcrp}は，到達可能な$k=4$彩色遷移問題の例である．
+この例は，
+スタート状態($t=0$)からゴール状態($t=3$)へ，3回の遷移で到達している．
+また，各状態$t$はグラフ点彩色問題の制約を満たしており，
+1回の遷移においてちょうど1個の頂点の色が変化していることがわかる．
 
 %%% Local Variables:
 %%% mode: latex

@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{解集合プログラミングに基づく組合せ遷移ソルバー} \label{chap:proposal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % ~と～
@@ -252,81 +252,81 @@ basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp}
   \end{itemize}
 \end{itemize}
 
-\begin{comment}
-\begin{figure}[tb]
-  \centering
-  \begin{tabular}{l}\hline
-    \textbf{Algorythm} improved solver\\\hline
-    %~1: input: a problem $P$ \\
-    ~2: input: $stop$, $min$, $max$ \\
-    ~3: launch ASP system $S$; \\
-    ~4: $step := 0$; \\
-    ~5: $ret := None$; \\
-    ~6: \bf{repeat} \\
-    ~7: \quad \quad generate a empty list $parts$; \\
-    ~8: \quad \quad $append\_list(parts, "check", step)$; \\
-    ~9: \quad \quad $append\_list(parts, "step", step)$; \\
-    10: \quad \quad \textbf{if} $step > 0$ \textbf{then} \\
-    11: \quad \quad \quad \quad $assign\_false(S, "query", step-1)$; \\
-    12: \quad \quad \textbf{else} \\
-    13: \quad \quad \quad \quad $append\_list(parts, "base", step)$; \\
-    14: \quad \quad \textbf{end if} \\
-    15: \quad \quad $ground(S, parts)$; \\
-    16: \quad \quad $assign\_true(S, "query", step)$; \\
-    17: \quad \quad $ret := solve(S)$; \\
-    18: \quad \quad $step := step+1$; \\
-    19: \textbf{until} $step > max$ or $ret == stop$ and $step \ge min$\\
-    20: close $S$; \\
-    21: \textbf{if} $ret == stop$ and $step \ge min$ \textbf{then} \\
-    22: \quad \quad \textbf{return} REACHABLE \\
-    23: \textbf{else} \\
-    24: \quad \quad \textbf{return} UNREACHABLE \\
-    25: \textbf{end if} \\ \hline
-  \end{tabular}
-  \caption{改良ソルバーのアルゴリズム}
-  \label{algo:inc_solver}
-\end{figure}
-改良ソルバーのアルゴリズムを図\ref{algo:inc_solver}に示す．
+% \begin{comment}
+% \begin{figure}[tb]
+%   \centering
+%   \begin{tabular}{l}\hline
+%     \textbf{Algorythm} improved solver\\\hline
+%     %~1: input: a problem $P$ \\
+%     ~2: input: $stop$, $min$, $max$ \\
+%     ~3: launch ASP system $S$; \\
+%     ~4: $step := 0$; \\
+%     ~5: $ret := None$; \\
+%     ~6: \bf{repeat} \\
+%     ~7: \quad \quad generate a empty list $parts$; \\
+%     ~8: \quad \quad $append\_list(parts, "check", step)$; \\
+%     ~9: \quad \quad $append\_list(parts, "step", step)$; \\
+%     10: \quad \quad \textbf{if} $step > 0$ \textbf{then} \\
+%     11: \quad \quad \quad \quad $assign\_false(S, "query", step-1)$; \\
+%     12: \quad \quad \textbf{else} \\
+%     13: \quad \quad \quad \quad $append\_list(parts, "base", step)$; \\
+%     14: \quad \quad \textbf{end if} \\
+%     15: \quad \quad $ground(S, parts)$; \\
+%     16: \quad \quad $assign\_true(S, "query", step)$; \\
+%     17: \quad \quad $ret := solve(S)$; \\
+%     18: \quad \quad $step := step+1$; \\
+%     19: \textbf{until} $step > max$ or $ret == stop$ and $step \ge min$\\
+%     20: close $S$; \\
+%     21: \textbf{if} $ret == stop$ and $step \ge min$ \textbf{then} \\
+%     22: \quad \quad \textbf{return} REACHABLE \\
+%     23: \textbf{else} \\
+%     24: \quad \quad \textbf{return} UNREACHABLE \\
+%     25: \textbf{end if} \\ \hline
+%   \end{tabular}
+%   \caption{改良ソルバーのアルゴリズム}
+%   \label{algo:inc_solver}
+% \end{figure}
+% 改良ソルバーのアルゴリズムを図\ref{algo:inc_solver}に示す．
 
-\begin{enumerate}
-  \item 終了条件と，ステップ数の下限と上限を与える．
-  \item ASPシステムを起動する．
-  \item $step$と$ret$の値を初期化する．
-  \item 空のリスト$parts$を生成する．
-  $parts$は基礎化するものを記憶するためのものである．
-  \item 論理プログラム内において，
-  \code{check}ブロックと\code{step}ブロックに
-  割り振られたステップ数$step$のルールを$parts$に加える．
+% \begin{enumerate}
+%   \item 終了条件と，ステップ数の下限と上限を与える．
+%   \item ASPシステムを起動する．
+%   \item $step$と$ret$の値を初期化する．
+%   \item 空のリスト$parts$を生成する．
+%   $parts$は基礎化するものを記憶するためのものである．
+%   \item 論理プログラム内において，
+%   \code{check}ブロックと\code{step}ブロックに
+%   割り振られたステップ数$step$のルールを$parts$に加える．
 
-  \begin{itemize}
-    \item \code{check}ブロックには，主に目標状態に関するルールが記述される．
-    \item \code{step}ブロックには，主に各ステップで満たされるべきルールが記述される．
-  \end{itemize}
+%   \begin{itemize}
+%     \item \code{check}ブロックには，主に目標状態に関するルールが記述される．
+%     \item \code{step}ブロックには，主に各ステップで満たされるべきルールが記述される．
+%   \end{itemize}
 
-  \item $step \ge 0$のとき，ステップ数$step-1$で基礎化された
-  命題変数\code{query(step-1)}を偽とする．そうでないとき，
-  \code{base}ブロックに割り振られたルールを$parts$に加える．
-  \begin{itemize}
-    \item \code{query}は，すでに生成されている前の段階時点における目標状態
-    に関するルールを無効化するためのものである．
-  \end{itemize}
+%   \item $step \ge 0$のとき，ステップ数$step-1$で基礎化された
+%   命題変数\code{query(step-1)}を偽とする．そうでないとき，
+%   \code{base}ブロックに割り振られたルールを$parts$に加える．
+%   \begin{itemize}
+%     \item \code{query}は，すでに生成されている前の段階時点における目標状態
+%     に関するルールを無効化するためのものである．
+%   \end{itemize}
 
-  \begin{itemize}
-    \item \code{base}ブロックには，
-    ステップ数に関わらず成り立つルールが記述される．
-    \item ファクト形式のファイルなどの，ブロックが明記されてないルールも
-    \code{base}ブロックとみなされる．
-  \end{itemize}
+%   \begin{itemize}
+%     \item \code{base}ブロックには，
+%     ステップ数に関わらず成り立つルールが記述される．
+%     \item ファクト形式のファイルなどの，ブロックが明記されてないルールも
+%     \code{base}ブロックとみなされる．
+%   \end{itemize}
 
-  \item $parts$内のルールについて，$step$を代入し基礎化する．
-  \item ステップ数$step$で基礎化された命題変数\code{query(step)}を
-  真とする．
-  \item ASP システムにより問題を解く．
-  \item 終了条件を満たすまで，ステップ4～9を繰り返す．
-  \item 結果を出力する．
-  \item ASPシステムを終了する．
-\end{enumerate}
-\end{comment}
+%   \item $parts$内のルールについて，$step$を代入し基礎化する．
+%   \item ステップ数$step$で基礎化された命題変数\code{query(step)}を
+%   真とする．
+%   \item ASP システムにより問題を解く．
+%   \item 終了条件を満たすまで，ステップ4～9を繰り返す．
+%   \item 結果を出力する．
+%   \item ASPシステムを終了する．
+% \end{enumerate}
+% \end{comment}
 
 %%% Local Variables:
 %%% mode: latex
