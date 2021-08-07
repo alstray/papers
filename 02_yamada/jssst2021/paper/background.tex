@@ -1,13 +1,13 @@
-\section{組合せ遷移問題と\bm{$k$}彩色遷移問題}\label{chap:background}
+﻿\section{組合せ遷移問題と\bm{$k$}彩色遷移問題}\label{chap:background}
 
 \textbf{組合せ遷移問題}
 (Combinatorial Reconfiguration Problems;
-CoRe\cite{core:ItoDHPSUU11,core:Nishimura18,core:Heuvel13})
+CoRe~\cite{core:ItoDHPSUU11,core:Nishimura18,core:Heuvel13})
 とは，基となる組合せ問題とその2つの実行可能解が与えられたとき，
 一方の実行可能解から他方の実行可能解へ，遷移制約を満たしつつ，
 実行可能解のみを経由して到達できるかを判定する問題である．
 組合せ遷移問題は，基となる組合せ問題の実行可能解が形成する解空間グラフ
-を用いて定義される．解空間グラフの頂点は実行可能解を，
+を用いて定義される．解空間グラフの頂点は実行可能解を表し，
 辺は遷移制約に関する実行可能解の間の隣接関係を表す．
 つまり，組合せ問題が実行可能解が存在するかを判定するのに対し，
 組合せ遷移問題は，解空間グラフにおいて2つの頂点間の到達可能性を判定
@@ -19,7 +19,7 @@ CoRe\cite{core:ItoDHPSUU11,core:Nishimura18,core:Heuvel13})
 命題論理の充足可能性判定問題(SAT)，
 集合被覆問題，
 独立点集合，
-グラフ点彩色問題を基とする組合せ遷移問題などがある\cite{%
+グラフ点彩色問題を基とする組合せ遷移問題などがある~\cite{%
   core:gcp:BonsmaC09,%
   core:gcp:CerecedaHJ11,%
   core:sat:GopalanKMP09,%
@@ -28,9 +28,8 @@ CoRe\cite{core:ItoDHPSUU11,core:Nishimura18,core:Heuvel13})
 
 グラフ点彩色問題を基とする組合せ遷移問題は，
 \textbf{\bm{$k$}彩色遷移問題}
-($k$-coloring reconfiguration problem)
-ともよばれ盛んに研究されている%
-\cite{core:gcp:BonsmaC09,core:gcp:CerecedaHJ11}．
+($k$-coloring Reconfiguration Problems)
+ともよばれ盛んに研究されている~\cite{core:gcp:BonsmaC09,core:gcp:CerecedaHJ11}．
 $k$彩色遷移問題は，
 色数$k$のグラフ点彩色問題と2つの実行可能解が与えられたとき，
 一方の実行可能解から他方の実行可能解へ，1回の遷移において色が変化する
@@ -47,7 +46,7 @@ $k$彩色遷移問題では，グラフの形や色数に制限を加えるこ�
   \centering
   \scalebox{0.7}{\input{tikz/graph}}
   \quad
-  \scalebox{0.7}{\input{tikz/graph_colored}}
+  \scalebox{0.7}{\input{tikz/gcrp_t1}}
   \caption{色数$k=3$のグラフ点彩色問題の入力例(左)と実行可能解(右)}
   \label{fig:graph}
 \end{figure}
@@ -78,7 +77,7 @@ $k$彩色遷移問題では，グラフの形や色数に制限を加えるこ�
 図~\ref{fig:graph}に，色数$k=3$のグラフ点彩色問題の例とその実行可能解を示す．
 図~\ref{fig:gcrp}は，到達可能な$k=4$彩色遷移問題の例である．
 この例は，
-スタート状態($t=0$)からゴール状態($t=3$)へ，3回の遷移で到達している．
+スタート状態($t=0$)からゴール状態($t=3$)へ，3ステップの遷移で到達している．
 また，各状態$t$はグラフ点彩色問題の制約を満たしており，
 1回の遷移においてちょうど1個の頂点の色が変化していることがわかる．
 
