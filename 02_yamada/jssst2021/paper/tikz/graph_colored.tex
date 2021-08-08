@@ -12,9 +12,9 @@
  
   % node %
   \node[node, fill=red!70] at (-1,1) (node1) {\textbf{1}};
-  \node[node, fill=blue!70] at (1,1) (node2) {\textbf{2}};
-  \node[node, fill=yellow!70] at (-1,-1) (node3) {\textbf{3}};
-  \node[node, fill=red!70] at (1,-1) (node4) {\textbf{4}};
+  \node[node, fill=yellow!70] at (1,1) (node2) {\textbf{2}};
+  \node[node, fill=red!70] at (-1,-1) (node3) {\textbf{3}};
+  \node[node, fill=blue!70] at (1,-1) (node4) {\textbf{4}};
  
   \foreach \u / \v in {node1/node2, node2/node3, node2/node4, node3/node4}
   \draw (\u) -- (\v);

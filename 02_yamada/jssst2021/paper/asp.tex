@@ -110,7 +110,7 @@ basicstyle=\ttfamily\scriptsize]{code/color.log}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-{\gringo}の実行例: 基礎化された論理プログラム},%
+基礎化された論理プログラム},%
 captionpos=b,frame=single,label=code:color_ground.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
@@ -154,20 +154,24 @@ ASP を用いた基本的な問題解法は，
 ASP システムは，
 コード~\ref{code:graph.lp}のファクトと
 コード~\ref{code:color.lp}の論理プログラム
-を基礎化した後，解集合を計算する．
+から解集合を計算する．
 コード~\ref{code:color.log}に{\clingo}の実行例を示す．
-色\code{1}を黄，色\code{2}を赤，色\code{3}を青とすると，
+色\code{1}を赤，色\code{2}を青，色\code{3}を黄とすると，
 得られた解集合\{
 \code{color(1,1)},
 \code{color(2,3)},
 \code{color(3,1)},
 \code{color(4,2)}\}
 は，図~\ref{fig:graph}の右側の彩色を表す．
-最後に基礎化された論理プログラムを
-コード~\ref{code:color_ground.lp}に示す．
-5--8行目が
+より詳しく言うと，
+{\clingo}は，グラウンダー{\gringo}を用いて
+コード~\ref{code:graph.lp}のファクトと
+コード~\ref{code:color.lp}の論理プログラムを基礎化した後，
+{\clasp}を用いて基礎化された論理プログラムの解集合を計算する．
+基礎化されたルール集合をコード~\ref{code:color_ground.lp}に示す．
+4--7行目が
 コード~\ref{code:color.lp}の2行目に，
-9--20行目が
+8--19行目が
 コード~\ref{code:color.lp}の3行目に
 対応している．
 
