@@ -145,8 +145,9 @@ $v\rightarrow u$を対応させることで有向グラフ化して解く符号�
 \begin{itemize}
 \item 1行目では，無向グラフの有向グラフ化を行う．
   与えられた無向グラフの各辺\code{edge(X,Y)}に対して，
-  2つの弧\code{in(X,Y)}と\code{in(Y,X)}を導入し，
-  それらの高々1個がハミルトン閉路に含まれることを個数制約を使って
+  \code{in(X,Y)}と\code{in(Y,X)}を導入し，
+  二つの弧$X\rightarrow Y$と$Y\rightarrow X$のうち
+  高々1個がハミルトン閉路に含まれることを個数制約を使って
   表している．
 \item 次数制約は2--3行目のルールで表される．
   2行目のルールは，各頂点\code{node(X)}の出次数が1に等しいことを表して
@@ -237,8 +238,8 @@ basicstyle=\ttfamily\footnotesize]{code/cost_constraint.lp}
 ハミルトン閉路問題に，距離の総和が所与の閾値以下であるこ
 とを制約条件として付加した問題である．
 この問題のASP符号化は，
-ハミルトン閉路問題の\textsf{undirected}, \textsf{acyclicity},
-\textsf{directed}符号化に，
+ハミルトン閉路問題の\textsf{undirected}, \textsf{directed},
+\textsf{acyclicity}符号化に，
 コード~\ref{code:cost_constraint.lp}のルールを追加することで実現できる．
 %
 コード中の\code{c}は閾値を表し，実際の値は実行時に与えられる．
