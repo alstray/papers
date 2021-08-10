@@ -100,6 +100,7 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/color.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \lstinputlisting[float=t,caption={%
 {\clingo}の実行例},%
 captionpos=b,frame=single,label=code:color.log,%
@@ -130,8 +131,10 @@ ASP を用いた基本的な問題解法は，
 
 図~\ref{fig:graph}の無向グラフを，ASP のファクト形式で表したものをコー
 ド~\ref{code:graph.lp}に示す．
-アトム\code{node/1}は頂点を表し，
-アトム\code{edge/2}は辺を表している．
+アトム\code{n/1}は頂点の数，
+\code{e/1}は辺の数，
+\code{node/1}は頂点，
+\code{edge/2}は辺を表している．
 ピリオド(``\code{.}'')はルールの終わりを表す終端記号である．
 
 グラフ点彩色問題を解く論理プログラムを，

@@ -1,0 +1,44 @@
+% clingo graph_reconfig.lp changed.lp -c c=4 -c length=0
+clingo version 5.4.0
+Reading from graph_reconfig.lp ...
+Solving...
+UNSATISFIABLE
+
+Models       : 0
+Calls        : 1
+CPU Time     : 0.003s
+
+% clingo graph_reconfig.lp changed.lp -c c=4 -c length=1
+clingo version 5.4.0
+Reading from graph_reconfig.lp ...
+Solving...
+UNSATISFIABLE
+
+Models       : 0
+Calls        : 1
+CPU Time     : 0.003s
+
+% clingo graph_reconfig.lp changed.lp -c c=4 -c length=2
+clingo version 5.4.0
+Reading from graph_reconfig.lp ...
+Solving...
+UNSATISFIABLE
+
+Models       : 0
+Calls        : 1
+CPU Time     : 0.005s
+
+% clingo graph_reconfig.lp changed.lp -c c=4 -c length=3
+clingo version 5.4.0
+Reading from graph_reconfig.lp ...
+Solving...
+Answer: 1
+color(1,4,0) color(2,2,0) color(3,3,0) color(4,1,0)
+color(1,3,1) color(2,2,1) color(3,3,1) color(4,1,1)
+color(1,3,2) color(2,4,2) color(3,3,2) color(4,1,2)
+color(1,3,3) color(2,4,3) color(3,2,3) color(4,1,3)...
+SATISFIABLE
+
+Models       : 1+
+Calls        : 1
+CPU Time     : 0.005s

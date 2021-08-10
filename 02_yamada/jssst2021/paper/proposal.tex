@@ -1,6 +1,7 @@
 ﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{ASPに基づく組合せ遷移ソルバーの解法}\label{chap:proposal}
+\section{ASPを用いた組合せ遷移問題の解法}\label{chap:proposal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
 ASP 技術を用いた組合せ遷移問題の解法として，
 \textbf{有界組合せ遷移}(Bounded Combinatorial Reconfiguration)
 を提案し，そのソルバーの実装方法について述べる．
@@ -12,7 +13,6 @@ ASP 技術を用いた組合せ遷移問題の解法として，
 有界組合せ遷移では，組合せ遷移問題に対して，制限された長さの(すなわち
 有界の)遷移系列を論理プログラムとして記号的に表現し，その論理プログラ
 ムを ASP システムで実行することにより，到達可能性の検査を行う．
-与えられた組合せ問題とその2つの実行可能解について，
 ASP システムが充足可能と判定した場合，
 制限された長さの到達可能な遷移系列が存在することを意味する．
 逆に充足不能と判定した場合，制限された長さでは到達不能である
@@ -20,76 +20,84 @@ ASP システムが充足可能と判定した場合，
 を構成し，再び ASP システムによる実行を繰り返す．
 有界組合せ遷移は，到達可能な遷移系列を探すだけで，
 到達不能の証明は行わない不完全な手続きであるが，検査すべき遷移系列の長
-さに上限を設定できる場合には，完全な手続きとなる．
+さに上限が存在する場合には，完全な手続きとなる．
 例えば，基の組合せ問題の直径 (任意の2つの実行可能解の最短経路のうちの
 最大長)を上限とすればよい~\footnote{%
 理論的には，問題の直径を越えるまで手続きを繰り返せばよいが，
 実用的な問題ではしばしば直径が大きすぎ，現実的には適用できない}．
 
+組合せ遷移問題が与えられたとき，
+基の組合せ問題の変数集合
+$\bm{x} = \{x_1,x_2,\ldots,x_n\}$，
+各遷移ステップ$t\geq 0$に対して，
+ステップ$t$での各変数の値を表す変数集合
+$\bm{x}^{t} = \{x_1^t,x_2^t,\ldots,x_n^t\}$
+を導入する．
+ここで，
+スタート状態の制約を表す論理式を$S(\bm{x})$，
+基の組合せ問題の制約を表す論理式を$C(\bm{x)}$，
+遷移制約を表す論理式を$T(\bm{x},\bm{x}')$，
+ゴール状態の制約を表す論理式を$G(\bm{x)}$とする．
+スタート状態から$\ell$ステップ遷移した後の各変数の値
+$\bm{x}^{\ell}$は，
+\(
+S(\bm{x}^0) \land 
+\bigwedge_{t=0}^{\ell} C(\bm{x}^t) \land
+\bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t})
+\)
+を満たす．
+そこで，ゴール状態の制約を満たすかどうか判定するため，
+$G(\bm{x}^\ell)$を付け加えた論理式$\varphi_{\ell}$を構成する．
+\begin{align*}
+  \varphi_{\ell} &= S(\bm{x}^0) \\
+  &\land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
+  \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t}) \nonumber\\
+  &\land G(\bm{x}^\ell)
+\end{align*}
+与えられたステップ長$\ell$に対し$\varphi_\ell$が充足可能であれば，
+到達可能な遷移系列が得られる．
 
-\vskip 10em
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{有界組合せ遷移の基本手続き} \label{sec:based_solver}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+ASP システムを用いて有界組合せ遷移を行う手続きは以下のようになる．
+\begin{enumerate}
+\item ステップ長$\ell$を$\ell=0$とする．
+\item \label{BoCoRe:base:solver:2}
+  $\varphi_\ell$を論理プログラムとして記述し，
+  ファクト形式のCoRe問題インスタンスといっしょに，
+  ASP システムに入力として与える．
+\item ASP システムの出力結果が充足可能であれば終了する．
+  充足不能であれば$\ell$の値を増加させ，
+  \ref{BoCoRe:base:solver:2}に戻り手続きを繰り返す．
+  ただし，
+  $\ell$が基の問題の直径を越えたところで繰り返しを停止できる．
+\end{enumerate}
+この手続は，与えられた組合せ遷移問題に対して，
+到達可能な最短の遷移系列を探索する．
+一般に，到達不能の証明は行わない不完全な手続きであるが，検査すべきステッ
+プ長$\ell$に上限が存在する場合には完全な手続きとなり，到達不能も判定で
+きる．
 
-本研究では，解集合プログラミングに基づく組合せ遷移ソルバーを2種類提案する．
-提案するソルバーの構成図を図\ref{fig:arch}に示す．
-提案する2種のソルバーは組合せ遷移ソルバー内の仕組みが異なる．
-ASP システムには{\clingo}を利用する．
-提案手法では，組合せ遷移問題の基本的な入力である
-基となる組合せ問題と二つの実行可能解に加え，ステップ長$l$も与える．
-本来の問題では
-「ある組合せ問題における，
-与えられた二つの実行可能解の到達可能性」
-を解くのに対し，ステップ長を加えた場合は
-「ある組合せ問題における，
-ステップ長$l$での与えられた二つの実行可能解の到達可能性」
-を解くことになる．
-基となる組合せ問題の実行可能解の総数を$M$とすると，
-$0 \le l \le M-1$として問題を解くことで
-元の組合せ遷移問題の到達可能性が求まる．
-一つでも到達可能である$l$が存在すれば元の問題でも到達可能となる．
-また，すべての$l$で到達不能であれば元の問題でも到達不能となる．
-
-組合せ遷移問題のインスタンスは ASP ファクト形式で与えられる．
-コード\ref{code:gcrp_example.lp}は，
-$k$彩色遷移問題のファクト表現である．
-1～7行目はグラフのファクト表現である．
-\code{n(4).}は頂点数が4個であることを，
-\code{e(4).}は辺が4本であることを意味する．
-%4～7行目は\ref{code:color.lp}内のグラフのファクト表現と同じである．
-4～7行目は頂点と辺の存在をファクトとして表している．
-9～10行目では初期状態をファクトとして表している．
-\code{start(X, C)}は初期状態において頂点\code{X}が
-色\code{C}で塗られることを意味する．
-12～13行目では目標状態をファクトとして表している．
-\code{goal(X, C)}は目標状態において頂点\code{X}が
-色\code{C}で塗られることを意味する．
-
-\lstinputlisting[float=tb,caption={%
-$k$彩色遷移問題のファクト表現 (\code{gcrp_example.lp})},%
-captionpos=b,frame=single,label=code:gcrp_example.lp,%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=t,caption={%
+$k=4$彩色遷移問題のファクト表現 (\code{graph_reconfig.lp})},%
+captionpos=b,frame=single,label=code:graph_reconfig.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
 numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/gcrp_example.lp}
+basicstyle=\ttfamily\scriptsize]{code/graph_reconfig.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{基本ソルバー} \label{sec:based_solver}
-
-提案する基本ソルバーは，組合せ遷移問題をASPファクト形式で表したファイルと
-問題を解くための ASP 符号化，及び$M$が与えられたとき，
-ステップ長$l$の値を変化させならがASPシステムを繰り返し起動し
-問題を解き到達可能性を出力する．
-組合せ遷移問題を解く符号化の例として，
-$k$彩色遷移問題を解く2種類の符号化
-\code{changed}と\code{unchanged}をそれぞれ
-コード\ref{code:gcrp_cc_changed.lp}と
-コード\ref{code:gcrp_cc_unchanged.lp}に示す．
-
-%コード名にccを入れる？入れない？
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-基本ソルバーにおいて$k$彩色遷移問題を解く\code{changed}符号化 (\code{gcrp_cc_changed.lp})},%
+  $k=$\code{c} 彩色遷移問題を解く\code{changed}符号化 (\code{changed.lp})．
+  定数\code{length} はステップ長を表す．
+},%
 captionpos=b,frame=single,label=code:gcrp_cc_changed.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
@@ -98,9 +106,13 @@ numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-基本ソルバーにおいて$k$彩色遷移問題を解く\code{unchanged}符号化 (\code{gcrp_cc_unchanged.lp})},%
+  $k=$\code{c} 彩色遷移問題を解く\code{unchanged}符号化 (\code{unchanged.lp})．
+  定数\code{length} はステップ長を表す．
+},%
 captionpos=b,frame=single,label=code:gcrp_cc_unchanged.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
@@ -109,70 +121,165 @@ numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-コード\ref{code:gcrp_cc_changed.lp}において，
-1行目では定数を用いて色\code{1}から色\code{c}までを定義している．
-2行目では定数を用いてステップ\code{0}からステップ\code{l}までを定義している．
-5行目では一貫性制約を用いて初期状態を定義しており，
-「\code{start(X,C)}ならば\code{color(X,C,0)}である」を意味する．
-8～9行目では，各ステップにおいてグラフ点彩色問題の制約を満たすことを，
-基数制約を用いて定義している．
-8行目は「各ステップにおいて，各頂点は一つの色で塗られる」
-を意味する．
-9行目は「各ステップにおいて，
-辺で結ばれた二つの頂点で色\code{C}で塗られる頂点は一つ以下」
-を意味する．
-12～13行目では遷移制約を定義している．
-12行目で定義している\code{changed(X, T)}は，
-「ステップ\code{T-1}とステップ\code{T}で頂点\code{X}の色が
-変化した」を意味する．
-13行目では一貫性制約と個数制約を用いて
-「各ステップで色が変化する頂点は一つ」という制約を表している．
-16行目では一貫性制約を用いて目標状態を定義しており，
-「\code{goal(X,C)}ならば\code{color(X,C,l)}である」を意味する．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[float=t,caption={%
+{\clingo}の実行例},%
+captionpos=b,frame=single,label=code:graph_reconfig.log,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/graph_reconfig.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-コード\ref{code:gcrp_cc_unchanged.lp}は，
-遷移制約の表し方がコード\ref{code:gcrp_cc_changed.lp}
-と異なる．
-12行目で定義している\code{unchanged(X, T)}は，
-「ステップ\code{T-1}とステップ\code{T}で頂点\code{X}の色が
-変化しなかった」を意味する．
-13行目では一貫性制約と個数制約を用いて
-「各ステップで色が変化しない頂点は\code{N-1}個」という制約を表している．
-ここで\code{N}はグラフの頂点数である．
+図~\ref{fig:gcrp}の$k=4$彩色遷移問題の ASP ファクト表現を
+コード~\ref{code:graph_reconfig.lp}に示す．
+色\code{1}は赤，色\code{2}は青，色\code{3}は黄，
+色\code{4}は緑を表している．
+ゴード~\ref{code:graph.lp}のグラフ点彩色問題と比較して，
+スタート状態を表す
+\code{start/2}と
+ゴール状態を表す
+\code{goal/2}が追加されている．
+例えば，\code{start(1,4).}は，スタート状態($t=0$)において頂点\code{1}
+が色\code{4} (緑)で塗られることを表す．
 
-基本ソルバーでは，ASP システムの起動や
-ルールの\textbf{基礎化}による
-オーバーヘッドが大きいという問題がある．
-基礎化とは，一階述語論理に代入を行い
-命題論理へと変換することをいう．
-コード\ref{code:gcrp_cc_changed.lp}と
-コード\ref{code:gcrp_cc_unchanged.lp}において，
-ある$l$で生成される節集合から
-目標状態を定義する制約を除いたものを
-$C(l)$とすると，
-\begin{align}
-  C(l) \: \subseteq \: C(l') \: (l \: < \: l')
-\end{align}
-となるため，同じ節を何度も生成することになる．
+コード\ref{code:gcrp_cc_changed.lp}に，
+$k$=\code{c}彩色遷移問題を解く論理プログラムとして\code{changed}符号化を示す．
+コード中の\code{c} は色数，\code{length} はステップ長を表す．
+1行目のアトム\code{t/1}はステップ数を表す．
+% \code{t(0..length).}は\code{t(0).}, \code{t(1).}, \ldots,
+% \code{t(length).}に展開される．
+アトム\code{color(X,C,T)}は，ステップ\code{T}において，頂点\code{X}が
+色\code{C}で塗られることを意味する．
+3行目はスタート状態の制約を表す．
+5--7行目は基のグラフ点彩色問題の制約を表す．
+9--11行目は遷移制約を表す．
+9行目の補助アトム\code{changed(X,T)}は，
+ステップ\code{T-1}と\code{T}の間で頂点\code{X}の色が
+変化したことを意味する．
+11行目のルールは，個数制約を用いて
+「各ステップ\code{T}において色が変化する頂点はただ1つのみ」という制約
+を表している．
 
-\subsection{改良ソルバー}
+コード\ref{code:gcrp_cc_unchanged.lp}に，遷移制約の表現方法が異なる
+\code{changed}符号化を示す．
+9行目の補助アトム\code{unchanged(X,T)}は，
+ステップ\code{T-1}と\code{T}の間で頂点\code{X}の色が
+変化しないことを意味する．
+10行目のルールは，個数制約を用いて
+「各ステップ\code{T}において色が変化しない頂点は\code{N-1}個」という制
+約を表している．
+
+コード~\ref{code:graph_reconfig.log}は，
+{\clingo}を用いて有界組合せ遷移の手続きを実行したものである．
+ステップ長$\ell$を0から3まで変化させ，{\clingo}を合計4回実行することに
+より，到達可能な遷移系列が得られている．
+$\ell=3$で得られた解集合は，図~\ref{fig:gcrp}の遷移系列に対応している．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{有界組合せ遷移ソルバーの実装} \label{sec:improved_solver}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{arch.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\lstinputlisting[float=tb,caption={%
-\clingo のPythonAPIを用いた改良ソルバー (\code{core.lp})},%
-captionpos=b,frame=single,label=code:core.lp,%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% \lstinputlisting[float=t,caption={%
+% {\clingo}の Python API を用いた有界組合せ遷移ソルバーの実装 (\code{core.lp})},%
+% captionpos=b,frame=single,label=code:core.lp,%
+% xrightmargin=1zw,% 
+% xleftmargin=1zw,% 
+% numbersep=5pt,%
+% numbers=left,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\scriptsize]{code/core.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{figure*}[t]
+\centering  
+\begin{lstlisting}[
+frame=single,
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
 numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/core.lp}
+basicstyle=\ttfamily\footnotesize]
+#script (python) 
+import clingo
 
+def get(val, default):
+    return val if val != None else default
+
+def main(prg):
+    core_stop  = get(prg.get_const("core_stop"), clingo.String("SAT"))
+    core_max   = prg.get_const("core_max")
+
+    step, ret = 0, None
+    while ((core_max is None or step <= core_max.number) and
+            (step == 0 or (core_stop.string == "SAT" and not ret.satisfiable) or
+            (core_stop.string == "UNSAT" and not ret.unsatisfiable))):    
+        parts = []
+        parts.append(("check", [step]))
+        parts.append(("step", [step]))
+        if step > 0:
+            prg.release_external(clingo.Function("query", [step-1]))
+            prg.cleanup()
+        else:
+            parts.append(("base", []))
+        prg.ground(parts)
+        prg.assign_external(clingo.Function("query", [step]), True)
+        ret, step = prg.solve(), step+1
+
+    print('c step: %s' % str(step-1))
+    if (step != 0 and
+        (core_stop.string != "SAT" or ret.satisfiable) and
+        (core_stop.string != "UNSAT" or ret.unsatisfiable)):
+        print('s REACHABLE')
+    else:
+        print('s UNREACHABLE')
+
+#end.
+#program check(t).
+#external query(t).
+\end{lstlisting}
+\caption{{\clingo}の Python API を用いた有界組合せ遷移ソルバーの実装 (\code{core.lp})}
+\label{code:core.lp}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+有界組合せ遷移ソルバーは，
+ステップ長$\ell$を増やしながら，複数の$\varphi_\ell$を
+繰り返し解く必要がある．
+しかし，各$\varphi_\ell$に含まれる制約の大部分は同じであるため，
+毎回 ASP システムを実行する単純な実装方法は，
+同一の探索空間を何度も調べることになり求解効率が低下する．
+また，毎回$\varphi_\ell$全体を基礎化するオーバーヘッドも無視でいない．
+
+この問題を解決するために，モデル検査やプランニングの実装で使われる
+インクリメンタル ASP 解法を用いる~\cite{GebserKKS19}．
+この解法は，ルールを追加・削除した一連の論理プログラムを，
+同様の探索失敗を防ぐために獲得した学習節を再利用しながら，
+連続的に解くための手法である．
+提案する有界組合せ遷移ソルバーは，
+このインクリメンタル ASP 解法を利用することで，
+ステップ長$\ell$を増やしながら，段階的に$\varphi_\ell$を構成
+および基礎化し，獲得した学習節を再利用した効率のよい到達可能性の検査を
+可能とする．
+
+提案ソルバーの構成を図~\ref{fig:arch}に示す．
+コード~\ref{code:core.lp}に，
+{\clingo}の Python インターフェースを用いて実装した
+有界組合せ遷移の手続きを示す．
+
+%%%%%%%%%%%%%%%%%%%%%%% TODO TODO %%%%%%%%%%%%%%%%%%%%%%%
+{\color{red}
 \ref{sec:based_solver}節で述べた問題点を改善するために
 改良ソルバーを提案した．
 改良ソルバーでは{\clingo}のインクリメンタルサーチモードを用いる．
@@ -246,9 +353,25 @@ PythonAPI\footnote{https://potassco.org/clingo/python-api/5.4/}
 36～37行目では，\code{check}ブロック内にある\code{qurey(t)}を
 \code{external}変数として定義している．
 これは19行目や24行目の操作を行うのに必要となる．
+}
+%%%%%%%%%%%%%%%%%%%%%%% TODO TODO %%%%%%%%%%%%%%%%%%%%%%%
 
-\lstinputlisting[float=tb,caption={%
-基本ソルバーにおいて$k$彩色遷移問題を解く\code{unchanged}符号化 (\code{gcrp_cc_unchanged_inc.lp})},%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=t,caption={%
+$k$=\code{c} 彩色遷移問題を解く\code{changed_inc} 符号化 (\code{changed_inc.lp})},%
+captionpos=b,frame=single,label=code:gcrp_cc_changed_inc.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed_inc.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=t,caption={%
+$k$=\code{c} 彩色遷移問題を解く\code{unchanged_inc} 符号化 (\code{unchanged_inc.lp})},%
 captionpos=b,frame=single,label=code:gcrp_cc_unchanged_inc.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
@@ -257,106 +380,35 @@ numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-組合せ遷移問題を解く ASP 符号化も，
-改良ソルバーに対応させる必要がある．
-コード\ref{code:gcrp_cc_unchanged.lp}の\code{unchanged}符号化
-を対応させた\code{unchanged_inc}符号化をコード\ref{code:gcrp_cc_unchanged_inc.lp}
-に示す．
-変更点は以下の通りである．
-\begin{itemize}
-  \item 1行目の\code{#const}では，\code{core_max}の値を\code{l}として宣言している．
-  \begin{itemize}
-    \item \code{core_stop}については宣言していないため\code{SAT}となる．
-  \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[float=t,caption={%
+提案ソルバーの実行例},%
+captionpos=b,frame=single,label=code:graph_reconfig_inc.log,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/graph_reconfig_inc.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  \item ルールを\code{base}などのブロックに割当てるための記述を追加している．
-  5～6行目が\code{base}に，10～14目が\code{step}に，17行目が\code{check}に
-  割当てられている．
-
-  \item ステップを表すファクト\code{t(0..l)}を削除した．
-  \item 目標状態を表すルールに\code{query(t)}を追加した．
-  \begin{itemize}
-    \item \code{query(t)}に偽を割当てることで，前の段階で生成された
-    一貫性制約が成り立たないようにしている．
-  \end{itemize}
-\end{itemize}
-
-% \begin{comment}
-% \begin{figure}[tb]
-%   \centering
-%   \begin{tabular}{l}\hline
-%     \textbf{Algorythm} improved solver\\\hline
-%     %~1: input: a problem $P$ \\
-%     ~2: input: $stop$, $min$, $max$ \\
-%     ~3: launch ASP system $S$; \\
-%     ~4: $step := 0$; \\
-%     ~5: $ret := None$; \\
-%     ~6: \bf{repeat} \\
-%     ~7: \quad \quad generate a empty list $parts$; \\
-%     ~8: \quad \quad $append\_list(parts, "check", step)$; \\
-%     ~9: \quad \quad $append\_list(parts, "step", step)$; \\
-%     10: \quad \quad \textbf{if} $step > 0$ \textbf{then} \\
-%     11: \quad \quad \quad \quad $assign\_false(S, "query", step-1)$; \\
-%     12: \quad \quad \textbf{else} \\
-%     13: \quad \quad \quad \quad $append\_list(parts, "base", step)$; \\
-%     14: \quad \quad \textbf{end if} \\
-%     15: \quad \quad $ground(S, parts)$; \\
-%     16: \quad \quad $assign\_true(S, "query", step)$; \\
-%     17: \quad \quad $ret := solve(S)$; \\
-%     18: \quad \quad $step := step+1$; \\
-%     19: \textbf{until} $step > max$ or $ret == stop$ and $step \ge min$\\
-%     20: close $S$; \\
-%     21: \textbf{if} $ret == stop$ and $step \ge min$ \textbf{then} \\
-%     22: \quad \quad \textbf{return} REACHABLE \\
-%     23: \textbf{else} \\
-%     24: \quad \quad \textbf{return} UNREACHABLE \\
-%     25: \textbf{end if} \\ \hline
-%   \end{tabular}
-%   \caption{改良ソルバーのアルゴリズム}
-%   \label{algo:inc_solver}
-% \end{figure}
-% 改良ソルバーのアルゴリズムを図\ref{algo:inc_solver}に示す．
-
-% \begin{enumerate}
-%   \item 終了条件と，ステップ数の下限と上限を与える．
-%   \item ASPシステムを起動する．
-%   \item $step$と$ret$の値を初期化する．
-%   \item 空のリスト$parts$を生成する．
-%   $parts$は基礎化するものを記憶するためのものである．
-%   \item 論理プログラム内において，
-%   \code{check}ブロックと\code{step}ブロックに
-%   割り振られたステップ数$step$のルールを$parts$に加える．
-
-%   \begin{itemize}
-%     \item \code{check}ブロックには，主に目標状態に関するルールが記述される．
-%     \item \code{step}ブロックには，主に各ステップで満たされるべきルールが記述される．
-%   \end{itemize}
-
-%   \item $step \ge 0$のとき，ステップ数$step-1$で基礎化された
-%   命題変数\code{query(step-1)}を偽とする．そうでないとき，
-%   \code{base}ブロックに割り振られたルールを$parts$に加える．
-%   \begin{itemize}
-%     \item \code{query}は，すでに生成されている前の段階時点における目標状態
-%     に関するルールを無効化するためのものである．
-%   \end{itemize}
-
-%   \begin{itemize}
-%     \item \code{base}ブロックには，
-%     ステップ数に関わらず成り立つルールが記述される．
-%     \item ファクト形式のファイルなどの，ブロックが明記されてないルールも
-%     \code{base}ブロックとみなされる．
-%   \end{itemize}
-
-%   \item $parts$内のルールについて，$step$を代入し基礎化する．
-%   \item ステップ数$step$で基礎化された命題変数\code{query(step)}を
-%   真とする．
-%   \item ASP システムにより問題を解く．
-%   \item 終了条件を満たすまで，ステップ4～9を繰り返す．
-%   \item 結果を出力する．
-%   \item ASPシステムを終了する．
-% \end{enumerate}
-% \end{comment}
+提案ソルバーの入力となる論理プログラムは，
+\code{base}, \code{step(t)}, \code{check(t)}
+の 3つのパートから構成される．
+\code{base} パートには，スタート状態の制約をを記述する．
+\code{step(t)} パートには，各ステップ$t\geq 0$において満たすべ
+き基の組合せ問題の制約および遷移制約を記述する．
+\code{check(t)} パートには，ゴール状態の制約を記述する．
+%
+コード~\ref{code:gcrp_cc_changed_inc.lp}と
+コード~\ref{code:gcrp_cc_unchanged_inc.lp}に，
+$k$=\code{c}彩色遷移問題を解く2種類の論理プログラムを示す．
+これらは，それぞれ
+コード~\ref{code:gcrp_cc_changed.lp}と
+コード~\ref{code:gcrp_cc_unchanged.lp}
+の論理プログラムに対応している．
+提案ソルバーの実行例をコード~\ref{code:graph_reconfig_inc.log}に示す．
+得られた解集合は，図~\ref{fig:gcrp}の遷移系列に対応している．
 
 %%% Local Variables:
 %%% mode: latex
