@@ -21,14 +21,22 @@ Flinders Hamiltonian Cycle Project (FHCP) で公開されている
 その結果，
 \textsf{directed}符号化が，875 問と最も多くの問題を解き，
 他の符号化と比較してその優位性が確認できた．
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textcolor{red}{
-  また，2016年に同一ベンチマークを用いて行われた競技会(１年間開催)では，
-  一位となった David Coudert と Nathann Cohen が
-  CPLEX を使用して985問を解き\cite{cohen17:1001graph}，
-  二位となった Andrew Johnson が SATソルバーを使用して
-  614問を解いていた\cite{andrew18:triple}.  
-  そのため，他の手法との比較においても，その優秀な性能を示した．
+  この実験で使用した問題集は，
+  2016年に FHCP Challenge と呼ばれる国際競技会で使用されたものである．
+  この競技会では，
+  1位となった D.~Coudert と N.~Cohen が
+  CPLEX を使用して 985 問\cite{cohen17:1001graph}，
+  2位となった A.~Johnson が 
+  SATソルバーを使用して 614 問\cite{andrew18:triple}，
+  3位となった A.~Gharbi と U.~Syarif が 488 問，
+  4位となった M.~Noisternig が 464 問，
+  5位となった M.~Nurhafiz が 385 問をそれぞれ解いた\cite{haythorpe19:fhcp}．
+  \textsf{directed}符号化は，
+  ASPのルール10個程度の簡潔な記述であるにもかかわらず，
+  実質的に二位の成績に相当した．
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,7 +52,11 @@ CEGAR (Counterexample Guided Abstraction Refinement)
 本研究と関連の深い研究としては，
 SATソルバーを用いた解法~\cite{Prestwich03:DAM,VelevG09:relative,soh14:jelia2014}，
 整数計画ソルバーを用いた解法~\cite{numata11:tsp}がある．
-これらを含む他のアプローチとの比較も重要な今後の課題である．
+これら
+\textcolor{red}{
+  や FHCP Challenge で 用いられた解法
+}
+を含む他のアプローチとの比較も重要な今後の課題である．
 
 
 %%% Local Variables:
