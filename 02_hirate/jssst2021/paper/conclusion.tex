@@ -22,23 +22,19 @@ Flinders Hamiltonian Cycle Project (FHCP) で公開されている
 \textsf{directed}符号化が，875 問と最も多くの問題を解き，
 他の符号化と比較してその優位性が確認できた．
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textcolor{red}{
-  この実験で使用した問題集は，
-  2015年9月30日から2016年9月30日にかけて行われた 
-  FHCP Challenge と呼ばれる国際競技会で使用されたものである．
-  この競技会では，
-  1位となった D.~Coudert と N.~Cohen が
-  整数計画ソルバー CPLEX を使用して 985 問\cite{cohen17:1001graph}，
-  2位となった A.~Johnson が 
-  SATソルバーを使用して 614 問\cite{andrew18:triple}，
-  3位となった A.~Gharbi と U.~Syarif が 488 問，
-  4位となった M.~Noisternig が 464 問，
-  5位となった M.~Nurhafiz が 385 問をそれぞれ解いた\cite{haythorpe19:fhcp}．
-  \textsf{directed}符号化は，
-  ASPのルール10個程度の簡潔な記述であるにもかかわらず，
-  実質的に二位の成績に相当した．
-}
+本研究で使用したハミルトン閉路問題の問題集は，
+2015年から2016年にかけて行われた 
+FHCP Challenge と呼ばれる国際競技会~\cite{haythorpe19:fhcp}で使用され
+たものである．
+この競技会では，
+整数計画ソルバー CPLEX を使用した手法~\cite{cohen17:1001graph}が 985
+問を解き優勝した．
+2位となった SAT ソルバーを使用した手法は 614 問を解い
+た~\cite{andrew18:triple}．
+3位から5位の解けた問題数はそれぞれ，488 問，464 問，385 問であった．
+よって，875 問を解いた\textsf{directed}符号化は，
+ASPのルール10個程度の簡潔なプログラムであるにもかかわらず，
+実質2位の成績に相当する．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 今後の課題としては，
@@ -50,14 +46,11 @@ CEGAR (Counterexample Guided Abstraction Refinement)
 ハミルトン閉路問題は代表的な NP 完全問題であり，
 また重要な工学的応用が数多く存在するため，
 その解法については古くから盛んに研究されている．
-本研究と関連の深い研究としては，
+本研究と関連の深いものとしては，
 SATソルバーを用いた解法~\cite{Prestwich03:DAM,VelevG09:relative,soh14:jelia2014}，
 整数計画ソルバーを用いた解法~\cite{numata11:tsp}がある．
-これら
-\textcolor{red}{
-  や FHCP Challenge で 用いられた解法\cite{cohen17:1001graph,andrew18:triple}
-}を含む他のアプローチとの比較も重要な今後の課題である．
-
+これらや FHCP Challenge の上位ソルバー~\cite{cohen17:1001graph,andrew18:triple}
+との比較も重要な今後の課題である．
 
 %%% Local Variables:
 %%% mode: latex
