@@ -123,40 +123,6 @@
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{ASP を用いたハミルトン閉路問題の解法}
-%%%%%%%%
-\begin{figure}[h]
-  \centering
-  \thicklines
-  \setlength{\unitlength}{1.0pt}
-  \small\footnotesize\scriptsize
-  \begin{picture}(280,57)(4,-10)
-    \put(  0, 20){\dashbox(50,24){\shortstack{HCP問題\\インスタンス}}}
-    \put( 60, 20){\framebox(50,24){変換器}}
-    \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
-    \put(120,-10){\alert{\dashbox(50,24){\shortstack{ASP符号化\\\tiny{(論理プログラム)}}}}}
-    \put(180, 20){\framebox(50,24){ASPシステム}}
-    \put(240, 20){\dashbox(50,24){\shortstack{HCP問題\\の解}}}
-    \put( 50, 32){\vector(1,0){10}}
-    \put(110, 32){\vector(1,0){10}}
-    \put(170, 32){\vector(1,0){10}}
-    \put(230, 32){\vector(1,0){10}}
-    \put(170, +2){\line(1,0){4}}
-    \put(174, +2){\line(0,1){30}}
-  \end{picture}  
-%\caption{ASP を用いたハミルトン閉路問題(HCP)の解法}
-\label{fig:arch}
-\end{figure}
-%%%%
-
-\begin{itemize}
-\item 与えられた問題インスタンスを ASP ファクトに変換する．
-\item ASP ファクトをハミルトン閉路問題を解く論理プログラム( ASP 符号化)と結合し，
-      ASP システムに入力する．
-\item ASP システムによって解が計算される．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASP の言語構文}
 \begin{alertblock}{}\centering
   ASPの言語は論理プログラムをベースとする\footnotemark．
@@ -224,6 +190,56 @@
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{ASP を用いたハミルトン閉路問題の解法}
+%%%%%%%%
+\begin{figure}[h]
+  \centering
+  \thicklines
+  \setlength{\unitlength}{1.0pt}
+  \small\footnotesize\scriptsize
+  \begin{picture}(280,57)(4,-10)
+    \put(  0, 20){\dashbox(50,24){\shortstack{HCP問題\\インスタンス}}}
+    \put( 60, 20){\framebox(50,24){変換器}}
+    \put(120, 20){\alert{\dashbox(50,24){\shortstack{ASPファクト}}}}
+    \put(120,-10){\alert{\dashbox(50,24){\shortstack{ASP符号化\\\tiny{(論理プログラム)}}}}}
+    \put(180, 20){\framebox(50,24){ASPシステム}}
+    \put(240, 20){\dashbox(50,24){\shortstack{HCP問題\\の解}}}
+    \put( 50, 32){\vector(1,0){10}}
+    \put(110, 32){\vector(1,0){10}}
+    \put(170, 32){\vector(1,0){10}}
+    \put(230, 32){\vector(1,0){10}}
+    \put(170, +2){\line(1,0){4}}
+    \put(174, +2){\line(0,1){30}}
+  \end{picture}  
+%\caption{ASP を用いたハミルトン閉路問題(HCP)の解法}
+\label{fig:arch}
+\end{figure}
+%%%%
+
+\begin{itemize}
+\item 与えられた問題インスタンスを ASP ファクトに変換する．
+\item ASP ファクトをハミルトン閉路問題を解く論理プログラム( ASP 符号化)と結合し，
+      ASP システムに入力する．
+\item ASP システムによって解が計算される．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ハミルトン閉路問題の ASP ファクト表現}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+\begin{center}
+\input{fig/graph_example.tex}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{exampleblock}{}
+\lstinputlisting[frame=none]{code/graph_example.lp} 
+\end{exampleblock}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{考案した ASP 符号化}
   \begin{block}{ハミルトン閉路問題の表現}
     与えられた無向グラフ$G= (V,E)$上に，以下の2つの制約を満たす
@@ -247,25 +263,9 @@
     \begin{itemize}
     \item \textsf{directed}符号化をベースに，連結制約に代わり
       部分閉路を禁止する制約を使用．
-      \item \#edge を用いて，部分閉路を禁止する制約を簡潔に表現．
+      \item \texttt{\#edge} を用いて，部分閉路を禁止する制約を簡潔に表現．
     \end{itemize}
   \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ハミルトン閉路問題の ASP ファクト表現}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[t]
-\begin{center}
-\input{fig/graph_example.tex}
-\end{center}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{exampleblock}{}
-\lstinputlisting[frame=none]{code/graph_example.lp} 
-\end{exampleblock}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{\textsf{undirected}符号化}
@@ -286,6 +286,20 @@
       \code{(6)}は，すべての頂点が始点から到達可能でなければならないこ
       とを表す．
 \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASP システムの出力}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+\begin{center}
+\input{fig/graph_example_out.tex}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{exampleblock}{}
+\lstinputlisting[numbers=none, frame=none]{code/output.txt}
+\end{exampleblock}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{\textsf{directed}符号化}
@@ -424,7 +438,7 @@ Flinders Hamiltonian Cycle Project(FHCP)\footnotemark で
 \end{block}
 2015 年から 2016 年にかけて行われた FHCP Challenge と呼ばれる国際競技会で使用された．
 \begin{itemize}
-\item 1位 985 問(整数計画ソルバー)
+\item 1位 985 問(整数計画ソルバー CPLEX)
 \item 2位 614 問(SATソルバー)
 \item 3--5位 488，464，385問
 \end{itemize}
