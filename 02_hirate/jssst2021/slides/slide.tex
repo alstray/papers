@@ -75,9 +75,9 @@
   \end{block}
   \begin{itemize}
   \item WA から ME までのハミルトン路は 6,876,928 通り
-    あり，最短ハミルトン路は 11698 マイル．
+    あり，最短ハミルトン路は 11,698 マイル．
   \item 閾値を最短距離の 10\%増 (12,868 マイル) とした場合，
-    解の総数は 16180 個．
+    解の総数は 16,180 個．
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,7 +120,7 @@
         \item \alert{FHCP Challenge 国際競技会}で使用された頂点数が
           66個から9,528個のハミルトン閉路問題のインスタンス(全1001問)
           を使用した．
-        \item directed 符号化が 875 問と最も多くの問題を解き，他の符号
+        \item directed 符号化が 879 問と最も多くの問題を解き，他の符号
           化と比較して，その優位性が確認できた．
         \item FHCP Challenge 競技会の優勝ソルバーは985問，2位は614問で
           あることから，directed 符号化は\alert{実質2位}の成績に相当する．
@@ -439,12 +439,6 @@ Flinders Hamiltonian Cycle Project(FHCP)\footnotemark で
        標準的なHCPヒューリスティックスでは解くのが難しいように設計されている．
 \end{itemize}
 \end{block}
-2015 年から 2016 年にかけて行われた FHCP Challenge と呼ばれる国際競技会で使用された．
-\begin{itemize}
-\item 1位 985 問(整数計画ソルバー CPLEX)
-\item 2位 614 問(SATソルバー)
-\item 3--5位 488，464，385問
-\end{itemize}
 \footnotetext{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -456,8 +450,8 @@ Flinders Hamiltonian Cycle Project(FHCP)\footnotemark で
 \item 1列目はHCPインスタンスの頂点数の範囲，2列目は問題数，
       3列目以降は各符号化で解けた問題数を示している．
 \item \textsf{directed}符号化が879問を解き，もっとも多くの問題を解いた．
-\item \textsf{directed}符号化は，FHCP Challenge で
-      1位であった985問に続く，実質2位の成績に相当する.
+\item \textsf{directed}符号化は，どの頂点数の範囲においても
+      他の符号化と同じかより多くの問題を解いており，その優位性が確認できる.
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -475,6 +469,22 @@ Flinders Hamiltonian Cycle Project(FHCP)\footnotemark で
 \item \textsf{directed}符号化が，他の2つの符号化と比較して，
       より多くの問題を高速に解いていることが確認できる．
 \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{他のアプローチとの比較}
+本実験で使用したハミルトン閉路問題の問題集は，
+2015年から2016年にかけて行われた FHCP Challenge 競技会
+で使用されたものである.
+\begin{itemize}
+\item 1位 985 問(整数計画ソルバー CPLEX)
+\item 2位 614 問(SATソルバー)
+\item 3--5位 488，464，385問
+\end{itemize}
+\begin{alertblock}{}
+879問を解いた\textsf{directed}符号化は，ASP 
+のルール10個程度の簡潔なプログラムであるにもか
+かわらず，実質2位の成績に相当する.
+\end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{最短ハミルトン路問題の実験結果(最良値)}
