@@ -1,0 +1,21 @@
+\renewcommand{\bibname}{参考文献}
+
+%%
+%% Figure 環境中で Table 環境の見出しを表示・カウンタの操作に必要
+%%
+\makeatletter
+\newcommand{\figcaption}[1]{\def\@captype{figure}\caption{#1}}
+\newcommand{\tblcaption}[1]{\def\@captype{table}\caption{#1}}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\makeatother
+
+
+%listingsの設定
+\lstset{float=t,
+  frame=single,
+  numbers=left,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  basicstyle=\ttfamily\footnotesize
+}
