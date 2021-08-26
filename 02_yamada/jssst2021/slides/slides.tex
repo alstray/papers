@@ -544,20 +544,20 @@
       \item ファクト形式の問題インスタンスと，
             各制約に対応したルールを表す複数のサブプログラムから構成された
             論理プログラムを与える．
-      \item ステップ長$\ell=0$とする．
-      \item $\ell>0$であれば，$G(\bm{x}^{\ell -1})$を
+      \item ステップ数$t=0$とする．
+      \item $t>0$であれば，$G(\bm{x}^{t -1})$を
             表すルールを削除する． \label{improved_solver:loop}
-      \item $\ell=0$であれば，$S(\bm{x}^0)$を
+      \item $t=0$であれば，$S(\bm{x}^0)$を
             表すルールを追加する．
-      \item $C(\bm{x}^{\ell})$と$T(\bm{x}^{\ell-1},\bm{x}^{\ell})$
+      \item $C(\bm{x}^{t})$と$T(\bm{x}^{t-1},\bm{x}^{t})$
             を表すルールを追加する．
-      \item $\varphi_{\ell}$の到達可能性を検査する．
+      \item $\varphi_{t}$の到達可能性を検査する．
       \item ASP システムの出力が充足可能であれば終了する．
-            充足不能であれば$\ell$を1増加させ，
+            充足不能であれば$t$を1増加させ，
             ASP システムを終了し，
             \ref{improved_solver:loop}に戻り繰り返す．
             \begin{itemize}
-              \item $\ell$が基の問題の実行可能解の総数以上になったところで
+              \item $t$がステップ長の上限値を超えたところで
                     繰り返しを停止し，ASP システムを終了できる．
             \end{itemize} \label{improved_solver:end}
     \end{enumerate}
