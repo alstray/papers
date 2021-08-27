@@ -21,6 +21,23 @@
   moredelim=[is][\color{red}\bfseries]{<\#}{\#>},
 }
 
+%Tikzの設定(ベン図)
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes}
+\tikzset{
+  set label/.style={fill=white,ellipse,inner sep=2}
+}
+\def\vennradius{2}
+\def\vennratio{0.8}
+\def\venncenterA{90:\vennratio*\vennradius}
+\def\venncenterB{-150:\vennratio*\vennradius}
+\def\venncenterC{-30:\vennratio*\vennradius}
+\def\venncolorA{blue}
+\def\venncolorB{red}
+\def\venncolorC{green!70!black}
+\def\venncircleA{(\venncenterA) circle [radius=\vennradius]}
+\def\venncircleB{(\venncenterB) circle [radius=\vennradius]}
+\def\venncircleC{(\venncenterC) circle [radius=\vennradius]}
 
 %%% For ASP
 \newcommand{\asap}{\textit{teaspoon}}

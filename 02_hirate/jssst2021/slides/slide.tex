@@ -352,7 +352,7 @@
 \item \code{(1)}: 与えられた無向グラフの各辺 \code{edge(X,Y)} に対して，
   \alert{弧 \code{X}~$\rightarrow$~\code{Y}}を表す
   \code{in(X,Y)} と
-  \alert{弧 \code{X}~$\rightarrow$~\code{Y}}を表す
+  \alert{弧 \code{Y}~$\rightarrow$~\code{X}}を表す
   \code{in(Y,X)} の2個のアトムを導入し，
   2つの弧のうち，高々1個がハミルトン閉路に含まれることを表す．
 \end{itemize}
@@ -364,7 +364,7 @@
   \item \code{(2)}: 各頂点\code{node(X)}の出次数が1に等しいことを表す．
   \item \code{(3)}: 各頂点\code{node(X)}の入次数が1に等しいことを表す．
   \end{itemize}
-\item \code{(4)}--\code{(6)}: 連結制約は．\textsf{directed}符号化と同じ．
+\item \code{(4)}--\code{(6)}: 連結制約は．\textsf{undirected}符号化と同じ．
 \item \code{(7)}: 対称解を除去する制約
 \end{itemize}
 }
@@ -468,7 +468,6 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 \end{center}
 
 \begin{itemize}
-\item \alert{TODO: 横軸「解けた問題数」，縦軸「CPU時間」を追加}
 \item \code{directed} 符号化が，他の2つの符号化と比較して，
   より多くの問題を高速に解いていることがわかる．
 \end{itemize}
@@ -480,13 +479,12 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{center}
-% \scalebox{0.9}[0.9]{\input{fig/venn_diagram.tex}}
-\includegraphics[width=0.5\linewidth]{fig/venn.jpeg}
+\scalebox{0.5}[0.5]{\input{fig/venn_diagram.tex}}
+% \includegraphics[width=0.5\linewidth]{fig/venn.jpeg}
 \end{center}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vfill
 \begin{itemize}
-\item \alert{TODO: ベン図の差し替え}
 \item 全1,001問のうち，いずれかの符号化で解けた問題数は903問，
   どの符号化でも解けなかった問題数は98問であった．
 \item \code{acyclicity} 符号化で解けた482問は，1問を除いて，
@@ -623,7 +621,6 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 %\includegraphics[width=0.7\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
 
 \begin{itemize}
-\item \alert{TODO: 平均CPU時間の桁数だけ4桁，他は3桁．3桁に揃える}
 \item \code{acyclicity} 符号化が，より多くの問題を
   高速に解き，平均 CPU 時間も最も短かった．
 \end{itemize}  

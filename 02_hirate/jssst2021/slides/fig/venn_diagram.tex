@@ -1,3 +1,24 @@
-%\begin{tikzpicture}
-
-%\end{tikzpicture}
+\begin{tikzpicture}
+% 座標設定
+\coordinate (O) at (0,0);
+\coordinate (NE) at (5,4.5);
+\coordinate (SW) at (-5,-3.5);
+% 円の描画
+\filldraw[draw=black, fill=white,line width=1pt] (SW) rectangle (NE);
+\filldraw[draw=\venncolorA,fill=\venncolorA,fill opacity=0.1,line width=1pt] \venncircleA;
+\filldraw[draw=\venncolorB,fill=\venncolorB,fill opacity=0.1,line width=1pt] \venncircleB;
+\filldraw[draw=\venncolorC,fill=\venncolorC,fill opacity=0.1,line width=1pt] \venncircleC;
+% ラベルの描画
+  \node[set label] at (O |- NE) {$U$ (計1001問)};
+  \node[set label,text=\venncolorA] at (90:\vennradius+0.85*\vennradius) {undirected};
+  \node[set label,text=\venncolorB] at (-150:\vennradius+\vennratio*\vennradius) {acyclicity};
+  \node[set label,text=\venncolorC] at (-30:\vennradius+\vennratio*\vennradius) {directed};
+  \node[font=\Large] at (90:\vennradius) {23};
+  \node[font=\Large] at (-150:\vennradius) {0};
+  \node[font=\Large] at (-30:\vennradius) {107};
+  \node[font=\Large] at (30:1.1)  {291};
+  \node[font=\Large] at (150:1.1) {1};
+  \node[font=\Large] at (-90:1.1) {81};
+  \node[font=\Large] at (0:0)   {400};
+  \node[font=\Large] at (155:4) {98};
+\end{tikzpicture}
