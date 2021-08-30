@@ -8,6 +8,6 @@ col(1..c).    t(0..length).
 
 changed(X,T) :- color(X,C1,T), color(X,C2,T-1),
 		C1 != C2, T >= 1.
-:- not 1  { changed(X,T) } 1, t(T), T >= 1.
+:- not 1 { changed(X,T) } 1, t(T), T >= 1.
 
 :- not color(X,C,length), goal(X,C).

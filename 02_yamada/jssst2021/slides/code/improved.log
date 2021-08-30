@@ -1,0 +1,18 @@
+% clingo core.lp changed_inc.lp gcrp_reconfig.lp -c c=4
+clingo version 5.4.0
+Reading from origin_core.lp ...
+Solving...
+Solving...
+Solving...
+Answer: 1
+color(1,1,0) color(2,2,0) color(3,3,0) color(4,4,0) 
+color(1,3,1) color(3,3,1) color(4,4,1) color(2,2,1) 
+color(1,3,2) color(2,1,2) color(3,3,2) color(4,4,2)
+c step: 2
+s REACHABLE
+SATISFIABLE
+
+Models       : 1+
+Calls        : 3
+Time         : 0.050s 
+CPU Time     : 0.031s

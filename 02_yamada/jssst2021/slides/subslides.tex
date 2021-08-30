@@ -13,10 +13,10 @@
 \begin{frame}\frametitle{実験結果: 考察}
 
   \begin{itemize}
-    \item 結果によらず，\structure{vrc3$>$vrc2$>$vrc1の順}によい性能を示した．
-    \item 要因として，\alert{ルール数の差}が考えられる．
+    \item \code{unchanged}符号化は，\code{changed}符号化と比べて有効性を示した．
+    \item 要因として，\alert{基礎化後のルール数の差}が考えられる．
     \begin{itemize}
-      \item \textit{clingo}では与えられたASP言語を充足可能性判定問題へと変換して解く．
+      \item \textit{clingo}では与えられた論理プログラムを充足可能性判定問題へと変換して解く．
       \item ルール数を少なくすることは，節数を少なくすることにつながる．
       \item 節数が多い時，単位伝播やヒューリスティックによる変数選択時のオーバーヘッドが増加する．
       \item ルール数を抑えることでオーバーヘッドの減少につながり，優位性を示したと考えられる．
@@ -28,44 +28,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 基礎化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{基礎化}
-  
-\end{frame}
+%\begin{frame}\frametitle{基礎化}
+%  
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASP符号化のルール数
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{ASP符号化の基礎化後のルール数}
+\begin{frame}\frametitle{2つの符号化の基礎化後のルール数}
+
   \begin{itemize}
     \item 基礎化とは，変数を含む述語論理を変数を含まない命題論理へと変換することである．
     \item 遷移制約に関するルール数のみに着目する．
-    \item $|T|$を遷移回数$t$, $|C|$を色数$k$, $|V|$をグラフ$G$の頂点数とする.
+    \item $|L|$をステップ長$\ell$，$|C|$を色数，$|V|$をグラフ$G$の頂点数とする．
   \end{itemize}
-
-  %\begin{table}[t]
-  %  \centering
-  %  \input{table/rule.tex}
-  %\end{table}
-
-  \begin{itemize}
-    \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の場合の数・色の選び方の場合の数・グラフの頂点の選び方の場合の数の乗算となる．
-  \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% グラフの全解数
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{独自に生成した$k$彩色遷移問題のベンチマーク問題}
 
   \begin{exampleblock}{}
     \centering
-    \input{table/graph.tex}
+    \input{table/rule.tex}
   \end{exampleblock}
 
   \begin{itemize}
-  \item 実行可能解の総数は，最少で120個，最大で約28億個である．
-  \item 求められた実行可能解から解をランダムで二つ選びベンチマーク問題を作成し，
-        各グラフから10問，計90問を作成した．
+    \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の組合せ・
+          色の選び方の組合せ・グラフの頂点の選び方の組合せの乗算となる．
   \end{itemize}
 
 \end{frame}
@@ -74,6 +59,9 @@
 %% 符号化コード
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{\code{unchanged}符号化}
+
+  \code{unchanged}符号化は，制約$T$に関する記述が
+  \code{changed}符号化と異なる．
 
   \begin{exampleblock}{}
     \centering
@@ -85,33 +73,41 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 符号化コード
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]\frametitle{\code{changed}符号化との違い}
-
-  制約$T$に対応するルールが\code{changed}符号化と異なる．
+\begin{frame}[fragile]\frametitle{\code{unchanged}符号化}
 
   \begin{exampleblock}{}
     \centering
-    \begin{lstlisting}
-    unchanged(X,T) :- color(X,C,T), color(X,C,T-1), 
-                      T >= 1.
-    \end{lstlisting}
+    \lstinputlisting[
+      basicstyle=\tiny
+    ]{code/gcrp_cc_unchanged.lp}
   \end{exampleblock}
-  \begin{itemize}
-    \item ステップ数$T-1$とステップ数$T$で頂点$X$の色が変化しなかったことを意味する
-          アトム\code{unchanged(X,T)}を導入している．
-    \item 色が変わらない頂点は各遷移において$N-1$個であることを表している．
-  \end{itemize}
 
-  \begin{exampleblock}{}
-    \centering
-    \begin{lstlisting}
-    :- not N-1 { unchanged(X,T) } N-1 , 
-       n(N), t(T), T >= 1.
-    \end{lstlisting}
-  \end{exampleblock}
-  \begin{itemize}
-    \item 色が変わらない頂点は各遷移において$N-1$個であることを表している．
-  \end{itemize}
+  \begin{onlyenv}<1>
+    \begin{exampleblock}{}
+      \centering
+      \begin{lstlisting}
+unchanged(X,T) :- color(X,C,T), color(X,C,T-1), 
+                  T >= 1.
+      \end{lstlisting}
+    \end{exampleblock}
+    \begin{itemize}
+      \item ステップ数$T-1$とステップ数$T$で頂点$X$の色が変化しなかったことを意味する
+            アトム\code{unchanged/2}を導入している．
+    \end{itemize}
+  \end{onlyenv}
+
+  \begin{onlyenv}<2>
+    \begin{exampleblock}{}
+      \centering
+      \begin{lstlisting}
+:- not N-1 { unchanged(X,T) } N-1 , 
+    n(N), t(T), T >= 1.
+      \end{lstlisting}
+    \end{exampleblock}
+    \begin{itemize}
+      \item 色が変わらない頂点は各遷移において$N-1$個であることを表している．
+    \end{itemize}
+  \end{onlyenv}
   
 \end{frame}
 
@@ -155,7 +151,7 @@
     \begin{columns}
       \begin{column}{1.0\textwidth}
         \centering
-        \input{tikz/graph0.tex}
+        \input{tikz/start.tex}
       \end{column}
     \end{columns}
   \end{exampleblock}
