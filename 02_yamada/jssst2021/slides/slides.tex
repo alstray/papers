@@ -252,7 +252,7 @@
           基の組合せ問題の制約を表す論理式である．
     \item $T(\bm{x}^{t-1},\bm{x}^{t})$はステップ数$t-1$と$t$間の，
           遷移制約を表す論理式である．
-    \item $G(\bm{x}^\ell)$はゴール状態の制約を表す論理式である．
+    \item $G(\bm{x}^{\ell})$はゴール状態の制約を表す論理式である．
   \end{itemize}
 
 \end{frame}
@@ -722,7 +722,7 @@ changed(X,T) :- color(X,C1,T), color(X,C2,T-1),
       \item \code{query/1}に偽を割当てることで，必ず一貫性制約を
             満たさなくなる．
       \item 一貫性制約を満たさなくすることは，
-            $G(\bm{x}^{\t -1})$を
+            $G(\bm{x}^{t -1})$を
             表すルールの削除に対応している．
     \end{itemize}
   \end{onlyenv}
