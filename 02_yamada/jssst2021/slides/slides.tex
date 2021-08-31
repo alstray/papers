@@ -72,9 +72,11 @@
 
   \begin{block}{$k$彩色遷移問題}
     \begin{itemize}
-    \item 問題の入力として，グラフ点彩色問題とその2つの実行可能解
-          (\structure{スタート状態}と\structure{ゴール状態})が与えられる．
-    \item 遷移制約は「\structure{各遷移で色が変化する頂点はただ一つのみ}」である．
+      \item \structure{$k \ge 4$}のとき，
+            一般に\structure{\bf PSPACE完全}となる~[Bonsma+ '09]．
+      \item 問題の入力として，グラフ点彩色問題とその2つの実行可能解
+            (\structure{スタート状態}と\structure{ゴール状態})が与えられる．
+      \item 遷移制約は「\structure{各遷移で色が変化する頂点はただ一つのみ}」である．
     \end{itemize}
   \end{block}
 
@@ -301,7 +303,8 @@
           \structure{ルール}の有限集合である．
           \begin{block}{}
             \centering
-            $a_0$ \code{:-} $a_1, \dots, a_m,$ \code{not} $a_{m+1}, \dots,$ \code{not} $a_{n}$
+            $a_0$ \code{:-} $a_1, \dots, a_m,$ \code{not} 
+            $a_{m+1}, \dots,$ \code{not} $a_{n}$
           \end{block}
           \begin{itemize}
             \item $0 \le m \le n$であり，各$a_i$はアトム，\code{not}はデフォルトの否定，
