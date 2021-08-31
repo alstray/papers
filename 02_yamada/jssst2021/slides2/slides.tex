@@ -410,19 +410,21 @@
 \end{center}
   
 \begin{enumerate}
-\item 基本アルゴリズム
+\item \structure{基本アルゴリズム}
   \begin{itemize}
   \item ステップ長$\ell$を増加させながら，
     $\varphi_{\ell}$を繰り返し構成し解く．
   \item 長所: 実装が単純である．
-  \item 短所: オーバーヘッドが大きい．
+  \item 短所: 学習節が再利用できない．
+  \item 短所: ASPシステムを毎回起動するオーバーヘッドが大きい．
   \end{itemize}
-\item インクリメンタルASP解法を用いた改良アルゴリズム
+\item \structure{インクリメンタルASP解法を用いた改良アルゴリズム}
   \begin{itemize}
-  \item ステップ数$t$を増加させながら，
-    $t$に関する制約を逐次追加しインクリメンタルに解く．
-  \item 長所: 効率的な解探索が可能である．
-  \item 短所: デバックを行いにくい．
+  \item $S(\bm{x}^{0})$, $C(\bm{x}^{t})$,
+    $T(\bm{x}^{t-1},\bm{x}^{t})$, $G(\bm{x}^{\ell})$
+    を動的に追加・削除しながら，$\varphi_{\ell}$をインクリメンタルに構成し解く．
+  \item 長所: 学習節が再利用が可能．ASPシステムの起動は1回のみ
+  \item 短所: 現状では，デバックを行いにくい．
   \end{itemize}
 \end{enumerate}
 \end{frame}
@@ -504,13 +506,14 @@
 \begin{columns}[t]
 \begin{column}{0.9\linewidth}
 \begin{exampleblock}{$4$彩色遷移問題の例(\code{graph_reconfig.lp})}
-\lstinputlisting[frame=none,numbers=none]{code/graph_reconfig.lp} 
+\lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\footnotesize]{code/graph_reconfig.lp} 
 \end{exampleblock}    
 \end{column}
 \end{columns}
 \begin{itemize}
-  \item \code{start/2}, \code{goal/2}はそれぞれスタート/ゴール状態で
-        頂点\code{X}が色\code{C}で塗られることを意味する．
+\item \code{start(X,C)} は，スタート状態で頂点\code{X}が色\code{C}で
+  塗られることを意味する．
+  \code{goal(X,C)}も同様．
   \item 色1は赤，色2は青，色3は黄，色4は緑に対応している．
 \end{itemize}
 }
@@ -554,40 +557,36 @@
 \end{column}
 \end{columns}
 }
+\only<2>{
+  \begin{itemize}
+  \item 1行目: 定数\code{c} は色数，定数\code{length} はステップ長を表す．
+    これらは，実行時にASPシステムのオプションから与えられる．
+  \item アトム\code{col/1}は色，アトム\code{t/1} はステップを表す．
+  \item 3行目: スタート状態の制約$S(\bm{x}^0)$を表す．
+  \end{itemize}
+}
 \only<3>{
 \begin{itemize}
-  \item 1行目は，色数とステップ数をファクトで表している．
-  \item \code{length}はステップ長$\ell$に対応している．
-  \item \code{c}と\code{length}は定数であり，
-    実行時にオプションから与えられる．
-  \item 3行目は制約$S$に対応するルールを，
-    一貫性制約を用いて表している．
+  \item 5--7行目: グラフ点彩色問題の制約を表すルールである．
+  \item \code{color(X,C,T)}は，ステップ\code{T}で頂点\code{X}が色
+    \code{C}で塗られることを意味する．
+  \item 5行目: 各ステップ\code{T}，各頂点\code{X}に対して，
+    \code{X}がただ1つの色で塗られることを個数制約を用いて表している．
+  \item 6--7行目: 各ステップ\code{T}，各辺\code{edge(X,Y)}に対して，
+    隣接する頂点\code{X}と\code{Y}が同じ色で塗られないことを表している．
 \end{itemize}
 }
 \only<4>{
-\begin{itemize}
-  \item 5--7行目のルールは制約$C$に対応している．
-  \item 5行目では，頂点\code{X}が色\code{C}で塗られることを意味する
-    \code{color/2}を導入している．
-  \item 個数制約を用いて，1つの色で塗られることを表している．
-  \item 6--7行目では，個数制約を用いて，辺で結ばれた2つの頂点のうち，
-    色\code{C}で塗られるのは1つ以下であることを表している．
-  \item 辺で結ばれた頂点は同じ色で塗られないという制約に対応している．
-\end{itemize}
-}
-\only<5>{
-\begin{itemize}
-  \item 9--10行目のルールは制約$T$に対応している．
-  \item 9行目では，ステップ数$T-1$とステップ数$T$で，頂点$X$の色が変化したことを意味する
-    \code{changed/2}を導入している．
-  \item 10行目では，個数制約を用いて，
-    色が変わる頂点は各遷移において1つであることを表している．
-  \item 12行目では，制約$G$に対応するルールを，
-    一貫性制約を用いて表している
-\end{itemize}
+  \begin{itemize}
+  \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を表す．
+  \item アトム\code{changed(X,T)}は，ステップ$T-1$とステップ$T$の間い
+    で，頂点$X$の色が変化したことを意味する．
+  \item 10行目: 各ステップ\code{T}において，色が変化する頂点はただ1つ
+    であることを表す．
+  \item 12行目: ゴール状態の制約$G(\bm{x}^{\ell})$を表す．
+  \end{itemize}
 }
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
   \frametitle{基本ソルバーの実行例}
@@ -622,26 +621,61 @@
 \end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{ベンチマークの作成}
-
+\begin{frame}\frametitle{実験概要}
+  \begin{block}{}\centering
+    有界組合せ遷移の有効性を評価するにあたり，以下の実験を行った．
+  \end{block}
+  \bigskip
   \begin{itemize}
-    \item 組合せ遷移問題の実践的な研究は始まったばかりであり，
-          ベンチマーク問題の整備も重要な課題の一つである．
-    \item 本研究では$k$彩色遷移問題をベンチマーク問題として用いる．
-    \item ステップ長の上限値として与える実行可能界の総数を求められる，
-          グラフ点彩色問題が必要となる．
-          \begin{enumerate}
-            \item \textit{COLOR04}で公開されているグラフ点彩色問題のグラフ127個のうち，
-                  彩色数が判明している44個~[Tamura+ '09] をベンチマーク問題の候補とした．
-            \item 44個のグラフに対して，彩色数での実行可能解を全列挙することが可能
-                  かを調査した．
-          \end{enumerate}
-    \item 結果，9個のグラフについて総数が求められた．
-  \end{itemize}
-  
+  \item \structure{比較に用いたソルバー}
+    \begin{itemize}
+    \item 基本ソルバー$\cdots$基本アルゴリズムを実装
+    \item 改良ソルバー$\cdots$改良アルゴリズムを実装
+    \end{itemize}
+  \item \structure{比較に用いたASP符号化}
+    \begin{itemize}
+    \item \code{changed}符号化
+    \item \code{unchanged}符号化
+    \end{itemize}
+  \item \structure{ベンチマーク問題}: \alert{\bf 独自に作成した$k$彩色遷移問題(計90問)}
+    \begin{itemize}
+    \item \textit{COLOR04}で公開されているグラフ点彩色問題のグラフ127個のうち，
+      彩色数が判明している44個~[Tamura+,'09] を候補とした．
+    \item 最終的に，彩色数での実行可能解を全列挙することができたグラフ9個を使用した．
+    \end{itemize}
+  % \item \structure{ステップ長の上限値}: 基となるグラフ点彩色問題の実行
+  %   可能解の総数から1引いた数
+    % \begin{itemize}
+    % \item グラフmyciel4から作成した問題については，{\clingo}が対応している数
+    %   よりも解の総数が大きかったため，
+    %   上限値を$2^{31}-1$とした．
+    % \end{itemize}
+    \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{jumpy}
+    \item \structure{制限時間}: 3600秒/問
+    \item \structure{環境}: Mac OS, 3.2GHz 6コア Intel Core i7，64GB メモリ
+    \end{itemize}
 \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% \begin{frame}\frametitle{ベンチマークの作成}
+
+%   \begin{itemize}
+%     \item 組合せ遷移問題の実践的な研究は始まったばかりであり，
+%           ベンチマーク問題の整備も重要な課題の一つである．
+%     \item 本研究では$k$彩色遷移問題をベンチマーク問題として用いる．
+%     \item ステップ長の上限値として与える実行可能界の総数を求められる，
+%           グラフ点彩色問題が必要となる．
+%           \begin{enumerate}
+%             \item \textit{COLOR04}で公開されているグラフ点彩色問題のグラフ127個のうち，
+%                   彩色数が判明している44個~[Tamura+ '09] をベンチマーク問題の候補とした．
+%             \item 44個のグラフに対して，彩色数での実行可能解を全列挙することが可能
+%                   かを調査した．
+%           \end{enumerate}
+%     \item 結果，9個のグラフについて総数が求められた．
+%   \end{itemize}
+  
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{ベンチマークに使用したグラフ}
+\begin{frame}\frametitle{独自に作成した$k$彩色遷移問題}
 
   \begin{exampleblock}{}
     \centering
@@ -656,29 +690,21 @@
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験概要}
-  提案した2つのソルバーの評価にあたり，以下の実験を行った．
-  \bigskip
+\begin{frame}\frametitle{実験結果: 解けた問題数}
+
+  \begin{exampleblock}{}
+    \centering
+    \scalebox{0.9}{\input{table/result.tex}}
+  \end{exampleblock}
+
   \begin{itemize}
-    \item \structure{比較対象}: 
-          \begin{itemize}
-            \item 基本ソルバー: \code{changed}符号化と\code{unchanged}符号化
-            \item 改良ソルバー: \code{changed_inc}符号化と\code{unchanged_inc}符号化
-          \end{itemize}
-    \item \structure{ベンチマーク問題}: 作成した$k$彩色遷移問題(90問)
-    \item \structure{ステップ長の上限値}: 基となるグラフ点彩色問題の実行可能解の総数
-          \begin{itemize}
-            \item グラフmyciel4から作成した問題については，{\clingo}が対応している数
-                  よりも解の総数が大きかったため，
-                  上限値を$2^{31}-1$とした．
-          \end{itemize}
-    \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{jumpy}
-    \item \structure{制限時間}: 3600秒/問
-    \item \structure{環境}: Mac mini，3.2GHz 6コア Intel Core i7，64GB メモリ
+  \item 90問中71問について，到達可能性を検査できた．
+  \item 改良ソルバーの\code{unchanged}符号化は，他が解いた問題をすべて解いていた．
+  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
+  \item 到達不能なインスタンスに対する改良ソルバーの優位性が確認できた．
   \end{itemize}
-  
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}\frametitle{実験結果: カクタスプロット}
 
   \begin{figure}[h]
@@ -693,54 +719,51 @@
   
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験結果: 解けた問題数}
-    
-  \begin{itemize}
-    \item 90問中71問について，到達可能性を確認できた．
-    \item \code{unchanged_inc}符号化は他が解いた問題をすべて解いていた．
-    \item 到達可能なものの最長のステップ長は17であった．
-  \end{itemize}
-
-  \begin{exampleblock}{}
-    \centering
-    \scalebox{0.8}{\input{table/result.tex}}
-  \end{exampleblock}
-
-  \begin{block}{}
-    \centering
-    改良ソルバーの有効性が確認できた．
-  \end{block}
-  
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{まとめと今後の課題}
 
-  \begin{block}{まとめ}
+  \begin{alertblock}{}\centering
+    ASP 技術を用いた組合せ遷移問題の解法として，有界組合せ遷移を提案し，
+    ソルバーの実装を行なった．
+  \end{alertblock}
+
+  \begin{enumerate}
+  \item \structure{2種類の実装方式の提案}
     \begin{itemize}
-      \item 有界組合せ遷移を提案した．
-      \item 有界組合せ遷移を解く2つのソルバーを提案した．
-      \begin{itemize}
-        \item 特に改良ソルバーはインクリメンタル解法に基づいた効率化を図っている．
-      \end{itemize}
-      \item $k$彩色遷移問題を解く二つの符号化を提案した．
-      \item 独自に作成したベンチマーク問題を用い，2つのソルバー及び2つの符号化の評価
-            実験を行った．
-      \begin{itemize}
-        \item 実験の結果，改良ソルバーの優位性が確かめられた．
-      \end{itemize}
+    \item 基本アルゴリズム
+    \item インクリメンタルASP解法を用いた改良アルゴリズム
     \end{itemize}
-  \end{block}
+  \item \structure{$k$彩色遷移問題を解く2種類の ASP 符号化の考案}
+    \begin{itemize}
+    \item \textsf{changed}符号化と\textsf{unchanged}符号化 (本発表では省略)
+    \item ASPの表現力の高さを生かし，$k$彩色遷移問題を簡潔に記述できることを確認
+    \end{itemize}
+  \item \structure{$k$彩色遷移問題のベンチマーク問題を独自に生成}
+  \item \structure{$k$彩色遷移問題を用いた有界組合せ遷移の評価実験}
+  \end{enumerate}
+
+  % \begin{block}{まとめ}
+  %   \begin{itemize}
+  %     \item 有界組合せ遷移を提案した．
+  %     \item 有界組合せ遷移を解く2つのソルバーを提案した．
+  %     \begin{itemize}
+  %       \item 特に改良ソルバーはインクリメンタル解法に基づいた効率化を図っている．
+  %     \end{itemize}
+  %     \item $k$彩色遷移問題を解く二つの符号化を提案した．
+  %     \item 独自に作成したベンチマーク問題を用い，2つのソルバー及び2つの符号化の評価
+  %           実験を行った．
+  %     \begin{itemize}
+  %       \item 実験の結果，改良ソルバーの優位性が確かめられた．
+  %     \end{itemize}
+  %   \end{itemize}
+  % \end{block}
   
   \begin{alertblock}{今後の課題}
     \begin{itemize}
-      \item 改良ソルバーの高速化．
-      \item 組合せ遷移問題の記述例の蓄積．
-      \item $k$彩色遷移問題の ASP 符号化の高速化．
+      \item ソルバーの高速化，組合せ遷移問題の記述例の蓄積
+      \item $k$彩色遷移問題の ASP 符号化の改良
     \end{itemize}
   \end{alertblock}
-
 \end{frame}
-
 %###########################################################
 %##### 補助スライド ########################################
 %###########################################################
