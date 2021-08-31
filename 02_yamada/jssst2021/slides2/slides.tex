@@ -194,7 +194,7 @@
     \begin{enumerate}
     \item \structure{有界組合せ遷移(Bounded Combinatorial Reconfiguration)の提案}
       \begin{itemize}
-      \item ASP 技術を用いた組合せ遷移問題の解法の一つ
+      \item ASP 技術を用いた組合せ遷移問題の解法の1つ
       \end{itemize}
     \item \structure{ASP 技術を用いた有界組合せ遷移の実装方式の提案}
       \begin{itemize}
@@ -257,7 +257,7 @@
     ステップ長$\ell$の\structure{到達可能}な遷移系列が存在
   \item \structure{充足不能}の場合，ステップ長$\ell$では\structure{到達不能}．
     この場合，$\ell$を増加させた論理プログラムを構成し，
-    繰り返し ASP システムを実行
+    繰り返し ASP システムを実行．
   \item この手法は，到達不能の証明は行わない不完全な手続きである．
     検査すべき遷移系列のステップ長に上限~\footnotemark[2]
     が存在する場合には，完全な手続きとなる．
@@ -412,15 +412,17 @@
 \begin{enumerate}
 \item 基本アルゴリズム
   \begin{itemize}
-  \item
-  \item 長所: 
-  \item 短所: 
+  \item ステップ長$\ell$を増加させながら，
+    $\varphi_{\ell}$を繰り返し構成し解く．
+  \item 長所: 実装が単純である．
+  \item 短所: オーバーヘッドが大きい．
   \end{itemize}
 \item インクリメンタルASP解法を用いた改良アルゴリズム
   \begin{itemize}
-  \item
-  \item 長所: 
-  \item 短所: 
+  \item ステップ数$t$を増加させながら，
+    $t$に関する制約を逐次追加しインクリメンタルに解く．
+  \item 長所: 効率的な解探索が可能である．
+  \item 短所: デバックを行いにくい．
   \end{itemize}
 \end{enumerate}
 \end{frame}
@@ -445,8 +447,10 @@
 \item ASP システムの出力結果が充足可能であれば終了する．
   充足不能であれば$\ell$の値を1増加させ，
   (\ref{BoCoRe:base:solver:2})に戻り手続きを繰り返す．
-  ただし，
-  $\ell$が問題の直径を超えたところで繰り返しを停止できる．
+  \begin{itemize}
+    \item ただし，
+      $\ell$がステップ長の上限値を超えたところで繰り返しを停止できる．
+  \end{itemize}
 \end{enumerate}
 \end{block}
 
@@ -454,11 +458,6 @@
 \item この手続きは，与えられた組合せ遷移問題に対して，
   到達可能な\structure{最短の遷移系列}を探索する．
 \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-  \frametitle{改良アルゴリズム}
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}
@@ -509,6 +508,11 @@
 \end{exampleblock}    
 \end{column}
 \end{columns}
+\begin{itemize}
+  \item \code{start/2}, \code{goal/2}はそれぞれスタート/ゴール状態で
+        頂点\code{X}が色\code{C}で塗られることを意味する．
+  \item 色1は赤，色2は青，色3は黄，色4は緑に対応している．
+\end{itemize}
 }
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -541,7 +545,7 @@
 \end{picture}  
 \end{center}
 }
-\only<2>{
+\only<2->{
 \begin{columns}[t]
 \begin{column}{0.9\linewidth}
 \begin{exampleblock}{\code{changed.lp}}
@@ -550,47 +554,43 @@
 \end{column}
 \end{columns}
 }
-
+\only<3>{
+\begin{itemize}
+  \item 1行目は，色数とステップ数をファクトで表している．
+  \item \code{length}はステップ長$\ell$に対応している．
+  \item \code{c}と\code{length}は定数であり，
+    実行時にオプションから与えられる．
+  \item 3行目は制約$S$に対応するルールを，
+    一貫性制約を用いて表している．
+\end{itemize}
+}
+\only<4>{
+\begin{itemize}
+  \item 5--7行目のルールは制約$C$に対応している．
+  \item 5行目では，頂点\code{X}が色\code{C}で塗られることを意味する
+    \code{color/2}を導入している．
+  \item 個数制約を用いて，1つの色で塗られることを表している．
+  \item 6--7行目では，個数制約を用いて，辺で結ばれた2つの頂点のうち，
+    色\code{C}で塗られるのは1つ以下であることを表している．
+  \item 辺で結ばれた頂点は同じ色で塗られないという制約に対応している．
+\end{itemize}
+}
+\only<5>{
+\begin{itemize}
+  \item 9--10行目のルールは制約$T$に対応している．
+  \item 9行目では，ステップ数$T-1$とステップ数$T$で，頂点$X$の色が変化したことを意味する
+    \code{changed/2}を導入している．
+  \item 10行目では，個数制約を用いて，
+    色が変わる頂点は各遷移において1つであることを表している．
+  \item 12行目では，制約$G$に対応するルールを，
+    一貫性制約を用いて表している
+\end{itemize}
+}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
-  \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(基本ソルバー用)}}
-
-\begin{columns}[t]
-\begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{unchanged.lp}}
-\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged.lp} 
-\end{exampleblock}    
-\end{column}
-\end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]
-  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(改良ソルバー用)}}
-
-\begin{columns}[t]
-\begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{unchanged_inc.lp}}
-\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp} 
-\end{exampleblock}    
-\end{column}
-\end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]
-  \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(改良ソルバー用)}}
-
-\begin{columns}[t]
-\begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{unchanged_inc.lp}}
-\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp} 
-\end{exampleblock}    
-\end{column}
-\end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]
-  \frametitle{実行例}
+  \frametitle{基本ソルバーの実行例}
 
 %\begin{columns}[t]
 %\begin{column}{0.9\linewidth}
@@ -636,24 +636,21 @@
             \item 44個のグラフに対して，彩色数での実行可能解を全列挙することが可能
                   かを調査した．
           \end{enumerate}
-    \item 総数を求められた9個のグラフから各10問ずつ，計90問のベンチマーク問題を作成した．
-          \begin{itemize}
-            \item スタート状態とゴール状態はランダムに選んだ．
-          \end{itemize}
-    \item 実行可能解の総数は，最少で120個，最大で約28億個である．
+    \item 結果，9個のグラフについて総数が求められた．
   \end{itemize}
+  
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{独自に生成した$k$彩色遷移問題のベンチマーク問題}
+\begin{frame}\frametitle{ベンチマークに使用したグラフ}
 
-  \begin{table}[t]
+  \begin{exampleblock}{}
     \centering
     \input{table/graph.tex}
-  \end{table}
+  \end{exampleblock}
 
   \begin{itemize}
   \item 実行可能解の総数は，最少で120個，最大で約28億個である．
-  \item 求められた実行可能解から解をランダムで二つ選びベンチマーク問題を作成し，
+  \item 求められた実行可能解から解をランダムで2つ選びベンチマーク問題を作成し，
         各グラフから10問，計90問を作成した．
   \end{itemize}
 
@@ -682,24 +679,6 @@
   
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験結果: 解けた問題数}
-
-実験結果は以下の通りである．
-\bigskip
-
-\begin{exampleblock}{}
-  \centering
-  \scalebox{0.8}{\input{table/result.tex}}
-\end{exampleblock}
-  
-  \begin{itemize}
-    \item 90問中71問について，到達可能性を確認できた．
-    \item \code{unchanged_inc}符号化は他が解いた問題をすべて解いていた．
-    \item 改良ソルバーの有効性が確認できた．
-  \end{itemize}
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{実験結果: カクタスプロット}
 
   \begin{figure}[h]
@@ -714,6 +693,26 @@
   
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験結果: 解けた問題数}
+    
+  \begin{itemize}
+    \item 90問中71問について，到達可能性を確認できた．
+    \item \code{unchanged_inc}符号化は他が解いた問題をすべて解いていた．
+    \item 到達可能なものの最長のステップ長は17であった．
+  \end{itemize}
+
+  \begin{exampleblock}{}
+    \centering
+    \scalebox{0.8}{\input{table/result.tex}}
+  \end{exampleblock}
+
+  \begin{block}{}
+    \centering
+    改良ソルバーの有効性が確認できた．
+  \end{block}
+  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{まとめと今後の課題}
 
   \begin{block}{まとめ}
@@ -721,7 +720,7 @@
       \item 有界組合せ遷移を提案した．
       \item 有界組合せ遷移を解く2つのソルバーを提案した．
       \begin{itemize}
-        \item 特に改良ソルバーは{\clingo}の PythonAPI を用いて高速化を図っている．
+        \item 特に改良ソルバーはインクリメンタル解法に基づいた効率化を図っている．
       \end{itemize}
       \item $k$彩色遷移問題を解く二つの符号化を提案した．
       \item 独自に作成したベンチマーク問題を用い，2つのソルバー及び2つの符号化の評価

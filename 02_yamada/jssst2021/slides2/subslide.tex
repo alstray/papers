@@ -7,110 +7,138 @@
  - 補足用 -
 \end{frame} 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 実験結果
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験結果: 考察}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{基本ソルバーの問題点}
 
-  \begin{itemize}
-    \item 結果によらず，\structure{vrc3$>$vrc2$>$vrc1の順}によい性能を示した．
-    \item 要因として，\alert{ルール数の差}が考えられる．
-    \begin{itemize}
-      \item \textit{clingo}では与えられたASP言語を充足可能性判定問題へと変換して解く．
-      \item ルール数を少なくすることは，節数を少なくすることにつながる．
-      \item 節数が多い時，単位伝播やヒューリスティックによる変数選択時のオーバーヘッドが増加する．
-      \item ルール数を抑えることでオーバーヘッドの減少につながり，優位性を示したと考えられる．
-    \end{itemize}
-  \end{itemize}
+  \begin{block}{}
+    \centering
+    $
+      \varphi_{\ell} = S(\bm{x}^0)
+      \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
+      \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t})
+      \land G(\bm{x}^\ell)
+    $
+  \end{block}
   
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASP符号化のルール数
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{ASP符号化の基礎化後のルール数}
   \begin{itemize}
-    \item 基礎化とは，変数を含む述語論理を変数を含まない命題論理へと変換することである．
-    \item 遷移制約に関するルール数のみに着目する．
-    \item $|T|$を遷移回数$t$, $|C|$を色数$k$, $|V|$をグラフ$G$の頂点数とする.
+    \item $\varphi_{\ell-1}$と$\varphi_{\ell}$に含まれる制約のほとんどは同じである．
   \end{itemize}
 
-  %\begin{table}[t]
-  %  \centering
-  %  \input{table/rule.tex}
-  %\end{table}
-
-  \begin{itemize}
-    \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の場合の数・色の選び方の場合の数・グラフの頂点の選び方の場合の数の乗算となる．
-  \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% グラフの全解数
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{独自に生成した$k$彩色遷移問題のベンチマーク問題}
-
-  \begin{table}[t]
+  \begin{block}{$\varphi_{\ell-1}$と$\varphi_{\ell}$の共通要素と非共通要素}
     \centering
-    \input{table/graph.tex}
-  \end{table}
+    $
+      \varphi_{\ell -1} \land \varphi_{\ell} =
+      \{S(\bm{x}^0) \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t)
+      \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})\}
+    $
+    $
+      \varphi_{\ell -1} \oplus \varphi_{\ell} = 
+      \{C(\bm{x}^{\ell}), T(\bm{x}^{\ell -1}, 
+      \bm{x}^{\ell}), G(\bm{x}^{\ell -1}), G(\bm{x}^{\ell})\}
+    $
+  \end{block}
+  \pause
+  \bigskip
 
+  基本ソルバーでは各$\varphi_{\ell}$に対して，
+  毎回 ASP システムを起動し実行するため，
   \begin{itemize}
-  \item 実行可能解の総数は，最少で120個，最大で約28億個である．
-  \item 求められた実行可能解から解をランダムで二つ選びベンチマーク問題を作成し，
-        各グラフから10問，計90問を作成した．
+    \item 学習節が引き継がれず同一の探索空間を繰り返し調べる必要がある．
+    \item 同一のルールを繰り返し基礎化する必要がある．
   \end{itemize}
+  といった問題点が存在する．
 
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{改良アルゴリズム}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 符号化コード
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{\code{unchanged}符号化}
-
-  \begin{exampleblock}{}
-    \centering
-    \lstinputlisting{code/gcrp_cc_unchanged.lp}
-  \end{exampleblock}
-  
+  \begin{block}{改良ソルバーの手続き}
+    \begin{enumerate}
+      \item ファクト形式の問題インスタンスと，
+            各制約に対応したルールを表す複数のサブプログラムから構成された
+            論理プログラムを与える．
+      \item ステップ数$t=0$とする．
+      \item $t>0$であれば，$G(\bm{x}^{t -1})$を
+            表すルールを削除する． \label{improved_solver:loop}
+      \item $t=0$であれば，$S(\bm{x}^0)$を
+            表すルールを追加する．
+      \item $C(\bm{x}^{t})$と$T(\bm{x}^{t-1},\bm{x}^{t})$
+            を表すルールを追加する．
+      \item $G(\bm{x}^{t})$を表すルールを追加する．
+      \item $\varphi_{t}$の到達可能性を検査する．
+      \item ASP システムの出力が充足可能であれば終了する．
+            充足不能であれば$t$の値を1増加させ，
+            \ref{improved_solver:loop}に戻り手続きを繰り返す．
+            \begin{itemize}
+              \item ただし，$t$がステップ長の上限値を超えたところで
+                    繰り返しを停止できる．
+            \end{itemize} \label{improved_solver:end}
+    \end{enumerate}
+  \end{block}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(基本ソルバー用)}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 符号化コード
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]\frametitle{\code{changed}符号化との違い}
+\begin{columns}[t]
+\begin{column}{0.9\linewidth}
+\begin{exampleblock}{\code{unchanged.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
 
-  制約$T$に対応するルールが\code{changed}符号化と異なる．
-
-  \begin{exampleblock}{}
-    \centering
-    \begin{lstlisting}
-    unchanged(X,T) :- color(X,C,T), color(X,C,T-1), 
-                      T >= 1.
-    \end{lstlisting}
-  \end{exampleblock}
+\only<1>{
   \begin{itemize}
-    \item ステップ数$T-1$とステップ数$T$で頂点$X$の色が変化しなかったことを意味する
-          アトム\code{unchanged(X,T)}を導入している．
-    \item 色が変わらない頂点は各遷移において$N-1$個であることを表している．
+    \item \code{changed}符号化とは，制約$T$の表し方が異なる．(9--10行目)
   \end{itemize}
-
-  \begin{exampleblock}{}
-    \centering
-    \begin{lstlisting}
-    :- not N-1 { unchanged(X,T) } N-1 , 
-       n(N), t(T), T >= 1.
-    \end{lstlisting}
-  \end{exampleblock}
+}
+\only<2>{
   \begin{itemize}
-    \item 色が変わらない頂点は各遷移において$N-1$個であることを表している．
+    \item 9行目では，ステップ数$T-1$とステップ数$T$で頂点$X$の色が
+      変化しなかったことを意味する
+      \code{unchanged/2}を導入している．
+    \item 10行目では，色が変わらない頂点は各遷移において$N-1$個であることを表している．
+    \item $N$はグラフの頂点数である．
   \end{itemize}
-  
+}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(改良ソルバー用)}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% k彩色遷移問題
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{columns}[t]
+\begin{column}{0.9\linewidth}
+\begin{exampleblock}{\code{unchanged_inc.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
+
+\begin{itemize}
+  \item 1, 5, 12行目の\code{\#program}により，
+    論理プログラムを複数のブロックに分割している．
+  \item その他の部分は\code{changed}符号化の自然な拡張である．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(改良ソルバー用)}}
+
+\begin{columns}[t]
+\begin{column}{0.9\linewidth}
+\begin{exampleblock}{\code{unchanged_inc.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{改良ソルバーの実行例}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{$k$彩色遷移問題の性質}
 
   \begin{itemize}
@@ -128,8 +156,55 @@
     \end{itemize}
 
   \end{itemize}
-
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験結果
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}\frametitle{実験結果: 考察}
+%
+%  \begin{itemize}
+%    \item \code{unchanged}符号化は，\code{changed}符号化と比べて有効性を示した．
+%    \item 要因として，\alert{基礎化後のルール数の差}が考えられる．
+%    \begin{itemize}
+%      \item \textit{clingo}では与えられた論理プログラムを充足可能性判定問題へと変換して解く．
+%      \item ルール数を少なくすることは，節数を少なくすることにつながる．
+%      \item 節数が多い時，単位伝播やヒューリスティックによる変数選択時のオーバーヘッドが増加する．
+%      \item ルール数を抑えることでオーバーヘッドの減少につながり，優位性を示したと考えられる．
+%    \end{itemize}
+%  \end{itemize}
+%  
+%\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 基礎化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}\frametitle{基礎化}
+%  
+%\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASP符号化のルール数
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}\frametitle{2つの符号化の基礎化後のルール数}
+%
+%  \begin{itemize}
+%    \item 基礎化とは，変数を含む述語論理を変数を含まない命題論理へと変換することである．
+%    \item 遷移制約に関するルール数のみに着目する．
+%    \item $|L|$をステップ長$\ell$，$|C|$を色数，$|V|$をグラフ$G$の頂点数とする．
+%  \end{itemize}
+%
+%  \begin{exampleblock}{}
+%    \centering
+%    \input{table/rule.tex}
+%  \end{exampleblock}
+%
+%  \begin{itemize}
+%    \item 遷移制約の基礎化後のルール数は，遷移回数の選び方の組合せ・
+%          色の選び方の組合せ・グラフの頂点の選び方の組合せの乗算となる．
+%  \end{itemize}
+%
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PSPACE
