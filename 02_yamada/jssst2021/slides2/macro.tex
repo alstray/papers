@@ -1,0 +1,52 @@
+% My Macro
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{plistings}
+\lstset{
+%        frame=single,
+        basicstyle=\ttfamily\small,
+        numbers=left,
+        numbersep=10pt,
+        tabsize=2,
+        extendedchars=true,
+        xleftmargin=3pt,
+        framexleftmargin=3pt,
+        moredelim=[is][\color{red}\bfseries]{<\#}{\#>},
+        moredelim=[is][\color{blue}\bfseries]{(\#}{\#)}
+}
+
+\newcommand{\bhline}{\noalign{\hrule height 1pt}}
+%\renewcommand{\labelenumi}{(\arabic{enumi})}
+\newcommand{\rz}[1]{\smash{\raise6.ex\hbox{#1}}}
+
+%%% For ASP
+\newcommand{\asap}{\textit{teaspoon}}
+\newcommand{\gringo}{\textit{gringo}}
+\newcommand{\clasp}{\textit{clasp}}
+\newcommand{\clingo}{\textit{clingo}}
+\newcommand{\dlv}{\textit{DLV}}
+\newcommand{\wasp}{\textit{WASP}}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
+\newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
+\newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
+\newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+\newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
+\newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
+\newcommand{\pbody}[1]{\poslits{\body{#1}}}
+\newcommand{\nbody}[1]{\neglits{\body{#1}}}
+\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+\newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "slides"
+%%% End:

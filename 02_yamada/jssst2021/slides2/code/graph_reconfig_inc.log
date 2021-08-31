@@ -1,0 +1,19 @@
+% clingo graph_reconfig.lp changed_inc.lp core.lp -c c=4
+clingo version 5.4.0
+Reading from graph_reconfig.lp ...
+Solving...
+Solving...
+Solving...
+Solving...
+Answer: 1
+color(1,4,0) color(2,2,0) color(3,3,0) color(4,1,0)
+color(1,3,1) color(2,2,1) color(3,3,1) color(4,1,1)
+color(1,3,2) color(2,4,2) color(3,3,2) color(4,1,2)
+color(1,3,3) color(2,4,3) color(3,2,3) color(4,1,3)...
+SATISFIABLE
+c step: 3
+s REACHABLE
+
+Models       : 1+
+Calls        : 4
+CPU Time     : 0.029s
