@@ -1,9 +1,0 @@
-% clingo gcrp_reconfig.lp changed.lp -c c=4 -c length=2
-clingo version 5.4.0
-Reading from gcrp_reconfig.lp ...
-Solving...
-Answer: 1
-color(1,3,2) color(2,1,2) color(3,3,2) color(4,4,2) 
-color(1,1,0) color(1,3,1) color(2,2,1) color(2,2,0) 
-color(3,3,1) color(3,3,0) color(4,4,1) color(4,4,0)
-SATISFIABLE

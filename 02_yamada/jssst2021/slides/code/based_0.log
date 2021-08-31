@@ -1,6 +1,0 @@
-% clingo gcrp_reconfig.lp changed.lp -c c=4 -c length=0
-clingo version 5.4.0
-Reading from gcrp_reconfig.lp ...
-Solving...
-UNSATISFIABLE
-
