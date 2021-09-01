@@ -8,86 +8,6 @@
 \end{frame} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{基本ソルバーの問題点}
-
-  \begin{block}{}
-    \centering
-    $
-    \varphi_{\ell-1} = S(\bm{x}^0)
-    \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t) 
-    \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})
-    \land G(\bm{x}^{\ell-1})
-    $
-    $
-      \varphi_{\ell} = S(\bm{x}^0)
-      \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
-      \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t})
-      \land G(\bm{x}^\ell)
-    $
-  \end{block}
-  
-  
-  \begin{itemize}
-    \item $\varphi_{\ell-1}$と$\varphi_{\ell}$に含まれる制約のほとんどは同じである．
-  \end{itemize}
-  \begin{exampleblock}{}
-    \centering
-      \scalebox{0.8}{\input{table/bcr.tex}}
-  \end{exampleblock}
-
-  %\begin{block}{$\varphi_{\ell-1}$と$\varphi_{\ell}$の共通要素と非共通要素}
-  %  \centering
-  %  $
-  %    \varphi_{\ell -1} \land \varphi_{\ell} =
-  %    \{S(\bm{x}^0) \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t)
-  %    \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})\}
-  %  $
-  %  $
-  %    \varphi_{\ell -1} \oplus \varphi_{\ell} = 
-  %    \{C(\bm{x}^{\ell}), T(\bm{x}^{\ell -1}, 
-  %    \bm{x}^{\ell}), G(\bm{x}^{\ell -1}), G(\bm{x}^{\ell})\}
-  %  $
-  %\end{block}
-  \bigskip
-
-  基本ソルバーでは各$\varphi_{\ell}$に対して，
-  毎回 ASP システムを起動し実行するため，
-  \begin{itemize}
-    \item 学習節が引き継がれず同一の探索空間を繰り返し調べる必要がある．
-    \item 同一のルールを繰り返し基礎化する必要がある．
-  \end{itemize}
-  といった問題点が存在する．
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-  \frametitle{改良アルゴリズム}
-
-  \begin{block}{改良アルゴリズムの手続き}
-    \begin{enumerate}
-      \item ファクト形式の問題インスタンスと，
-            各制約に対応したルールを表す複数のサブプログラムから構成された
-            論理プログラムを与える．
-      \item ステップ数$t=0$とする．
-      \item $t>0$であれば，ゴール状態の制約$G(\bm{x}^{t -1})$を
-            表すルールを削除する． \label{improved_solver:loop}
-      \item $t=0$であれば，スタート状態の制約$S(\bm{x}^0)$を
-            表すルールを追加する．
-      \item グラフ点彩色問題の制約$C(\bm{x}^{t})$と遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
-            を表すルールを追加する．
-      \item ゴール状態の制約$G(\bm{x}^{t})$を表すルールを追加する．
-      \item $\varphi_{t}$の到達可能性を検査する．
-      \item ASP システムの出力が充足可能であれば終了する．
-            充足不能であれば$t$の値を1増加させ，
-            \ref{improved_solver:loop}に戻り手続きを繰り返す．
-            \begin{itemize}
-              \item ただし，$t$がステップ長の上限値を超えたところで
-                    繰り返しを停止できる．
-            \end{itemize} \label{improved_solver:end}
-    \end{enumerate}
-  \end{block}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
   \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(基本ソルバー用)}}
 
@@ -111,41 +31,6 @@
     \end{itemize}
 \end{itemize}
 
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]
-  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(改良ソルバー用)}}
-
-\begin{columns}[t]
-\begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{changed_inc.lp}}
-\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed_inc.lp} 
-\end{exampleblock}    
-\end{column}
-\end{columns}
-
-\begin{itemize}
-  \item 複数のサブプログラムから構成される．
-    \only<1>{
-      \begin{itemize}
-        \item \code{based}ブロックはスタート状態の制約$S(\bm{x}^0)$を含む．
-      \end{itemize}
-    }
-    \only<2>{
-      \begin{itemize}
-        \item \code{step}ブロックはグラフ点彩色問題の制約$C(\bm{x}^{t})$，
-          遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を含む．
-      \end{itemize}
-    }
-    \only<3>{
-      \begin{itemize}
-        \item \code{check}ブロックはゴール状態の制約$G(\bm{x}^{\ell})$を含む．
-      \end{itemize}
-    }
-    \only<4>{
-      \item その他の部分は\code{changed}符号化の自然な拡張である．
-    }
-\end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
@@ -196,14 +81,16 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
-  \frametitle{改良ソルバーの実行例}
+  \frametitle{基本ソルバーの実行例}
 
-  \begin{exampleblock}{}
-    \lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\scriptsize]{code/graph_reconfig_inc.log} 
-  \end{exampleblock}
-  \begin{itemize}
-    \item \code{core.lp}は改良アルゴリズムの手続きを実装したプログラムである．
-  \end{itemize}
+%\begin{columns}[t]
+%\begin{column}{0.9\linewidth}
+\begin{exampleblock}{}
+\lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\tiny]{code/graph_reconfig.log} 
+\end{exampleblock}    
+%\end{column}
+%\end{columns}
+  
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
