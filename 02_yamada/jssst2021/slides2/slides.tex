@@ -146,12 +146,12 @@
 
   \begin{alertblock}{組合せ遷移問題に対してASPを用いる利点}
     \begin{itemize}
-    \item \underline{ASPの高い表現力}により，様々な組合せ問題を簡潔に記述できる．
+    \item ASPの高い表現力により，様々な組合せ問題を簡潔に記述できる．
       \begin{itemize}
-      \item \textbf{遷移問題への拡張も容易}．
+      \item \alert{\bf 遷移問題への拡張も容易}．
       \end{itemize}
-    \item \underline{インクリメンタルASP解法}により，ステップ長を増やしながら，
-      遷移問題の\textbf{到達可能性を効率的に検査}できる．
+    \item インクリメンタルASP解法により，ステップ長を増やしながら，
+      遷移問題の\alert{\bf 到達可能性を効率的に検査}できる．
       \begin{itemize}
       \item ASP システムを複数回起動するオーバーヘッドを回避．
       \item 同様の探索失敗を避けるために獲得した学習節を再利用．
@@ -168,13 +168,13 @@
     ASP 技術を活用し，組合せ遷移問題を効率よく解くソルバーを実現する．
   \end{alertblock}
   \begin{itemize}
-  \item 方針: プランニングやモデル検査のための技法を応用
+  \item 方針: プランニングや有界モデル検査のための技法を応用
   \end{itemize}
   \begin{block}{研究内容}
     \begin{enumerate}
     \item \structure{有界組合せ遷移(Bounded Combinatorial Reconfiguration)の提案}
       \begin{itemize}
-      \item ASP 技術を用いた組合せ遷移問題の解法の1つ
+      \item ASP 技術を用いた組合せ遷移問題の解法
       \end{itemize}
     \item \structure{ASP 技術を用いた組合せ遷移ソルバーの実装方式の提案}
       \begin{itemize}
@@ -198,7 +198,7 @@
   \item 基の組合せ問題の変数集合
     $\bm{x} = \{x_1,x_2,\ldots,x_n\}$
     に対して，ステップ$t\geq 0$での各変数の値を表す変数集合を
-    $\bm{x}^{t} = \{x_1^t,x_2^t,\ldots,x_n^t\}$で表す．
+    $\bm{x}^{t} = \{x_1^t,x_2^t,\ldots,x_n^t\}$を導入．
   \item スタート状態から$\ell$ステップ遷移した後の各変数の値
     $\bm{x}^{\ell}$が，ゴール状態を満足するかを判定するため，
     論理式$\varphi_{\ell}$を構成する．
@@ -247,77 +247,6 @@
   \footnotetext[2]{例えば，任意の2つの実行可能解の最短経路のうちの最大長(問題の直径)}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASP 言語の構文(1)}
-  \begin{alertblock}{}\centering
-    ASP言語は論理プログラムをベースとする\footnotemark[1]．
-  \end{alertblock}
-\begin{itemize}
-\item \structure{論理プログラム}とは以下の形式の\structure{ルール}
-  の有限集合である．
-  \[
-    \underbrace{a_0}_{\textrm{ヘッド}}\ \texttt{:-}\
-    \underbrace{a_1\texttt{,}\dots\texttt{,}a_m\texttt{,}
-      \texttt{not}\ {a_{m+1}}\texttt{,}\dots\texttt{,}
-      \texttt{not}\ {a_n}\texttt{.}}_{\textrm{ボディ}}
-  \]
-\item $0\leq m\leq n$ であり，各$a_i$はアトム，
-  \texttt{not}は\structure{デフォルトの否定}，
-  ``\texttt{,}''は連言を表す．
-\item \alert{\bf 直観的な意味}は「$a_1,\ldots,a_m$がすべて成り立ち,
-  $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，$a_0$が成り立つ」である．
-\end{itemize}
- \footnotetext[1]{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASP 言語の構文(2)}
-\begin{itemize}
-\item ボディが空のルールは\structure{ファクト}と呼ばれ，
-  ``\texttt{:-}''は省略できる．
-  \[
-    \underbrace{a_0}_{\textrm{ヘッド}}\texttt{.}
-  \]
-\item ヘッドが空のルールは\structure{一貫性制約}と呼ばれる．
-  \[
-    \texttt{:-}\
-    \underbrace{a_1\texttt{,}\dots\texttt{,}a_m\texttt{,}
-      \texttt{not}\ {a_{m+1}}\texttt{,}\dots\texttt{,}
-      \texttt{not}\ {a_n}\texttt{.}}_{\textrm{ボディ}}
-  \]
-  例えば，\\[1em]
-  \begin{tabular}[t]{l|l}
-    \(\texttt{:-}\ a\texttt{.}\) &
-   「$a$ではない」という禁止を表す．\\
-    \(\texttt{:-}\ \texttt{not}\ a\texttt{.}\) &
-   「$a$でなければならない」という強制を表す．\\
-    \(\texttt{:-}\ \texttt{not}\ a_1\texttt{,} {a_{2}}\texttt{.}\)&
-  「$a_2$ならば$a_1$」を表す．
-  \end{tabular}
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}[shrink]{拡張構文}
-\begin{alertblock}{}\centering
-  組合せ問題やグラフ問題を解くのに便利な構文が用意されている．
-\end{alertblock}
-
-\begin{itemize}
-\item \structure{選択子}\\
-  \begin{center}
-   \code{\{}\(a_1\texttt{;}\dots\texttt{;}a_n\)\code{\}.}\\
-  \end{center}
-  アトム集合\(\{a_1,\dots,a_n\}\)の任意の部分集合が成り立つことを意味
-  する．
-\item \structure{個数制約}
-  \begin{center}
-   $lb$\ \code{\{}\(a_1\texttt{;}\dots\texttt{;}a_n\)\code{\}}\ $ub$\code{.}
-  \end{center}
-  $a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下が成り立つことを意味する．
-\end{itemize}
-% \vfill
-% 組合せ最適化問題を解くために，最小化関数 (\structure{\texttt{\#minimize}}) 
-% と最大化関数 (\structure{\texttt{\#maximize}}) 等も用意されている.
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASP 技術を用いた組合せ遷移ソルバーの実装}
 
 \begin{alertblock}{}\centering
@@ -333,7 +262,7 @@
   \put(  0, 20){\dashbox(50,24){\shortstack{組合せ遷移問題\\のインスタンス}}}
   \put( 60, 20){\framebox(50,24){変換器}}
   \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
-  \put(120,-10){\dashbox(50,24){\shortstack{論理プログラム}}}
+  \put(120,-10){\dashbox(50,24){\shortstack{論理プログラム\\(ASP符号化)}}}
   \put(180,-10){\alert{\framebox(50,54){}}}
   \put(185, 27){\framebox(40,12){ASP システム}}
   \put(185, -5){\framebox(40,18){\shortstack{有界組合せ遷移\\アルゴリズム}}}
@@ -353,7 +282,7 @@
 \begin{enumerate}
 \item 問題インスタンスを ASP のファクト形式に変換する．
 \item ASP ファクトと組合せ遷移問題を解く
-  ASP符号化 (論理プログラム) を入力として，
+  論理プログラム(ASP符号化)を入力として，
   \alert{\bf 提案ソルバー}を用いて解集合を計算する．
 \item 解集合を解釈して，組合せ遷移問題の解を得る．
 \end{enumerate}
@@ -437,8 +366,7 @@
   充足不能であれば$\ell$の値を1増加させ，
   (\ref{BoCoRe:base:solver:2})に戻り手続きを繰り返す．
   \begin{itemize}
-    \item ただし，
-      $\ell$がステップ長の上限値を超えたところで繰り返しを停止できる．
+  \item ただし，$\ell$が問題の直径を超えたところで繰り返しを停止できる．
   \end{itemize}
 \end{enumerate}
 \end{block}
@@ -474,7 +402,7 @@
     毎回 \structure{ASP システムを起動するオーバヘッド}も無視できない．
   \end{itemize}
 
-  \begin{alertblock}{アイデア}\centering
+  \begin{alertblock}{改善のためのアイデア}\centering
     $\varphi_{\ell}$は，$\varphi_{\ell-1}$に
     $C(\bm{x}^{\ell})$と$T(\bm{x}^{\ell-1},\bm{x}^{\ell})$と
     $G(\bm{x}^{\ell})$を追加し，$G(\bm{x}^{\ell-1})$を削除することで，
@@ -486,20 +414,18 @@
 
   \begin{block}{改良アルゴリズムの手続き}
     \begin{enumerate}
-    \item ステップ$t$を$t=0$，論理プログラム$\Psi$を$\Psi = \emptyset$とする．
-    \item $t>0$であれば，$\Psi = \Psi - \enc{G(\bm{x}^{t-1})}$
-      % ゴール状態の制約$G(\bm{x}^{t -1})$を表すルールを削除する．
+    \item ASP システムを起動する．
+    \item ステップ$t$を$t=0$，論理プログラム
+      $\Psi$を$\Psi = \emptyset$とする．
+    \item $t>0$であれば，
+      $\Psi = \Psi - \enc{G(\bm{x}^{t-1})}$
       \label{improved_solver:loop}
-    \item $t=0$であれば，$\Psi = \Psi \cup \enc{S(\bm{x}^0)}$
-      % スタート状態の制約$S(\bm{x}^0)$を表すルールを追加する．
+    \item $t=0$であれば，
+      $\Psi = \Psi\ \cup\ \enc{\textrm{問題インスタンス}} \cup\ \enc{S(\bm{x}^0)}$
     \item $\Psi = \Psi \ \cup \ \enc{C(\bm{x}^{t})} \ \cup \ 
       \enc{T(\bm{x}^{t-1},\bm{x}^{t})} \ \cup \ \enc{G(\bm{x}^{t})}$
-      % グラフ点彩色問題の制約$C(\bm{x}^{t})$と遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
-      % を表すルールを追加する．
-      % ゴール状態の制約$G(\bm{x}^{t})$を表すルールを追加する．
-    \item 論理プログラム$\Psi$とファクト形式の問題インスタンスとともに，
-      ASP システムに入力として与える．
-    \item ASP システムの出力が充足可能であれば終了する．
+    \item $\Psi$を実行する．
+    \item 実行結果が充足可能であれば終了する．
       充足不能であれば$t$の値を1増加させ，
       (\ref{improved_solver:loop})に戻り手続きを繰り返す．
       \begin{itemize}
@@ -511,15 +437,18 @@
 
   \begin{itemize}
   \item 改良アルゴリズムは，ASP システム{\clingo}の python インターフェー
-    スを用いて簡潔に実装できる．
+    スを用いて簡潔に実装できる(37行程度)．
   \end{itemize}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-  \frametitle{$k$彩色遷移問題のASPファクト形式}
+  \frametitle{提案ソルバーを用いた$k$彩色遷移問題の解法}
 
-\only<1>{
+\begin{alertblock}{}\centering
+  $k$彩色遷移問題を例にとって，提案ソルバーを用いた解法を示す．
+\end{alertblock}
+\vfill
 \begin{center}
 \setlength{\unitlength}{1.0pt}
 \scriptsize\tiny
@@ -529,11 +458,11 @@
   \put(  0, 20){\dashbox(50,24){\shortstack{$k$彩色遷移問題\\のインスタンス}}}
   \put( 60, 20){\framebox(50,24){変換器}}
   \put(120, 20){\alert{\bf \dashbox(50,24){\shortstack{ASPファクト}}}}
-  \put(120,-10){\dashbox(50,24){\shortstack{論理プログラム\\(ASP符号化)}}}
+  \put(120,-10){\alert{\bf \dashbox(50,24){\shortstack{論理プログラム\\(ASP符号化)}}}}
   \put(180,-10){\framebox(50,54){}}
   \put(185, 27){\framebox(40,12){ASP システム}}
   \put(185, -5){\framebox(40,18){\shortstack{有界組合せ遷移\\アルゴリズム}}}
-  \put(240, 20){\dashbox(50,24){\shortstack{$k$彩色遷移問題\\の解}}}
+  \put(240, 20){\alert{\bf \dashbox(50,24){\shortstack{$k$彩色遷移問題\\の解}}}}
   \put( 50, 32){\vector(1,0){10}}
   \put(110, 32){\vector(1,0){10}}
   \put(170, 32){\vector(1,0){10}}
@@ -545,8 +474,20 @@
   \put(188, 50){提案ソルバー}
 \end{picture}  
 \end{center}
-}
-\only<2>{
+\begin{enumerate}
+\item $k$彩色遷移問題のASPファクト形式
+\item $k$彩色遷移問題を解く ASP 符号化
+  \begin{tabular}[t]{lcl}
+    \structure{\textsf{changed} 符号化}   & : & 色が変化した頂点数をカウント\\
+    \structure{\textsf{unchanged} 符号化} & : & 色が変化しなかった頂点数をカウント
+  \end{tabular}
+\item 提案ソルバーの実行例
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{$k$彩色遷移問題のファクト形式}
+
 \begin{center}
   \tabcolsep = 3mm
   \renewcommand{\arraystretch}{1.2}
@@ -557,134 +498,53 @@
   \end{tabular}
 \end{center}
 \vfill
-\begin{columns}[t]
-\begin{column}{0.9\linewidth}
-\begin{exampleblock}{$4$彩色遷移問題の例(\code{graph_reconfig.lp})}
+\begin{exampleblock}{$4$彩色遷移問題の例 (\code{graph_reconfig.lp})}
 \lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\footnotesize]{code/graph_reconfig.lp} 
 \end{exampleblock}    
-\end{column}
-\end{columns}
+
 \begin{itemize}
-\item \code{start(X,C)} は，スタート状態で頂点\code{X}が色\code{C}で
-  塗られることを意味する．
-  \code{goal(X,C)}も同様．
-  \item 色1は赤，色2は青，色3は黄，色4は緑に対応している．
+\item アトム\code{node/1}は頂点，\code{edge/2}は辺を表す．
+\item アトム\code{start(X,C)} は，スタート状態で頂点\code{X}が色\code{C}で
+  塗られることを意味する．\code{goal(X,C)}はゴール状態を表す．
+%  \item 色1は赤，色2は青，色3は黄，色4は緑に対応している．
 \end{itemize}
-}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
-  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(基本ソルバー用)}}
-\only<1>{
-\begin{center}
-\setlength{\unitlength}{1.0pt}
-\scriptsize\tiny
-\thicklines
-%  \input{arch}
-\begin{picture}(280,57)(4,-10)
-  \put(  0, 20){\dashbox(50,24){\shortstack{$k$彩色遷移問題\\のインスタンス}}}
-  \put( 60, 20){\framebox(50,24){変換器}}
-  \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
-  \put(120,-10){\alert{\bf\dashbox(50,24){\shortstack{論理プログラム\\(ASP符号化)}}}}
-  \put(180,-10){\framebox(50,54){}}
-  \put(185, 27){\framebox(40,12){ASP システム}}
-  \put(185, -5){\framebox(40,18){\shortstack{有界組合せ遷移\\アルゴリズム}}}
-  \put(240, 20){\dashbox(50,24){\shortstack{$k$彩色遷移問題\\の解}}}
-  \put( 50, 32){\vector(1,0){10}}
-  \put(110, 32){\vector(1,0){10}}
-  \put(170, 32){\vector(1,0){10}}
-  \put(230, 32){\vector(1,0){10}}
-  \put(170, +2){\line(1,0){4}}
-  \put(174, +2){\line(0,1){30}}
-  \put(195, 13){\vector(0,1){14}}
-  \put(215, 27){\vector(0,-1){14}}
-  \put(188, 50){提案ソルバー}
-\end{picture}  
-\end{center}
-}
-\only<2->{
-\begin{columns}[t]
-\begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{changed.lp}}
-\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed.lp} 
-\end{exampleblock}    
-\end{column}
-\end{columns}
-}
-\only<2>{
-  \begin{itemize}
-  \item 1行目: 定数\code{c} は色数，定数\code{length} はステップ長を表す．
-    これらは，実行時にASPシステムのオプションから与えられる．
-  \item アトム\code{col/1}は色，アトム\code{t/1} はステップを表す．
-  \item 3行目: スタート状態の制約$S(\bm{x}^0)$を表す．
-  \end{itemize}
-}
-\only<3>{
-\begin{itemize}
-  \item 5--7行目: グラフ点彩色問題の制約$C(\bm{x}^{t})$を表す．
-  \item アトム\code{color(X,C,T)}は，ステップ\code{T}で頂点\code{X}が色
-    \code{C}で塗られることを意味する．
-  \item 5行目: 各ステップ\code{T}，各頂点\code{X}に対して，
-    \code{X}がただ1つの色で塗られることを個数制約を用いて表している．
-  \item 6--7行目: 各ステップ\code{T}，各辺\code{edge(X,Y)}に対して，
-    隣接する頂点\code{X}と\code{Y}が同じ色で塗られないことを表す．
-\end{itemize}
-}
-\only<4>{
-  \begin{itemize}
-  \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を表す．
-  \item アトム\code{changed(X,T)}は，ステップ\code{T-1}とステップ\code{T}の間
-    で，頂点\code{X}の色が変化したことを意味する．
-  \item 10行目: 各ステップ\code{T}において，色が変化する頂点はただ1つ
-    であることを表す．
-  \item 12行目: ゴール状態の制約$G(\bm{x}^{\ell})$を表す．
-  \end{itemize}
-}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]
-  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(改良ソルバー用)}}
+  \frametitle{$k$彩色遷移問題を解く ASP 符号化 {\small(改良アルゴリズム用)}}
 
 \begin{columns}[t]
 \begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{changed_inc.lp}}
+\begin{exampleblock}{\code{changed} 符号化 (\code{changed_inc.lp})}
 \lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed_inc.lp} 
 \end{exampleblock}    
 \end{column}
 \end{columns}
 
 \begin{itemize}
-  \item 複数のサブプログラムから構成される．
-    \only<1>{
-      \begin{itemize}
-        \item \code{based}ブロックはスタート状態の制約$S(\bm{x}^0)$を含む．
-      \end{itemize}
-    }
-    \only<2>{
-      \begin{itemize}
-        \item \code{step}ブロックはグラフ点彩色問題の制約$C(\bm{x}^{t})$，
-          遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を含む．
-      \end{itemize}
-    }
-    \only<3>{
-      \begin{itemize}
-        \item \code{check}ブロックはゴール状態の制約$G(\bm{x}^{\ell})$を含む．
-      \end{itemize}
-    }
-    \only<4>{
-      \item その他の部分は\code{changed}符号化の自然な拡張である．
-    }
+\item 3つのサブプログラム
+  \code{base}, \code{step(t)}, \code{check(t)}
+  から構成される．
+% \item 記号\code{t} は，ステップを表す．
+  \begin{itemize}
+  \item \code{base} : スタート状態の制約$S(\bm{x}^0)$
+  \item \code{step(t)} : グラフ点彩色遷移問題の制約$C(\bm{x}^{t})$と
+    遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
+  \item \code{check(t)} : ゴール状態の制約$G(\bm{x}^{t})$
+  \end{itemize}
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]
-  \frametitle{改良ソルバーの実行例}
+\begin{frame}%[shrink]
+  \frametitle{提案ソルバーの実行例}
 
   \begin{exampleblock}{}
     \lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\scriptsize]{code/graph_reconfig_inc.log} 
   \end{exampleblock}
   \begin{itemize}
-    \item \code{core.lp}は改良アルゴリズムの手続きを実装したプログラムである．
+  \item \code{core.lp}は，改良アルゴリズムを実装したpythonプログラム
+  \item \code{color(X,C,T)}はステップ\code{T} で頂点\code{X} が色\code{C}
+    で塗られることを意味
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -742,25 +602,6 @@
     \item \structure{環境}: Mac OS, 3.2GHz 6コア Intel Core i7，64GB メモリ
     \end{itemize}
 \end{frame}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% \begin{frame}\frametitle{ベンチマークの作成}
-
-%   \begin{itemize}
-%     \item 組合せ遷移問題の実践的な研究は始まったばかりであり，
-%           ベンチマーク問題の整備も重要な課題の一つである．
-%     \item 本研究では$k$彩色遷移問題をベンチマーク問題として用いる．
-%     \item ステップ長の上限値として与える実行可能界の総数を求められる，
-%           グラフ点彩色問題が必要となる．
-%           \begin{enumerate}
-%             \item \textit{COLOR04}で公開されているグラフ点彩色問題のグラフ127個のうち，
-%                   彩色数が判明している44個~[Tamura+ '09] をベンチマーク問題の候補とした．
-%             \item 44個のグラフに対して，彩色数での実行可能解を全列挙することが可能
-%                   かを調査した．
-%           \end{enumerate}
-%     \item 結果，9個のグラフについて総数が求められた．
-%   \end{itemize}
-  
-% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{独自に作成した$k$彩色遷移問題}
 
@@ -770,25 +611,32 @@
   \end{exampleblock}
 
   \begin{itemize}
-  \item 実行可能解の総数は，最少で120個，最大で約28億個である．
-  \item 求められた実行可能解から解をランダムで2つ選びベンチマーク問題を作成し，
+  \item 実行可能解の総数は，最小で120個，最大で約28億個である．
+  \item 求められた実行可能解から解をランダムに2つ選びベンチマーク問題を作成し，
         各グラフから10問，計90問を作成した．
+  \item 今回の実験では，ステップ長の上限値に，実行可能解の総数から1引
+    いた数を使用した．
   \end{itemize}
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{実験結果: 解けた問題数}
 
   \begin{exampleblock}{}
     \centering
+    \renewcommand{\arraystretch}{1.2}
     \scalebox{0.9}{\input{table/result.tex}}
   \end{exampleblock}
 
   \begin{itemize}
-  \item 90問中71問について，到達可能性を検査できた．
-  \item 改良ソルバーの\code{unchanged}符号化は，他が解いた問題をすべて解いていた．
-  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
-  \item 到達不能なインスタンスに対する改良ソルバーの優位性が確認できた．
+  \item 90問中71問について，到達可能性を判定できた．
+    \begin{itemize}
+    \item 到達可能11問，到達不能60問
+    \end{itemize}
+  \item 改良ソルバーと\code{unchanged}符号化の組合せが，
+    最も多くの問題を解いた．平均CPU時間も最も短い．
+%  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
+  \item 到達不能なインスタンスについて，インクリメンタル解法を用いた改
+    良ソルバーの優位性が確認できた．
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -801,62 +649,46 @@
 
   \begin{itemize}
     \item 改良ソルバーは基本ソルバーより多くの問題を高速に解いている．
-    \item \code{unchanged}符号化は\code{changed}符号化より多くの問題を高速に解いている．
+    \item \code{unchanged} 符号化は，\code{changed}符号化より良い性能
+      を示した．
   \end{itemize}
   
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{まとめと今後の課題}
+\begin{frame}\frametitle{まとめ}
 
-  \begin{alertblock}{}\centering
-    ASP 技術を用いた組合せ遷移問題の解法として，有界組合せ遷移を提案し，
-    ソルバーの実装を行なった．
+  \begin{alertblock}{本研究の貢献}\centering
+    ASP 用いた組合せ遷移問題の解法として，有界組合せ遷移を提案し，
+    汎用ソルバーの実装および$k$彩色遷移問題を用いた性能評価を行なった．
   \end{alertblock}
 
   \begin{enumerate}
-  \item \structure{2種類の実装方式の提案}
+  \item \structure{2種類の実装方式の考案}
     \begin{itemize}
     \item 基本アルゴリズム
     \item インクリメンタルASP解法を用いた改良アルゴリズム
     \end{itemize}
   \item \structure{$k$彩色遷移問題を解く2種類の ASP 符号化の考案}
     \begin{itemize}
-    \item \textsf{changed}符号化と\textsf{unchanged}符号化 (本発表では省略)
-    \item ASPの表現力の高さを生かし，$k$彩色遷移問題を簡潔に記述できることを確認
+    \item $k$彩色遷移問題を簡潔に記述できることを確認
     \end{itemize}
   \item \structure{$k$彩色遷移問題のベンチマーク問題を独自に生成}
   \item \structure{$k$彩色遷移問題を用いた有界組合せ遷移の評価実験}
+    \begin{itemize}
+    \item 改良アルゴリズムの優位性を確認
+    \end{itemize}
   \end{enumerate}
-
-  % \begin{block}{まとめ}
-  %   \begin{itemize}
-  %     \item 有界組合せ遷移を提案した．
-  %     \item 有界組合せ遷移を解く2つのソルバーを提案した．
-  %     \begin{itemize}
-  %       \item 特に改良ソルバーはインクリメンタル解法に基づいた効率化を図っている．
-  %     \end{itemize}
-  %     \item $k$彩色遷移問題を解く二つの符号化を提案した．
-  %     \item 独自に作成したベンチマーク問題を用い，2つのソルバー及び2つの符号化の評価
-  %           実験を行った．
-  %     \begin{itemize}
-  %       \item 実験の結果，改良ソルバーの優位性が確かめられた．
-  %     \end{itemize}
-  %   \end{itemize}
-  % \end{block}
   
-  \begin{alertblock}{今後の課題}
+  \begin{exampleblock}{今後の課題}
     \begin{itemize}
       \item ソルバーの高速化，組合せ遷移問題の記述例の蓄積
       \item $k$彩色遷移問題の ASP 符号化の改良
     \end{itemize}
-  \end{alertblock}
+  \end{exampleblock}
 \end{frame}
-%###########################################################
-%##### 補助スライド ########################################
-%###########################################################
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\end{document}
 \input{subslide.tex}
-
 \end{document}
 
 %%% Local Variables:
