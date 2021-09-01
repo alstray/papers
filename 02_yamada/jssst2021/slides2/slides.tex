@@ -1,4 +1,4 @@
-% 2021-08-26 by Banbara
+% 2021-09-01 by Banbara
 \documentclass[dvipdfmx,11pt]{beamer}
 
 %%% Package
@@ -43,26 +43,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \maketitle
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% x 組合せ遷移問題
-% x k彩色遷移問題
-% x 解集合プログラミング(ASP)
-% x 研究目的
-% x 有界組合せ遷移の基本アイデア
-% x 有界組合せ遷移
-% x ASP言語の構文
-% x ASP 技術を用いた有界組合せ遷移の実装
-% x 基本アルゴリズム
-% x 改良アルゴリズム
-% x ASPファクト形式
-% x k彩色遷移問題のASP符号化 (基本ソルバー用)
-% x k彩色遷移問題のASP符号化 (改良ソルバー用)
-% x 実行例
-% ベンチマーク問題の生成
-% 実行実験
-% まとめ
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
   \frametitle{組合せ遷移 (Combinatorial Reconfiguration)}
@@ -146,7 +126,7 @@
   \uncover<2>{
   \begin{itemize}
   \item スタート状態からゴール状態へ3ステップで到達可能である．
-  \item 各状態$t$において，グラフ点彩色問題の制約を満たす．
+  \item 各ステップ$t$において，グラフ点彩色問題の制約を満たす．
   \item 1回の遷移において，色が変化する頂点はただ1つのみである．
   \end{itemize}
   }
@@ -168,10 +148,10 @@
     \begin{itemize}
     \item \underline{ASPの高い表現力}により，様々な組合せ問題を簡潔に記述できる．
       \begin{itemize}
-      \item 遷移問題への拡張も容易．
+      \item \textbf{遷移問題への拡張も容易}．
       \end{itemize}
     \item \underline{インクリメンタルASP解法}により，ステップ長を増やしながら，
-      遷移問題の到達可能性を効率的に検査できる．
+      遷移問題の\textbf{到達可能性を効率的に検査}できる．
       \begin{itemize}
       \item ASP システムを複数回起動するオーバーヘッドを回避．
       \item 同様の探索失敗を避けるために獲得した学習節を再利用．
@@ -196,7 +176,7 @@
       \begin{itemize}
       \item ASP 技術を用いた組合せ遷移問題の解法の1つ
       \end{itemize}
-    \item \structure{ASP 技術を用いた有界組合せ遷移の実装方式の提案}
+    \item \structure{ASP 技術を用いた組合せ遷移ソルバーの実装方式の提案}
       \begin{itemize}
       \item 基本アルゴリズム
       \item インクリメンタルASP解法を用いた改良アルゴリズム
@@ -338,7 +318,7 @@
 % と最大化関数 (\structure{\texttt{\#maximize}}) 等も用意されている.
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASP 技術を用いた有界組合せ遷移の実装}
+\begin{frame}{ASP 技術を用いた組合せ遷移ソルバーの実装}
 
 \begin{alertblock}{}\centering
 開発した組合せ遷移ソルバーの構成図は以下の通りである．
@@ -379,10 +359,10 @@
 \end{enumerate}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{有界組合せ遷移アルゴリズム}
+\begin{frame}[shrink]{有界組合せ遷移アルゴリズム}
 
 \begin{alertblock}{}\centering
-有界組合せ遷移アルゴリズムを2種類考案した．
+有界組合せ遷移のためのアルゴリズムを2種類考案した．
 \end{alertblock}
 
 \begin{center}
@@ -423,10 +403,10 @@
 \item \structure{インクリメンタルASP解法を用いた改良アルゴリズム}
   \begin{itemize}
   \item $S(\bm{x}^{0})$, $C(\bm{x}^{t})$,
-    $T(\bm{x}^{t-1},\bm{x}^{t})$, $G(\bm{x}^{\ell})$
+    $T(\bm{x}^{t-1},\bm{x}^{t})$, $G(\bm{x}^{t})$
     を動的に追加・削除しながら，$\varphi_{\ell}$をインクリメンタルに構成し解く．
   \item 長所: 学習節の再利用が可能．ASPシステムの起動は1回のみ．
-  \item 短所: 現状では，デバックを行いにくい．
+  \item 短所: 現状では，デバックしにくい．
   \end{itemize}
 \end{enumerate}
 \end{frame}
@@ -449,8 +429,10 @@
 %  ファクト形式の問題インスタンスとともに，
 %  ASP システムに入力として与える．
 \item \label{BoCoRe:base:solver:2}
-  ルールの集合$\phi = LP(\varphi_\ell)$とする．
-\item $\phi$の到達可能性を検査する．
+  $\varphi_\ell$を論理プログラムとして記述した
+  $\enc{\varphi_\ell}$と
+  ファクト形式の問題インスタンスとともに，
+  ASP システムに入力として与える．
 \item ASP システムの出力結果が充足可能であれば終了する．
   充足不能であれば$\ell$の値を1増加させ，
   (\ref{BoCoRe:base:solver:2})に戻り手続きを繰り返す．
@@ -462,90 +444,76 @@
 \end{block}
 
 \begin{itemize}
-%\item この手続きは，与えられた組合せ遷移問題に対して，
-%  到達可能な\structure{最短の遷移系列}を探索する．
-\item 関数$LP()$は，与えられた論理式を ASP のルールへと変換する関数である．
+\item この手続きは，与えられた組合せ遷移問題に対して，
+ 到達可能な\structure{最短の遷移系列}を探索する．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}\frametitle{基本ソルバーの問題点}
+\begin{frame}\frametitle{基本アルゴリズムの問題点}
 
   \begin{block}{}
-    \centering
-    $
-    \varphi_{\ell-1} = S(\bm{x}^0)
+    \vskip -1em
+    \begin{align*}
+    \varphi_{\ell-1} &= S(\bm{x}^0)
     \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t) 
     \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})
-    \land G(\bm{x}^{\ell-1})
-    $
-    $
-      \varphi_{\ell} = S(\bm{x}^0)
-      \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
-      \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t})
-      \land G(\bm{x}^\ell)
-    $
+    \land G(\bm{x}^{\ell-1})\\
+    \varphi_{\ell} &= S(\bm{x}^0)
+    \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
+    \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t})
+    \land G(\bm{x}^\ell)
+  \end{align*}
   \end{block}
   
-  
   \begin{itemize}
-    \item $\varphi_{\ell-1}$と$\varphi_{\ell}$に含まれる制約のほとんどは同じである．
+  \item $\varphi_{\ell-1}$と$\varphi_{\ell}$は共通部分が多いため，
+    \structure{同じ探索空間を繰り返し調べる}ことになる．
+  \item 各$\varphi_\ell$に対して，毎回 ASP システムを起動するため，
+    \structure{学習節の再利用ができない}．
+  \item また，ステップ長$\ell$が大きくなった場合，
+    毎回 \structure{ASP システムを起動するオーバヘッド}も無視できない．
   \end{itemize}
-  \begin{exampleblock}{}
-    \centering
-      \scalebox{0.8}{\input{table/bcr.tex}}
-  \end{exampleblock}
 
-  %\begin{block}{$\varphi_{\ell-1}$と$\varphi_{\ell}$の共通要素と非共通要素}
-  %  \centering
-  %  $
-  %    \varphi_{\ell -1} \land \varphi_{\ell} =
-  %    \{S(\bm{x}^0) \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t)
-  %    \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})\}
-  %  $
-  %  $
-  %    \varphi_{\ell -1} \oplus \varphi_{\ell} = 
-  %    \{C(\bm{x}^{\ell}), T(\bm{x}^{\ell -1}, 
-  %    \bm{x}^{\ell}), G(\bm{x}^{\ell -1}), G(\bm{x}^{\ell})\}
-  %  $
-  %\end{block}
-  \bigskip
-
-  基本ソルバーでは各$\varphi_{\ell}$に対して，
-  毎回 ASP システムを起動し実行するため，
-  \begin{itemize}
-    \item 学習節が引き継がれず同一の探索空間を繰り返し調べる必要がある．
-    \item 同一のルールを繰り返し基礎化する必要がある．
-  \end{itemize}
-  といった問題点が存在する．
-
+  \begin{alertblock}{アイデア}\centering
+    $\varphi_{\ell}$は，$\varphi_{\ell-1}$に
+    $C(\bm{x}^{\ell})$と$T(\bm{x}^{\ell-1},\bm{x}^{\ell})$と
+    $G(\bm{x}^{\ell})$を追加し，$G(\bm{x}^{\ell-1})$を削除することで，
+    インクリメンタルに構成できる．    
+  \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-  \frametitle{改良アルゴリズム}
+\begin{frame}\frametitle{改良アルゴリズム}
 
   \begin{block}{改良アルゴリズムの手続き}
     \begin{enumerate}
-      \item ステップ数$t=0$，ルールの集合$\phi = \emptyset$とする．
-      \item $t>0$であれば，$\phi/LP(G(\bm{x}^{t -1}))$とする．
-        %ゴール状態の制約$G(\bm{x}^{t -1})$を表すルールを削除する．
-        \label{improved_solver:loop}
-      \item $t=0$であれば，$\phi\cup LP(S(\bm{x}^0))$とする．
-        %スタート状態の制約$S(\bm{x}^0)$を表すルールを追加する．
-      \item $\phi\cup LP(C(\bm{x}^{t}))\cup LP(T(\bm{x}^{t-1},\bm{x}^{t}))$とする．
-        %グラフ点彩色問題の制約$C(\bm{x}^{t})$と遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
-        %を表すルールを追加する．
-      \item $\phi\cup LP(G(\bm{x}^{t}))$とする．
-        %ゴール状態の制約$G(\bm{x}^{t})$を表すルールを追加する．
-      \item $\phi$の到達可能性を検査する．
-      \item ASP システムの出力が充足可能であれば終了する．
-            充足不能であれば$t$の値を1増加させ，
-            \ref{improved_solver:loop}に戻り手続きを繰り返す．
-            \begin{itemize}
-              \item ただし，$t$がステップ長の上限値を超えたところで
-                    繰り返しを停止できる．
-            \end{itemize} \label{improved_solver:end}
+    \item ステップ$t$を$t=0$，論理プログラム$\Psi$を$\Psi = \emptyset$とする．
+    \item $t>0$であれば，$\Psi = \Psi - \enc{G(\bm{x}^{t-1})}$
+      % ゴール状態の制約$G(\bm{x}^{t -1})$を表すルールを削除する．
+      \label{improved_solver:loop}
+    \item $t=0$であれば，$\Psi = \Psi \cup \enc{S(\bm{x}^0)}$
+      % スタート状態の制約$S(\bm{x}^0)$を表すルールを追加する．
+    \item $\Psi = \Psi \ \cup \ \enc{C(\bm{x}^{t})} \ \cup \ 
+      \enc{T(\bm{x}^{t-1},\bm{x}^{t})} \ \cup \ \enc{G(\bm{x}^{t})}$
+      % グラフ点彩色問題の制約$C(\bm{x}^{t})$と遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
+      % を表すルールを追加する．
+      % ゴール状態の制約$G(\bm{x}^{t})$を表すルールを追加する．
+    \item 論理プログラム$\Psi$とファクト形式の問題インスタンスとともに，
+      ASP システムに入力として与える．
+    \item ASP システムの出力が充足可能であれば終了する．
+      充足不能であれば$t$の値を1増加させ，
+      (\ref{improved_solver:loop})に戻り手続きを繰り返す．
+      \begin{itemize}
+      \item ただし，$t$がステップ長の上限値を超えたところで
+        繰り返しを停止できる．
+      \end{itemize} \label{improved_solver:end}
     \end{enumerate}
   \end{block}
+
+  \begin{itemize}
+  \item 改良アルゴリズムは，ASP システム{\clingo}の python インターフェー
+    スを用いて簡潔に実装できる．
+  \end{itemize}
+
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
