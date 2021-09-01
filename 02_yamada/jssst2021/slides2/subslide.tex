@@ -13,6 +13,12 @@
   \begin{block}{}
     \centering
     $
+    \varphi_{\ell-1} = S(\bm{x}^0)
+    \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t) 
+    \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})
+    \land G(\bm{x}^{\ell-1})
+    $
+    $
       \varphi_{\ell} = S(\bm{x}^0)
       \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
       \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t})
@@ -20,24 +26,28 @@
     $
   \end{block}
   
+  
   \begin{itemize}
     \item $\varphi_{\ell-1}$と$\varphi_{\ell}$に含まれる制約のほとんどは同じである．
   \end{itemize}
-
-  \begin{block}{$\varphi_{\ell-1}$と$\varphi_{\ell}$の共通要素と非共通要素}
+  \begin{exampleblock}{}
     \centering
-    $
-      \varphi_{\ell -1} \land \varphi_{\ell} =
-      \{S(\bm{x}^0) \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t)
-      \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})\}
-    $
-    $
-      \varphi_{\ell -1} \oplus \varphi_{\ell} = 
-      \{C(\bm{x}^{\ell}), T(\bm{x}^{\ell -1}, 
-      \bm{x}^{\ell}), G(\bm{x}^{\ell -1}), G(\bm{x}^{\ell})\}
-    $
-  \end{block}
-  \pause
+      \scalebox{0.8}{\input{table/bcr.tex}}
+  \end{exampleblock}
+
+  %\begin{block}{$\varphi_{\ell-1}$と$\varphi_{\ell}$の共通要素と非共通要素}
+  %  \centering
+  %  $
+  %    \varphi_{\ell -1} \land \varphi_{\ell} =
+  %    \{S(\bm{x}^0) \land \bigwedge_{t=0}^{\ell-1} C(\bm{x}^t)
+  %    \land \bigwedge_{t=1}^{\ell-1} T(\bm{x}^{t-1},\bm{x}^{t})\}
+  %  $
+  %  $
+  %    \varphi_{\ell -1} \oplus \varphi_{\ell} = 
+  %    \{C(\bm{x}^{\ell}), T(\bm{x}^{\ell -1}, 
+  %    \bm{x}^{\ell}), G(\bm{x}^{\ell -1}), G(\bm{x}^{\ell})\}
+  %  $
+  %\end{block}
   \bigskip
 
   基本ソルバーでは各$\varphi_{\ell}$に対して，
@@ -53,19 +63,19 @@
 \begin{frame}
   \frametitle{改良アルゴリズム}
 
-  \begin{block}{改良ソルバーの手続き}
+  \begin{block}{改良アルゴリズムの手続き}
     \begin{enumerate}
       \item ファクト形式の問題インスタンスと，
             各制約に対応したルールを表す複数のサブプログラムから構成された
             論理プログラムを与える．
       \item ステップ数$t=0$とする．
-      \item $t>0$であれば，$G(\bm{x}^{t -1})$を
+      \item $t>0$であれば，ゴール状態の制約$G(\bm{x}^{t -1})$を
             表すルールを削除する． \label{improved_solver:loop}
-      \item $t=0$であれば，$S(\bm{x}^0)$を
+      \item $t=0$であれば，スタート状態の制約$S(\bm{x}^0)$を
             表すルールを追加する．
-      \item $C(\bm{x}^{t})$と$T(\bm{x}^{t-1},\bm{x}^{t})$
+      \item グラフ点彩色問題の制約$C(\bm{x}^{t})$と遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
             を表すルールを追加する．
-      \item $G(\bm{x}^{t})$を表すルールを追加する．
+      \item ゴール状態の制約$G(\bm{x}^{t})$を表すルールを追加する．
       \item $\varphi_{t}$の到達可能性を検査する．
       \item ASP システムの出力が充足可能であれば終了する．
             充足不能であれば$t$の値を1増加させ，
@@ -89,20 +99,18 @@
 \end{column}
 \end{columns}
 
-\only<1>{
-  \begin{itemize}
-    \item \code{changed}符号化とは，制約$T$の表し方が異なる．(9--10行目)
-  \end{itemize}
-}
-\only<2>{
-  \begin{itemize}
-    \item 9行目では，ステップ数$T-1$とステップ数$T$で頂点$X$の色が
-      変化しなかったことを意味する
-      \code{unchanged/2}を導入している．
-    \item 10行目では，色が変わらない頂点は各遷移において$N-1$個であることを表している．
-    \item $N$はグラフの頂点数である．
-  \end{itemize}
-}
+\begin{itemize}
+  \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$の表し方が，
+    \code{changed}符号化と異なる．
+  \item アトム\code{unchanged(X,T)}は，ステップ\code{T-1}とステップ\code{T}の間
+    で，頂点\code{X}の色が変化しなかったことを意味する．
+  \item 10行目: 各ステップ\code{T}において，色が変化しない頂点はちょうど
+    \code{N-1}個であることを表す．
+    \begin{itemize}
+      \item \code{N}はグラフの頂点数を表す．
+    \end{itemize}
+\end{itemize}
+
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
@@ -110,17 +118,69 @@
 
 \begin{columns}[t]
 \begin{column}{0.9\linewidth}
-\begin{exampleblock}{\code{unchanged_inc.lp}}
-\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp} 
+\begin{exampleblock}{\code{changed_inc.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed_inc.lp} 
 \end{exampleblock}    
 \end{column}
 \end{columns}
 
 \begin{itemize}
-  \item 1, 5, 12行目の\code{\#program}により，
-    論理プログラムを複数のブロックに分割している．
-  \item その他の部分は\code{changed}符号化の自然な拡張である．
+  \item 複数のサブプログラムから構成される．
+    \only<1>{
+      \begin{itemize}
+        \item \code{based}ブロックはスタート状態の制約$S(\bm{x}^0)$を含む．
+      \end{itemize}
+    }
+    \only<2>{
+      \begin{itemize}
+        \item \code{step}ブロックはグラフ点彩色問題の制約$C(\bm{x}^{t})$，
+          遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を含む．
+      \end{itemize}
+    }
+    \only<3>{
+      \begin{itemize}
+        \item \code{check}ブロックはゴール状態の制約$G(\bm{x}^{\ell})$を含む．
+      \end{itemize}
+    }
+    \only<4>{
+      \item その他の部分は\code{changed}符号化の自然な拡張である．
+    }
 \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{基となるグラフごとの解けた問題数}
+  
+  \begin{exampleblock}{}
+    \centering
+    \scalebox{0.8}{\input{table/benchmark.tex}}
+  \end{exampleblock}
+  \begin{itemize}
+    \item $\textrm{平均次数} = (\textrm{辺数}*2) / (\textrm{頂点数})$
+    \item 色数$k$は彩色数に等しい．
+    \item 難しい問題の特徴としては，基となる問題の実行可能解の総数が多いことや，
+      平均次数と色数$k$の差が少ないことなどが考えられる．
+      \begin{itemize}
+        \item $k \ge \Delta(G) + 2$ならば到達可能である．
+        \item $\Delta(G)$はグラフ$G$の最大次数である．
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{到達可能インスタンスのCPU時間による比較}
+
+  \begin{exampleblock}{}
+    \centering
+    \scalebox{0.75}{\input{table/reachable.tex}}
+  \end{exampleblock}
+  \begin{itemize}
+    \item ステップ長は7から17のものについて到達可能であることが求められた．
+    \item 全体の結果とは異なる傾向が見られた．
+      \begin{itemize}
+        \item 十分な長さの遷移系列が最短の解となるようなベンチマークが必要である．
+      \end{itemize}
+  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
@@ -135,8 +195,35 @@
 \end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
+\begin{frame}[shrink]
   \frametitle{改良ソルバーの実行例}
+
+  \begin{exampleblock}{}
+    \lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\scriptsize]{code/graph_reconfig_inc.log} 
+  \end{exampleblock}
+  \begin{itemize}
+    \item \code{core.lp}は改良アルゴリズムの手続きを実装したプログラムである．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{得られた遷移系列}
+
+  \begin{center}
+  \tabcolsep = 3mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}[t]{ccc}
+    スタート状態($t=0$) && $t=1$ \\
+    \scalebox{0.5}{\input{gcrp_t0}} &
+    \rz{\Large$\Rightarrow$} &
+    \scalebox{0.5}{\input{gcrp_t1}}\\
+    && {\Large $\Downarrow$} \\
+    \scalebox{0.5}{\input{gcrp_t3}} &
+    \rz{\Large$\Leftarrow$} &
+    \scalebox{0.5}{\input{gcrp_t2}}\\
+    ゴール状態 ($t=3$) && $t=2$
+  \end{tabular}
+\end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{$k$彩色遷移問題の性質}

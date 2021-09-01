@@ -111,7 +111,7 @@
   \begin{block}{$k$彩色遷移問題}
     \begin{itemize}
     \item \structure{\bf 入力}:
-      色数$k$のグラフ点彩色問題とスタート状態とゴール状態
+      色数$k$のグラフ点彩色問題と，スタート状態とゴール状態
       を表す2つの実行可能解
     \item \structure{遷移制約}: 1回の遷移で色が変化する頂点はただ1つのみ
     \item \structure{目的}:
@@ -254,13 +254,15 @@
   \end{alertblock}
   \begin{itemize}
   \item $\varphi_{\ell}$が\structure{充足可能}の場合，
-    ステップ長$\ell$の\structure{到達可能}な遷移系列が存在
+    ステップ長$\ell$の\structure{到達可能}な遷移系列が存在．
   \item \structure{充足不能}の場合，ステップ長$\ell$では\structure{到達不能}．
     この場合，$\ell$を増加させた論理プログラムを構成し，
     繰り返し ASP システムを実行．
   \item この手法は，到達不能の証明は行わない不完全な手続きである．
-    検査すべき遷移系列のステップ長に上限~\footnotemark[2]
-    が存在する場合には，完全な手続きとなる．
+    \begin{itemize}
+      \item ただし，検査すべき遷移系列のステップ長に上限~\footnotemark[2]
+        が存在する場合には，完全な手続きとなる．
+    \end{itemize}
   \end{itemize}
   \footnotetext[2]{例えば，任意の2つの実行可能解の最短経路のうちの最大長(問題の直径)}
 \end{frame}
@@ -423,7 +425,7 @@
   \item $S(\bm{x}^{0})$, $C(\bm{x}^{t})$,
     $T(\bm{x}^{t-1},\bm{x}^{t})$, $G(\bm{x}^{\ell})$
     を動的に追加・削除しながら，$\varphi_{\ell}$をインクリメンタルに構成し解く．
-  \item 長所: 学習節が再利用が可能．ASPシステムの起動は1回のみ
+  \item 長所: 学習節の再利用が可能．ASPシステムの起動は1回のみ．
   \item 短所: 現状では，デバックを行いにくい．
   \end{itemize}
 \end{enumerate}
@@ -439,7 +441,7 @@
     \land G(\bm{x}^\ell)  
   \]
 
-\begin{block}{基本ソルバーのアルゴリズム}
+\begin{block}{基本アルゴリズム}
 \begin{enumerate}
 \item ステップ長$\ell$を$\ell=0$とする．
 \item \label{BoCoRe:base:solver:2}
@@ -567,20 +569,20 @@
 }
 \only<3>{
 \begin{itemize}
-  \item 5--7行目: グラフ点彩色問題の制約を表すルールである．
-  \item \code{color(X,C,T)}は，ステップ\code{T}で頂点\code{X}が色
+  \item 5--7行目: グラフ点彩色問題の制約$C(\bm{x}^{t})$を表す．
+  \item アトム\code{color(X,C,T)}は，ステップ\code{T}で頂点\code{X}が色
     \code{C}で塗られることを意味する．
   \item 5行目: 各ステップ\code{T}，各頂点\code{X}に対して，
     \code{X}がただ1つの色で塗られることを個数制約を用いて表している．
   \item 6--7行目: 各ステップ\code{T}，各辺\code{edge(X,Y)}に対して，
-    隣接する頂点\code{X}と\code{Y}が同じ色で塗られないことを表している．
+    隣接する頂点\code{X}と\code{Y}が同じ色で塗られないことを表す．
 \end{itemize}
 }
 \only<4>{
   \begin{itemize}
   \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を表す．
-  \item アトム\code{changed(X,T)}は，ステップ$T-1$とステップ$T$の間い
-    で，頂点$X$の色が変化したことを意味する．
+  \item アトム\code{changed(X,T)}は，ステップ\code{T-1}とステップ\code{T}の間
+    で，頂点\code{X}の色が変化したことを意味する．
   \item 10行目: 各ステップ\code{T}において，色が変化する頂点はただ1つ
     であることを表す．
   \item 12行目: ゴール状態の制約$G(\bm{x}^{\ell})$を表す．
