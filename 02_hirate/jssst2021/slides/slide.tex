@@ -493,6 +493,7 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
   片方で解けて，もう片方で解けていない問題が一定数存在する．
 \end{itemize}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{他のアプローチとの比較}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -560,6 +561,22 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
     Appendix
   \end{center}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{HCP: 解けなかった問題数の内訳}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%
+\input{fig/unkn98.tex}
+%%%%%%%%%%
+
+\begin{itemize}
+\item 解けなかった問題の頂点数の平均は約4558問であり，
+      全体の平均値である約3099問と比較して大きかった．
+\end{itemize}
+\end{frame}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{最短ハミルトン閉路問題への拡張}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -624,6 +641,85 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 \item \code{acyclicity} 符号化が，より多くの問題を
   高速に解き，平均 CPU 時間も最も短かった．
 \end{itemize}  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ハミルトン閉路問題の実験結果(解けた問題数)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/cyclesat_table_old.tex}%label{sat_table_old}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item 1列目は問題の種類，２列目は問題数，
+  3列目以降は各符号化で解けた問題数を\textsf{SAT}，\textsf{UNSAT}，
+  \textsf{SAT+UNSAT} (\textsf{S+U}) 毎に示す．
+\item \textsf{undirected} と \textsf{acyclicity} は，
+  494問中490問を解き，\textsf{directed} よりも多くの問題を解いた．
+%% \item \textsf{SAT}に限定すると，\textsf{undirected} が，最も多くの問題を解いた．
+%% \item \textsf{UNSAT}に限定すると，\textsf{directed} と \textsf{acyclicity} 符号化が，
+%%   \textsf{undirected} より1問多く解いた．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ハミルトン閉路問題の実験結果(カクタスプロット)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tb]
+\begin{center}
+  \includegraphics[width=0.7\linewidth]{fig/cactus_old.png}
+%\caption{ハミルトン閉路問題: カクタスプロット (\textsf{SAT+UNSAT})}
+\label{cactus}
+\end{center}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item \textsf{acyclicity}符号化は，
+  解けた問題数が同じ\textsf{undirected}符号化と比較して，
+  より高速に問題を解いていることが確認できた．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{ベンチマーク詳細(1/2)}
+\begin{itemize}
+\item \textsf{color04} (127問)\\
+  グラフ彩色問題の国際競技会
+  COLOR02/03/04~\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
+  で使用された問題インスタンス．
+\item \textsf{complete} (15問)\\
+  SATソルバーを用いた既存研究~{\scriptsize[Soh+,2014]}で提供された
+  完全グラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{knight} (11問)\\
+%  \cite{DBLP:conf/sat/EenS03}で用いられた
+  $N\times N$の騎士巡回問題(Knight's Tour)のインスタンス．\\
+  $N=8,12,20,30,40,50,60,70,80,90,100$の11通り．
+\item \textsf{tsplib} (9問)\\
+  巡回セールスマン問題のポータルサイトTSPLIBに公開されている
+  インスタンス\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}．
+\end{itemize}  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマーク詳細(2/2)}
+\begin{itemize}
+\item \textsf{grid} (12問)\\
+  $N$次の正方グリッドグラフのインスタンス($6\leq N\leq 17$)．
+\item \textsf{random} (320問)\\
+  SATソルバーを用いた既存研究~{\scriptsize[Soh+,2014]}で提供された
+  ランダムグラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
+\item \textsf{usmap} (1問)\\
+  %図~\ref{fig:USmap}に示されたグラフ．
+  D.~E~.Knuth の教科書
+  The Art of Computer Programming 
+  に記載されている最短ハミルトン路問題の例．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{ベンチマークサイズ}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{fig/bench_size.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{frame}[noframenumbering]{参考文献}
