@@ -1,0 +1,233 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{}
+  \begin{center}\Huge
+    Appendix
+  \end{center}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{到達可能の判定に要したCPU時間}
+
+  \begin{exampleblock}{}
+    \centering
+    \scalebox{0.75}{\input{table/reachable.tex}}
+  \end{exampleblock}
+  \begin{itemize}
+    \item ステップ長については，最大で長さ17の問題が解けた．
+    % \item 全体の結果とは異なる傾向が見られた．
+    %   \begin{itemize}
+    %     \item 十分な長さの遷移系列が最短の解となるようなベンチマークが必要である．
+    %   \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}
+  \frametitle{基となるグラフごとの解けた問題数}
+  
+  \begin{exampleblock}{}
+    \centering
+    \scalebox{0.8}{\input{table/benchmark.tex}}
+  \end{exampleblock}
+  \begin{itemize}
+    \item $\textrm{平均次数} = (\textrm{辺数}*2) / (\textrm{頂点数})$
+    \item 色数$k$は彩色数に等しい．
+    \item 難しい問題の特徴としては，基となる問題の実行可能解の総数が多いことや，
+      平均次数と色数$k$の差が少ないことなどが考えられる．
+      \begin{itemize}
+        \item $k \ge \Delta(G) + 2$ならば到達可能である．
+        \item $\Delta(G)$はグラフ$G$の最大次数である．
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(基本ソルバー用)}}
+
+\begin{columns}[t]
+\begin{column}{0.95\linewidth}
+\begin{exampleblock}{\code{changed.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
+
+% \only<2>{
+%   \begin{itemize}
+%   \item 1行目: 定数\code{c} は色数，定数\code{length} はステップ長を表す．
+%     これらは，実行時にASPシステムのオプションから与えられる．
+%   \item アトム\code{col/1}は色，アトム\code{t/1} はステップを表す．
+%   \item 3行目: スタート状態の制約$S(\bm{x}^0)$を表す．
+%   \end{itemize}
+% }
+% \only<3>{
+% \begin{itemize}
+%   \item 5--7行目: グラフ点彩色問題の制約$C(\bm{x}^{t})$を表す．
+%   \item アトム\code{color(X,C,T)}は，ステップ\code{T}で頂点\code{X}が色
+%     \code{C}で塗られることを意味する．
+%   \item 5行目: 各ステップ\code{T}，各頂点\code{X}に対して，
+%     \code{X}がただ1つの色で塗られることを個数制約を用いて表している．
+%   \item 6--7行目: 各ステップ\code{T}，各辺\code{edge(X,Y)}に対して，
+%     隣接する頂点\code{X}と\code{Y}が同じ色で塗られないことを表す．
+% \end{itemize}
+% }
+% \only<4>{
+%   \begin{itemize}
+%   \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を表す．
+%   \item アトム\code{changed(X,T)}は，ステップ\code{T-1}とステップ\code{T}の間
+%     で，頂点\code{X}の色が変化したことを意味する．
+%   \item 10行目: 各ステップ\code{T}において，色が変化する頂点はただ1つ
+%     であることを表す．
+%   \item 12行目: ゴール状態の制約$G(\bm{x}^{\ell})$を表す．
+%   \end{itemize}
+% }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(基本ソルバー用)}}
+
+\begin{columns}[t]
+\begin{column}{0.95\linewidth}
+\begin{exampleblock}{\code{unchanged.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
+
+% \begin{itemize}
+%   \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$の表し方が，
+%     \code{changed}符号化と異なる．
+%   \item アトム\code{unchanged(X,T)}は，ステップ\code{T-1}とステップ\code{T}の間
+%     で，頂点\code{X}の色が変化しなかったことを意味する．
+%   \item 10行目: 各ステップ\code{T}において，色が変化しない頂点はちょうど
+%     \code{N-1}個であることを表す．
+%     \begin{itemize}
+%       \item \code{N}はグラフの頂点数を表す．
+%     \end{itemize}
+% \end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{unchanged} 符号化 {\small(改良ソルバー用)}}
+
+\begin{columns}[t]
+\begin{column}{0.9\linewidth}
+\begin{exampleblock}{\code{unchanged_inc.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_unchanged_inc.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{基本ソルバーの実行例}
+
+%\begin{columns}[t]
+%\begin{column}{0.9\linewidth}
+\begin{exampleblock}{}
+\lstinputlisting[frame=none,numbers=none,basicstyle=\ttfamily\tiny]{code/graph_reconfig.log} 
+\end{exampleblock}    
+%\end{column}
+%\end{columns}
+  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{$k$彩色遷移問題の性質}
+
+  \begin{itemize}
+    \item 色数$k$によって問題の性質が異なることが知られている．
+    \begin{itemize}
+      \item \structure{$k=2$}のとき，グラフGは2部グラフであり\structure{明らかに到達不能}~[Cereceda+ '08]．
+      \item \structure{$k=3$}のとき，\structure{クラスP}に属する~[Cereceda+ '08]．
+      \item \structure{$k \ge 4$}のとき，一般に\structure{\textbf{PSPACE完全}}となる~[Bonsma+ '09]．
+    \end{itemize}
+
+    \item グラフの形に制限を加えることにより，多項式時間で解決可能となるものが存在することがわかっている~[Bonsma+ '09]．
+    \begin{itemize}
+      \item 平面グラフであり，かつ$k \ge 7$のとき．
+      \item 2部平面グラフであり，かつ$k \ge 5$のとき．
+    \end{itemize}
+
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASP 言語の構文(1)}
+  \begin{alertblock}{}\centering
+    ASP言語は論理プログラムをベースとする\footnotemark[1]．
+  \end{alertblock}
+\begin{itemize}
+\item \structure{論理プログラム}とは以下の形式の\structure{ルール}
+  の有限集合である．
+  \[
+    \underbrace{a_0}_{\textrm{ヘッド}}\ \texttt{:-}\
+    \underbrace{a_1\texttt{,}\dots\texttt{,}a_m\texttt{,}
+      \texttt{not}\ {a_{m+1}}\texttt{,}\dots\texttt{,}
+      \texttt{not}\ {a_n}\texttt{.}}_{\textrm{ボディ}}
+  \]
+\item $0\leq m\leq n$ であり，各$a_i$はアトム，
+  \texttt{not}は\structure{デフォルトの否定}，
+  ``\texttt{,}''は連言を表す．
+\item \alert{\bf 直観的な意味}は「$a_1,\ldots,a_m$がすべて成り立ち,
+  $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，$a_0$が成り立つ」である．
+\end{itemize}
+ \footnotetext[1]{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASP 言語の構文(2)}
+\begin{itemize}
+\item ボディが空のルールは\structure{ファクト}と呼ばれ，
+  ``\texttt{:-}''は省略できる．
+  \[
+    \underbrace{a_0}_{\textrm{ヘッド}}\texttt{.}
+  \]
+\item ヘッドが空のルールは\structure{一貫性制約}と呼ばれる．
+  \[
+    \texttt{:-}\
+    \underbrace{a_1\texttt{,}\dots\texttt{,}a_m\texttt{,}
+      \texttt{not}\ {a_{m+1}}\texttt{,}\dots\texttt{,}
+      \texttt{not}\ {a_n}\texttt{.}}_{\textrm{ボディ}}
+  \]
+  例えば，\\[1em]
+  \begin{tabular}[t]{l|l}
+    \(\texttt{:-}\ a\texttt{.}\) &
+   「$a$ではない」という禁止を表す．\\
+    \(\texttt{:-}\ \texttt{not}\ a\texttt{.}\) &
+   「$a$でなければならない」という強制を表す．\\
+    \(\texttt{:-}\ \texttt{not}\ a_1\texttt{,} {a_{2}}\texttt{.}\)&
+  「$a_2$ならば$a_1$」を表す．
+  \end{tabular}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}[shrink]{拡張構文}
+\begin{alertblock}{}\centering
+  組合せ問題やグラフ問題を解くのに便利な構文が用意されている．
+\end{alertblock}
+
+\begin{itemize}
+\item \structure{選択子}\\
+  \begin{center}
+   \code{\{}\(a_1\texttt{;}\dots\texttt{;}a_n\)\code{\}.}\\
+  \end{center}
+  アトム集合\(\{a_1,\dots,a_n\}\)の任意の部分集合が成り立つことを意味
+  する．
+\item \structure{個数制約}
+  \begin{center}
+   $lb$\ \code{\{}\(a_1\texttt{;}\dots\texttt{;}a_n\)\code{\}}\ $ub$\code{.}
+  \end{center}
+  $a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下が成り立つことを意味する．
+\end{itemize}
+% \vfill
+% 組合せ最適化問題を解くために，最小化関数 (\structure{\texttt{\#minimize}}) 
+% と最大化関数 (\structure{\texttt{\#maximize}}) 等も用意されている.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backupend
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "slides"
+%%% End:
