@@ -37,7 +37,7 @@
 %%% Title page
 \title{解集合プログラミングに基づく組合せ遷移ソルバーの実装方式に関する考察}
 \author{山田 悠也\inst{1} \and 湊 真一\inst{2} \and 番原 睦則\inst{1}}
-\date{「SATと組合せ遷移」に関する打合せ(第1回))}
+\date{「SATと組合せ遷移」に関する打合せ(第1回)}
 \institute{\inst{1}名古屋大学 大学院情報学研究科 \and \inst{2}京都大学 大学院情報学研究科}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -508,6 +508,53 @@
   塗られることを意味する．\code{goal(X,C)}はゴール状態を表す．
 %  \item 色1は赤，色2は青，色3は黄，色4は緑に対応している．
 \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink]
+  \frametitle{$k$彩色遷移問題を解く\code{changed} 符号化 {\small(基本ソルバー用)}}
+
+\begin{columns}[t]
+\begin{column}{0.95\linewidth}
+\begin{exampleblock}{\code{changed.lp}}
+\lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily\scriptsize]{code/gcrp_cc_changed.lp} 
+\end{exampleblock}    
+\end{column}
+\end{columns}
+
+\bigskip
+\begin{itemize}
+  \item 8個のルールで簡潔に記述可能である．
+\end{itemize}
+
+% \only<2>{
+%   \begin{itemize}
+%   \item 1行目: 定数\code{c} は色数，定数\code{length} はステップ長を表す．
+%     これらは，実行時にASPシステムのオプションから与えられる．
+%   \item アトム\code{col/1}は色，アトム\code{t/1} はステップを表す．
+%   \item 3行目: スタート状態の制約$S(\bm{x}^0)$を表す．
+%   \end{itemize}
+% }
+% \only<3>{
+% \begin{itemize}
+%   \item 5--7行目: グラフ点彩色問題の制約$C(\bm{x}^{t})$を表す．
+%   \item アトム\code{color(X,C,T)}は，ステップ\code{T}で頂点\code{X}が色
+%     \code{C}で塗られることを意味する．
+%   \item 5行目: 各ステップ\code{T}，各頂点\code{X}に対して，
+%     \code{X}がただ1つの色で塗られることを個数制約を用いて表している．
+%   \item 6--7行目: 各ステップ\code{T}，各辺\code{edge(X,Y)}に対して，
+%     隣接する頂点\code{X}と\code{Y}が同じ色で塗られないことを表す．
+% \end{itemize}
+% }
+% \only<4>{
+%   \begin{itemize}
+%   \item 9--10行目: 遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$を表す．
+%   \item アトム\code{changed(X,T)}は，ステップ\code{T-1}とステップ\code{T}の間
+%     で，頂点\code{X}の色が変化したことを意味する．
+%   \item 10行目: 各ステップ\code{T}において，色が変化する頂点はただ1つ
+%     であることを表す．
+%   \item 12行目: ゴール状態の制約$G(\bm{x}^{\ell})$を表す．
+%   \end{itemize}
+% }
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]
