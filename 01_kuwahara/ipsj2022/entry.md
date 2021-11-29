@@ -1,13 +1,20 @@
 # 講演情報
 ## 標題*
-解集合プログラミングに基づく系統的探索と確率的局所探索の統合的手法に関する研究
+解集合プログラミングを用いた優先度付き巨大近傍探索の実装と評価
+
 ## 標題（英文）*
-A Study on ASP-based Integration of Systematic and Stochastic Local Search
+ASP-based Implementation of Large Neighborhood Prioritized Search and its Evaluation
+
 ## 論文要旨*
 （300字程度）
-本発表では，SAT の発展形の一つである解集合プログラミング (Answer Set Programming; ASP) 技術を用い，組合わせ最適化問題に対して系統的探索と確率的局所探索を統合的に適用する手法を提案する．
-提案手法は，近似解法の一種である巨大近傍探索 (Large Neighborhood Search; LNS) のアイデアをベースにしている．提案手法は，組合せ最適化問題の最適値探索において，暫定解に含まれる変数の値割り当ての一部をランダムに選んで取り消し，他の値割り当てをなるべく維持したままで解を再探索する反復手法である．
-提案手法を ASP ソルバー clingo 上に実装し，国際時間割競技会の問題集(全21問)を用いて性能評価を行った．その結果，提案手法は，通常の ASP 解法と比較して，多くの問題に対してより良い解を得ることができた．また，2問について，既知の最良値を更新することに成功した．
+
+優先度付き巨大近傍探索 (LNPS: Large Neighborhood Prioritized Search)
+は，組合せ最適化問題に対して系統的探索と確率的局所探索を統合的に適用す
+る手法の一つである．本発表では，SAT の発展形の一つである解集合プログラ
+ミング (Answer Set Programming; ASP) 技術を用いた LNPS の実装について
+述べる．また，開発したソルバー asprior の性能評価として，代表的な時間
+割問題の一つであるカリキュラムベース・コース時間割などを使った実験結果
+を示す．
 
 ## 該当分野*
 205. PRO
@@ -39,7 +46,7 @@ A Study on ASP-based Integration of Systematic and Stochastic Local Search
 ## 講演者勤務先・学校名（英字）*
 Nagoya University
 ## 講演者所属・部課名・学年
-大学院情報学研究科 修士1年生
+大学院情報学研究科・修士2年生
 ## 講演者TEL*
 090-8152-1416
 ## 講演者E-mail*
@@ -74,6 +81,23 @@ banbara@nagoya-u.jp
 # 共著者情報（講演者を除く）
 
 ## 共著者名（カナ）
+ （姓）ソウ
+ （名）タケヒデ
+## 共著者名（漢字）
+ （姓）宋
+ （名）剛秀
+## 共著者名（英字）
+ （Last）Soh
+ （First）Takehide
+## 共著者勤務先・学校名
+神戸大学
+## 共著者勤務先・学校名（英字）
+Kobe University
+## 共著者所属・部課名
+情報基盤センター
+
+
+## 共著者名（カナ）
  （姓）タムラ
  （名）ナオユキ
 ## 共著者名（漢字）
@@ -105,4 +129,3 @@ Kobe University
 Nagoya University
 ## 共著者所属・部課名
 大学院情報学研究科
-
