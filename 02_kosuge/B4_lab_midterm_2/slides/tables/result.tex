@@ -1,0 +1,16 @@
+ \begin{tabular}[c] {|c|c|c|c|c||r|r|r|r|r|r|}\hline
+  model & 符号    & alldiff & PHP & ALT1 & N=8    & N=9           & N=10           & N=11           & N=12 \\
+        &         &         &     &      & UNSAT  & UNSAT         & UNSAT          & SAT            & SAT  \\\hline
+  0     & OE      & neq     &    &      & 20.120 & 1296.917      & 3017.705       & TO             & TO   \\
+  1     & OE      & neq     & \checkmark   &      & 0.118  & 479.376       & TO             & TO             & TO   \\
+  2     & OE{\textless=\textgreater}DE & neq     &    &     & 11.532 & 1333.950      & TO             & TO             & TO   \\
+  3     & OE{\textless=\textgreater}DE & neq     &    & \checkmark    & \alert{0.005}  & 1.600         & 25.872         & 758.905        & TO   \\
+  4     & OE{\textless=\textgreater}DE & neq     & \checkmark   &     & 0.047  & 364.726       & TO             & TO             & TO   \\
+  5     & OE{\textless=\textgreater}DE & neq     & \checkmark   & \checkmark    & 0.006  & 1.571         & 24.978         & 311.325        & TO   \\
+  6     & OE{\textless=\textgreater}DE & PB      &    &      & \alert{0.005}  & 1.605         & 27.360         & 761.812        & TO   \\
+  7     & OE{\textless=\textgreater}DE & PB      & \checkmark   &      & \alert{0.005}  & 1.525         & 25.105         & 610.408        & TO   \\
+  8     & OE{\textless=\textgreater}DE & 大野3   &    &      & 0.006  & \alert{0.884} & 21.967         & 446.034        & TO   \\
+  9     & OE{\textless=\textgreater}DE & 大野3   & \checkmark   &      & 0.006  & 1.195         & 22.950         & \alert{81.861} & TO   \\
+  10    & OE{\textless=\textgreater}DE & 大野4   &    &      & 0.007  & 1.069         & \alert{21.644} & 954.395        & TO   \\
+  11    & OE{\textless=\textgreater}DE & 大野4   & \checkmark   &      & 0.006  & 1.147         & 26.128         & 332.564        & TO   \\\hline
+ \end{tabular}
