@@ -1,17 +1,23 @@
 # 講演情報
 ## 標題*
-alldifferent 制約のSAT符号化とクイーングラフ彩色問題への応用
-チャネリング制約を用いた alldifferent 制約のSAT符号化
+
+チャネリング制約を用いた alldifferent 制約の SAT 符号化
+
 ## 標題（英文）*
-A Study on SAT Encoding of Alldifferent Constraints and its Application to Queen Graph Coloring Problem
-SAT Encoding of Alldifferent Constraints with Channeling Constraints
+
+SAT Encoding of alldifferent Constraints with Channeling Constraints
+
 ## 論文要旨*
 （300字程度）
 
-Sugarは順序符号化という符号化手法をベースとしたSAT型制約ソルバーである．
-
-alldifferent制約は互いに異なることを表すグローバル制約であり，様々な制約充足問題に現れる．
-本発表では，クイーングラフ彩色問題を題材とし，Sugarのalldifferent 制約を高速化するための符号化手法やヒント制約を実装し，比較評価する．実装した手法は順序符号化と直接符号化をチャネルさせている．これにより順序符号化と相性の良い鳩の巣原理と直接符号化と相性の良いat-least-one制約や疑似ブール制約等を組み合わせて用いることができるため，alldifferent制約の高速化が期待できる．
+alldifferent(x<sub>1</sub>,...,x<sub>n</sub>) 制約は，制約プログラミン
+グにおける代表的なグローバル制約の一つである．この制約は，与えられた変
+数 x<sub>i</sub> が互いに異なる値を取ることを意味する．alldifferent 制
+約は，グラフ彩色問題や時間割問題など様々な問題に現れる．本発表では，
+alldifferent 制約の SAT 符号化について，順序符号化法と直接符号化法をチャ
+ネリング制約を用いて融合した手法について述べる．考案した SAT 符号化の
+評価として，Knuth のThe Art of Computer Programming でも取り上げられて
+いるクイーングラフ彩色問題を用いた実験結果を示す．
 
 ## 該当分野*
 205. PRO
