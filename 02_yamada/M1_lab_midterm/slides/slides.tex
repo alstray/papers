@@ -1,0 +1,354 @@
+% 2021-09-01 by Banbara
+\documentclass[dvipdfmx,11pt]{beamer}
+
+%%% Package
+% \usepackage{bxdpx-beamer}
+% \usepackage{pxjahyper}
+% \usepackage{minijs}
+% \usepackage{otf}
+% \renewcommand{\kanjifamilydefault}{\gtdefault}
+
+%%% My Macro
+\input{macro}
+
+%%% Beamer
+% \usetheme{Copenhagen}
+% \usetheme{Warsaw}
+\usetheme{Madrid}
+\usefonttheme{structurebold}
+% \usefonttheme{professionalfonts}
+% \setbeamertemplate{blocks}[shadow=true,rounded]
+% \setbeamercolor{structure}{fg=blue!50!black}
+% \setbeamercolor{alerted text}{fg=red!70!black}
+% \setbeamercolor{item projected}{fg=black,bg=blue!20!white}
+\setbeamertemplate{navigation symbols}{}
+% \useoutertheme[subsection=false]{miniframes}
+\setbeamertemplate{footline}[frame number]
+% exclude apprendix slides from framenumber
+\newcommand{\backupbegin}{
+  \newcounter{framenumberappendix}
+  \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+  \addtocounter{framenumberappendix}{-\value{framenumber}}
+  \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+%%% Title page
+\title{解集合プログラミングを用いた組合せ遷移ソルバーに関する考察}
+\author{山田 悠也}
+\date{2021年度番原研中間発表会\\2021年12月3日}
+\institute{番原研究室}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{組合せ遷移 (Combinatorial Reconfiguration)}
+  \begin{alertblock}{組合せ遷移問題とは}
+    基となる組合せ問題とその2つの実行可能解が与えられたとき，
+    一方の実行可能解から他方の実行可能解へ，遷移制約を満たしつつ，
+    実行可能解のみを経由して到達できるかを判定する問題
+  \end{alertblock}
+
+  \begin{itemize}
+  \item 近年，理論計算機科学の分野を中心に急速に発展し，理論的な基盤が
+    整備されつつある\footnotemark[1]．
+  \item 基となる問題が NP 完全であるとき，その遷移問題の多くは
+    \alert{\bf PSPACE完全}であることが知られている．
+    \begin{itemize}
+%    \item 命題論理の充足可能性判定(SAT)の遷移問題~[Gopalan+,'09]
+    \item 独立点集合の遷移問題~[Ito+,'11]
+%    \item 集合被覆の遷移問題~[Ito+,'11]
+    \item \structure{グラフ点彩色の遷移問題}~[Bonsma+,'09]
+%    \item 15パズル
+    \end{itemize}
+  \item 工学的にも，配電網の切替えなど持続的システムへの実用的応用が期
+    待されている．
+  \item 今年度から競技会も開催されている．
+  \end{itemize}
+
+  \begin{alertblock}<2>{}\centering
+    しかしながら，現状では，組合せ遷移問題を解く
+    \alert{\bf 汎用ソルバーの実装技術は確立されていない}．
+  \end{alertblock}
+
+  \footnotetext[1]{Web Portal: http://www.ecei.tohoku.ac.jp/alg/core/}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{グラフ点彩色問題を基とする遷移問題}
+  \begin{exampleblock}{色数$k=3$のグラフ点彩色問題}\centering
+    \begin{tabular}[t]{ccc}
+      \scalebox{0.55}{\input{graph}}
+      &
+      \rz{$\Rightarrow$}
+      &
+      \scalebox{0.55}{\input{graph_colored}}
+    \end{tabular}
+  \end{exampleblock}
+  \pause
+  \begin{block}{$k$彩色遷移問題}
+    \begin{itemize}
+    \item \structure{\bf 入力}:
+      色数$k$のグラフ点彩色問題と，スタート状態とゴール状態
+      を表す2つの実行可能解
+    \item \structure{遷移制約}: 1回の遷移で色が変化する頂点はただ1つのみ
+    \item \structure{目的}:
+      スタート状態からゴール状態への到達可能性を判定
+    \end{itemize}
+  \end{block}
+  \begin{itemize}
+  \item 代表的な組合せ遷移問題の一つである．
+  \item 一般に$k \geq 4$で PSPACE 完全であることが知られている．
+  \end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}%[shrink]
+  \frametitle{$k=4$彩色遷移問題の例}
+  \begin{center}
+  \tabcolsep = 3mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}[t]{ccc}
+    スタート状態($t=0$) && \uncover<2>{$t=1$} \\
+    \scalebox{0.5}{\input{gcrp_t0}} &
+    \uncover<2>{\rz{\Large$\Rightarrow$}} &
+    \uncover<2>{\scalebox{0.5}{\input{gcrp_t1}}}\\
+    && \uncover<2>{\Large $\Downarrow$} \\
+    \scalebox{0.5}{\input{gcrp_t3}} &
+    \uncover<2>{\rz{\Large$\Leftarrow$}} &
+    \uncover<2>{\scalebox{0.5}{\input{gcrp_t2}}}\\
+    ゴール状態\uncover<2>{($t=3$)} && \uncover<2>{$t=2$}
+  \end{tabular}
+  \end{center}
+
+  \uncover<2>{
+  \begin{itemize}
+  \item スタート状態からゴール状態へ3ステップで到達可能である．
+  \item 各ステップ$t$において，グラフ点彩色問題の制約を満たす．
+  \item 1回の遷移において，色が変化する頂点はただ1つのみである．
+  \end{itemize}
+  }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{解集合プログラミング {\large(Answer Set Programming; ASP)}}
+  \begin{itemize}
+  \item \structure{ASP 言語}は，一階論理に基づく知識表現言語の一種．
+  \item \structure{ASP システム}は，論理プログラムから
+    安定モデル意味論~{\scriptsize[Gelfond and Lifschitz, '88]}
+    に基づく解集合を計算するシステム．
+  \item 近年，SAT 技術を応用した高速 ASP システムが開発され，
+    システム生物学，プランニング，モデル検査など様々な分野への実用的応
+    用が急速に拡大している．
+  \end{itemize}
+
+  \begin{alertblock}{組合せ遷移問題に対してASPを用いる利点}
+    \begin{itemize}
+    \item ASPの高い表現力により，様々な組合せ問題を簡潔に記述できる．
+      \begin{itemize}
+      \item \alert{\bf 遷移問題への拡張も容易}．
+      \end{itemize}
+    \item インクリメンタルASP解法により，ステップ長を増やしながら，
+      遷移問題の\alert{\bf 到達可能性を効率的に検査}できる．
+      \begin{itemize}
+      \item ASP システムを複数回起動するオーバーヘッドを回避．
+      \item 同様の探索失敗を避けるために獲得した学習節を再利用．
+      \end{itemize}
+    \item 探索ヒューリスティックスを簡単にカスタマイズできる．
+    % \item ASP Modulo Theories 技術により，様々な背景理論ソルバーと連携が可能である．
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}
+  \frametitle{研究目的}
+  \begin{alertblock}{研究目的}
+    ASP 技術を活用し，組合せ遷移問題を効率よく解くソルバーを実現する．
+  \end{alertblock}
+  %\begin{itemize}
+  %\item 方針: プランニングや有界モデル検査のための技法を応用
+  %\end{itemize}
+
+  \begin{block}{卒業研究の内容}
+    \begin{itemize}
+      \item 組合せ遷移問題に対してステップ長$\ell$を導入し解く手法に基づき，
+        $k$彩色遷移問題の3つの符号化を考案・評価．
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{その後の研究内容}
+    \begin{itemize}
+      \item ステップ長$\ell$を導入して解く手法を
+        \alert{有界組合せ遷移}として定式化．
+ %     \item インクリメンタル ASP 解法を利用し，基本ソルバーの
+ %       問題点を改良した改良ソルバーを考案・評価．
+      \item ソルバーを構成する2つのアルゴリズムの考案．
+        \begin{itemize}
+          \item \structure{基本アルゴリズム}
+          \item \structure{改良アルゴリズム}
+        \end{itemize}
+      \item 各アルゴリズムを実装した2つのソルバーの評価．
+      \item 独立点集合の遷移問題を解く ASP 符号化の考案．
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASP 技術を用いた組合せ遷移ソルバーの実装}
+
+\begin{alertblock}{}\centering
+開発した組合せ遷移ソルバーの構成図は以下の通りである．
+\end{alertblock}
+\vfill
+\begin{center}
+\setlength{\unitlength}{1.0pt}
+\scriptsize\tiny
+\thicklines
+%  \input{arch}
+\begin{picture}(280,57)(4,-10)
+  \put(  0, 20){\dashbox(50,24){\shortstack{組合せ遷移問題\\のインスタンス}}}
+  \put( 60, 20){\framebox(50,24){変換器}}
+  \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
+  \put(120,-10){\dashbox(50,24){\shortstack{論理プログラム\\(ASP符号化)}}}
+  \put(180,-10){\alert{\framebox(50,54){}}}
+  \put(185, 27){\framebox(40,12){ASP システム}}
+  \put(185, -5){\alert{\bf\framebox(40,18){\shortstack{有界組合せ遷移\\アルゴリズム}}}}
+  \put(240, 20){\dashbox(50,24){\shortstack{組合せ遷移問題\\の解}}}
+  \put( 50, 32){\vector(1,0){10}}
+  \put(110, 32){\vector(1,0){10}}
+  \put(170, 32){\vector(1,0){10}}
+  \put(230, 32){\vector(1,0){10}}
+  \put(170, +2){\line(1,0){4}}
+  \put(174, +2){\line(0,1){30}}
+  \put(195, 13){\vector(0,1){14}}
+  \put(215, 27){\vector(0,-1){14}}
+  \put(188, 50){\alert{\bf 提案ソルバー}}
+\end{picture}  
+\end{center}
+  
+\begin{enumerate}
+\item 問題インスタンスを ASP のファクト形式に変換する．
+\item ASP ファクトと組合せ遷移問題を解く
+  論理プログラム(ASP符号化)を入力として，
+  \alert{\bf 提案ソルバー}を用いて解集合を計算する．
+\item 解集合を解釈して，組合せ遷移問題の解を得る．
+\end{enumerate}
+\begin{alertblock}{}
+  有界組合せ遷移のためのアルゴリズムとして，
+  基本アルゴリズムと改良アルゴリズムの2種類を考案した．
+\end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験概要}
+  \begin{block}{}\centering
+    提案したソルバーの有効性を評価するにあたり，以下の実験を行った．
+  \end{block}
+  \bigskip
+  \begin{itemize}
+  \item \structure{比較に用いたソルバー}
+    \begin{itemize}
+    \item 基本ソルバー$\cdots$基本アルゴリズムを実装
+    \item 改良ソルバー$\cdots$改良アルゴリズムを実装
+    \end{itemize}
+  \item \structure{比較に用いたASP符号化}
+    \begin{itemize}
+    \item \code{changed}符号化
+    \item \code{unchanged}符号化
+    \end{itemize}
+  \item \structure{ベンチマーク問題}: \alert{\bf 独自に作成した$k$彩色遷移問題(計90問)}
+    \begin{itemize}
+    \item \textit{COLOR04}で公開されているグラフ点彩色問題のグラフ127個のうち，
+      彩色数が判明している44個~[Tamura+,'09] を候補とした．
+    \item 最終的に，彩色数での実行可能解を全列挙することができたグラフ9個を使用した．
+    \end{itemize}
+  % \item \structure{ステップ長の上限値}: 基となるグラフ点彩色問題の実行
+  %   可能解の総数から1引いた数
+    % \begin{itemize}
+    % \item グラフmyciel4から作成した問題については，{\clingo}が対応している数
+    %   よりも解の総数が大きかったため，
+    %   上限値を$2^{31}-1$とした．
+    % \end{itemize}
+    \item \structure{ASPシステム}: \textit{clingo-5.4.0} \textit{jumpy}
+    \item \structure{制限時間}: 3600秒/問
+    \item \structure{環境}: Mac OS, 3.2GHz 6コア Intel Core i7，64GB メモリ
+    \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験結果: 解けた問題数}
+
+  \begin{exampleblock}{}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \scalebox{0.9}{\input{table/result.tex}}
+  \end{exampleblock}
+
+  \begin{itemize}
+  \item 90問中71問について，到達可能性を判定できた．
+    \begin{itemize}
+    \item 到達可能11問，到達不能60問
+    \end{itemize}
+  \item 改良ソルバーと\code{unchanged}符号化の組合せが，
+    最も多くの問題を解いた．平均CPU時間も最も短い．
+%  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
+  \item 到達不能なインスタンスについて，インクリメンタル解法を用いた改
+    良ソルバーの優位性が確認できた．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}\frametitle{実験結果: カクタスプロット}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.7]{fig/cactus.eps}
+  \end{figure}
+
+  \begin{itemize}
+    \item 改良ソルバーは基本ソルバーより多くの問題を高速に解いている．
+    \item \code{unchanged} 符号化は，\code{changed}符号化より良い性能
+      を示した．
+  \end{itemize}
+  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{まとめ}
+
+  \begin{alertblock}{本研究の成果}\centering
+    ASP を用いた組合せ遷移問題の解法として有界組合せ遷移を提案し，
+    汎用ソルバーの実装および$k$彩色遷移問題を用いた性能評価を行なった．
+  \end{alertblock}
+
+  \begin{enumerate}
+  \item \structure{2種類の実装方式の考案}
+    \begin{itemize}
+    \item 基本アルゴリズム
+    \item インクリメンタルASP解法を用いた改良アルゴリズム
+    \end{itemize}
+  \item \structure{$k$彩色遷移問題を解く2種類の ASP 符号化の考案}
+  \item \structure{$k$彩色遷移問題のベンチマーク問題を独自に生成}
+  \item \structure{$k$彩色遷移問題を用いた有界組合せ遷移の評価実験}
+    \begin{itemize}
+    \item 改良アルゴリズムの優位性を確認
+    \end{itemize}
+  \end{enumerate}
+  
+  \begin{exampleblock}{今後の課題}
+    \begin{itemize}
+      \item 組合せ遷移問題の記述例の蓄積
+        \begin{itemize}
+          \item 現在，\structure{独立点集合の遷移問題}を対象として取組んでいる．
+        \end{itemize}
+      \item ソルバーの高速化
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\end{document}
+\input{subslide.tex}
+\end{document}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
