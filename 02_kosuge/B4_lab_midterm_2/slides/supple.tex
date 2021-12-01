@@ -61,9 +61,9 @@
         $alldifferent(x_1,x_2,x_3),alldifferent(x_1,x_4,x_5),alldifferent(x_1,x_6,x_7)$\\ $(x_i \in \{1,2,3\})$があるとすると，以下の制約が追加される．
         {\fontsize{10pt}{0pt}\selectfont
         \begin{eqnarray*}
-            (x_11 = 1) \lor (x_21 = 1) \lor (x_31 = 1) \lor (x_4 = 1) \lor (x_5 = 1) \lor (x_6 = 1) \lor (x_7 = 1)\\
-            (x_12 = 1) \lor (x_22 = 1) \lor (x_32 = 2) \lor (x_4 = 2) \lor (x_5 = 2) \lor (x_6 = 2) \lor (x_7 = 2)\\
-            (x_13 = 1) \lor (x_23 = 1) \lor (x_33 = 3) \lor (x_4 = 3) \lor (x_5 = 3) \lor (x_6 = 3) \lor (x_7 = 3)\\
+            (x_{11} = 1) \lor (x_{21} = 1) \lor (x_{31} = 1) \lor (x_{41} = 1) \lor (x_{51} = 1) \lor (x_{61} = 1) \lor (x_{71} = 1)\\
+            (x_{12} = 1) \lor (x_{22} = 1) \lor (x_{32} = 1) \lor (x_{42} = 1) \lor (x_{52} = 1) \lor (x_{62} = 1) \lor (x_{72} = 1)\\
+            (x_{13} = 1) \lor (x_{23} = 1) \lor (x_{33} = 1) \lor (x_{43} = 1) \lor (x_{53} = 1) \lor (x_{63} = 1) \lor (x_{73} = 1)\\
         \end{eqnarray*}
     }
     \end{exampleblock}
@@ -77,8 +77,8 @@
 \begin{frame}
     \frametitle{大野3を用いた手法}
     \begin{block}{}
-        $alldifferent(x_1,\dots,x_n)$について，$x_i \in \{\ell,\ell+1,\dots u\}$かつ$u-\ell > n-1$である時，PBの式に加えて
-        新たな整数変数$y_j \, (j \in \{\ell \dots u\})$を導入し，以下のように分解する．
+        $alldifferent(x_1,\dots,x_n)$について，$x_i \in \{\ell,\ell+1,\dots u\}$かつ$u-\ell > n-1$である時，
+        新たな整数変数$y_j \, (j \in \{\ell \dots u\})$を導入し，以下の式をPBの式に加える
         \vspace{-3mm}
         \begin{eqnarray*}
             & x_{1j} + \dots + x_{nj}  =  y_j & (j=\ell \dots u)\\
@@ -144,8 +144,8 @@
 % 追加実験
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{色数を増やした追加実験}
-    kernel制約の有効性を確認するためにクイーングラフ彩色問題の色数を一色増やして追加の実験を行った\footnote{ALT1は{\alldifferent}制約の要素数とサイズが一致する時のみ追加されるため，今回は省略している}
+    \frametitle{色数を増やした実験結果全体}
+    kernel制約の有効性を確認するためにクイーングラフ彩色問題の色数を1色増やして実験を行った\footnote{ALT1は{\alldifferent}制約の要素数とサイズが一致する時のみ追加されるため，今回は省略している}
     \begin{block}{}
         {\fontsize{5pt}{5pt}\selectfont \input{tables/result_kernel}}
     \end{block}

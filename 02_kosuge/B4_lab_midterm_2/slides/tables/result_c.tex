@@ -1,0 +1,14 @@
+ \begin{tabular}[c] {|c|c|c|c||r|r|r|r|r|}\hline
+  model & 符号    & alldiff & PHP &   N=8     & N=9      & N=10      & N=11      & N=12 \\
+        &         &         &     &         C=9     & C=10     & C=11      & C=12      & C=13 \\\hline
+  0     & OE      & neq     &    &         1.053   & 2.280    & TO        & TO        & TO \\
+  1     & OE      & neq     & \checkmark   &         \alert{0.036}   & 10.663   & TO        & TO        & TO \\
+  4     & OE\textless=\textgreater DE & neq     &    &         1.456   & 11.838   & TO        & TO        & TO \\
+  5     & OE\textless=\textgreater DE & neq     & \checkmark           & 1.197   & 13.797   & 1042.342  & TO        & TO \\
+  8     & OE\textless=\textgreater DE & PB      &    &         4.125   & 5.133    & 4712.599  & TO        & TO \\
+  9     & OE\textless=\textgreater DE & PB      & \checkmark           & 1.855   & 9.640    & 5248.163  & TO        & TO \\
+  10    & OE\textless=\textgreater DE & 大野3   &    &         0.502   & 18.096   & TO        & TO        & TO \\
+  11    & OE\textless=\textgreater DE & 大野3   & \checkmark           & 1.936   & \alert{1.958}    & 1438.766  & TO        & TO \\
+  12    & OE\textless=\textgreater DE & 大野4   &    &         0.404   & 24.845   & \alert{123.527}   & TO        & TO \\
+  13    & OE\textless=\textgreater DE & 大野4   & \checkmark           & 1.457   & 19.329   & 2682.197  & TO        & TO \\\hline
+  \end{tabular}
