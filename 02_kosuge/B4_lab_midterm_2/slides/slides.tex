@@ -33,6 +33,7 @@
 \setbeamersize{text margin left=1.5em,text margin right=1.5em}
 \setlength{\abovedisplayskip}{0pt} % 上部のマージン
 \setlength{\belowdisplayskip}{0pt} % 下部のマージン
+\setlength{\columnsep}{0pt}
 %
 %
 %
@@ -69,9 +70,10 @@
 
 
 \title{alldifferent制約のSAT符号化と\\クイーングラフ彩色問題への応用}
+% \title{チャネリング制約を用いた\\ alldifferent 制約の SAT 符号化}
 \author{小菅脩司}
+\date{2021年度番原研中間発表会\\2021年12月3日}
 \institute{番原研究室}
-\date{2021年度番原研中間発表\\2021年12月3日}
 \begin{document}
 \begin{frame} {}
     \titlepage
@@ -91,7 +93,7 @@
     \begin{itemize}
         \item Sugarの特徴は表現能力の高い述語論理で問題を簡潔に記述できる点や，解を求める外部のSATソルバーを切り替えることができる点である．
         % \item 制約充足問題や制約最適化問題，最大制約充足問題に対応できる．
-        \item SugarはCSP Solver Competitionで好成績を残しており，特にグローバル制約区分のAlldiff部門で1位にもなっている．
+        \item SugarはCSP Solver Competitionで好成績を残しており，特にAlldiff部門で1位にもなっている．
         \item OEは他の直接符号化(DE)や多値符号化(MVE)などに比べて平均的に良い性能を持つことが知られている．
         \item また，OEとDEを組み合わせることで，より高速に{\alldifferent}制約を解くことができるという研究もある．
     \end{itemize}
@@ -164,31 +166,47 @@
     \end{alertblock}
     \begin{block}{研究内容}
         \begin{enumerate}
-            \item \structure{{\alldifferent}制約に対し，3種類の符号化を実装}
+            \item \structure{{\alldifferent}制約に対し，3種類の符号化法を実装}
                 \vspace{-1mm}
                 \begin{itemize}
-                    \item SugarのOEをそのまま用いた手法(OE)
-                    \item \alert{\bf OEとDEをチャネリングさせた手法(OE{\textless=\textgreater}DE)}
-                    \item OEとMVEをチャネリングさせた手法(OE{=\textgreater}MVE)
+                    \item {\footnotesize SugarのOEをそのまま用いた手法(OE) }
+                    \item {\footnotesize \alert{\bf OEとDEをチャネリングさせた手法(OE{\textless=\textgreater}DE)} }
+                    \item {\footnotesize OEとMVEをチャネリングさせた手法(OE{=\textgreater}MVE) }
                 \end{itemize}
                 \vspace{-3mm}
             \item \structure{{\alldifferent}制約に対し，4種類の表現方法を実装}
                 \vspace{-5mm}
                 \begin{multicols}{2}
                     \begin{itemize}
-                        \item not-equal制約に分解(neq)
-                        \item \alert{\bf ブール基数制約で表す(PB)}
-                        \item 大野3を用いた手法(大野3)
-                        \item 大野4を用いた手法(大野4)
+                        \item {\footnotesize not-equal制約に分解(neq) }
+                        \item {\footnotesize \alert{\bf ブール基数制約で表す(PB)} }
+                        \item {\footnotesize ~[大野,'19]の手法3(大野3) }
+                        \item {\footnotesize ~[大野,'19]の手法4(大野4) }
                     \end{itemize}
                 \end{multicols}
+        % \begin{columns}
+        %     \begin{column}{0.48\textwidth}\centering
+        %         %左側のテキストや画像
+        %             \begin{itemize}
+        %                 \item {\footnotesize not-equal制約に分解(neq) }
+        %                 \item {\footnotesize \alert{\bf ブール基数制約で表す(PB)} }
+        %             \end{itemize}
+        %     \end{column}
+        %     \begin{column}{0.48\textwidth}\centering
+        %         %右側のテキストや画像
+        %             \begin{itemize}
+        %                 \item {\footnotesize ~[大野,'19]の3つ目の手法(大野3) }
+        %                 \item {\footnotesize ~[大野,'19]の4つ目の手法(大野4) }
+        %             \end{itemize}
+        %     \end{column}
+        % \end{columns}
                 \vspace{-5mm}
             \item \structure{{\alldifferent}制約に対し，3種類のヒント制約を実装}
                 \vspace{-1mm}
                 \begin{itemize}
-                    \item \alert{\bf 鳩の巣原理を用いたヒント制約(PHP)}
-                    \item at-least-one制約を用いたヒント制約(ALT1)
-                    \item kernel制約を用いたヒント制約(kernel)
+                    \item {\footnotesize \alert{\bf 鳩の巣原理を用いたヒント制約(PHP)} }
+                    \item {\footnotesize at-least-one制約を用いたヒント制約(ALT1) }
+                    \item {\footnotesize kernel制約を用いたヒント制約(kernel) }
                 \end{itemize}
                 \vspace{-3mm}
             \item \structure{クイーングラフ彩色問題($5\leq N \leq 13$)を用いた評価実験}
@@ -318,12 +336,20 @@
     \frametitle{実験概要}
     実装したSAT符号化及び{\alldifferent}制約の高速化手法を評価するために，以下の実験を行なった．
     \begin{itemize}
-        \item \structure{比較に用いた実装(12個)}\footnote{予備実験で性能の悪かったOE={\textgreater}MVEモデル(計20個)は省略}\\
-            \vspace{-3mm}
-            \begin{block}{}\centering
-                {\tiny \input{tables/model}}
-            \end{block}
-        \item \structure{ベンチマーク問題}: $N$次クイーングラフ彩色問題 ($5\leq N\leq 13$)
+        \item \structure{比較に用いた実装(14個)}\footnote{予備実験で性能の悪かったOE={\textgreater}MVEモデル(計20個)は省略}\\
+            % \vspace{-3mm}
+            % \begin{block}{}\centering
+            %     {\fontsize{4pt}{5pt}\selectfont \input{tables/model}}
+            % \end{block}
+            \begin{itemize}
+                \item OEをそのまま使う手法(4個)
+                \item OEとDEをチャネリングさせる手法(10個)
+            \end{itemize}
+        \item \structure{ベンチマーク問題}
+            \begin{itemize}
+                \item $N$次クイーングラフ彩色問題 ($5\leq N\leq 13$)
+                \item $N$次クイーングラフ彩色問題 ($5\leq N\leq 13$)の色数を1色増やした問題
+            \end{itemize}
         \item \structure{SATソルバー}: Sugar ver.2.3.3 ,GlueMiniSat 2.2.10-193
         \item \structure{制限時間}: 1問あたり2時間
         \item \structure{実験環境}: Mac mini, 3.2GHz, 64GB メモリ
@@ -341,8 +367,25 @@
         {\tiny \input{tables/result}}
     \end{block}
     \begin{itemize}
-        \item ヒントの有無で比較すると，ヒント有がより高速に解けていることから，ヒントが有効に働いていることがわかる．
-        \item 符号化方法を比較すると，$N=11$を解けていることから，OEをそのまま使うよりOEをDEとチャネリングさせてヒントを追加した方が性能が良い．
+        \item ヒントの有無で比較すると，ヒント有がより高速に解けていることから，ヒントが有効に働いていることがわかる．特にALT1のヒントが有効である．
+        % \item 符号化方法を比較すると，$N=11$を解けていることから，OEをそのまま使うよりOEをDEとチャネリングさせてヒントを追加した方が性能が良い．
+        \item UNSATで比較すると，DEとチャネリングさせALT1を使うか，PB・大野3・大野4を使うのが性能が良い
+    \end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験結果2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{実験結果2: 求解に要したCPU時間(秒)}
+    {\alldifferent}制約の要素数と要素のサイズが等しくない場合について比較するために，色数を1色増やして実験を行った．\footnote{ALT1は{\alldifferent}制約の要素数とサイズが一致する時のみ追加されるため，今回は省略している}
+    \begin{block}{}\centering
+        {\tiny \input{tables/result_c}}
+    \end{block}
+    \begin{itemize}
+        \item 符号化方法を比較すると，$N=10$を解けていることから，DEとチャネリングさせた方が性能が良いと言える．
     \end{itemize}
 \end{frame}
 
@@ -354,19 +397,25 @@
 \begin{frame}
     \frametitle{まとめ}
     \begin{enumerate}
-        \item \structure{{\alldifferent}制約に対して，3種32個の実装方法を提案}
+        \item \structure{{\alldifferent}制約に対して，3種34個の実装方法を提案}
             \begin{itemize}
-                \item OEをそのまま使う手法(2個)
+                \item OEをそのまま使う手法(4個)
                 \item OEとDEをチャネリングさせる手法(10個)
                 \item OEとMVEをチャネリングさせる手法(20個)
             \end{itemize}
         \item \structure{クイーングラフ彩色問題($5 \leq N \leq 13$)を用いた評価実験}
             \begin{itemize}
-                \item {\alldifferent}制約を高速化するにはOEをDEとチャネリングさせて，ヒント制約を追加するのが良い．
+                \item {\alldifferent}制約を高速化するにはOEをDEとチャネリングさせるのが良い．
+                \item ヒント制約としてはat-least-one制約が性能が良い
                 \item OEとMVEをチャネリングさせたモデルは性能が悪かった．
                 \item kernel制約の有効性は確認できなかった．
             \end{itemize}
     \end{enumerate}
+    \begin{alertblock}{今後の課題}
+        \begin{itemize}
+            \item 色数を増やした場合の実験結果についてより詳しい調査を行う．
+        \end{itemize}
+    \end{alertblock}
 \end{frame}
 
 
