@@ -73,10 +73,10 @@
   \end{itemize}
   \begin{block}{}\centering\vskip-1em
   \begin{align*}
-  \varphi_{\ell} &= S(\bm{x}^0)  & S: \textrm{スタート状態を表す論理式} \\
-  &\land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) & C: \textrm{基の組合せ問題の制約を表す論理式} \\
+  \varphi_{\ell} &= S(\bm{x}^0)  & S: \textrm{スタート制約を表す論理式} \\
+  &\land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) & C: \textrm{組合せ制約を表す論理式} \\
   &\land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t}) & T: \textrm{遷移制約を表す論理式} \\
-  &\land G(\bm{x}^\ell)  & G: \textrm{ゴール状態を表す論理式}
+  &\land G(\bm{x}^\ell)  & G: \textrm{ゴール制約を表す論理式}
   \end{align*}
   \end{block}
   \begin{itemize}
@@ -86,33 +86,54 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}%[shrink]
-  \frametitle{有界組合せ遷移 (提案)} 
-  \begin{alertblock}{有界組合せ遷移}\centering
-    組合せ遷移問題に対して，制限された長さ (すなわち，有界)の
-    遷移系列
-    \[
-    \varphi_{\ell} = S(\bm{x}^0)  
-    \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
-    \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t}) 
-    \land G(\bm{x}^\ell)  
-    \]
-    を論理プログラムとして表現し，
-    ASP システムを用いて実行することにより，到達可能性の検査を行う手法
-  \end{alertblock}
+%\begin{frame}%[shrink]
+%  \frametitle{有界組合せ遷移 (提案)} 
+%  \begin{alertblock}{有界組合せ遷移}\centering
+%    組合せ遷移問題に対して，制限された長さ (すなわち，有界)の
+%    遷移系列
+%    \[
+%    \varphi_{\ell} = S(\bm{x}^0)  
+%    \land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) 
+%    \land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t}) 
+%    \land G(\bm{x}^\ell)  
+%    \]
+%    を論理プログラムとして表現し，
+%    ASP システムを用いて実行することにより，到達可能性の検査を行う手法
+%  \end{alertblock}
+%  \begin{itemize}
+%  \item $\varphi_{\ell}$が\structure{充足可能}の場合，
+%    ステップ長$\ell$の\structure{到達可能}な遷移系列が存在．
+%  \item \structure{充足不能}の場合，ステップ長$\ell$では\structure{到達不能}．
+%    この場合，$\ell$を増加させた論理プログラムを再構成し，
+%    繰り返し ASP システムを実行．
+%  \item この手法は，到達不能の証明は行わない不完全な手続きである．
+%    \begin{itemize}
+%      \item ただし，検査すべき遷移系列のステップ長に上限~\footnotemark[2]
+%        が存在する場合には，完全な手続きとなる．
+%    \end{itemize}
+%  \end{itemize}
+%  \footnotetext[2]{例えば，任意の2つの実行可能解の最短経路のうちの最大長(問題の直径)}
+%\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験結果: 解けた問題数}
+
+  \begin{exampleblock}{}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \scalebox{0.9}{\input{table/result.tex}}
+  \end{exampleblock}
+
   \begin{itemize}
-  \item $\varphi_{\ell}$が\structure{充足可能}の場合，
-    ステップ長$\ell$の\structure{到達可能}な遷移系列が存在．
-  \item \structure{充足不能}の場合，ステップ長$\ell$では\structure{到達不能}．
-    この場合，$\ell$を増加させた論理プログラムを再構成し，
-    繰り返し ASP システムを実行．
-  \item この手法は，到達不能の証明は行わない不完全な手続きである．
+  \item 90問中71問について，到達可能性を判定できた．
     \begin{itemize}
-      \item ただし，検査すべき遷移系列のステップ長に上限~\footnotemark[2]
-        が存在する場合には，完全な手続きとなる．
+    \item 到達可能11問，到達不能60問
     \end{itemize}
+  \item 改良ソルバーと\code{unchanged}符号化の組合せが，
+    最も多くの問題を解いた．平均CPU時間も最も短い．
+%  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
+  \item 到達不能なインスタンスについて，インクリメンタル解法を用いた改
+    良ソルバーの優位性が確認できた．
   \end{itemize}
-  \footnotetext[2]{例えば，任意の2つの実行可能解の最短経路のうちの最大長(問題の直径)}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -152,14 +173,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}\frametitle{独立点集合問題を基とする遷移問題}
 
-  \begin{exampleblock}{サイズ$k=2$の独立点集合問題}
+  \begin{exampleblock}{サイズ$k=3$の独立点集合問題}
     \begin{itemize}
-      \item 与えられたグラフ$G=(V,E)$から，
-        制約を満たす$V' \subseteq V$を求める．
+      \item 制約を満たすように$k$個のトークンを配置する問題．
     \end{itemize}
     \centering
     \begin{tabular}[t]{ccc}
-      \scalebox{0.55}{\input{graph}}
+      \scalebox{0.55}{\input{itho_graph}}
       &
       \rz{$\Rightarrow$}
       &
@@ -172,7 +192,7 @@
       \item \structure{\bf 入力}:
         サイズ$k$の独立点集合問題と，スタート状態とゴール状態
         を表す2つの実行可能解
-      \item \structure{遷移制約}: 1回の遷移で$V'$の要素と$V-V'$の要素がただ1つ入れ替わる．
+      \item \structure{遷移制約}: 1回の遷移でただ1つのトークンが移動する
       \item \structure{目的}:
         スタート状態からゴール状態への到達可能性を判定
       \end{itemize}
@@ -180,6 +200,33 @@
   \begin{itemize}
     \item 遷移制約をより厳しくしたモデルである Token Sliding (TS) も存在．
   \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}%[shrink]
+  \frametitle{$k=3$の独立点集合遷移問題の例\footnote{伊藤先生のスライドより}}
+  \begin{center}
+  \tabcolsep = 3mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}[t]{ccc}
+    スタート状態($t=0$) && \uncover<2>{$t=1$} \\
+    \scalebox{0.5}{\input{isrp_t0}} &
+    \uncover<2>{\rz{\Large$\Rightarrow$}} &
+    \uncover<2>{\scalebox{0.5}{\input{isrp_t1}}}\\
+    && \uncover<2>{\Large $\Downarrow$} \\
+    \scalebox{0.5}{\input{isrp_t3}} &
+    \uncover<2>{\rz{\Large$\Leftarrow$}} &
+    \uncover<2>{\scalebox{0.5}{\input{isrp_t2}}}\\
+    ゴール状態\uncover<2>{($t=3$)} && \uncover<2>{$t=2$}
+  \end{tabular}
+  \end{center}
+
+  \uncover<2>{
+  \begin{itemize}
+  \item スタート状態からゴール状態へ3ステップで到達可能である．
+  \item 各ステップ$t$において，独立点集合問題の制約を満たす．
+  \item 1回の遷移において，移動するトークンはただ1つのみである．
+  \end{itemize}
+  }
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \backupend
