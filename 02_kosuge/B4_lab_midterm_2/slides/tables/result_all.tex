@@ -1,0 +1,38 @@
+ \begin{tabular}[c] {|c|c|c|c|c|c||r|r|r|r|r|}\hline
+  model & 符号    & alldiff & PHP        & ALT1       & kernel     & N=8    & N=9      & N=10    & N=11     & N=12 \\
+        &         &         &            &            &            & UNSAT  & UNSAT    & UNSAT   & SAT      & SAT  \\\hline
+ 0     & OE      & neq     &    &      &        & 20.120    & 1296.917  & 3017.705   & TO       & TO \\
+ 1     & OE      & neq     & \checkmark   &      &        & 0.118     & 479.376   & TO         & TO       & TO \\
+ 2     & OE      & neq     &    & \checkmark   &        & 0.021     & 4.256     & 58.701     & 203.959  & TO \\
+ 3     & OE      & neq     & \checkmark   & \checkmark    &        & 0.017     & 3.833     & 58.621     & 452.605  & TO \\
+ 4     & OE\textless=\textgreater DE & neq     &    &     &        & 11.532    & 1333.950  & TO         & TO       & TO \\
+ 5     & OE\textless=\textgreater DE & neq     & \checkmark   &     &        & 0.047     & 364.726   & TO         & TO       & TO \\
+ 6     & OE\textless=\textgreater DE & neq     &    & \checkmark    &        & 0.005     & 1.600     & 25.872     & 758.905  & TO \\
+ 7     & OE\textless=\textgreater DE & neq     & \checkmark   & \checkmark    &        & 0.006     & 1.571     & 24.978     & 311.325  & TO \\
+ 8     & OE\textless=\textgreater DE & PB      &    &      &        & 0.005     & 1.605     & 27.360     & 761.812  & TO \\
+ 9     & OE\textless=\textgreater DE & PB      & \checkmark   &      &        & 0.005     & 1.525     & 25.105     & 610.408  & TO \\
+ 10    & OE\textless=\textgreater DE & 大野3   &    &      &        & 0.006     & 0.884     & 21.967     & 446.034  & TO \\
+ 11    & OE\textless=\textgreater DE & 大野3   & \checkmark   &      &        & 0.006     & 1.195     & 22.950     & 81.861   & TO \\
+ 12    & OE\textless=\textgreater DE & 大野4   &    &      &        & 0.007     & 1.069     & 21.644     & 954.395  & TO \\
+ 13    & OE\textless=\textgreater DE & 大野4   & \checkmark   &      &        & 0.006     & 1.147     & 26.128     & 332.564  & TO \\
+  14    & OE=\textgreater MVE & neq     &            &            &            & 13.351 & 5044.195 & TO      & TO       & TO   \\
+  15    & OE=\textgreater MVE & neq     &            &            & \checkmark & 13.634 & 3504.006 & TO      & TO       & TO   \\
+  16    & OE=\textgreater MVE & neq     &            & \checkmark &            & 0.010  & 2.530    & 511.445 & TO       & TO   \\
+  17    & OE=\textgreater MVE & neq     &            & \checkmark & \checkmark & 0.013  & 3.810    & 256.044 & TO       & TO   \\
+  18    & OE=\textgreater MVE & neq     & \checkmark &            &            & 0.047  & 452.829  & TO      & TO       & TO   \\
+  19    & OE=\textgreater MVE & neq     & \checkmark &            & \checkmark & 0.074  & 397.605  & TO      & TO       & TO   \\
+  20    & OE=\textgreater MVE & neq     & \checkmark & \checkmark &            & 0.009  & 1.800    & 889.400 & TO       & TO   \\
+  21    & OE=\textgreater MVE & neq     & \checkmark & \checkmark & \checkmark & 0.010  & 3.687    & 894.358 & TO       & TO   \\
+  22    & OE=\textgreater MVE & PB      &            &            &            & 0.015  & 2.935    & 227.920 & TO       & TO   \\
+  23    & OE=\textgreater MVE & PB      &            &            & \checkmark & 0.018  & 3.293    & 510.718 & TO       & TO   \\
+  24    & OE=\textgreater MVE & PB      & \checkmark &            &            & 0.009  & 3.828    & 290.225 & TO       & TO   \\
+  25    & OE=\textgreater MVE & PB      & \checkmark &            & \checkmark & 0.012  & 3.101    & 316.683 & TO       & TO   \\
+  26    & OE=\textgreater MVE & 大野3   &            &            &            & 0.012  & 1.869    & 130.062 & TO       & TO   \\
+  27    & OE=\textgreater MVE & 大野3   &            &            & \checkmark & 0.014  & 2.297    & 170.116 & 3330.446 & TO   \\
+  28    & OE=\textgreater MVE & 大野3   & \checkmark &            &            & 0.014  & 1.866    & 128.660 & 2373.458 & TO   \\
+  29    & OE=\textgreater MVE & 大野3   & \checkmark &            & \checkmark & 0.015  & 2.050    & 144.217 & 4769.444 & TO   \\
+  30    & OE=\textgreater MVE & 大野4   &            &            &            & 0.013  & 2.000    & 148.720 & 3169.771 & TO   \\
+  31    & OE=\textgreater MVE & 大野4   &            &            & \checkmark & 0.015  & 2.302    & 226.185 & 2754.992 & TO   \\
+  32    & OE=\textgreater MVE & 大野4   & \checkmark &            &            & 0.011  & 1.875    & 105.552 & TO       & TO   \\
+  33    & OE=\textgreater MVE & 大野4   & \checkmark &            & \checkmark & 0.009  & 2.094    & 131.638 & TO       & TO   \\\hline
+ \end{tabular}

@@ -1,0 +1,36 @@
+\begin{frame}\frametitle{改良アルゴリズム}
+
+  \begin{block}{改良アルゴリズムの手続き}
+    \begin{enumerate}
+    \item ステップ$t$を$t=0$，論理プログラム$\Psi$を$\Psi = \emptyset$とする．
+    \item ファクト形式の問題インスタンス$I$を与える．
+    \item ステップ$t$で追加する論理式を記憶するリスト$p=\emptyset$とする．
+      \label{improved_solver:loop}
+    \item $t>0$であれば，$Remove(\Psi, \enc{G(\bm{x}^{t-1})}$
+      % ゴール状態の制約$G(\bm{x}^{t -1})$を表すルールを削除する．
+    \item $t=0$であれば，$p = p \ \cup \ \enc{S(\bm{x}^0)}
+      \ \cup \ \enc{I}$
+      % スタート状態の制約$S(\bm{x}^0)$を表すルールを追加する．
+    \item $p = p \ \cup \ \enc{C(\bm{x}^{t})} \ \cup \ 
+      \enc{T(\bm{x}^{t-1},\bm{x}^{t})} \ \cup \ \enc{G(\bm{x}^{t})}$
+      % グラフ点彩色問題の制約$C(\bm{x}^{t})$と遷移制約$T(\bm{x}^{t-1},\bm{x}^{t})$
+      % を表すルールを追加する．
+      % ゴール状態の制約$G(\bm{x}^{t})$を表すルールを追加する．
+    \item $\Psi = Add(\Psi, p)$
+    \item $\Psi$を ASP システムに与えて解く．
+    \item ASP システムの出力が充足可能であれば終了する．
+      充足不能であれば$t$の値を1増加させ，
+      (\ref{improved_solver:loop})に戻り手続きを繰り返す．
+      \begin{itemize}
+      \item ただし，$t$がステップ長の上限値を超えたところで
+        繰り返しを停止できる．
+      \end{itemize} \label{improved_solver:end}
+    \end{enumerate}
+  \end{block}
+
+  \begin{itemize}
+  \item 改良アルゴリズムは，ASP システム{\clingo}の python インターフェー
+    スを用いて簡潔に実装できる．
+  \end{itemize}
+
+\end{frame}

@@ -1,0 +1,191 @@
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%% 補助スライド
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+\backupbegin
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{~}
+    \centering
+    - 補足用 -
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% at-least-one制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{at-least-one制約を用いたヒント制約(ALT1)}
+    \vspace{-3mm}
+    \begin{block}{}
+        $alldfifferent(x_1,x_2,\ldots,x_n)$について, $x_i \in \{\ell, \ell+1,\ldots, u\}$かつ$u-\ell=n-1$であるときに以下の制約を追加する.\\
+        \vspace{-3mm}
+        $$\bigvee_{i=1}^n x_{ia}=1 \qquad (a \in \{\ell,\ldots, u\})$$
+    \end{block}
+    \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
+        $alldifferent(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            (x_{11}=1) \lor (x_{21}=1) \lor (x_{31}=1) \lor (x_{41}=1)\\
+            (x_{12}=1) \lor (x_{22}=1) \lor (x_{32}=1) \lor (x_{42}=1)\\
+            (x_{13}=1) \lor (x_{23}=1) \lor (x_{33}=1) \lor (x_{43}=1)\\
+            (x_{14}=1) \lor (x_{24}=1) \lor (x_{34}=1) \lor (x_{44}=1)
+        \end{eqnarray*}
+    \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% kernel制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{kernel制約を用いたヒント制約(kernel)}
+    MVEにおいて，頂点$x$が色$a$で彩色されないとき，$x$に隣接するある頂点が色$a$に彩色されることを表す制約を{\alldifferent}のヒント制約として追加する．
+    % \begin{block}{}
+    %     ある変数$x_i$について，それを含む{\alldifferent}制約の他の要素$x_j \, (j \neq i)$との関係を表す以下の制約を追加する．
+    %     \begin{eqnarray*}
+    %         
+    %     \end{eqnarray*}
+    % \end{block}
+    \begin{exampleblock}{}
+        $x_1$について
+        $alldifferent(x_1,x_2,x_3),alldifferent(x_1,x_4,x_5),alldifferent(x_1,x_6,x_7)$\\ $(x_i \in \{1,2,3\})$があるとすると，以下の制約が追加される．
+        {\fontsize{10pt}{0pt}\selectfont
+        \begin{eqnarray*}
+            (x_{11} = 1) \lor (x_{21} = 1) \lor (x_{31} = 1) \lor (x_{41} = 1) \lor (x_{51} = 1) \lor (x_{61} = 1) \lor (x_{71} = 1)\\
+            (x_{12} = 1) \lor (x_{22} = 1) \lor (x_{32} = 1) \lor (x_{42} = 1) \lor (x_{52} = 1) \lor (x_{62} = 1) \lor (x_{72} = 1)\\
+            (x_{13} = 1) \lor (x_{23} = 1) \lor (x_{33} = 1) \lor (x_{43} = 1) \lor (x_{53} = 1) \lor (x_{63} = 1) \lor (x_{73} = 1)\\
+        \end{eqnarray*}
+    }
+    \end{exampleblock}
+    この制約を追加することで，複数の{\alldifferent}制約について高速化を促すことが期待できる．
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 大野3
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{大野3を用いた手法}
+    \begin{block}{}
+        $alldifferent(x_1,\dots,x_n)$について，$x_i \in \{\ell,\ell+1,\dots u\}$かつ$u-\ell > n-1$である時，
+        新たな整数変数$y_j \, (j \in \{\ell \dots u\})$を導入し，以下の式をPBの式に加える
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            & x_{1j} + \dots + x_{nj}  =  y_j & (j=\ell \dots u)\\
+            & y_{\ell} + \dots + y_u  =  n    &
+        \end{eqnarray*}
+    \end{block}
+    \begin{exampleblock}{例}
+        $alldifferent(x_1, x_2, x_3)$について, $x_i \in \{1,2,3,4\}$であるとき，以下のように分解する．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            x_{11} + x_{21} + x_{31} \leq 1 & x_{11} + x_{21} + x_{31} = y_1 \\
+            x_{12} + x_{22} + x_{32} \leq 1 & x_{12} + x_{22} + x_{32} = y_2 \\
+            x_{13} + x_{23} + x_{33} \leq 1 & x_{13} + x_{23} + x_{33} = y_3 \\
+            x_{14} + x_{24} + x_{34} \leq 1 & x_{14} + x_{24} + x_{34} = y_4 \\
+                                            & y_1 + y_2 + y_3 + y_4 = 3
+        \end{eqnarray*}
+    \end{exampleblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 大野4
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{大野4を用いた手法}
+    \begin{block}{}
+        $alldifferent(x_1,\dots,x_n)$について，$x_i \in \{\ell,\ell+1,\dots u\}$かつ$u-\ell > n-1$である時，
+        新たな01変数$x_{(n+1)j}\,(j \in \{\ell \dots u\})$を導入し，以下のように分解する．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            & x_{1j} + \dots + x_{(n+1)j} = 1 & (j=\ell \dots u)\\
+            & x_{(n+1)\ell} + \dots + x_{(n+1)u} = (u-\ell)-(n-1) &
+        \end{eqnarray*}
+    \end{block}
+    \begin{exampleblock}{例}
+        $alldifferent(x_1, x_2, x_3)$について, $x_i \in \{1,2,3,4\}$であるとき，以下のように分解する．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            x_{11} + x_{21} + x_{31} + x_{41} = 1 \\
+            x_{12} + x_{22} + x_{32} + x_{42} = 1 \\
+            x_{13} + x_{23} + x_{33} + x_{43} = 1 \\
+            x_{14} + x_{24} + x_{34} + x_{44} = 1 \\
+            x_{41} + x_{42} + x_{43} + x_{44} = 1
+        \end{eqnarray*}
+    \end{exampleblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 実験結果全体
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{実験結果全体}
+    \begin{block}{}
+        {\fontsize{5pt}{5pt}\selectfont \input{tables/result_all}}
+    \end{block}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 追加実験
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{色数を増やした実験結果全体}
+    kernel制約の有効性を確認するためにクイーングラフ彩色問題の色数を1色増やして実験を行った\footnote{ALT1は{\alldifferent}制約の要素数とサイズが一致する時のみ追加されるため，今回は省略している}
+    \begin{block}{}
+        {\fontsize{5pt}{5pt}\selectfont \input{tables/result_kernel}}
+    \end{block}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OEとMVEのチャネリング
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{OEとMVEのチャネリング}\small
+    OEとMVEをチャネリングさせる手法は以下の通りである．
+    \begin{block}{}
+        $x \in \{\ell \dots u\}$について，$x$が$a (a \in \{\ell \dots u\})$であることを表す01変数$x_{a}$を用意し，以下の制約を追加する．
+        \vspace{-3mm}
+        \[
+            (x = a) \Rightarrow (x_{a} = 1)
+        \]
+    \end{block}
+    \begin{exampleblock}{例}
+        $x \in \{1 \dots 4\}$であるときには，01変数$x_a$($a \in \{ 1 \dots 4\}$)と以下の制約が追加される．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            (x = 1) \Rightarrow (x_1 = 1) \\
+            (x = 2) \Rightarrow (x_2 = 1) \\
+            (x = 3) \Rightarrow (x_3 = 1) \\
+            (x = 4) \Rightarrow (x_4 = 1)
+        \end{eqnarray*}
+    \end{exampleblock}
+    OEをMVEとチャネリングさせることで{\alldifferent}制約をPBや大野3，大野4で表現できる．\\
+    また，ヒント制約としてkernel制約が使用できる．
+\end{frame}
+
+
+
+
+
+\backupend
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "slide"
+%%% End:
