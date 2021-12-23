@@ -1,0 +1,33 @@
+% \chapter{実行実験}
+\section{実行実験}
+クイーングラフ彩色問題は$N$個ずつの$N$個のグループからなるクイーン (計$N^2$個) を，
+$N\times N$のチェス盤に，同じグループのクイーン同士が互いに
+取られないように配置する問題である．
+この問題は alldifferent 制約のみを用いて記述でき， Knuthの教科書 The Art of Computer Programming でも取り上げられている．
+
+本実験においてSATソルバーは Sugar version.2.3.3, GlueMiniSat version 2.2.10-193を用い，
+タイムアウトは2時間とした．
+
+\begin{table}[h]
+    \caption{クイーングラフ彩色問題での実験結果}
+    \label{table:result}
+    {\scriptsize \input{table/result}}
+\end{table}
+
+\begin{table}[h]
+    \caption{色数を増やしたクイーングラフ彩色問題での実験結果}
+    \label{table:result_c}
+    {\scriptsize \input{table/result_c}}
+\end{table}
+計測したCPU時間を示す．
+表2の1行目はクイーングラフ彩色問題のサイズとその問題に解が存在するかどうかを表している．
+TOはタイムアウトを表している．
+赤色で示した秒数がそのサイズの中で最も早く解くことができたものである．
+model0~7を比較するとAt-least-one制約がヒントとして有効であることがわかる．
+表3はAt-least-one制約が生成されない場合の実験結果を表している．
+表3の結果よりAt-least-one制約が入っていない場合でもチャネリングが有効であることがわかる．
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

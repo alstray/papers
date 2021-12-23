@@ -1,0 +1,34 @@
+% \chapter{チャネリング制約を用いた alldifferent 制約の SAT 符号化}
+\section{チャネリング制約を用いた alldifferent 制約の SAT 符号化}
+
+順序符号化とその他の符号化を組み合わせる．
+順序符号化で有効な鳩の巣原理を用いたヒント制約や，
+直接符号化で有効なAt-least-one制約を組み合わせることができる．
+チャネリングさせることでPB，大野の手法でalldiferent制約を表現することができる．
+
+
+\begin{table}[h]
+    \caption{提案した符号化一覧}
+    \label{table:model}
+    {\scriptsize \input{table/model}}
+\end{table}
+１列目は提案した符号化の番号を表している．
+２列目は alldifferent 制約の符号化手法を表している．
+OE は順序符号化法で符号化することを表している．
+OE\textless=\textgreater DE は順序符号化法と直接符号化法をチャネリングさせて符号化する符号化することを表している．
+３列目は alldifferent 制約の分解方法を表している．
+neq はnot-equal 制約に分解することを表している．
+PB はブール基数制約を用いて分解することを表している．
+大野3・大野4は[大野,'19]の手法3・4を用いて分解することを表している．
+４列目は 鳩の巣原理を用いたヒント制約の有無を表している．
+チェックマークを付けたモデルにヒント制約として追加している．
+５列目は At-least-one 制約の有無を表している
+チェックマークを付けたモデルにヒント制約として追加している．
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
