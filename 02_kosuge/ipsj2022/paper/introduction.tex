@@ -1,5 +1,17 @@
 % \chapter{はじめに}
 \section{はじめに}
+% % 概要
+% alldifferent($x_1,\dots,x_n$) 制約は，制約プログラミン
+% グにおける代表的なグローバル制約の一つである．この制約は，与えられた変
+% 数 $x_i$ が互いに異なる値を取ることを意味する．alldifferent 制
+% 約は，グラフ彩色問題や時間割問題など様々な問題に現れる．本発表では，
+% alldifferent 制約の SAT 符号化について，順序符号化法と直接符号化法をチャ
+% ネリング制約を用いて融合した手法について述べる．考案した SAT 符号化の
+% 評価として，Knuth のThe Art of Computer Programming でも取り上げられて
+% いるクイーングラフ彩色問題を用いた実験結果を示す．
+
+制約プログラミングにおける代表的なグローバル制約の一つである alldifferent 制約は，その要素が互いに異なることを意味し，グラフ彩色問題や時間割問題など様々な問題に現れる．
+本稿では， alldifferent 制約のSAT符号化について順序符号化と直接符号化をチャネリング制約を用いて融合させた手法について述べ，Knuth の The Art of Computer Programming \cite{Knuth:TAOCP:SAT}でも取り上げられているクイーングラフ彩色問題\cite{Tamura:queen}を用いて評価実験を行った結果について示す．
 
 %%% Local Variables:
 %%% mode: latex
