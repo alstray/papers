@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 根付き全域森 (第2章で使う)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}[x=1.5cm,y=1.5cm,scale=0.7]
+
+ % 設定
+ \tikzset{root/.style={circle,draw=black,fill=gray!30,minimum size=1cm}}
+ \tikzset{node/.style={circle,draw=black,minimum size=1cm}}
+ 
+ % 補助線
+ % \draw [help lines,blue,step=2cm] (-3,0) grid (3,-3);
+
+
+ \node[node,fill=black!40,label=above:$r_1$] (r1){$1$};
+
+ \node[node,left=of r1] (n1){$5$};
+ \node[node,left=of n1] (n2){$4$};
+ \node[node,above=of n2] (n3){$6$};
+ \node[node,above=of n1] (n4){$7$};
+ \node[node,above=of n3] (n5){$8$};
+ \node[node,above=of n4] (n6){$9$};
+ \node[node,above=of n5] (n7){$10$};
+ \node[node,above=of n6] (n8){$11$};
+
+ \node[node,pattern=dots,right=of n8,label=above:$r_2$] (r2){$2$};
+ \node[node,right=of r2] (n9){$14$};
+ \node[node,right=of n9] (n10){$15$};
+ \node[node,right=of r1] (n11){$12$};
+ \node[node,right=of n11] (n12){$13$};
+ 
+ \node[node,pattern=north east lines,label=right:$r_3$](r3) at ($(n10)!0.5!(n12)$) {$3$};
+ 
+ \foreach \v / \u in {r1/n1,n1/n2,n2/n3,n1/n4,n3/n5,n4/n6,n5/n7,n6/n8,n7/n8,n8/r2,
+ r2/n9,n9/n10,r1/n11,n11/n12,r3/n10,r3/n12}
+ \draw[thick] (\v) -- (\u);
+
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: paper.tex
+%%% End:
