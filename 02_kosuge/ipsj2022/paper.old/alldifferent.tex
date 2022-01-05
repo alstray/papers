@@ -1,0 +1,48 @@
+% \chapter{alldifferent 制約の SAT 符号化}
+\section{alldifferent 制約の SAT 符号化}
+
+alldifferent 制約は alldifferent($x_1,\dots,x_n$) で表され，その要素$x_i$が互いに異なることを表す．
+% この制約は
+% $$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$
+% を意味する．
+
+直接符号化は各整数変数$x$とそのドメイン$a$について$x=a$であることを命題変数$p(x=a)$で表す．
+$x$がそのドメイン$\{\ell,\ell+1,\dots,u\}$の中から少なくとも1つの値を取る制約を
+$$p(x=\ell) \lor p(x=\ell+1) \lor \dots \lor p(x=u)$$
+と表す．
+$x$がそのドメイン$\{\ell,\ell+1,\dots,u\}$の中から多くとも1つの値を取る制約を
+$$\lnot p(x=i) \land \lnot p(x=j) \;\; (\ell \leq i < j \leq u)$$
+と表す．
+
+順序符号化は各整数変数$x$とそのドメイン$a$について$x \leq a$であることを命題変数$p(x\leq a)$で表す．
+$x$とそのドメイン$\{\ell,\ell+1,\dots,u\}$に対し，$p(x \leq \ell),p(x \leq \ell+1),\dots,p(x \leq u-1)$を導入し，その関係を
+$$\lnot p(x \leq i) \lor p(x \leq i+1) \; (\ell \leq i \leq u-2)$$
+と表す．
+
+
+alldifferent$(x_1,\dots,x_n)$について$x_i\in \{ \ell,\ell+1,\dots,u \}$である時，
+この制約は
+$$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$
+を意味する．
+また，$x \neq x'$は
+$$
+\bigwedge_{\ell \leq a \leq u} (x \neq a \lor x' \neq a)
+$$
+で表すことができる．
+直接符号化において，$x \neq a$は$\lnot p(x=a)$と符号化できる．
+順序符号化において，$x \neq a$は$p(x \leq a-1) \lor \lnot p(x \leq a)$と符号化できる．
+
+
+% alldifferent$(x_1,\dots,x_n)$について$x_i\in \{ \ell,\ell+1,\dots,u \}$である時，
+% 直接符号化では
+% $$\bigwedge_{1 \leq i < j \leq n} (p(x_i=a) \lor p(x_j=a)) \;\; (\ell \leq a \leq u)$$
+% と符号化できる．
+% 順序符号化では
+% $$\bigwedge_{1 \leq i < j \leq n} (p(x_i \leq a-1) \lor \lnot p(x_i \leq a) \lor p(x_j \leq a-1) \lor \lnot p(x_j \leq a)) \;\; (\ell \leq a \leq u-2)$$
+% と符号化できる．
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

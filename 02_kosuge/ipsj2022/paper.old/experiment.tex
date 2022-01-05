@@ -1,0 +1,37 @@
+% \chapter{実行実験}
+\section{実行実験}
+クイーングラフ彩色問題は$N$個ずつの$N$個のグループからなるクイーン (計$N^2$個) を，
+$N\times N$のチェス盤に，同じグループのクイーン同士が互いに
+取られないように配置する問題である．
+この問題は alldifferent 制約のみを用いて記述できる．
+% Knuthの教科書 The Art of Computer Programming でも取り上げられている．
+
+本実験においてSATソルバーは Sugar version.2.3.3, GlueMiniSat version 2.2.10-193を用い，
+タイムアウトは2時間とした．
+ベンチマーク問題として先程説明したクイーングラフ彩色問題のN=8〜12を用いた．
+
+\begin{table}[t]
+    \caption{クイーングラフ彩色問題での実験結果: N=12については全てのモデルでTOであったため，N=11で性能の良かった上位3モデルについてタイムアウトを3日に伸ばした実験結果を示している．}
+    \label{table:result}
+    {\tiny \input{table/result}}
+\end{table}
+
+\begin{table}[t]
+    \caption{色数を増やしたクイーングラフ彩色問題での実験結果}
+    \label{table:result_c}
+    {\scriptsize \input{table/result_c}}
+\end{table}
+計測したCPU時間を表\ref{table:result}・\ref{table:result_c}に示す．
+表\ref{table:result}の1行目はクイーングラフ彩色問題のサイズとその問題に解が存在するかどうかを表している．
+TOはタイムアウトを表している．
+赤色で示した秒数がそのサイズの中で最も早く解くことができたものである．
+表\ref{table:result}のmodel2と3・5を比較するとat-least-one制約がヒントとして有効であることがわかる．
+N=12のクイーングラフ彩色問題に対してmodel9で解を求めることができた．
+表\ref{table:result_c}の実験では at-least-one 制約が生成されない問題を解いている．
+表\ref{table:result_c}の1行目はクイーングラフ彩色問題のサイズと色数，その問題に解が存在するかどうかを表している．
+表\ref{table:result_c}の結果よりat-least-one制約が入っていない場合でもチャネリングが有効であることがわかる．
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
