@@ -1,4 +1,67 @@
-\section{配電網遷移問題のASP符号化}
+\section{配電網遷移問題のASP符号化}\label{chap:core}
+
+本節では，配電網遷移問題の入力と制約を論理プログラミングとして表現する
+方法について述べる．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  配電網遷移問題(図~\ref{fig:test-core})のファクト表現},%
+captionpos=b,frame=single,label=code:test-core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/core-input.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  配電網遷移問題のASP符号化},%
+captionpos=b,frame=single,label=code:pw-core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{ASPファクト形式．}
+配電網遷移問題は，もととなる配電網問題の入力と，新たにスタート状態とゴール状態
+が与えられる．配電網遷移問題のスタート状態とゴール状態の入力(図\ref{fig:test-core})
+のファクト表現をコード\ref{code:test-core.lp}に示す．
+スタート状態における閉じたスイッチは，アトム\code{init_switch/1}によって表される．
+また，ゴール状態での閉じたスイッチは，アトム\code{goal_switch/1}によって表される．
+
+\textbf{ASP符号化．}
+配電網遷移問題のASP符号化をコード\ref{code:pw-core.lp}に示す．
+この符号化は，ASPシステム \clingo のマルチショットASP解法ライブラリを用いており，
+\code{base}，\code{step(t)}，\code{check(t)}の3パートから構成される．
+
+\code{base}パートには，ステップ\code{t=0}で満たすべき制約を記述する．
+ここでは13行目のルールで，スタート状態とステップ\code{0}での閉じたスイッチが
+一致することを強制している．また，17$\sim$37行目のルールは，4節で示した前処理の
+ASP符号化を記述している．
+
+次に\code{step(t)}パートには，各ステップ\code{t}において満たすべき制約を記述する．
+ここでは，根付き全域森問題を解くASP符号化のうち，比較実験(6節)にて良い性能を示した
+発展符号化をもとに拡張を行った．発展符号化と電流制約の符号化の各アトムにステップを
+表す項\code{t}を引数として追加したルールを記述している(47$\sim$79行目)．さらに，
+83$\sim$85行目には，遷移制約を表すルールを記述している．アトム\code{changed(SW,t)}
+は，ステップ\code{t-1}とステップ\code{t}の間でスイッチ\code{SW}の状態が変化した
+ことを意味する．85行目のルールで，各ステップ\code{t}において，変化したスイッチの数
+が\code{d}であることを保証している．
+
+最後に，\code{step(t)}パートでは，プログラムの終了条件を記述する．
+ここでは，93行目でゴール状態とステップ\code{t}の対応を記述する．
+なお，\code{t}がインクリメントされると，一つ前の不要になった終了条件は，\code{query(t)}
+の真偽を動的に操作することにより無効化される．
+
+
+
 
 %%% Local Variables:
 %%% mode: japanese-latex

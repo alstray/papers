@@ -1,0 +1,12 @@
+init_switch("switch_0001").
+init_switch("switch_0002").
+init_switch("switch_0003").
+init_switch("switch_0005").
+init_switch("switch_0006").
+init_switch("switch_0007").
+init_switch("switch_0009").
+init_switch("switch_0010").
+init_switch("switch_0011").
+init_switch("switch_0013").
+init_switch("switch_0014").
+init_switch("switch_0016").

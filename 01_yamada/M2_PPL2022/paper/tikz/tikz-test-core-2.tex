@@ -1,7 +1,3 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 配電網 例 (第1章で使う)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{tikzpicture}
 
  % setting
@@ -70,8 +66,8 @@
  \swnodeR{left=of node3,fill=black!40}{node5}{sw5}{ };
  \swnodeA{above =of node5,fill=black!40}{node6}{sw6}{ };
 
- \swnodeB{above =of node6,fill=black!10}{node7}{sw7}{ };
- \swnodeA{above =of node7,fill=black!10}{node29}{sw29}{ };
+ \swnodeB{above =of node6,fill=black!40}{node7}{sw7}{ };
+ \swnodeA{above =of node7,fill=black!40}{node29}{sw29}{ };
 
  \swnodeB{above =of node29,fill=black!10}{node30}{sw30}{ };
  
@@ -85,7 +81,7 @@
  \swnodeL{right =of node17,fill=black!40}{node18}{sw18}{ };
 
  % root2
- \node[customer,fill=black!10,above=4.5cm of sub, fill=black!10] (root2) { };
+ \node[customer,fill=black!20,above=4.5cm of sub, fill=black!10] (root2) { };
  \swnodeL{left =of root2,fill=black!10}{node9}{sw9}{ };
 
  \swnodeR{left=of node9,fill=black!10}{node10}{sw10}{ };
@@ -105,7 +101,7 @@
  \swnodeL{right =of node22,fill=black!10}{node23}{sw23}{ };
  
  % root3
- \node[customer,fill=black!10,right=5.2cm of sub,pattern=north east lines] (root3) { };
+ \node[customer,fill=black!20,right=5.2cm of sub,pattern=north east lines] (root3) { };
  \swnodeB{below =1.4of root3,pattern=north east lines}{node24}{sw24}{ };
  \swnodeA{above =1.4of root3,pattern=north east lines}{node25}{sw25}{ };
 
@@ -114,8 +110,8 @@
  
  \swnodeR{left =of node20,fill=black!40}{node21}{sw21}{ };
 
- \swnodeB{above =of node25,pattern=north east lines}{node26}{sw26}{ };
- \swnodeL{above =1.3of node26,pattern=north east lines}{node27}{sw27}{ };
+ \swnodeB{above =of node25,fill=black!10}{node26}{sw26}{ };
+ \swnodeL{above =1.3of node26,fill=black!10}{node27}{sw27}{ };
 
  \swnodeR{left =of node27,fill=black!10}{node28}{sw28}{ };
  
@@ -131,17 +127,17 @@
  % switches
  %% horizontal
  \foreach \v / \u / \t in {sw1/sw2/$sw_{1}$,sw3/sw5/$sw_{2}$,sw9/sw10/$sw_{11}$,
- sw11/sw13/$sw_{12}$,sw18/sw17/$sw_{13}$,sw23/sw22/$sw_{15}$}
+ sw11/sw13/$sw_{12}$,sw18/sw17/$sw_{13}$,sw23/sw22/$sw_{15}$,sw27/sw28/$sw_{16}$}
  \draw[very thick] (\v) -- node[below=0.2of \v]{\t} (\u.center);
  
- \foreach \v / \u in {sw20/sw21,sw27/sw28}
+ \foreach \v / \u in {sw20/sw21}
  \draw[very thick] (\v) -- (\u.45);
  %% vertical
- \foreach \v / \u / \t in {sw4/sw8/$sw_{4}$,sw29/sw30/$sw_{5}$,sw15/sw14/$sw_{7}$,%
- sw16/sw12/$sw_{8}$,sw19/sw24/$sw_{9}$,sw25/sw26/$sw_{10}$}
+ \foreach \v / \u / \t in {sw4/sw8/$sw_{4}$,sw6/sw7/$sw_{3}$,sw15/sw14/$sw_{7}$,%
+ sw16/sw12/$sw_{8}$,sw19/sw24/$sw_{9}$}
  \draw[very thick] (\v) -- node[auto=below]{\t~~~~~~~~~~} (\u.center);
 
- \foreach \v / \u in {sw6/sw7,sw31/sw32}
+ \foreach \v / \u in {sw29/sw30,sw31/sw32,sw25/sw26}
  \draw[very thick] (\v) -- (\u.-30);
 \end{tikzpicture}
 
