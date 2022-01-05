@@ -38,7 +38,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table*}[t]
   \centering
-  \caption{配電網遷移問題のASP符号化(コード~\ref{code:pw-core})の実行結果}
+  \caption{配電網遷移問題のASP符号化(コード~\ref{code:pw-core.lp})の実行結果}
   \label{table:core}
   \input{table/core-experiment}
 \end{table*}
@@ -80,7 +80,7 @@ ASPシステムには {\clingo}-5.4.0 (\textit{trendy})を使用し，
 
 \textbf{配電網遷移問題.}
 ベンチマークとしては，DNETで公開されている実用規模の配電網問題
-({\sf fukui-tepco}，ノード数 432，根ノード数 72，電流上限 300)をベースにした．
+({\sf fukui-tepco}，ノード数 432，根ノード数 72，$V_{max}=300$)をベースにした．
 この問題の実行可能解から，スタート状態を10個，ゴール状態を100個，
 をランダムに選び，それらを組み合わせた計1000問の配電網遷移問題を生
 成した．ASPシステムと実験環境は上と同じである．
