@@ -1,0 +1,32 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 変換
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}
+
+ \definecolor{edge}{RGB}{38,38,134}
+ \definecolor{node}{RGB}{220,220,249}
+
+ \definecolor{alert_edge}{RGB}{191,0,0}
+ \definecolor{alert_node}{RGB}{249,200,200}
+
+ \definecolor{example_edge}{RGB}{0,96,0}
+ \definecolor{example_node}{RGB}{230,239,230}
+
+ \tikzset{node/.style={circle, thick, text centered,
+ draw=black, fill=gray!20}};
+ \tikzset{root/.style={circle, very thick, text centered, 
+ draw=alert_edge, fill=alert_node}};
+
+ %\tikzset{node distance =0.5cm};
+
+ % node
+ \node[root] (r1){};
+ \node[node, above right=0.5cm and 1cm of r1] (n1){};
+ \node[node, below right=0.5cm and 1cm of r1] (n2){};
+ \node[root, draw=edge, fill=node, above right=0.5cm and 1cm of n2] (r2){};
+
+ % edge
+ \foreach \v / \u in {r1/n1, r1/n2, r2/n1, r2/n2}
+ \draw[ultra thick, draw=orange!80!gray] (\v) -- (\u);
+
+\end{tikzpicture}

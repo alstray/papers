@@ -1,0 +1,86 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 電流制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}
+
+ \definecolor{edge}{RGB}{38,38,134}
+ \definecolor{node}{RGB}{220,220,249}
+
+ \definecolor{alert_edge}{RGB}{191,0,0}
+ \definecolor{alert_node}{RGB}{249,200,200}
+
+ \definecolor{example_edge}{RGB}{0,96,0}
+ \definecolor{example_node}{RGB}{230,239,230}
+
+ \tikzset{cs1/.style={rectangle, thick, text centered,
+ draw=black, fill=alert_node}};
+ \tikzset{cs2/.style={rectangle, thick, text centered,
+ draw=black, fill=node}};
+ \tikzset{root/.style={rectangle, very thick, text centered, 
+ minimum size=0.4cm, draw=alert_edge, fill=alert_node}};
+
+ \tikzset{node distance =1cm};
+
+ % node
+ \node[root] (r1){$R_1$};
+ \node[cs1, right=of r1] (n1){};
+ \node[cs1, above=of n1] (n2){};
+ \node[cs1, below=of n1] (n3){};
+ \node[cs1, right=of n2] (n4){};
+ \node[cs1, right=of n4] (n5){};
+ \node[cs2, right=of n3] (n6){};
+ \node[cs2, right=of n6] (n7){};
+ \node[cs2, right=of n5] (n8){};
+ \node[cs2, below=of n8] (n9){};
+ \node[cs2, right=of n7] (n10){};
+ \node[root,draw=edge, fill=node, right=of n9] (r2){$R_2$}; 
+
+ \node[below right=0.2cm and -0.1cm of n2,scale=0.8] (ss11){$I_{s_1}=30$};
+ \node[above right=0.2cm and -0.1cm of n3,scale=0.8] (ss11){$I_{s_2}=20$};
+ \node[below right=0.2cm and -0.1cm of n8,scale=0.8] (ss11){$I_{s_5}=10$};
+ \node[above right=0.2cm and -0.1cm of n10,scale=0.8] (ss11){$I_{s_6}=20$};
+ \node[above right=0cm and 0cm of n4,scale=0.8] (ss11){$I_{s_3}=10$};
+ \node[below right=0cm and 0cm of n6,scale=0.8] (ss11){$I_{s_4}=20$};
+
+ % section
+ \foreach \v / \u / \t in {r1/n1, n1/n2, n1/n3, n4/n5}
+ \draw[thick, draw=alert_edge] (\v) -- (\u);
+ 
+ \foreach \v / \u in {n6/n7, r2/n9, n8/n9, n9/n10}
+ \draw[thick, draw=edge] (\v) -- (\u);
+
+ %switch
+ \node[right=0.4cm of n2] (s1){};
+ \draw[very thick, draw=alert_edge] (n2) -- (n4);
+ 
+ \node[right=0.8cm of n5] (s2){};
+ \draw[thick, draw=black] (n5) -- (s2.130);
+
+ \node[left=0.8cm of n6] (s3){};
+ \draw[thick, draw=black] (n6) -- (s3.50);
+ 
+ \node[left=0.8cm of n10] (s4){};
+ \draw[very thick, draw=edge] (n10) -- (n7);
+
+ %decoration
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ right=0cm of n2, scale=0.2] (s1l){};
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ left=0cm of n4, scale=0.2] (s1r){};
+
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ right=0cm of n5, scale=0.2] (s2l){};
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ left=0cm of n8, scale=0.2] (s2r){};
+
+\node[circle, draw=black, fill=white, text width=0.2cm, 
+ right=0cm of n3, scale=0.2] (s3l){};
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ left=0cm of n6, scale=0.2] (s3r){};
+
+\node[circle, draw=black, fill=white, text width=0.2cm, 
+ right=0cm of n7, scale=0.2] (s4l){};
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ left=0cm of n10, scale=0.2] (s4r){};
+
+\end{tikzpicture}
