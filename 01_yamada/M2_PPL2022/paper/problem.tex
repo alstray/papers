@@ -1,46 +1,61 @@
-\section{配電網問題}\label{chap:problem}
+\section{配電網問題と配電網遷移問題}\label{chap:problem}
+
 \subsection{配電網問題}
-本節では，本稿で扱う配電網問題を定式化する．
-以下の式において，ある配電区間$i\in\{1,\ldots,n\}$に対して，
-配電網構成$X$が決まったとする．このとき，
-%変電所側(木の上流)にある区間の集合を$C_i^{up}$とする．また，
-各区間$i$に対して，変電所と反対側の区間(木の下流)
-にある自身を含む区間の集合を$C_i^{down}$とする．
+
+配電網問題は，
+与えられた配電網$D=(S,SW)$から，以下の制約を満たす
+配電網の構成(スイッチの開閉状態)が存在するかどうかを判定する問題である．
+$S$は配電区間を表すセクションの集合，
+$SW$は配電区間を結ぶスイッチの集合である．
+本論文では，配電網の構成を閉じたスイッチの集合$X\subset SW$で表す．
+$I_{i}$は各セクション$s_{i}\in S$の電流，
+$J_{i}^{max}$は各セクション$s_{i}\in S$における許容電流を表し，
+ともに入力として与えられる．
+
+\begin{eqnarray}
+& X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}   \label{topology}\\
+% & J_i = \displaystyle\sum_{j\in S_i^{down}} I_j \qquad (\forall s_{i}\in S)\nonumber\\
+% & J_i \leq J_{i}^{max} \qquad (\forall s_{i}\in S)\label{electrical}
+& J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \qquad J_i \leq J_{i}^{max}
+  \qquad (\forall s_{i}\in S)\label{electrical}
+\end{eqnarray}
+
+制約~(\ref{topology})は\textbf{トポロジ制約}と呼ばれる．
+トポロジ制約を満たす配電網構成は，配電網$D$に対応するグラフから，
+\textbf{根付き全域森}と呼ばれる部分グラフを求める問題に帰着できる~\cite{Minato:dnet:netuki}．
+根付き全域森の定義は以下の通りである．
+\theoremstyle{definition}
+\newtheorem*{definition*}{定義}
+\begin{definition*}
+  グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
+  このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
+  $G'=(V,E'), E' \subseteq E$ である．
+  \begin{itemize}
+  \item $G'$はサイクルを持たない．(非閉路制約)
+  \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
+  \end{itemize}
+\end{definition*}
+
+制約~(\ref{electrical})は\textbf{電流制約}と呼ばれる．
+$S_{i}^{down}$は，各セクション$s_{i}$に対して，自身を含む
+下流のセクションの集合を表す．
+$J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し，
+許容電流$J_{i}^{max}$以下でなければならない．
+
+上で述べた配電網問題の定義は，論文~\cite{Minato:dnet:ZDD}に基づいている．
+論文~\cite{Minato:dnet:ZDD}では
+損失電力を最小にする最適化問題として定義されている．
+本論文では，後で述べる配電網遷移問題への拡張を主眼とするため，
+配電網問題を判定問題として定義している．
+
+\vskip 5em
+
+
 また，各区間 $i$ には，負荷(電力需要) $I_i$%とインピーダンス$Z_i = R_i + X_i$
 が与えられる．
 
-区間$i$における電流の値$J_i$は，次式で与えられる．
-\begin{equation}
-\label{current} 
- J_i = \sum_{j\in C_i^{down}} I_j.
-\end{equation}
-%
-% 変電所から区間$i$までの電圧の大きさ$V_i$は，次式で与えられる．
-% \begin{equation}
-% \label{voltage} 
-% V_i = V_0 - \sum_{j \in C_i^{up} \cup \{i\}} Z_j 
-% \left[ \sum_{k\in C_j^{down}} I_k + \frac{I_j}{2} \right].
-% \end{equation}
-% 区間$i$における消費電力$P_i$は，次式で与えられる．
-% \begin{equation}
-%  \label{power}
-% P_i = R_i|J_i|^2.
-% \end{equation}
-%
-配電網問題は，以下のように定式化される．
-\begin{eqnarray}
- % \label{minimize}
- %  minimize & P = {\displaystyle \sum_{i\in \{1,\ldots,n\}}}~ P_i. \\
-\label{topology}
-subject~to & X ~\text{is spanning rooted forest}.\\
-\label{electrical}
- & J_i \leq J^{max},
-%~\text{and}~ V_i \geq V^{min},
-~ i \in \{1,\ldots,n\}.
-\end{eqnarray}
-制約(\ref{topology})，(\ref{electrical})をそれぞれ，\textbf{トポロジ制約}と\textbf{電流制約}と呼ぶ．
-これらの制約を満たす閉じたスイッチの組合せが存在するかどうかの判定問題として本稿では定式化する．
-なお，文献\cite{Minato:dnet:ZDD}では，電圧に関する制約などを含んだ組合せ最適化問題として定式化されている．
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{figure}[tbp]
@@ -62,22 +77,22 @@ $s_c^{down}=\{s_c,s_{17},s_{18},s_{19},s_{20}\}$である．
 したがって，表\ref{table:current}より，各供給経路に対する電流値の合計は，$J_a=162$，$J_b=284$，$J_c=71$となり，
 電流制約も満たしている．
 
-ここで，トポロジ制約を満たす配電網構成は，\textbf{根付き全域森}という部分グラフに対応する
-ことが知られている~\cite{Minato:dnet:netuki}．
-根付き全域森は以下のように定義される．
-\theoremstyle{definition}
-\newtheorem*{definition*}{定義}
-\begin{definition*}
-  グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
-  このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
-  $G'=(V,E'), E' \subseteq E$ である．
-  \begin{enumerate}
-  \item $G'$はサイクルを持たない．(非閉路制約)
-  \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
-  \end{enumerate}
-本稿では，与えられたグラフ$G$から，根付き全域森
-$G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}と呼ぶ．
-\end{definition*}
+% ここで，トポロジ制約を満たす配電網構成は，\textbf{根付き全域森}という部分グラフに対応する
+% ことが知られている~\cite{Minato:dnet:netuki}．
+% 根付き全域森は以下のように定義される．
+% \theoremstyle{definition}
+% \newtheorem*{definition*}{定義}
+% \begin{definition*}
+%   グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
+%   このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
+%   $G'=(V,E'), E' \subseteq E$ である．
+%   \begin{enumerate}
+%   \item $G'$はサイクルを持たない．(非閉路制約)
+%   \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
+%   \end{enumerate}
+% 本稿では，与えられたグラフ$G$から，根付き全域森
+% $G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}と呼ぶ．
+% \end{definition*}
 
 根付き全域森問題の入力例となるグラフを図\ref{fig:test-netsuki-input}に示す．
 図\ref{fig:test-netsuki-input}は，図\ref{fig:test-input}で示した配電網に対応しており，
@@ -145,6 +160,22 @@ $G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}�
   \label{fig:test-core}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% 根付き全域森問題の入力例となるグラフを図\ref{fig:test-netsuki-input}に示す．
+% 図\ref{fig:test-netsuki-input}は，図\ref{fig:test-input}で示した配電網に対応しており，
+% 配電区間$\{s_i ~|~ 1 \leq i \leq 22\}$は，スイッチで区切られる1つのまとまりごとに
+% \textbf{ノード}に対応する．例えば，区間$\{s_2,s_3,s_4\}$は，ノード5に対応している．
+% スイッチ$\{sw_1,\ldots,sw_{16}\}$は，\textbf{辺}に対応する．
+% また，図中の色付きノード$\{r_1,r_2,r_3\}$は変電所を含むことを意味しており，
+% \textbf{根}に対応している．
+
+% 根付き全域森の例を図\ref{fig:test-netsuki-output}に示す．根付き全域森は，
+% 各連結成分が必ずちょうど1つの根をもつ木構造を形成することで，
+% 非閉路制約と根付き連結制約を満たす．図\ref{fig:test-netsuki-output}は，
+% 図\ref{fig:test-output}の配電網問題の解に対応している．
+
+
 
 
 %%% Local Variables:
