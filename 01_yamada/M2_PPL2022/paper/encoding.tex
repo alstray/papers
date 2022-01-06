@@ -1,7 +1,17 @@
 ﻿\section{配電網問題のASP符号化}\label{chap:encode}
 
-本節では，配電網問題の入力と制約を論理プログラムとして表現する方
-法について述べる．
+第~\ref{chap:intro}節の図~\ref{fig:arch}に示したように，
+提案解法では，まず与えられた問題インスタンスを ASP のファクト形式に変
+換した後，そのファクトと配電網問題を解くための ASP 符号化を結合した上
+で，高速 ASP システム{\clingo}を用いて解を求める．
+%
+本節では，まずxxで配電網問題インスタンスのファクト形式について述べる．
+xx で前処理として補助アトムを導入したのち，xxx でトポロジ制約のASP符号
+化として，基本符号化，改良符号化，有向符号化の3つを提案する．
+最後に，xxx で電流制約のASP符号化を示す．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{配電網問題インスタンスのファクト形式}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -16,21 +26,32 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/test.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\vskip 3em
-要相談
-
-\textbf{ASPファクト形式.} 
-配電網問題の入力(図~\ref{fig:test-input})のファクト表現を
-コード\ref{code:test.lp}に示す．
-この問題は，区間25個，スイッチ16個から構成されている．
-各区間とスイッチは，隣接関係をアトム\code{dnet_node/2}によって表される．
-例えば，ファクト\code{dnet_node(1,2).}は，ノード\code{1}とノード\code{2}が
-隣接していることを表す．
-
-\vskip 3em
+図~\ref{fig:test-input}で示した
+配電網問題の例の ASP ファクト表現をコード\ref{code:test.lp}に示す．
+このファクト表現は
+DNETに公開されているYAML形式の問題インスタンスを，ほぼ一対一に ASP の
+ファクトに変換したものである．
+%
+\code{dnet_node}アトムは，図~\ref{fig:test-input}の四角ノード($\Box$)
+に対応し，セクションとスイッチの結合関係を表している．
+例えば，1行目の
+\code{dnet_node(1, ("s_a1"; "s_1"; "s_15"))}は，
+赤色の四角ノードに対応し，
+3つのセクション
+\code{s_a}, \code{s_1}, \code{s_15}
+が結合していることを表す．
+アトム中のセミコロン(\code{;})は ASP の略記法であり，実行時には
+\code{dnet_node(1, "s_a1")}
+\code{dnet_node(1, "s_1")}
+\code{dnet_node(1, "s_15")}
+の3つのアトムに展開される．
+%
+4行目の\code{dnet_node(4, ("s_1"; "sw_1"))}は，
+セクション\code{s_1}とスイッチ\code{sw_1}
+が結合していることを表す．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textbf{前処理.}
+\subsection{前処理：補助アトムの導入}
 配電網問題を解くための前処理となるASP符号化をコード\ref{code:prepro.lp}に示す．
 1行目のルールは，スイッチを含むノード(スイッチノード)番号を表すアトム\code{swt_node(X)}
 を導入する．この\code{swt_node(X)}は，ノード番号\code{X}はスイッチを含むことを意味する．
@@ -99,7 +120,7 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/srf3.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{根付き全域森問題のASP符号化}
+\subsection{トポロジ制約のASP符号化}
 \textbf{基本符号化.}
 根付き全域森問題のASP符号化をコード\ref{code:srf1.lp}に示す．
 2行目のルールは，各辺(\code{X},\code{Y})に対して，
