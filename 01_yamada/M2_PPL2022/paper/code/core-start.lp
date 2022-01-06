@@ -1,12 +1,5 @@
-init_switch("switch_0001").
-init_switch("switch_0002").
-init_switch("switch_0003").
-init_switch("switch_0005").
-init_switch("switch_0006").
-init_switch("switch_0007").
-init_switch("switch_0009").
-init_switch("switch_0010").
-init_switch("switch_0011").
-init_switch("switch_0013").
-init_switch("switch_0014").
-init_switch("switch_0016").
+% start
+init_switch("sw_11"). init_switch("sw_8").  init_switch("sw_12").
+init_switch("sw_7").  init_switch("sw_4").  init_switch("sw_5").
+init_switch("sw_2").  init_switch("sw_1").  init_switch("sw_15").
+init_switch("sw_10"). init_switch("sw_13"). init_switch("sw_9").

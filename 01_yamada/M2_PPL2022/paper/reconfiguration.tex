@@ -1,20 +1,9 @@
 \section{配電網遷移問題への拡張}\label{chap:core}
 
-本節では，配電網遷移問題の入力と制約を論理プログラミングとして表現する
-方法について述べる．
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=tb,caption={%
-  配電網遷移問題(図~\ref{fig:test-core})のファクト表現},%
-captionpos=b,frame=single,label=code:test-core.lp,%
-xrightmargin=1zw,% 
-xleftmargin=1zw,% 
-numbersep=5pt,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/core-input.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+本節では，
+まず，配電網遷移問題インスタンスのASPファクト形式について述べる．
+次に，提案する配電網遷移問題のASP符号化について示す．
+最後に，提案するASP符号化を用いて行った実行実験の結果を示す．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -23,92 +12,85 @@ captionpos=b,frame=single,label=code:pw-core.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
 numbersep=5pt,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textbf{ASPファクト形式．}
-配電網遷移問題は，もととなる配電網問題の入力と，新たにスタート状態とゴール状態
-が与えられる．配電網遷移問題のスタート状態とゴール状態の入力(図\ref{fig:test-core})
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  配電網遷移問題(図~\ref{fig:test-core})のファクト表現},%
+captionpos=b,frame=single,label=code:test-core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/core-input.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+配電網遷移問題は，もととなる配電網問題インスタンスのASPファクト形式と，
+新たにスタート状態とゴール状態が与えられる．
+配電網遷移問題のスタート状態とゴール状態(図\ref{fig:test-core})の入力
 のファクト表現をコード\ref{code:test-core.lp}に示す．
 スタート状態における閉じたスイッチは，アトム\code{init_switch/1}によって表される．
 また，ゴール状態での閉じたスイッチは，アトム\code{goal_switch/1}によって表される．
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textbf{ASP符号化．}
+%
 配電網遷移問題のASP符号化をコード\ref{code:pw-core.lp}に示す．
+実行時には前処理のASP符号化(コード\ref{code:prepro.lp})とともに実行する．
 この符号化は，ASPシステム \clingo のマルチショットASP解法ライブラリを用いており，
 \code{base}，\code{step(t)}，\code{check(t)}の3パートから構成される．
 
-\code{base}パートには，ステップ\code{t=0}で満たすべき制約を記述する．
-ここでは13行目のルールで，スタート状態とステップ\code{0}での閉じたスイッチが
-一致することを強制している．また，17$\sim$37行目のルールは，4節で示した前処理の
-ASP符号化を記述している．
+
+初めに\code{base}パートには，ステップ\code{t=0}で満たすべき制約を記述する．
+ここでは5行目のルールで，スタート状態とステップ\code{0}での閉じたスイッチが
+一致することを強制している．
 
 次に\code{step(t)}パートには，各ステップ\code{t}において満たすべき制約を記述する．
-ここでは，根付き全域森問題を解くASP符号化のうち，比較実験(6節)にて良い性能を示した
-発展符号化をもとに拡張を行った．発展符号化と電流制約の符号化の各アトムにステップを
-表す項\code{t}を引数として追加したルールを記述している(47$\sim$79行目)．さらに，
-83$\sim$85行目には，遷移制約を表すルールを記述している．アトム\code{changed(SW,t)}
+ここでは，\ref{chap:encode}節で示した有向符号化と電流制約の符号化の各アトムにステップを
+表す項\code{t}を引数として追加したルールを記述している(12$\sim$39行目)．さらに，
+42$\sim$44行目には，遷移制約を表すルールを記述している．アトム\code{changed(SW,t)}
 は，ステップ\code{t-1}とステップ\code{t}の間でスイッチ\code{SW}の状態が変化した
 ことを意味する．85行目のルールで，各ステップ\code{t}において，変化したスイッチの数
 が\code{d}であることを保証している．
 
 最後に，\code{step(t)}パートでは，プログラムの終了条件を記述する．
-ここでは，93行目でゴール状態とステップ\code{t}の対応を記述する．
+ここでは，50行目でゴール状態とステップ\code{t}の対応を記述する．
 なお，\code{t}がインクリメントされると，一つ前の不要になった終了条件は，\code{query(t)}
 の真偽を動的に操作することにより無効化される．
 
-
-
-
-\textbf{配電網遷移問題.}
-ベンチマークとしては，DNETで公開されている実用規模の配電網問題
-({\sf fukui-tepco}，ノード数 432，根ノード数 72，$V_{max}=300$)をベースにした．
+\textbf{実行実験.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[t]
+  \centering
+  \caption{配電網遷移問題のASP符号化(コード~\ref{code:pw-core.lp})の実行結果}
+  \label{table:core}
+  \input{table/core-experiment}
+  %\input{table/core-experiment2}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+DNETで公開されている実用規模の配電網問題
+({\sf fukui-tepco}，ノード数 432，根ノード数 72，$J_i^{max}=300$)をベースにした．
 この問題の実行可能解から，スタート状態を10個，ゴール状態を100個，
 をランダムに選び，それらを組み合わせた計1000問の配電網遷移問題を生
-成した．ASPシステムと実験環境は上と同じである．
+成し，ベンチマーク問題とした．
+実験に用いたASPシステムと実験環境は~\ref{chap:exp}節で示したものと同じである．
 
 配電網遷移問題のASP符号化(コード~\ref{code:pw-core.lp})の実行結果を
 表~\ref{table:core}に示す．
 左から順に，
 問題名，
-解を求めるまでのステップ長，解けた問題数，平均CPU時間を示している．
-今回行った実行実験では，最長でステップ長が7の問題を解くことができた．
-
-
-切替可能なスイッチの個数を$d$個に制限する．
-
-
-\begin{tabular}{c|c|c}
-\noalign{\hrule height 1pt}
-test &  &  \\
-\noalign{\hrule height 1pt}
-0 & 2 & 0.016 \\
-1 & 12 & 0.019 \\
-2 & 33 & 0.023 \\
-3 & 64 & 0.026 \\
-4 & 33 & 0.030 \\
-\noalign{\hrule height 1pt}
-baran32 &  &  \\
-\noalign{\hrule height 1pt}
-0 & 2 & 0.018 \\
-1 & 12 & 0.022 \\
-2 & 66 & 0.027 \\
-3 & 68 & 0.032 \\
-4 & 28 & 0.038 \\
-\noalign{\hrule height 1pt}
-fukui-tepco &  &  \\
-\noalign{\hrule height 1pt}
-0 & 2 & 0.508 \\
-1 & 11 & 1.012 \\
-2 & 28 & 1.603 \\
-3 & 64 & 2.140 \\
-4 & 38 & 2.724 \\
-5 & 11 & 3.361 \\
-\noalign{\hrule height 1pt}
-\end{tabular}
+最短ステップ長，解けた問題数，平均CPU時間を示している．
+今回行った実行実験では，全てのベンチマーク問題を解くことができ，
+最長でステップ長が7の問題を解くことができた．
 
 
 
