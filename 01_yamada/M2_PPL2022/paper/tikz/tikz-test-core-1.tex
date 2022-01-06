@@ -55,65 +55,65 @@
  \substation{0}{0}{sub};
  
  % root1
- \node[customer,fill=black!40,below =4.5cm of sub] (root1) { };
- \swnodeL{left =of root1,fill=black!40}{node1}{sw1}{ };
+ \node[customer,fill=purple!60,below =4.5cm of sub] (root1) { };
+ \swnodeL{left =of root1,fill=purple!60}{node1}{sw1}{ };
  
- \swnodeR{left=of node1,fill=black!40}{node2}{sw2}{ };
- \node[customer,left=of node2,fill=black!40] (junc1){ };
- \swnodeL{left =of junc1,fill=black!40}{node3}{sw3}{ };
- \swnodeA{above= of junc1,fill=black!40}{node4}{sw4}{ }
+ \swnodeR{left=of node1,fill=purple!60}{node2}{sw2}{ };
+ \node[customer,left=of node2,fill=purple!60] (junc1){ };
+ \swnodeL{left =of junc1,fill=purple!60}{node3}{sw3}{ };
+ \swnodeA{above= of junc1,fill=purple!60}{node4}{sw4}{ }
 
- \swnodeR{left=of node3,fill=black!40}{node5}{sw5}{ };
- \swnodeA{above =of node5,fill=black!40}{node6}{sw6}{ };
+ \swnodeR{left=of node3,fill=purple!60}{node5}{sw5}{ };
+ \swnodeA{above =of node5,fill=purple!60}{node6}{sw6}{ };
 
- \swnodeB{above =of node6,fill=black!40}{node7}{sw7}{ };
- \swnodeA{above =of node7,fill=black!40}{node29}{sw29}{ };
+ \swnodeB{above =of node6,fill=purple!60}{node7}{sw7}{ };
+ \swnodeA{above =of node7,fill=purple!60}{node29}{sw29}{ };
 
- \swnodeB{above =of node29,fill=black!10}{node30}{sw30}{ };
+ \swnodeB{above =of node29,fill=cyan!80}{node30}{sw30}{ };
  
- \swnodeB{above =of node4,fill=black!40}{node8}{sw8}{ };
- \swnodeA{above =of node8,fill=black!40}{node31}{sw31}{ };
+ \swnodeB{above =of node4,fill=purple!60}{node8}{sw8}{ };
+ \swnodeA{above =of node8,fill=purple!60}{node31}{sw31}{ };
  
- \swnodeB{above =of node31,fill=black!10}{node32}{sw32}{ };
+ \swnodeB{above =of node31,fill=cyan!80}{node32}{sw32}{ };
 
- \swnodeR{right =of root1,fill=black!40}{node17}{sw17}{ };
+ \swnodeR{right =of root1,fill=purple!60}{node17}{sw17}{ };
 
- \swnodeL{right =of node17,fill=black!40}{node18}{sw18}{ };
+ \swnodeL{right =of node17,fill=purple!60}{node18}{sw18}{ };
 
  % root2
- \node[customer,fill=black!20,above=4.5cm of sub, fill=black!10] (root2) { };
- \swnodeL{left =of root2,fill=black!10}{node9}{sw9}{ };
+ \node[customer,fill=black!20,above=4.5cm of sub, fill=cyan!80] (root2) { };
+ \swnodeL{left =of root2,fill=cyan!80}{node9}{sw9}{ };
 
- \swnodeR{left=of node9,fill=black!10}{node10}{sw10}{ };
- \node[customer,left=of node10,fill=black!10] (junc2){ };
- \swnodeL{left =of junc2,fill=black!10}{node11}{sw11}{ };
- \swnodeB{below =of junc2,fill=black!10}{node12}{sw12}{ };
+ \swnodeR{left=of node9,fill=cyan!80}{node10}{sw10}{ };
+ \node[customer,left=of node10,fill=cyan!80] (junc2){ };
+ \swnodeL{left =of junc2,fill=cyan!80}{node11}{sw11}{ };
+ \swnodeB{below =of junc2,fill=cyan!80}{node12}{sw12}{ };
  
- \swnodeR{left =of node11,fill=black!10}{node13}{sw13}{ };
- \swnodeB{below =of node13,fill=black!10}{node14}{sw14}{ };
+ \swnodeR{left =of node11,fill=cyan!80}{node13}{sw13}{ };
+ \swnodeB{below =of node13,fill=cyan!80}{node14}{sw14}{ };
  
- \swnodeA{below =of node14,fill=black!10}{node15}{sw15}{ };
+ \swnodeA{below =of node14,fill=cyan!80}{node15}{sw15}{ };
 
- \swnodeA{below =of node12,fill=black!10}{node16}{sw16}{ };
+ \swnodeA{below =of node12,fill=cyan!80}{node16}{sw16}{ };
 
- \swnodeR{right =of root2,fill=black!10}{node22}{sw22}{ };
+ \swnodeR{right =of root2,fill=cyan!80}{node22}{sw22}{ };
 
- \swnodeL{right =of node22,fill=black!10}{node23}{sw23}{ };
+ \swnodeL{right =of node22,fill=cyan!80}{node23}{sw23}{ };
  
  % root3
- \node[customer,fill=black!20,right=5.2cm of sub,pattern=north east lines] (root3) { };
- \swnodeB{below =1.4of root3,pattern=north east lines}{node24}{sw24}{ };
- \swnodeA{above =1.4of root3,pattern=north east lines}{node25}{sw25}{ };
+ \node[customer,fill=black!20,right=5.2cm of sub,fill=yellow!80] (root3) { };
+ \swnodeB{below =1.4of root3,fill=yellow!80}{node24}{sw24}{ };
+ \swnodeA{above =1.4of root3,fill=yellow!80}{node25}{sw25}{ };
 
- \swnodeA{below =of node24,pattern=north east lines}{node19}{sw19}{ };
- \swnodeL{below =1.3of node19,pattern=north east lines}{node20}{sw20}{ };
+ \swnodeA{below =of node24,fill=yellow!80}{node19}{sw19}{ };
+ \swnodeL{below =1.3of node19,fill=yellow!80}{node20}{sw20}{ };
  
- \swnodeR{left =of node20,fill=black!40}{node21}{sw21}{ };
+ \swnodeR{left =of node20,fill=purple!60}{node21}{sw21}{ };
 
- \swnodeB{above =of node25,pattern=north east lines}{node26}{sw26}{ };
- \swnodeL{above =1.3of node26,pattern=north east lines}{node27}{sw27}{ };
+ \swnodeB{above =of node25,fill=yellow!80}{node26}{sw26}{ };
+ \swnodeL{above =1.3of node26,fill=yellow!80}{node27}{sw27}{ };
 
- \swnodeR{left =of node27,fill=black!10}{node28}{sw28}{ };
+ \swnodeR{left =of node27,fill=cyan!80}{node28}{sw28}{ };
  
  % sections
  \foreach \v / \u / \t in {root1/sub/$s_a$,root1/node1/$s_1$,node2/junc1/$s_2$, %
