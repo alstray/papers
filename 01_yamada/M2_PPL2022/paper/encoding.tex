@@ -43,8 +43,8 @@ DNETに公開されているYAML形式の問題インスタンスを，ほぼ一
 \code{s_a}, \code{s_1}, \code{s_15}
 が結合していることを表す．
 アトム中のセミコロン(\code{;})は ASP の略記法であり，実行時には
-\code{dnet_node(1, "s_a")}
-\code{dnet_node(1, "s_1")}
+\code{dnet_node(1, "s_a")}，
+\code{dnet_node(1, "s_1")}，
 \code{dnet_node(1, "s_15")}
 の3つのアトムに展開される．
 %
@@ -75,12 +75,12 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/prepro.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-配電網問題のASP符号化を簡潔に記述するために前処理として，
+配電網問題のASP符号化を簡潔に記述するために，前処理として
 補助アトムを導入する．用いるASP符号化をコード\ref{code:prepro.lp}に示す．
 
 1行目のルールは，あるノード\code{X}に対して，スイッチノードであることを表す
 アトム\code{swt_node(X)}を導入する．この\code{swt_node(X)}は，
-ノード\code{X}でセクションとスイッチが結合していることを意味する．
+ノード\code{X}で，セクションとスイッチが結合していることを意味する．
 %
 反対に，2行目のルールは，あるノード\code{X}がジャンクションノードであること
 表すアトム\code{jct_node(X)}を導入する．この\code{jct_node(X)}は，
@@ -235,8 +235,8 @@ basicstyle=\ttfamily\scriptsize]{code/electrical.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 電流制約のASP符号化をコード\ref{code:electrical.lp}に示す．
-この符号化は，第~\ref{chap:exp}節で示すトポロジ制約の実行実験で最も
-良い性能を示した有向符号化に基づき考案したASP符号化である．
+この符号化は，第~\ref{chap:exp}節で示すトポロジ制約のASP符号化の
+実行実験で最も良い性能を示した有向符号化に基づき考案したASP符号化である．
 %
 1，4行目のルールは，配電網問題の実行可能解である閉じたスイッチを表すための
 ルールである．閉じたスイッチの集合$X$は，アトム\code{closed_switch/1}で表される．
