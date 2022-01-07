@@ -7,7 +7,7 @@
 %
 本節では，まず\ref{chap:fact}節で配電網問題インスタンスのファクト形式
 について述べる．
-\ref{chap:prepro}節で前処理として補助アトムを導入する．
+\ref{chap:prepro}節で補助アトムを導入する．
 \ref{chap:topology}節でトポロジ制約のASP符号化として，
 基本符号化，改良符号化，有向符号化の3つを提案する．
 最後に，\ref{chap:electrical}節で電流制約のASP符号化を示す．
@@ -91,7 +91,8 @@ basicstyle=\ttfamily\scriptsize]{code/prepro.lp}
 \item 8行目の\code{jct_section(S)}は，セクション\code{S}がジャンクショ
   ンに属することを意味する．
   逆に，7行目の\code{swt_section(S)}は，
-  ジャンクションではないスイッチを含む基本ノードに属することを意味する．
+  セクション\code{S}が
+  ジャンクションではないスイッチを含むノードに属することを意味する．
 \item 10行目の\code{switch(SW,S,T)}は，
   セクション\code{S}と\code{T}の間にスイッチ\code{SW}があることを意味
   する．
@@ -171,23 +172,23 @@ basicstyle=\ttfamily\scriptsize]{code/srf3.lp}
 
 \textbf{基本符号化}をコード\ref{code:srf1.lp}に示す．
 2行目のルールは，各辺(\code{X},\code{Y})に対して，
-解の候補となるアトム\code{inForest(X,Y)}を導入する．
+解の候補となる\code{inForest(X,Y)}を導入する．
 この\code{inForest(X,Y)}は，
 辺(\code{X},\code{Y})が根付き全域森に含まれることを意味する．
 %
-各ノードの到達可能性は5～7行目のルールで表される．
-アトム\code{reached(X,R)}は，ノード\code{X}は根
+各ノードの到達可能性は5--7行目のルールで表される．
+\code{reached(X,R)}は，ノード\code{X}は根
 \code{R}から到達可能であることを意味する．
 5行目のルールは，各根ノードは自分自身から到達可能であることを表す．
-6～7行目のルールは，ノード\code{Y}が根ノード\code{R}から到達可能であり，
+6--7行目のルールは，ノード\code{Y}が根ノード\code{R}から到達可能であり，
 かつ，辺(\code{X},\code{Y})が根付き全域森に含まれるならば，
 ノード\code{X}も\code{R}から到達可能であることを表す．
 
-非閉路制約は10～13行目のルールで表される．
+非閉路制約は10--13行目のルールで表される．
 このルールは，各連結成分のノード数と辺数の差が1になること(木の性質)を，
 ASP の重み付き個数制約を使って表している．
 %
-根付き連結制約は16～17行目のルールで表される．
+根付き連結制約は16--17行目のルールで表される．
 16行目のルールは，各ノードは少なくとも1つの根から到達可能であることを
 表している(\textit{at-least-one}制約)．
 17行目のルールは，各ノードは高々1つの根から到達可能である
@@ -251,10 +252,10 @@ basicstyle=\ttfamily\scriptsize]{code/electrical.lp}
 すなわち，\code{connected(SW,S,T)}は，
 セクション\code{S}と\code{T}の間のスイッチ\code{SW}が閉じていることを
 意味する．
-なお，供給経路上，\code{S}は\code{T}の上流であることに注意が必要である．
-2行目の\code{closed_switch/1}は，閉じたスイッチを表す．
+なお，供給経路上で\code{S}は\code{T}の親となることに注意が必要である．
+2行目の\code{closed_switch/1}は閉じたスイッチを表す．
 %
-4--5行目は，同一ジャンクション内のセクションの上下関係を表すためのルー
+4--5行目は，同一ジャンクション内のセクションの親子関係を表すためのルー
 ルである．
 \code{entrance_section(S,X)}は，セクション\code{S}が
 ジャンクション\code{X}内で，供給経路上で最も変電所に近いことを意味する．
@@ -263,16 +264,14 @@ basicstyle=\ttfamily\scriptsize]{code/electrical.lp}
 ついて，\code{connected(_,_,S)}が成り立つならば，
 \code{S}が最も上流であることを表す．
 %
-7--8行目の\code{downstream/2}は，任意の2つのセクションの上下関係を表す．
-% この\code{downstream(S,T)}は，セクション\code{S}の次にセクション\code{T}
-% を経由することを意味する．
-7行目のルールは，任意の2つのセクション\code{S}と\code{T}が，この順序で
-接続されているならば，\code{downstream(S,T)}を生成する．
-8行目のルールは，ノード\code{X}内で最も上流にあるセクション\code{S}と，
-同じノード\code{X}に属する他のセクション\code{T}について，
-\code{downstream(S,T)}を生成する．
-
-各セクションへの電力が供給されるかどうかは10--11行目のルールで表される．
+7--8行目の\code{downstream/2}は，任意の2つのセクションの親子関係を表す．
+% 7行目のルールは，任意の2つのセクション\code{S}と\code{T}について，
+% \code{connected(_,S,T)}が成り立つならば，\code{downstream(S,T)}を生成する．
+% 8行目のルールは，ノード\code{X}内で最も上流にあるセクション\code{S}と，
+% 同じノード\code{X}に属する他のセクション\code{T}について，
+% \code{downstream(S,T)}を生成する．
+%
+各セクションへ電力が供給されるかどうかは10--11行目のルールで表される．
 \code{suppliable(S,R)}は，セクション\code{S}は変電所\code{R}
 から電力供給を受けることを意味する．
 10行目のルールは，各変電所は自分自身から電力供給を受けることを表す．
@@ -282,7 +281,7 @@ basicstyle=\ttfamily\scriptsize]{code/electrical.lp}
 セクション\code{S}も\code{R}から電力供給を受けることを表す．
 %
 13行目のルールは，電流制約に対応するルールである．ルール中の\code{max_current}は
-入力である$J_i^{max}$に対応する．
+入力である$J^{max}$に対応する．
 各変電所\code{R}に対して，\code{R}が供給する各セクション\code{S}の
 電流\code{I}の総和が\code{max_current}以下であることを保証する．
 
