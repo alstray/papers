@@ -1,0 +1,23 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 提案手法の比較表
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tabular}[tb]{ccc}
+ \rowcolor[RGB]{60,60,134} & & \\
+ \rowcolor[RGB]{60,60,134}
+ \multirow{-2}{*}{ \textcolor{white}{符号化}} &
+	 \multirow{-2}{*}{\textcolor{white}{根付き連結制約}} & 
+		 \multirow{-2}{*}{\textcolor{white}{非閉路制約}} \\
+ \rowcolor[RGB]{230,230,249} % 2行目
+   \begin{tabular}{c}基本\\符号化\end{tabular} & 
+	 \begin{tabular}{l} at-least-one制約と\\at-most-one制約 \end{tabular} & 
+	 \begin{tabular}{c} 各連結成分の\\辺数の制約 \end{tabular} \\ 
+ \rowcolor[RGB]{210,210,245} % 3行目
+  \begin{tabular}{c} 改良\\符号化1 \end{tabular} & 
+	 \begin{tabular}{c} \textbf{ASPの個数制約} \end{tabular} & 
+		 \begin{tabular}{c} 各連結成分の\\辺数の制約 \end{tabular} \\
+ \rowcolor[RGB]{230,230,249} % 4行目
+  \begin{tabular}{c} \alert{\bf 改良}\\\alert{\bf 符号化2} \end{tabular} & 
+	 \begin{tabular}{c} \textbf{ASPの個数制約} \end{tabular} & 
+		 \begin{tabular}{c} \textbf{ノードの入次数の制約} \end{tabular} \\
+\end{tabular}
+ 

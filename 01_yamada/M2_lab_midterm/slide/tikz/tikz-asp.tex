@@ -1,0 +1,40 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPで配電網問題を解く流れの図
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}
+
+ \definecolor{edge}{RGB}{38,38,134}
+ \definecolor{node}{RGB}{220,220,249}
+
+ \definecolor{alert_edge}{RGB}{191,0,0}
+ \definecolor{alert_node}{RGB}{249,200,200}
+
+ \definecolor{example_edge}{RGB}{0,96,0}
+ \definecolor{example_node}{RGB}{230,239,230}
+
+ \tikzset{block/.style={rectangle, very thick, draw=edge, fill=node, text centered, 
+ rounded corners, text width=3cm, minimum height=1.5cm,minimum width=3cm}};
+
+ \tikzset{alertblock/.style={rectangle, very thick, draw=alert_edge, fill=alert_node, 
+ text centered, rounded corners, text width=3cm, minimum height=1.5cm, minimum width=3cm}};
+
+\tikzset{exampleblock/.style={rectangle, very thick, draw=example_edge, fill=example_node, text centered, 
+ rounded corners, text width=3cm, minimum height=1cm,minimum width=1cm}};
+
+
+ \node[block](fact){問題インスタンス\\(ASPファクト)};
+ \node[exampleblock, below right=0.2cm and 1.5cm of fact] (pre){変換\\(配電網$\rightarrow$ SRF)};
+ \node[alertblock, below=3cm of fact] (srf){根付き全域森\\問題(SRF)};
+ \node[exampleblock, above right=0.3cm and 1.5cm of srf](decode){復元\\(SRF $\rightarrow$配電網)};
+ \node[alertblock, below right=0.3cm and 1.5cm of decode](cur){電気制約};
+ \node[block, above right=0.3cm and 1.5cm of pre] (ans){問題の解};
+ \node[below=0.65cm of fact] (point1){};
+ \node[right=3cm of srf] (point2){};
+
+ \draw[very thick, ->] (fact)--(srf);
+ \draw[very thick, ->] (srf)--(cur);
+ \draw[very thick, ->] (cur)--(ans);
+ \draw[very thick, ->] (pre)--(point1);
+ \draw[very thick, ->] (decode)--(point2);
+
+\end{tikzpicture}

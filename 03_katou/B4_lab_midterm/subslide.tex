@@ -1,0 +1,73 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+%
+%基本制約モデル
+%
+
+\begin{frame}{基本制約モデル}
+ \begin{block}{}
+  入力$Q_n$，$k$のクイーン支配問題を解くための基本制約モデルを示す．
+  \begin{description}
+   \item[{\color{black} (変数$q_{ij}$})] $q_{ij} \in \{0,1\}\;\;\;\;\;\;\;\;(1 \leq i,j \leq n)$ \par
+	      $q_{ij}$が1のとき，マス$(i,j)$にクイーンが配置されることを意味する．
+   \item[{\color{black}(制約 1)}] $\sum\limits_{i,j=1}^{n} q_{ij} = k$ \par
+	      $n \times n$上のクイーンの総数が$k$個であることを意味する．
+   \item[{\color{black}(制約 2)}] $\bigvee\limits_{i',j' \in A_{ij}}q_{i'j'} > 0$ \par
+	      マス$(i,j)$に移動できるクイーンが一つ以上存在することを意味する．
+  \end{description}
+ \end{block}
+ \begin{alertblock}{}
+  しかし，(制約 2)中に同じ部分式が何度も出現してしまう(以下は$Q_3$の例)．
+  \begin{align*}
+   {\color{red} q_{11}>0 \vee q_{12}>0 \vee q_{13}>0} \vee q_{21}>0 \vee q_{22}>0 \vee q_{31}>0 \vee q_{33}>0 \\
+   {\color{red} q_{11}>0 \vee q_{12}>0 \vee q_{13}>0} \vee q_{21}>0 \vee q_{22}>0 \vee q_{23}>0 \vee q_{32}>0 \\
+   {\color{red} q_{11}>0 \vee q_{12}>0 \vee q_{13}>0} \vee q_{22}>0 \vee q_{23}>0 \vee q_{31}>0 \vee q_{33}>0 
+  \end{align*}
+ \end{alertblock}
+\end{frame}
+
+%
+%改良制約モデル1
+%
+
+\begin{frame}{改良制約モデル1}
+ \begin{alertblock}{}
+  改良制約モデル1では，基本制約モデルにおいて複数回出現する，\\リテラルの選言部分をまとめるための補助ブール変数を導入する．
+ \end{alertblock}
+ \begin{block}{}
+  各行$i$に対して変数$r_{i}$と制約3を追加する．
+  \begin{description}
+   \item[{\color{black} (変数$r_{i}$})] $r_{i} \in \{0,1\}$  $(1 \leq i \leq n)$
+   \item[{\color{black} (制約 3)}] $r_{i}>0 \rightarrow \bigvee\limits_{i',j' 
+	      \in R_{ij}}q_{i'j'} = 1\;\;\;(1\leq i \leq n)$ \par
+	      $r_{i}$が1のとき，行$i$にクイーンがひとつ以上存在することを意味する．
+  \end{description}
+ 各列，各右上がり対角線，各右下がり対角線に対しても同様に\\補助ブール変数$c_j$，$u_{i+j}$，$d_{i-j}$と(制約 4)，(制約 5)，(制約 6)を追加する．
+ \end{block}
+ \begin{block}{}
+  基本制約モデルの(制約 2)を削除し，(制約 7)を追加する．
+  \begin{description}
+   \item[{\color{black} (制約 7)}] $r_{i} \vee c_{j} \vee u_{i+j} \vee d_{i-j} > 0 \;\;\;\;1\leq i,j \leq n$
+  \end{description}
+ \end{block}
+\end{frame}
+
+%
+%改良制約モデル2
+%
+
+\begin{frame}{改良制約モデル2}
+ \begin{alertblock}{}
+  改良制約モデル2では，各行，各列，各対角線ごとのクイーンの個数を表す補助整数変数を導入し，行方向，列方向，対角線方向それぞれに対しクイーンの総数に関する(制約 8)を追加する．
+ \end{alertblock}
+ \begin{block}{}
+  \begin{description}
+   \item[{\color{black} (変数$r_{i}$)}] $r_{i} \in \{0,...\,,k\} \;\;\;\; (1 \leq i \leq n)$
+   \item[{\color{black} (制約 8)}] $\sum\limits_{i=1}^{n}r_{i} = \sum\limits_{j=1}^{n}c_{j} = \sum\limits_{i+j=2}^{2n}u_{i+j} = \sum\limits_{i-j=1-n}^{n-1}d_{i-j} = k$
+  \end{description}
+ \end{block}
+\end{frame}
+
+\backupend

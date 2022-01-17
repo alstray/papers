@@ -1,0 +1,142 @@
+\documentclass[uplatex,dvipdfmx,a4paper,twocolumn,base=11pt,jbase=11pt,ja=standard]{bxjsarticle}
+
+\input{macro}
+
+\title{チャネリング制約を用いた alldifferent 制約の SAT 符号化}%
+      {SAT Encoding of Alldifferent Constraints with Channeling Constraints}
+\author{名古屋大学}{小菅 脩司}{Shuji Kosuge, Nagoya University}
+\author{神戸大学}{宋 剛秀}{Takehide Soh, Kobe University}
+\author{神戸大学}{田村 直之}{Naoyuki Tamura, Kobe University}
+\author{名古屋大学}{番原 睦則}{Mutsunori Banbara, Nagoya University}
+
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% alldiff 制約とその重要性
+
+\textbf{alldifferent制約}は，制約プログラミングにおける代表的なグロー
+バル制約の一つである．
+$\Alldiff$は，整数変数 $x_1$, $x_2$, \ldots, $x_n$ の値が互いに異なる
+ことを表す制約である．すなわち
+\begin{align*}\small
+  \Alldiff & \Llra \bigwedge_{1 \le i < j \le n} x_i \ne x_j
+\end{align*}
+である．
+各 $x_i$ が 1 以上 $d$ 以下の値を取る場合，
+alldifferent 制約の解は $d$ 個から $n$ 個を取り出す順列に対応する．
+alldifferent 制約は，人工知能分野の諸問題に頻繁に現れる．
+そのため，alldifferent 制約の効率的な実装は重要な研究課題であり，
+古くから研究がなされている．%~\cite{DBLP:reference/fai/HoeveK06}．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% alldiff 制約の SAT 符号化
+
+一方，2000年以降，
+命題論理の充足可能性判定問題(Boolean SATisfiability; SAT)を解く
+SAT ソルバーの性能が飛躍的に向上し，
+alldifferent 制約を含む制約充足問題(制約プログラミングの言語)を
+SAT に符号化して解く手法の研究が進められた．
+\textbf{順序符号化法} (Order Encoding; OE) は，
+各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，
+$x\le a$を意味する命題変数$\oE{x}{a}$を用いる
+\cite{DBLP:journals/constraints/TamuraTKB09}．
+%
+この順序符号化法に基づいたSAT型制約ソルバー{\sf Sugar}
+\footnote{\texttt{https://cspsat.gitlab.io/sugar/}}
+は，
+2008年国際制約ソルバー競技会
+のグローバル制約部門で第1位になるなど，
+alldifferent 制約に対して優れた性能を示している．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 提案
+
+本発表では，alldifferent 制約の SAT 符号化として，
+順序符号化法と直接符号化法をチャネリング制約を用いて
+融合させた手法を提案する．
+また，クイーングラフ彩色問題を用いた評価結果について述べる．
+この問題は alldifferent 制約だけで記述でき，
+D.~E.~Knuth の著書~\cite{Knuth:TAOCP:SAT}でも
+%D.~E.~Knuth の著書でも
+種々な SAT 符号化を比較するためのベンチマークとして用いられている．
+
+提案手法の基本的アイデアは，
+各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，
+順序符号化法と直接符号化法の両方の命題変数を導入し，
+以下のようなチャネリング制約を追加する点である\footnote{%
+$a-1\notin\Dom(x)$の場合は，$\lnot\oE{x}{a-1}$は省略}．
+\begin{align*}
+  \dE{x}{a} & \Llra \lnot\oE{x}{a-1} \land \oE{x}{a}
+\end{align*}
+$\dE{x}{a}$は
+直接符号化法 (Direct Encoding; DE) の命題変数であり$x=a$を意味する．
+これにより，提案手法は，
+$\Alldiff$を $\bigwedge x_i \ne x_j$ の形に分解し，
+各々の $x_i \ne x_j$ を順序符号化法(OE)と直接符号化法(DE)のいずれかを
+用いて SAT に符号化できる．
+また，
+順序符号化法で有効性が確認されている鳩の巣原理
+(Pigeon Hole Principle; PHP)に基づくヒント制約，
+$n=d$の場合に直接符号化法で有効性が確認されている at-least-one 制約 (ALT1)
+を組み合わせて利用できる．
+さらに，
+alldifferent 制約を
+$\bigwedge x_i \ne x_j$ の形に分解する代わりに，
+擬似ブール (Pseudo-Boolean; PB) 制約に符号化~\cite{Ono19:ai}し，その後，
+SAT に符号化することもできる．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[tb]
+  %\tabcolsep = 2mm
+  \small
+  \renewcommand{\arraystretch}{0.8}
+  \centering
+  \caption{比較に用いた alldifferent 制約の符号化一覧}
+  \label{table:model}
+  \input{table/model2}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[t]
+  %\tabcolsep = 2mm
+  \small
+  \renewcommand{\arraystretch}{0.8}
+  \centering
+  \caption{クイーングラフ彩色問題の実験結果:
+    一問あたりの制限時間は2時間．
+    ただし，$N=12$については，$N=11$で性能の良かった上位3モデルについ
+    て制限時間を72時間に延ばして得られた結果である．}
+    \label{table:result}
+    \input{table/result}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+提案手法の有効性を評価するために，
+クイーングラフ彩色問題($8\leq N\leq 12$)を用いた実行実験を行なった．
+比較に用いた符号化を表~\ref{table:model}に，
+結果を表~\ref{table:result}に示す．
+表~\ref{table:model}の符号化1は，高速制約ソルバー
+{\sf Sugar}のデフォルト設定と同じである．
+符号化2--11はチャネリング制約を用いた提案手法である．
+例えば，符号化9は，alldifferent 制約を
+PB 符号化~\cite{Ono19:ai}したのち，
+鳩の巣原理に基づくヒント制約と併せて，
+順序符号化法を用いて SAT に符号化する．
+
+表~\ref{table:result}より，提案手法は既存の順序符号化法を単体で用いる
+よりも優れた結果を示している．
+特に，符号化9は，
+クイーングラフ彩色問題の SAT 解法について様々な手法を比較した論
+文~\cite{Tamura:queen}でも成功していない$N=12$の発見に成功しており，
+提案手法の有効性を示している．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\small
+\bibliographystyle{jplain} % 参考文献スタイル
+\bibliography{bachelor,aisat,local}    % 参考文献リスト
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

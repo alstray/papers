@@ -1,0 +1,89 @@
+%%% Packages
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{lineno}
+%\usepackage{bm}
+%\usepackage{array}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{amsmath}
+\usepackage{ascmac}
+%\usepackage{tikz}
+%\usetikzlibrary{arrows,shapes}
+%\usetikzlibrary{positioning}
+\usepackage{listings}
+\usepackage{plistings}
+\def\lstlistingname{コード}
+\usepackage{color}
+
+%%% For ASP
+\newcommand{\asap}{\textit{teaspoon}}
+\newcommand{\gringo}{\textit{gringo}}
+\newcommand{\clingo}{\textit{clingo}}
+\newcommand{\dlv}{\textit{DLV}}
+\newcommand{\wasp}{\textit{WASP}}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
+\newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
+\newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
+%\newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+\newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
+\newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
+\newcommand{\pbody}[1]{\poslits{\body{#1}}}
+\newcommand{\nbody}[1]{\neglits{\body{#1}}}
+%\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+\newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}%
+% \newcommand{\web}[2]{\href{#1}{#2\ \raisebox{-0.15ex}{\beamergotobutton{Web}}}}
+% \newcommand{\doi}[2]{\href{#1}{#2\ \raisebox{-0.15ex}{\beamergotobutton{DOI}}}}
+% \newcommand{\weblink}[1]{\web{#1}{#1}}
+% \newcommand{\imp}{\mathrel{\Rightarrow}}
+% \newcommand{\Iff}{\mathrel{\Leftrightarrow}}
+% \newcommand{\mybox}[1]{\fbox{\rule[.2cm]{0cm}{0cm}\mbox{${#1}$}}}
+% \newcommand{\mycbox}[2]{\tikz[baseline]\node[fill=#1!10,anchor=base,rounded corners=2pt] () {#2};}
+% \newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
+% \newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
+% \newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
+% \newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+% \newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
+% \newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
+% \newcommand{\pbody}[1]{\poslits{\body{#1}}}
+% \newcommand{\nbody}[1]{\neglits{\body{#1}}}
+% \newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+% \newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
+% \newcommand{\OK}{\mbox{\textcolor{green}{\Pisymbol{pzd}{52}}}}
+% \newcommand{\KO}{\mbox{\textcolor{red}{\Pisymbol{pzd}{56}}}}
+% \newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+
+\newcommand{\lw}[1]{\smash{\lower1.ex\hbox{#1}}}
+\newcommand{\llw}[1]{\smash{\lower3.ex\hbox{#1}}}
+\newcommand{\compress}{\itemsep0pt\parsep0pt\parskip0pt\partopsep0pt}
+
+%%% Table
+\newenvironment{tableA}{%
+  \small
+%  \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{1.1}
+  \begin{tabular}{c|rr|rrrrrrrrrr}
+    \lw{問題名} & \multicolumn{2}{c|}{既存手法ASP} & \multicolumn{7}{c}{提案手法LNPS}\\\cline{2-13}
+     & bb & usc & \textsf{R-0} & \textsf{R-3} & \textsf{R-5} & \textsf{DP} & \textsf{DR} & \textsf{SR-5} & \textsf{SR-10} & \textsf{DPSR-1} & \textsf{DPSR-2} & \textsf{DPSR-3}\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
+
+\newenvironment{tableB}{%
+ \small
+ % \tabcolsep = 2mm
+ \renewcommand{\arraystretch}{0.9}
+  \begin{tabular}[t]{c|r|rr|rr}
+    \lw{問題名} & \lw{既知の最良値($\sharp$)} & 
+    \multicolumn{2}{c|}{既存手法ASP} & \multicolumn{2}{c}{提案手法LNPS}\\\cline{3-6}
+    &  & 最良値 & $\sharp$との比(\%) & 最良値 & $\sharp$との比(\%)\\\hline
+    }{%
+    \hline
+  \end{tabular}
+}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:

@@ -1,0 +1,161 @@
+graph G {
+graph [
+    charset = "UTF-8";
+    label = "sample graph",
+    labelloc = "t",
+    labeljust = "c",
+    bgcolor = "#343434",
+    fontcolor = white,
+    fontsize = 18,
+    style = "filled",
+    rankdir = TB,
+    margin = 0.2,
+    splines = spline,
+    ranksep = 1.0,
+    nodesep = 0.9
+  ];
+
+  node [
+    colorscheme = "rdylgn11"
+    style = "solid,filled",
+    fontsize = 16,
+    fontcolor = 6,
+    fontname = "Monaco",
+    color = 7,
+    fillcolor = 11,
+    fixedsize = true,
+    height = 0.6,
+    width = 1.2
+  ];
+
+  edge [
+    style = solid,
+    fontsize = 14,
+    fontcolor = white,
+    fontname = "Migu 1M",
+    color = white,
+    labelfloat = true,
+    labeldistance = 2.5,
+    labelangle = 70
+  ];
+ans1 -- ans3;
+ans1 -- ans5;
+ans1 -- ans7;
+ans1 -- ans17;
+ans1 -- ans24;
+ans1 -- ans28;
+ans2 -- ans3;
+ans2 -- ans4;
+ans2 -- ans8;
+ans2 -- ans11;
+ans3 -- ans6;
+ans3 -- ans9;
+ans3 -- ans20;
+ans3 -- ans28;
+ans4 -- ans6;
+ans4 -- ans8;
+ans4 -- ans14;
+ans5 -- ans6;
+ans5 -- ans7;
+ans5 -- ans18;
+ans5 -- ans26;
+ans5 -- ans30;
+ans6 -- ans9;
+ans6 -- ans21;
+ans6 -- ans30;
+ans7 -- ans9;
+ans7 -- ans19;
+ans7 -- ans29;
+ans8 -- ans9;
+ans9 -- ans29;
+ans10 -- ans11;
+ans10 -- ans13;
+ans10 -- ans16;
+ans10 -- ans17;
+ans10 -- ans22;
+ans10 -- ans31;
+ans11 -- ans12;
+ans11 -- ans14;
+ans11 -- ans20;
+ans11 -- ans31;
+ans12 -- ans15;
+ans12 -- ans20;
+ans13 -- ans14;
+ans13 -- ans16;
+ans13 -- ans18;
+ans13 -- ans25;
+ans13 -- ans35;
+ans14 -- ans15;
+ans14 -- ans21;
+ans14 -- ans35;
+ans15 -- ans21;
+ans16 -- ans19;
+ans16 -- ans33;
+ans17 -- ans18;
+ans17 -- ans19;
+ans17 -- ans20;
+ans17 -- ans24;
+ans17 -- ans32;
+ans18 -- ans19;
+ans18 -- ans21;
+ans18 -- ans26;
+ans18 -- ans36;
+ans19 -- ans34;
+ans20 -- ans21;
+ans20 -- ans32;
+ans21 -- ans36;
+ans22 -- ans23;
+ans22 -- ans24;
+ans22 -- ans25;
+ans22 -- ans37;
+ans23 -- ans24;
+ans23 -- ans27;
+ans24 -- ans26;
+ans24 -- ans40;
+ans25 -- ans26;
+ans25 -- ans27;
+ans25 -- ans39;
+ans26 -- ans27;
+ans26 -- ans41;
+ans28 -- ans29;
+ans28 -- ans30;
+ans28 -- ans32;
+ans28 -- ans40;
+ans29 -- ans30;
+ans29 -- ans34;
+ans29 -- ans42;
+ans30 -- ans36;
+ans30 -- ans41;
+ans30 -- ans45;
+ans31 -- ans32;
+ans31 -- ans33;
+ans31 -- ans35;
+ans31 -- ans37;
+ans32 -- ans34;
+ans32 -- ans36;
+ans32 -- ans40;
+ans33 -- ans34;
+ans33 -- ans35;
+ans33 -- ans38;
+ans34 -- ans36;
+ans34 -- ans42;
+ans35 -- ans36;
+ans35 -- ans39;
+ans35 -- ans43;
+ans36 -- ans41;
+ans36 -- ans45;
+ans37 -- ans38;
+ans37 -- ans39;
+ans37 -- ans40;
+ans38 -- ans39;
+ans38 -- ans42;
+ans39 -- ans41;
+ans39 -- ans43;
+ans40 -- ans41;
+ans40 -- ans42;
+ans41 -- ans42;
+ans41 -- ans45;
+ans43 -- ans44;
+ans43 -- ans45;
+ans44 -- ans45;
+}
