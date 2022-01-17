@@ -1,0 +1,135 @@
+# 著者・所属機関
+
+## 著者情報
+* 発表者と共著者全員の氏名を記入
+* 著者情報は最大10人まで
+* 10人を超える場合は、大会事務局（jsai2022@ai-gakkai.or.jp）まで
+* 所属を追加する場合は、先に次の項目の所属機関情報で定義
+* 発表申込者以外の方を発表者とする場合、発表者も参加登録が必要
+    * 発表者は、参加登録する際は以下で登録されたメールアドレスで参加登録する
+
+
+### 発表者
+姓
+山田
+名
+悠也
+ふりがな姓
+やまだ
+ふりがな名
+ゆうや
+Given/First
+Yuya
+Middle (任意)
+
+Family/Last
+Yamada
+メールアドレス
+yuya.yamada@nagoya-u.jp
+所属機関
+1. 名古屋大学大学院情報学研究科情報システム学専攻 
+
+### 発表者
+姓
+番原
+名
+睦則
+ふりがな姓
+ばんばら
+ふりがな名
+むつのり
+Given/First
+Mutsunori
+Middle (任意)
+
+Family/Last
+Banbara
+メールアドレス
+banbara@nagoya-u.jp
+所属機関
+2. 名古屋大学大学院情報学研究科
+
+### 発表者
+姓
+姓
+名
+名
+ふりがな姓
+せい
+ふりがな名
+めい
+Given/First
+Given/First
+Middle (任意)
+Middle
+Family/Last
+Family/Last
+メールアドレス
+メールアドレス
+所属機関
+
+### 発表者
+姓
+姓
+名
+名
+ふりがな姓
+せい
+ふりがな名
+めい
+Given/First
+Given/First
+Middle (任意)
+Middle
+Family/Last
+Family/Last
+メールアドレス
+メールアドレス
+所属機関
+
+### 発表者
+姓
+姓
+名
+名
+ふりがな姓
+せい
+ふりがな名
+めい
+Given/First
+Given/First
+Middle (任意)
+Middle
+Family/Last
+Family/Last
+メールアドレス
+メールアドレス
+所属機関
+
+## 所属機関情報
+* 著者の全ての所属機関を記入
+* 所属機関は最大10件まで
+* 機種依存文字使用しない
+* 省略記号は全角文字の組み合わせで入力
+
+### 所属機関	
+所属機関(日)
+名古屋大学大学院情報学研究科情報システム学専攻
+所属機関(英)
+Nagoya University Graduate School of Informatics  Department of Computing and Software Systems
+
+### 所属機関
+名古屋大学大学院情報学研究科
+Nagoya University Graduate School of Informatics
+
+### 所属機関	
+所属機関(日)
+所属機関(英)
+
+### 所属機関	
+所属機関(日)
+所属機関(英)
+
+### 所属機関	
+所属機関(日)
+所属機関(英)
