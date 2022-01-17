@@ -9,8 +9,8 @@ Given/First: Takahiro
 Middle (任意):
 Family/Last: Hirate
 メールアドレス: hirate310@nagoya-u.jp
-所属機関: 名古屋大学大学院
-
+所属機関(日): 名古屋大学 
+所属機関(英): Nagoya University
 *** No.2
 発表者: no
 姓: 宋
@@ -21,8 +21,8 @@ Given/First: Soh
 Middle (任意): 
 Family/Last: Takehide
 メールアドレス: soh@lion.kobe-u.ac.jp
-所属機関: 神戸大学 情報基盤センター
-
+所属機関(日): 神戸大学
+所属機関(英): Kobe University
 *** No.3
 発表者: no
 姓: 田村
@@ -33,8 +33,8 @@ Given/First: Naoyuki
 Middle (任意): 
 Family/Last: Tamura
 メールアドレス: tamura@kobe-u.ac.jp
-所属機関: 神戸大学 情報基盤センター
-
+所属機関(日): 神戸大学
+所属機関(英): Kobe University
 *** No.4
 発表者: no
 姓: 番原
@@ -45,9 +45,8 @@ Given/First: Mutsunori
 Middle (任意): 
 Family/Last: Banbara
 メールアドレス: banbara@nagoya-u.jp
-所属機関: 名古屋大学 大学院情報学研究科
-
-
+所属機関(日): 名古屋大学
+所属機関(英): Nagoya University
 
 ** 講演情報
 *** 発表希望テーマ
