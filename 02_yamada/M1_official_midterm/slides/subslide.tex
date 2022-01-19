@@ -8,6 +8,27 @@
   \end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\frametitle{実験結果: 解けた問題数}
+
+  \begin{exampleblock}{}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \scalebox{0.9}{\input{table/result.tex}}
+  \end{exampleblock}
+
+  \begin{itemize}
+  \item 90問中71問について，到達可能性を判定できた．
+    \begin{itemize}
+    \item 到達可能11問，到達不能60問
+    \end{itemize}
+  \item 改良ソルバーと\code{unchanged}符号化の組合せが，
+    最も多くの問題を解いた．平均CPU時間も最も短い．
+%  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
+  \item 到達不能なインスタンスについて，インクリメンタル解法を用いた改
+    良ソルバーの優位性が確認できた．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]{有界組合せ遷移アルゴリズム}
 
   \begin{alertblock}{}\centering
@@ -182,7 +203,7 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}%[shrink]
-  \frametitle{$k=3$の独立点集合遷移問題の例\footnote{伊藤先生のスライドより}}
+  \frametitle{$k=3$の独立点集合遷移問題の例\footnote{伊藤健洋，第1回 CoRe.Seminar スライドより}}
   \begin{center}
   \tabcolsep = 3mm
   \renewcommand{\arraystretch}{1.2}

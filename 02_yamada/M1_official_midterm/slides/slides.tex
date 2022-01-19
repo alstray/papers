@@ -174,24 +174,18 @@
 
   \begin{block}{卒業研究の内容}
     \begin{itemize}
-      \item 組合せ遷移問題に対してステップ長$\ell$を導入し解く手法に基づき，
-        $k$彩色遷移問題の3つの符号化を考案・評価．
+      \item $k$彩色遷移問題の3つの符号化を考案し評価実験を行った．
     \end{itemize}
   \end{block}
 
   \begin{block}{その後の研究内容}
     \begin{itemize}
-      \item ステップ長$\ell$を導入して解く手法を
-        \alert{有界組合せ遷移}として定式化．
+      \item ASP に基づく組合せ遷移問題の解法として，
+        \alert{有界組合せ遷移}を提案．
  %     \item インクリメンタル ASP 解法を利用し，基本ソルバーの
  %       問題点を改良した改良ソルバーを考案・評価．
-      \item ソルバーを構成する2つのアルゴリズムの考案．
-        \begin{itemize}
-          \item \structure{基本アルゴリズム}
-          \item \structure{改良アルゴリズム}
-        \end{itemize}
-      \item 各アルゴリズムを実装した2つのソルバーの評価．
-      \item 独立点集合の遷移問題を解く ASP 符号化の考案．
+      \item 有界組合せ遷移に基づくソルバーを実装．
+      \item $k$彩色遷移問題を用いたソルバーの評価実験．
     \end{itemize}
   \end{block}
 \end{frame}
@@ -237,7 +231,7 @@
 \end{enumerate}
 \begin{alertblock}{}
   有界組合せ遷移のためのアルゴリズムとして，
-  基本アルゴリズムと改良アルゴリズムの2種類を考案した．
+  \alert{基本アルゴリズム}と\alert{改良アルゴリズム}の2種類を考案した．
 \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -275,27 +269,6 @@
     \item \structure{環境}: Mac OS, 3.2GHz 6コア Intel Core i7，64GB メモリ
     \end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{実験結果: 解けた問題数}
-
-  \begin{exampleblock}{}
-    \centering
-    \renewcommand{\arraystretch}{1.2}
-    \scalebox{0.9}{\input{table/result.tex}}
-  \end{exampleblock}
-
-  \begin{itemize}
-  \item 90問中71問について，到達可能性を判定できた．
-    \begin{itemize}
-    \item 到達可能11問，到達不能60問
-    \end{itemize}
-  \item 改良ソルバーと\code{unchanged}符号化の組合せが，
-    最も多くの問題を解いた．平均CPU時間も最も短い．
-%  \item 到達可能であることが判定できた問題のうち，最長のステップ長は17であった．
-  \item 到達不能なインスタンスについて，インクリメンタル解法を用いた改
-    良ソルバーの優位性が確認できた．
-  \end{itemize}
-\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}\frametitle{実験結果: カクタスプロット}
 
@@ -320,25 +293,37 @@
   \end{alertblock}
 
   \begin{enumerate}
-  \item \structure{2種類の実装方式の考案}
+    \item 組合せ遷移の解法として有界組合せ遷移を提案．
+    \item 有界組合せ遷移に基づくソルバーを実装．
     \begin{itemize}
-    \item 基本アルゴリズム
-    \item インクリメンタルASP解法を用いた改良アルゴリズム
+      \item 基本ソルバー
+      \item 改良ソルバー
     \end{itemize}
-  \item \structure{$k$彩色遷移問題を解く2種類の ASP 符号化の考案}
-  \item \structure{$k$彩色遷移問題のベンチマーク問題を独自に生成}
-  \item \structure{$k$彩色遷移問題を用いた有界組合せ遷移の評価実験}
+    \item $k$彩色遷移問題を用いたソルバーの評価実験．
     \begin{itemize}
-    \item 改良アルゴリズムの優位性を確認
+      \item 特に改良ソルバーの有効性を確認できた．
     \end{itemize}
   \end{enumerate}
+  %\begin{enumerate}
+  %\item \structure{2種類の実装方式の考案}
+  %  \begin{itemize}
+  %  \item 基本アルゴリズム
+  %  \item インクリメンタルASP解法を用いた改良アルゴリズム
+  %  \end{itemize}
+  %\item \structure{$k$彩色遷移問題を解く2種類の ASP 符号化の考案}
+  %\item \structure{$k$彩色遷移問題のベンチマーク問題を独自に生成}
+  %\item \structure{$k$彩色遷移問題を用いた有界組合せ遷移の評価実験}
+  %  \begin{itemize}
+  %  \item 改良アルゴリズムの優位性を確認
+  %  \end{itemize}
+  %\end{enumerate}
   
   \begin{exampleblock}{今後の課題}
     \begin{itemize}
       \item 組合せ遷移問題の記述例の蓄積
         \begin{itemize}
           \item 現在，競技会のベンチマークでもある，
-            \structure{独立点集合の遷移問題}を対象として取組んでいる．
+            \structure{独立点集合遷移問題}を対象として取組んでいる．
         \end{itemize}
       \item ソルバーの高速化
     \end{itemize}
@@ -349,11 +334,22 @@
   \begin{itemize}
     \item \structure{受賞}
     \begin{itemize}
-      \item 
+      \item \alert{学生奨励賞}
+      
+      山田悠也，湊真一，番原睦則．
+      解集合プログラミングに基づく組合せ遷移ソルバーの
+      実装方式に関する考察．
+      日本ソフトウェア科学会第38回大会講演論文集，
+      46-L，日本ソフトウェア科学会，
+      2021年9月3日．
     \end{itemize}
-    \item \structure{研究会での発表}
+    \item \structure{ソフトウェア成果物}
     \begin{itemize}
-      \item 
+      \item \alert{recongo}
+      
+      山田悠也，山田健太郎，番原睦則．
+      \clingo を利用した，有界組合せ遷移に基づく
+      組合せ遷移ソルバー．
     \end{itemize}
   \end{itemize}
 \end{frame}
