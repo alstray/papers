@@ -110,25 +110,6 @@ banbara@nagoya-u.jp
 所属機関
 1. 名古屋大学大学院情報学研究科
 
-### 発表者
-姓
-姓
-名
-名
-ふりがな姓
-せい
-ふりがな名
-めい
-Given/First
-Given/First
-Middle (任意)
-Middle
-Family/Last
-Family/Last
-メールアドレス
-メールアドレス
-所属機関
-
 ## 所属機関情報
 * 著者の全ての所属機関を記入
 * 所属機関は最大10件まで
@@ -139,20 +120,9 @@ Family/Last
 所属機関(日)
 名古屋大学大学院情報学研究科
 所属機関(英)
-Nagoya University Graduate School of Informatics
+Graduate School of Informatics, Nagoya University
 
 ### 所属機関
 名古屋大学情報学部
-Nagoya University School of Informatics
+School of Informatics, Nagoya University
 
-### 所属機関
-所属機関(日)	
-所属機関(英)
-
-### 所属機関	
-所属機関(日)
-所属機関(英)
-
-### 所属機関	
-所属機関(日)
-所属機関(英)
