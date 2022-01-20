@@ -27,7 +27,68 @@ Yamada
 メールアドレス
 yuya.yamada@nagoya-u.jp
 所属機関
-1. 名古屋大学大学院情報学研究科情報システム学専攻 
+1. 名古屋大学大学院情報学研究科 
+
+### 発表者
+姓
+加藤
+名
+聖人
+ふりがな姓
+かとう
+ふりがな名
+まさと
+Given/First
+Masato
+Middle (任意)
+
+Family/Last
+Kato
+メールアドレス
+???
+
+所属機関
+2. 名古屋大学情報学部
+
+### 発表者
+姓
+小菅
+名
+脩司
+ふりがな姓
+こすげ
+ふりがな名
+しゅうじ
+Given/First
+Syuji
+Middle (任意)
+
+Family/Last
+Kosuge
+メールアドレス
+kosugeshuji003@nagoya-u.jp
+所属機関
+2. 名古屋大学情報学部
+
+### 発表者
+姓
+竹内
+名
+頼人
+ふりがな姓
+たけうち
+ふりがな名
+らいと
+Given/First
+Raito
+Middle (任意)
+
+Family/Last
+Takeuchi
+メールアドレス
+takeuchi.raito@nagoya-u.jp
+所属機関
+1. 名古屋大学大学院情報学研究科
 
 ### 発表者
 姓
@@ -47,45 +108,7 @@ Banbara
 メールアドレス
 banbara@nagoya-u.jp
 所属機関
-2. 名古屋大学大学院情報学研究科
-
-### 発表者
-姓
-姓
-名
-名
-ふりがな姓
-せい
-ふりがな名
-めい
-Given/First
-Given/First
-Middle (任意)
-Middle
-Family/Last
-Family/Last
-メールアドレス
-メールアドレス
-所属機関
-
-### 発表者
-姓
-姓
-名
-名
-ふりがな姓
-せい
-ふりがな名
-めい
-Given/First
-Given/First
-Middle (任意)
-Middle
-Family/Last
-Family/Last
-メールアドレス
-メールアドレス
-所属機関
+1. 名古屋大学大学院情報学研究科
 
 ### 発表者
 姓
@@ -114,16 +137,16 @@ Family/Last
 
 ### 所属機関	
 所属機関(日)
-名古屋大学大学院情報学研究科情報システム学専攻
-所属機関(英)
-Nagoya University Graduate School of Informatics  Department of Computing and Software Systems
-
-### 所属機関
 名古屋大学大学院情報学研究科
+所属機関(英)
 Nagoya University Graduate School of Informatics
 
-### 所属機関	
-所属機関(日)
+### 所属機関
+名古屋大学情報学部
+Nagoya University School of Informatics
+
+### 所属機関
+所属機関(日)	
 所属機関(英)
 
 ### 所属機関	
