@@ -1,0 +1,36 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\chapter{クイーン支配問題}\label{chap:background}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\section{支配集合問題}
+グラフ$G=(V,E)$の頂点の部分集合$S\subset V$とその隣接頂点の集合との和集合が$V$と一致するとき，$S$を$G$の\textbf{支配集合}という．\par
+支配集合$S$の要素数を\textbf{要素数}という．
+ \begin{itemize}
+  \item サイズが最小の支配集合を\textbf{最小支配集合}という．
+  \item 最小支配集合のサイズをグラフ$G$の\textbf{支配数}と呼ぶ．本論文ではグラフ$G$の支配数を$\gamma(G)$で表す．
+ \end{itemize}
+  グラフ$G$と正の整数$k$が与えられたとき，サイズが$k$の$G$の支配集合が存在するかどうかを判定する問題を\textbf{支配集合問題}という．
+\section{クイーン支配問題}
+$n\times n$のチェス盤について各マスを頂点とし，クイーンが移動できるマス同士が辺で結ばれているグラフを\textbf{クイーングラフ}という．サイズ$n\times n$のクイーングラフを$Q_n$で表す．\par
+例えば，サイズ3のチェス盤とクイーングラフ$Q_3$の対応関係は以下のようになる．
+% \begin{figure}[tb]
+%   \centering
+%   \includegraphics[width=0.6\linewidth]{fig/q_graph.png}
+%   \caption{$Q_8$の最小支配集合の例}
+%   \label{ex:queengraph}
+% \end{figure}
+クイーングラフ$Q_n$と正の整数$k$が与えられたとき，サイズ$k$の$Q_n$の支配集合が存在するかどうか判定する問題を\textbf{クイーン支配問題}という．\par
+図\ref{ex:queengraph}は，$Q_8$の最小支配集合の例である．5個のクイーンを置いたとき，クイーンを移動させて全てのマスにアタック可能である．また，4個以下のクイーンを置いたとき，クイーンを移動させて全てのマスにアタックすることは不可能である．
+% \begin{figure}[tb]
+%   \centering
+%   \includegraphics[width=0.6\linewidth]{fig/ex_queen.png}
+%   \caption{$Q_8$の最小支配集合の例}
+%   \label{ex:queengraph}
+% \end{figure}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
