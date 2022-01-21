@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{クイーン支配問題の制約モデル}\label{chap:constraint}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+本章では，SATソルバーを用いた既存研究~\cite{yamamoto21}で提案された制約モデルである，基本モデル，改良モデル，部分和モデルについての説明を行う．\par
+なお，各制約モデルにおいて，入力はクイーングラフ$Q_{n}$と正の整数$k$である．
+\section{基本モデル}
+\begin{description}
+ \item[(変数$q_{ij}$)] $q_{ij} \in \{0,1\}$ \par
+1のとき，マス$(i,j)$にクイーンが配置されることを意味する．
+ \item[(制約1)] $\sum\limits_{i,j=1}^{n} q_{ij} = k$ \par
+クイーングラフ上のクイーンの総数が$k$であることを意味する．
+ \item[(制約2)] $\bigvee\limits_{(i',j')\in A_{ij}} q_{i'j'}>0 \;\;\;(1 \leq i,j \leq n)$ \par
+マス$(i,j)$にひとつ以上のクイーンが移動できることを意味する．なお，$A_{ij}$はマス$(i,j)$と$Q_n$上で隣接している頂点の集合を表す．
+\end{description}
+\newpage
+\section{改良制約モデル}
+本モデルでは，基本制約モデルにおいて複数回出現する部分式をまとめるための補助ブール変数と制約を追加する．\par
+各行に対して以下の補助ブール変数と制約を追加する．
+\begin{description}
+ \item[(変数$r_i$)] $r_{i} \in \{0,1\} \;\;\; (1 \leq i \leq n)$\par
+1のとき，行$i$にクイーンがひとつ以上存在することを意味する．
+ \item[(制約3)] $r_{i}>0 \rightarrow \bigvee\limits_{(i',j')\in R_{i}} q_{i'j'}=1 \;\;\;\; (1 \leq i \leq n)$ \par
+$r_{i}$が1のとき，行$i$上にクイーンがひとつ以上配置されていることを意味する．なお，$R_i$は行$i$上に存在する頂点の集合を表す．
+\end{description}
+各列，各右上がり対角線，各右下がり対角線についても同様に，補助ブール変数$c_{j}$，$u_{a}$，$d_{b}$を追加し，(制約4)，(制約5)，(制約6)を追加する．
+\begin{description}
+ \item[(制約4)] $c_{j}>0 \rightarrow \bigvee\limits_{(i',j')\in C_{j}} q_{i'j'}=1 \;\;\;\; (1 \leq j \leq n)$ 
+ \item[(制約5)] $u_{a}>0 \rightarrow \bigvee\limits_{(i',j')\in U_{a}} q_{i'j'}=1 \;\;\;\; (1 \leq a \leq 2n-1)$ 
+ \item[(制約6)] $d_{b}>0 \rightarrow \bigvee\limits_{(i',j')\in D_{b}} q_{i'j'}=1 \;\;\;\; (1 \leq b \leq 2n-1)$
+\end{description}
+なお，$C_j$，$U_{a}$，$D_{b}$はそれぞれ列$j$，右上がり対角線$a$，右下がり対角線$b$上に存在する頂点の集合を表す．\par
+さらに，基本制約モデルの(制約2)を削除し，以下の(制約7)に置き換える．
+\begin{description}
+ \item[(制約7)] $(r_i > 0) \vee (c_j >0) \vee (u_{a}>0) \vee (d_{b}>0) \;\;\;\; (1 \leq i,j \leq n)$
+\end{description}
+\newpage
+\section{部分和モデル}
+本モデルでは，クイーンの個数を表す補助整数変数を追加し，行方向，列方向，対角線方向のクイーンの総数に関する制約を追加する．
+\begin{description}
+ \item[(変数$r_i$)] $r_{i} \in \{0,...,k\}$ 
+ \item[(制約8)] $r_{i} = \sum\limits _{(i',j') \in R_{i}} q_{i'j'} \;\;\;\;(1 \leq i \leq n)$ \par
+$r_i = s$のとき，行$i$にクイーンが$i$個存在することを意味する．
+\end{description}
+各列，各右上がり対角線，各右下がり対角線に対しても同様に補助整数変数$c_j$，$u_{a}$，$d_{b}$と(制約9)，(制約10)，(制約11)を追加する．
+\begin{description}
+ \item[(制約9)] $c_{j} = \sum\limits _{(i',j') \in C_{j}} q_{i'j'} \;\;\;\;(1 \leq i \leq n)$
+ \item[(制約10)] $u_{a} = \sum\limits _{(i',j') \in U_{a}} q_{i'j'} \;\;\;\;(1 \leq a \leq 2n-1)$
+ \item[(制約11)] $d_{b} = \sum\limits _{(i',j') \in D_{b}} q_{i'j'} \;\;\;\;(1 \leq b \leq 2n-1)$
+\end{description}
+さらに，クイーンの総数に関する制約である(制約12)を追加する．
+\begin{description}
+ \item[(制約12)] $\sum\limits_{i=1}^{n} r_{i} = \sum\limits_{j=1}^{n} c_{j} =\sum\limits_{a=1}^{2n-1} u_{a} =\sum\limits_{b=1}^{2n-1} d_{b} = k$ \par
+各行，各列，各対角線ごとにクイーンの個数を足し合わせるとクイーンの総数$k$に等しいことを意味する．
+\end{description}
