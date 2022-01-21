@@ -45,8 +45,7 @@ Middle (任意)
 Family/Last
 Kato
 メールアドレス
-???
-
+kato.masato@nagoya-u.jp
 所属機関
 2. 名古屋大学情報学部
 
@@ -60,7 +59,7 @@ Kato
 ふりがな名
 しゅうじ
 Given/First
-Syuji
+Shuji
 Middle (任意)
 
 Family/Last
