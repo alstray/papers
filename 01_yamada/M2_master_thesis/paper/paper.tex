@@ -1,0 +1,43 @@
+\documentclass[japanese,dvipdfmx]{jbook}
+
+\usepackage{bachelor}
+\input{macro}
+
+\addtolength{\textwidth}{3cm}
+\addtolength{\evensidemargin}{-3cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\school{情報システム学専攻}
+\bookname{修士論文}
+\title{解集合プログラミングを用いた\\配電網問題の解法}
+\date{2021年度}
+\author{山田 健太郎}
+
+\begin{document}
+\maketitle
+
+\input{abstract}
+
+\tableofcontents    % 目次
+
+\input{introduction}
+\input{problem}
+\input{asp}
+\input{encoding}
+\input{experiment}
+\input{reconfiguration}
+\input{conclusion}
+
+\bibliographystyle{jplain}
+\bibliography{bachelor,aisat}    % 参考文献リスト
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
+
