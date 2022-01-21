@@ -30,6 +30,16 @@ ASP を用いたクイーン支配問題の解法について述べる．
 クイーン支配問題を解くASP符号化と結合され，
 ASPシステムによって解が計算される．
 本論文では，ASPシステムとして{\clingo}を用いる．
+
+
+\begin{huge}
+  \begin{itemize}
+  \item 問題インスタンスのファクト形式はいらない．
+  \item なぜなら，$n$と$k$が決まれば，問題が定まるので
+  \end{itemize}
+\end{huge}
+
+
 \section{ASPファクト形式}
 \lstinputlisting[float=ht,caption={%
 クイーン支配問題のASPファクト表現},%
@@ -52,7 +62,7 @@ basicstyle=\ttfamily\scriptsize]{code/graph_example.lp}
 本論文では，この制約を\textbf{被覆制約}と呼ぶ．\par
 以下では，前章で説明した基本制約モデル，改良モデル，部分和モデルのASP符号化について，それぞれ2種類提案する．
 
-\subsection{基本制約モデルのASP符号化}
+\section{基本制約モデルのASP符号化}
 基本制約モデルのASP符号化は，被覆制約をASPの一貫性制約で記述した基本的な符号化である．
 
 \lstinputlisting[float=ht,caption={%
@@ -82,7 +92,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp1_sat.lp}
 
 基本モデルの符号化2は，一貫性制約を用いてクイーングラフ上の全てのマスは自身かその隣接頂点にクイーンが1つ以上存在しなければならないことを表現している．
 \newpage
-\subsection{改良モデルのASP符号化}
+\section{改良モデルのASP符号化}
 \lstinputlisting[float=ht,caption={%
  改良モデルのASP符号化1},%
 captionpos=b,frame=single,label=code:qdp2_asp.lp,%
