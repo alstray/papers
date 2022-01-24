@@ -1,0 +1,168 @@
+\chapter{ASP ソルバー 上での LNPS の実装}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{arch}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+提案手法 LNPS を 高速 ASP ソルバー
+{\clingo}~\footnote{\url{https://potassco.org/clingo/}}
+上に実装した．提案ソルバー\textit{asprior}は，
+ASP ファクト形式の問題インスタンスと
+問題を解く ASP 符号化を入力とし，
+LNPS アルゴリズムを用いて解を求める(図~\ref{fig:arch}参照)．
+%
+\input{arch}
+
+提案ソルバーは，{\clingo}の Python インターフェースを利用して実装され
+ている．以下に，LNPS を実装する上で重要な役割を果たすASP 技術について
+簡単にまとめる．\\
+
+\textbf{探索ヒューリスティックス}
+
+ASP ソルバー{\clingo}では，\code{#heuristic}文を用いて，
+探索ヒューリスティックスをカスタマイズすることができる\footnote{%
+{\clingo}のデフォルト探索ヒューリスティックスは，
+SAT ソルバーと同じ VSIDS (Variable State Independent Decaying Sum)}．
+以下に例を示す．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=h,caption={%
+\code{\#heuristic}文の例 (\code{heu.lp})},%
+captionpos=b,frame=single,label=code:heu.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/heu.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+1行目のルールは，選択子を使ってアトム
+\code{a}と\code{b}を導入している．
+2行目のルールは，\code{a}と\code{b}が同時に成り立たないことを表している．
+このプログラム例の解集合は
+\code{\{\}},\code{\{a\}},\code{\{b\}}の3つである．
+3行目の \code{#heuristic}文は，
+優先度1で\code{a}に真を割当てることを表している．
+同様に，4行目は
+優先度2で\code{b}に真を割当てることを表している．
+アトムに対するデフォルトの優先度は0である．
+%
+コード~\ref{code:heu.log}に \code{#heuristic}文を無効にした実行例，
+コード~\ref{code:heu2.log}に有効にした実行例を示す．
+これらの例より，\code{#heuristic}文を使うことによって，
+解の探索において優先度の高いアトムから順に値が割当てられている
+ことがわかる．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=h,caption={%
+\code{\#heuristic}文を無効にした実行例},%
+captionpos=b,frame=single,label=code:heu.log,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/heu.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[float=h,caption={%
+\code{\#heuristic}文を有効にした実行例},%
+captionpos=b,frame=single,label=code:heu2.log,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/heu2.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+LNPS の実装では，
+$destroy$で値割当てを取り消されなかった変数に対し，
+\code{#heuristic}文を利用して優先的に同じ値を割当てる．
+これにより，値割当てをなるべく維持したままでの解の再探索
+($re\mathchar`-search$)を{\clingo}の系統的探索を用いて
+自然に実装できる．\\
+
+\textbf{マルチショット ASP 解法}
+
+ASP ソルバー{\clingo}は，
+同様の探索失敗を防ぐために獲得した学習節を保持することで，無駄な探索を
+行うことなく，ルールを追加・削除した論理プログラムを連続的に解くことが
+できる．
+このマルチショット ASP 解法は，別名インクリメンタル ASP 解法とも呼
+ばれ，モデル検査やプランニング分野の諸問題に応用されている．
+
+LNPS の実装では，
+{\clingo}の Python インターフェースを介してこの解法を利用することで，
+$destroy$と$re\mathchar`-search$の反復実行を簡潔に実装できる．\\
+
+コード~\ref{code:lnps.lp}は LNPS プログラムの
+メイン関数部分（一部コメント等を除く）である．
+順にコードの内容を説明する．\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tphb,caption={%
+LNPSプログラム(メイン関数のみ)},%
+captionpos=b,frame=single,label=code:lnps.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/lnps.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item \code{reuse} プログラムの基礎化を行う(2行目)．
+ \begin{itemize}
+  \item 入力された論理プログラムを命題論理レベルのプログラムに
+  変換する手順を基礎化と呼ぶ．
+  また入力された論理プログラムは
+  それぞれ名前を付けて部分プログラムに分けることが可能であり，
+  \code{reuse} と名前が付けられた部分には，
+  LNPS アルゴリズムにおける
+  $destroy$と$re\mathchar`-search$ のオプションの情報が記述されている．
+ \end{itemize}
+\item $destroy$と$re\mathchar`-search$ のオプションを取得する(3行目)．
+\item \code{base} プログラムの基礎化を行う(5行目)．
+ \begin{itemize}
+  \item 入力された論理プログラムのうち，
+  名前を付けていない部分は全て
+  \code{base} プログラムとして扱われる．
+ \end{itemize}
+\item インスタンスを生成する(6行目)．
+\item 初期解を求め，暫定解とする(7--8行目)．
+\item リストや変数などの初期化を行う(10--13行目)．
+\item \code{#heuristic}文を文字列として生成する(14--16行目)．
+\item 生成した \code{#heuristic}文を動的にプログラムに追加する(17行目)．
+ \begin{itemize}
+  \item \code{heuristic} はプログラムに付ける名前，
+  \code{t} は LNPS アルゴリズムにおける
+  反復の回数を表している．
+ \end{itemize}
+\item 終了条件が満たされるまで以下のステップを繰り返す(19行目)．
+\item 反復回数を 1 増やす(20行目)．
+\item 暫定解の中で再利用したいアトム
+の情報を持った新しいアトム
+（以下，\code{heu} アトム）を生成し，
+リスト \code{heu_atoms} に加えていく(21--24行目)．
+ \begin{itemize}
+  \item \code{heu} アトムに真が割り当てられる
+  ことによって \code{#heuristic}文が有効になり，
+  再利用したいアトムに優先的な値割り当てが行われるように
+  なっている．
+ \end{itemize}
+\item 前回の反復での \code{heu} アトムを削除する(25--26行目)．
+\item 生成した \code{heu} アトムの頭に \code{#external} を
+付けて動的にプログラムに追加する(28--31行目)．
+ \begin{itemize}
+  \item \code{#external} によって宣言されたアトムは，
+  実行中でのプログラムへの動的な追加・削除が可能になる．
+ \end{itemize}
+\item まだ基礎化されていない追加されたプログラムをそれぞれ基礎化する(32--33行目)．
+\item \code{heu} アトムに真を割り当てる(34--35行目)．
+\item \code{heu} アトムの入ったリストを別のリストへコピー
+して空にする(36--37行目)．
+\item $re\mathchar`-search$ を行って解（$x^{t}$）を得る(39行目)．
+\item $x^{t}$ が受理条件を満たしていれば受理する(40--41行目)．
+ \begin{itemize}
+  \item 以前受理された解より改善された解であれば受理している．
+ \end{itemize}
+\item $x^{t}$ が暫定解より改善された解であれば暫定解を更新する(42--43行目)．
+\item 暫定解を出力する(45行目)．
+\end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

@@ -1,0 +1,121 @@
+\chapter{優先度付き巨大近傍探索}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{LNS}
+巨大近傍探索(LNS) は，解に含まれる変数の値割当ての一部をランダムに選んで取り消し，
+その変数のみに対して再割当てを行うことで解を再構築($repair$)する
+反復解法である．
+
+図~\ref{algo:lns}に LNS のアルゴリズムを示す．
+\begin{figure}[htb]\centering
+\begin{tabular}{l}\hline
+\textbf{Algorythm} Large Neighborhood Search\\\hline
+ ~1: input: a feasible solution $x$ \\
+ ~2: $x^{*} :=  x$; \\
+ ~3: \bf{repeat} \\
+ ~4: \quad \quad $x^{t} := repair(destroy(x))$; \\
+ ~5: \quad \quad \textbf{if} $accept(x^{t}, x)$ \textbf{then} \\
+ ~6: \quad \quad \quad \quad $x := x^{t}$; \\
+ ~7: \quad \quad \textbf{end if} \\
+ ~8: \quad \quad \textbf{if} $c(x^{t}) < c(x^{*})$ \textbf{then} \\
+ ~9: \quad \quad \quad \quad $x^{*} := x^{t}$; \\
+10: \quad \quad \textbf{end if} \\
+11: \textbf{until} stop criterion is met \\
+12: \textbf{return} $x^{*}$ \\ \hline
+\end{tabular}
+\caption{LNSアルゴリズム}
+\label{algo:lns}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{enumerate}\compress
+\item 初期解を$x$と置き，暫定解$x^{*} := x$ とする(1--2行目)．
+\item \label{lnps:repeat_start}
+  以下の$destroy$と$repair$で$x$から得られた解を$x^{t}$
+  と置く(4行目)．
+  \begin{itemize}\compress
+  \item $destroy$は$x$から値割当ての一部を取り消し$x'$とする．
+  \item $re\mathchar`-search$は$x'$の値割当てを変化させずに解を再構築する．
+  \end{itemize}
+\item 受理条件$accept$を満たしていたら$x := x^{t}$とする(5--7行目)．
+  \begin{itemize}\compress
+  \item 例えば，「$x^{t}$が$x$より改善された解なら」という条件を用いる．
+  \end{itemize}
+\item \label{lnps:repeat_end}
+  $x^{t}$が暫定解$x^{*}$より改善された解なら，$x^{*} := x^{t}$とする(8--10行目)．
+\item 終了条件が満たされるまで，
+  ステップ~\ref{lnps:repeat_start}〜\ref{lnps:repeat_end}を繰り返す(11行目)．
+  \begin{itemize}\compress
+  \item 例えば，反復回数や制限時間などを終了条件に用いる．
+  \end{itemize}
+\item 暫定解$x^{*}$を返す(12行目)．
+\end{enumerate}
+
+解の再構築には貪欲法等が用いられ，一般に解の最適性を保証できない．
+LNS の応用としては，巡回セールスマン問題を一般化した
+運搬経路問題 (Vehicle Routing Problem)
+に対する有効性が示されている~\cite{Pisinger10}．
+
+\section{LNPS}
+優先度付き巨大近傍探索(LNPS)は，
+メタ戦略の一種である巨大近傍探索(LNS~\cite{Pisinger10})
+を基に，組合せ最適化問題に対して，
+系統的探索と確率的局所探索を統合的に適用するよう拡張した手法である．
+図~\ref{algo:lnps}に LNPS のアルゴリズムを示す．
+\begin{figure}[htb]\centering
+\begin{tabular}{l}\hline
+\textbf{Algorythm} Large Neighborhood Prioritized Search\\\hline
+ ~1: input: a feasible solution $x$ \\
+ ~2: $x^{*} :=  x$; \\
+ ~3: \bf{repeat} \\
+ ~4: \quad \quad $x^{t} := re\mathchar`-search(destroy(x))$; \\
+ ~5: \quad \quad \textbf{if} $accept(x^{t}, x)$ \textbf{then} \\
+ ~6: \quad \quad \quad \quad $x := x^{t}$; \\
+ ~7: \quad \quad \textbf{end if} \\
+ ~8: \quad \quad \textbf{if} $c(x^{t}) < c(x^{*})$ \textbf{then} \\
+ ~9: \quad \quad \quad \quad $x^{*} := x^{t}$; \\
+10: \quad \quad \textbf{end if} \\
+11: \textbf{until} stop criterion is met \\
+12: \textbf{return} $x^{*}$ \\ \hline
+\end{tabular}
+\caption{LNPSアルゴリズム}
+\label{algo:lnps}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{enumerate}\compress
+\item 初期解を$x$と置き，暫定解$x^{*} := x$ とする(1--2行目)．
+\item \label{lnps:repeat_start}
+  以下の$destroy$と$re\mathchar`-search$で$x$から得られた解を$x^{t}$
+  と置く(4行目)．
+  \begin{itemize}\compress
+  \item $destroy$は$x$から値割当ての一部を取り消し$x'$とする．
+  \item $re\mathchar`-search$は$x'$の値割当てをなるべく維持したまま再探索する．
+  \end{itemize}
+\item 受理条件$accept$を満たしていたら$x := x^{t}$とする(5--7行目)．
+  \begin{itemize}\compress
+  \item 例えば，「$x^{t}$が$x$より改善された解なら」という条件を用いる．
+  \end{itemize}
+\item \label{lnps:repeat_end}
+  $x^{t}$が暫定解$x^{*}$より改善された解なら，$x^{*} := x^{t}$とする(8--10行目)．
+\item 終了条件が満たされるまで，
+  ステップ~\ref{lnps:repeat_start}〜\ref{lnps:repeat_end}を繰り返す(11行目)．
+  \begin{itemize}\compress
+  \item 例えば，反復回数や制限時間などを終了条件に用いる．
+  \end{itemize}
+\item 暫定解$x^{*}$を返す(12行目)．
+\end{enumerate}
+
+提案手法 LNPS では，LNS の再構築($repair$)を，
+値割当てをなるべく維持し
+たままでの再探索($re\mathchar`-search$)に置き換えることで，
+取り消されなかった変数への再割当てを許す．
+これによって，どの値割当てを取り消すかに依存しすぎない探索を行うことが
+できる点が特長である．
+また，再探索($re\mathchar`-search$)の終了条件を
+適切に設定することで解の最適性も保証できる．
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:

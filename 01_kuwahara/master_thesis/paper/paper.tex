@@ -1,0 +1,56 @@
+%%% for platex
+\documentclass[a4paper,12pt,dvipdfmx]{jbook}
+%%% for lualatex
+%\documentclass[a4paper,12pt]{ltjbook}
+
+\usepackage{master}
+\input{macro} % 自分用のマクロ
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bookname{修　士　論　文}
+\institute{名古屋大学大学院情報学研究科}
+\major{情報システム学専攻}
+\title{解集合プログラミングに基づく\\
+系統的探索と確率的局所探索の\\
+統合的手法に関する研究}
+\date{2021年度}
+\author{桑原 和也}
+\studentid{252005066}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 本体
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{document}
+\maketitle
+
+\input{abstract}    % 概要
+
+\tableofcontents    % 目次
+\listoffigures      % 図の目次
+\listoftables       % 表の目次
+\lstlistoflistings  % コードの目次
+
+% ここから「本文」
+\input{introduction}
+\input{asp}
+\input{timetabling}
+\input{lnps}
+\input{implementation}
+\input{experiment}
+\input{conclusion}
+% ここまで
+
+\bibliographystyle{jplain} % 参考文献スタイル
+\bibliography{master,procs,local,lit,akku,aisat}    % 参考文献リスト
+
+\input{ack}         % 謝辞
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
