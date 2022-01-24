@@ -83,10 +83,10 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_asp.lp}
 
 改良モデルのASP符号化1では，基本モデルにおいて複数回出現する部分式をまとめるための補助ブール変数と制約を追加した．\par
 具体的には，\begin{itemize}
-	     \item 5行目から8行目でマス\code{(X,Y)}にクイーンが置かれていたらその行，列，対角線方向は\code{attackable}であるという推論
-	     \item 10行目で一貫性制約を用いて各マス\code{(i,j)}に対する被覆制約
+	     \item 5行目から8行目でマス\code{(X,Y)}にクイーンが置かれていたらその行，列，対角線方向は\code{attackable}であるということ
+	     \item 10行目で一貫性制約を用いて全てのマスに対する被覆制約
 	    \end{itemize}
-を記述している．これにより，基本モデルよりも変数と節の数が減少することが期待される．
+を記述している．
 
 \lstinputlisting[float=ht,caption={%
  改良モデルのASP符号化2},%
@@ -135,7 +135,7 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp3_ic.lp}
 
 \newpage
-部分和モデルのASP符号化2は，7行目から21行目までは部分和モデルのASP符号化と同じである．24行目から29行目では，\[
+部分和モデルのASP符号化2は，7行目から21行目までは部分和モデルのASP符号化と同じである．24行目から29行目では，一貫性制約を用いて\[
 												 M>0 \vee N>0 \vee P>0 \vee Q>0
 												  \]
 という形で被覆制約を表現している．
