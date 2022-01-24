@@ -1,0 +1,51 @@
+%%% for platex
+\documentclass[a4paper,12pt,dvipdfmx,openany]{jbook}
+%%% for lualatex
+%\documentclass[a4paper,12pt]{ltjbook}
+
+\usepackage{bachelor}
+\input{macro} % 自分用のマクロ
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\school{コンピュータ科学科}
+\bookname{卒業論文}
+\title{解集合プログラミングを用いたグラフ彩色問題の解法に関する考察}
+\date{2022年2月}
+\author{101830314 春田 穂高}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 本体
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{document}
+\maketitle
+
+\input{abstract}    % 概要
+
+\tableofcontents    % 目次
+\listoffigures      % 図の目次
+\listoftables       % 表の目次
+\lstlistoflistings  % コードの目次
+
+% ここから「本文」
+\input{introduction}
+\input{background}
+\input{asp}
+\input{proposal}
+\input{experiment}
+\input{conclusion}
+% ここまで
+
+\input{ack}         % 謝辞
+
+\bibliographystyle{jplain} % 参考文献スタイル
+\bibliography{bachelor,aisat}    % 参考文献リスト
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
