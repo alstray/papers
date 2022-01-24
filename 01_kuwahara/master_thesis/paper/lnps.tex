@@ -2,11 +2,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{LNS}
-巨大近傍探索(LNS) は，解に含まれる変数の値割当ての一部をランダムに選んで取り消し，
+
+Pisinger らが提案した巨大近傍探索(LNS~\cite{Pisinger10}) は，
+解に含まれる変数の値割当ての一部をランダムに選んで取り消し，
 その変数のみに対して再割当てを行うことで解を再構築($repair$)する
 反復解法である．
-
 図~\ref{algo:lns}に LNS のアルゴリズムを示す．
+
 \begin{figure}[htb]\centering
 \begin{tabular}{l}\hline
 \textbf{Algorythm} Large Neighborhood Search\\\hline
@@ -57,11 +59,12 @@ LNS の応用としては，巡回セールスマン問題を一般化した
 に対する有効性が示されている~\cite{Pisinger10}．
 
 \section{LNPS}
-優先度付き巨大近傍探索(LNPS)は，
-メタ戦略の一種である巨大近傍探索(LNS~\cite{Pisinger10})
-を基に，組合せ最適化問題に対して，
+
+優先度付き巨大近傍探索(LNPS~\cite{jsai2021:kutaba})は，
+メタ戦略の一種である巨大近傍探索(LNS)を基に，組合せ最適化問題に対して，
 系統的探索と確率的局所探索を統合的に適用するよう拡張した手法である．
 図~\ref{algo:lnps}に LNPS のアルゴリズムを示す．
+
 \begin{figure}[htb]\centering
 \begin{tabular}{l}\hline
 \textbf{Algorythm} Large Neighborhood Prioritized Search\\\hline

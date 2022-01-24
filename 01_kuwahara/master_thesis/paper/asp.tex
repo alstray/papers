@@ -52,29 +52,29 @@ ASPシステムは, 与えられた論理プログラムから,
 なかでも{\clingo}は, 高性能かつ高機能なASPシステムとして世界中で広く使
 われている. 
 
-次に, 解集合の定義について簡単に説明する. 
-詳細については文献
-\cite{%
-  baral03:cambridge,%
-  DBLP:conf/iclp/GelfondL88,%
-  DBLP:journals/amai/Niemela99}
- を参考にされたい. 
- 論理プログラム$P$について考える. 
-そして以下に示すような表記を導入する. 
-\begin{itemize}
-\item $\head{r}$ はルール$r$のヘッドを表す
-\item $\pbody{r}$はルール$r$のボディにあるデフォルトの否定が付いていないアト
-ムの集合を表す
-\item $\nbody{r}$はデフォルトの否定が付いているアトムの集合を表す
-\end{itemize}
+% 次に, 解集合の定義について簡単に説明する. 
+% 詳細については文献
+% \cite{%
+%   baral03:cambridge,%
+%   DBLP:conf/iclp/GelfondL88,%
+%   DBLP:journals/amai/Niemela99}
+%  を参考にされたい. 
+%  論理プログラム$P$について考える. 
+% そして以下に示すような表記を導入する. 
+% \begin{itemize}
+% \item $\head{r}$ はルール$r$のヘッドを表す
+% \item $\pbody{r}$はルール$r$のボディにあるデフォルトの否定が付いていないアト
+% ムの集合を表す
+% \item $\nbody{r}$はデフォルトの否定が付いているアトムの集合を表す
+% \end{itemize}
 
-論理プログラム$P$のアトム集合$X$に関するリダクト
-$\reduct{P}{X}$を以下のように定義する. 
-\[\reduct{P}{X}
-  =
- \{\head{r}\leftarrow\pbody{r} \mid r\in P, \nbody{r}\cap X=\emptyset\}\]
-この時, アトム集合$X$が$\reduct{P}{X}$の最小モデルであるならば, 
-$X$が$P$の解集合となる. 
+% 論理プログラム$P$のアトム集合$X$に関するリダクト
+% $\reduct{P}{X}$を以下のように定義する. 
+% \[\reduct{P}{X}
+%   =
+%  \{\head{r}\leftarrow\pbody{r} \mid r\in P, \nbody{r}\cap X=\emptyset\}\]
+% この時, アトム集合$X$が$\reduct{P}{X}$の最小モデルであるならば, 
+% $X$が$P$の解集合となる. 
 
 解集合プログラミングを用いた問題解法のプロセスは, 以下の手順からなる. 
 まず最初に, 解きたい問題を論理プログラムとして表現する. 
@@ -90,7 +90,7 @@ ASP システムとしては{\clingo}を用いる.
 表記法を表~\ref{tbl:map}に示す. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[htb]
+\begin{table}[tb]
   \centering
   \begin{tabular}{l|*{4}{p{1cm}}}
     論理プログラム &   $\leftarrow$ & $,$        & $;$        & $\sim$       \\\hline
@@ -101,14 +101,14 @@ ASP システムとしては{\clingo}を用いる.
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[htb]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=0.6\linewidth]{fig/graph.png}
   \caption{グラフ彩色問題のグラフ}
   \label{fig:graph}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=ht,caption={%
+\lstinputlisting[float=tb,caption={%
 グラフ彩色問題の論理プログラム (\code{color.lp})},%
 captionpos=b,frame=single,label=code:color.lp,%
 numbers=left,%
@@ -116,7 +116,7 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/color.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
+\lstinputlisting[float=tb,caption={%
 \code{color.lp}に対する{\clingo}の実行例},%
 captionpos=b,frame=single,label=code:color.log,%
 numbers=left,%
@@ -124,7 +124,22 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/color.log}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\lstinputlisting[float=tb,caption={%
+変数選択ヒューリスティクスの例 (\code{heu.lp})},%
+captionpos=b,frame=single,label=code:heu.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/heu.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+\code{heu.lp} に対する\textit{clingo}の実行例},%
+captionpos=b,frame=single,label=code:heu.log,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/heu.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 グラフ彩色問題とは, 辺で結ばれたノードが同じ色にならないように, 各ノー
@@ -203,24 +218,6 @@ $a$,$b$どちらの\#\textit{heuristic}ルールも有効となって,
 実行結果は$a$,$b$の両方を含む解が出力されることになる. 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
-変数選択ヒューリスティクスの例 (\code{heu.lp})},%
-captionpos=b,frame=single,label=code:heu.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/heu.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
-\code{heu.lp} に対する\textit{clingo}の実行例},%
-captionpos=b,frame=single,label=code:heu.log,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/heu.log}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 

@@ -1,30 +1,26 @@
 \chapter{ASP ソルバー 上での LNPS の実装}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\input{arch}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{arch}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 提案手法 LNPS を 高速 ASP ソルバー
 {\clingo}~\footnote{\url{https://potassco.org/clingo/}}
 上に実装した．提案ソルバー\textit{asprior}は，
 ASP ファクト形式の問題インスタンスと
 問題を解く ASP 符号化を入力とし，
 LNPS アルゴリズムを用いて解を求める(図~\ref{fig:arch}参照)．
-%
-\input{arch}
 
 提案ソルバーは，{\clingo}の Python インターフェースを利用して実装され
 ている．以下に，LNPS を実装する上で重要な役割を果たすASP 技術について
-簡単にまとめる．\\
+簡単にまとめる．
 
-\textbf{探索ヒューリスティックス}
+% \textbf{探索ヒューリスティックス}
+\section{探索ヒューリスティックス}
 
-ASP ソルバー{\clingo}では，\code{#heuristic}文を用いて，
-探索ヒューリスティックスをカスタマイズすることができる\footnote{%
-{\clingo}のデフォルト探索ヒューリスティックスは，
-SAT ソルバーと同じ VSIDS (Variable State Independent Decaying Sum)}．
-以下に例を示す．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=h,caption={%
+\lstinputlisting[float=tb,caption={%
 \code{\#heuristic}文の例 (\code{heu.lp})},%
 captionpos=b,frame=single,label=code:heu.lp,%
 numbers=none,%
@@ -32,6 +28,28 @@ breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\small]{code/heu.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[float=tb,caption={%
+\code{\#heuristic}文を無効にした実行例},%
+captionpos=b,frame=single,label=code:heu.log,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/heu.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\lstinputlisting[float=tb,caption={%
+\code{\#heuristic}文を有効にした実行例},%
+captionpos=b,frame=single,label=code:heu2.log,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/heu2.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ASP ソルバー{\clingo}では，\code{#heuristic}文を用いて，
+探索ヒューリスティックスをカスタマイズすることができる\footnote{%
+{\clingo}のデフォルト探索ヒューリスティックスは，
+SAT ソルバーと同じ VSIDS (Variable State Independent Decaying Sum)}．
+以下に例を示す．
 
 1行目のルールは，選択子を使ってアトム
 \code{a}と\code{b}を導入している．
@@ -50,32 +68,32 @@ basicstyle=\ttfamily\small]{code/heu.lp}
 解の探索において優先度の高いアトムから順に値が割当てられている
 ことがわかる．
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=h,caption={%
-\code{\#heuristic}文を無効にした実行例},%
-captionpos=b,frame=single,label=code:heu.log,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\small]{code/heu.log}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\lstinputlisting[float=h,caption={%
-\code{\#heuristic}文を有効にした実行例},%
-captionpos=b,frame=single,label=code:heu2.log,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\small]{code/heu2.log}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 LNPS の実装では，
 $destroy$で値割当てを取り消されなかった変数に対し，
 \code{#heuristic}文を利用して優先的に同じ値を割当てる．
 これにより，値割当てをなるべく維持したままでの解の再探索
 ($re\mathchar`-search$)を{\clingo}の系統的探索を用いて
-自然に実装できる．\\
+自然に実装できる．
 
-\textbf{マルチショット ASP 解法}
+% \textbf{マルチショット ASP 解法}
+\section{マルチショット ASP 解法}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+LNPSプログラム(メイン関数のみ)},%
+captionpos=b,frame=single,label=code:lnps.lp,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/lnps.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 
 ASP ソルバー{\clingo}は，
 同様の探索失敗を防ぐために獲得した学習節を保持することで，無駄な探索を
@@ -92,15 +110,6 @@ $destroy$と$re\mathchar`-search$の反復実行を簡潔に実装できる．\\
 メイン関数部分（一部コメント等を除く）である．
 順にコードの内容を説明する．\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=tphb,caption={%
-LNPSプログラム(メイン関数のみ)},%
-captionpos=b,frame=single,label=code:lnps.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\small]{code/lnps.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{itemize}
 \item \code{reuse} プログラムの基礎化を行う(2行目)．
