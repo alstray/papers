@@ -31,28 +31,6 @@ ASP を用いたクイーン支配問題の解法について述べる．
 ASPシステムによって解が計算される．
 本論文では，ASPシステムとして{\clingo}を用いる．
 
-
-\begin{huge}
-  \begin{itemize}
-  \item 問題インスタンスのファクト形式はいらない．
-  \item なぜなら，$n$と$k$が決まれば，問題が定まるので
-  \end{itemize}
-\end{huge}
-
-
-\section{ASPファクト形式}
-\lstinputlisting[float=ht,caption={%
-クイーン支配問題のASPファクト表現},%
-captionpos=b,frame=single,label=code:graph_example.lp,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/graph_example.lp}
-本節では，クイーン支配問題の入力となるクイーングラフ$Q_{n}$とクイーンの個数$k$のASPファクト形式について説明する．
-
-コード\ref{code:graph_example.lp}にクイーン支配問題のASPファクト表現を示す．
-アトム\code{n/1}は$Q_n$の列番号，行番号を表す．アトム\code{q/2}はクイーンの有無を表す．
-\section{ASP符号化}
 クイーン支配問題は，与えられたクイーングラフ$Q_n$と正の整数$k$に対して，サイズが$k$である$Q_n$の支配集合が存在するかどうかを判定する問題である．
 以下の制約を満たすとき，クイーングラフ$Q_{n}$にサイズが$k$の支配集合が存在する．
 \begin{itemize}
@@ -60,7 +38,9 @@ basicstyle=\ttfamily\scriptsize]{code/graph_example.lp}
 \end{itemize}
 
 本論文では，この制約を\textbf{被覆制約}と呼ぶ．\par
-以下では，前章で説明した基本制約モデル，改良モデル，部分和モデルのASP符号化について，それぞれ2種類提案する．
+以下では，前章で説明した基本制約モデル，改良モデル，部分和モデルのASP符号化について，それぞれ2種類ずつ提案する．
+
+以降の符号化において，アトム\code{n/1}は$Q_n$の列番号，行番号を，\code{u/1}は右上がり対角線の番号を，\code{d/1}は右下がり対角線の番号を表す．アトム\code{q/2}はクイーンの有無を表す．
 
 \section{基本制約モデルのASP符号化}
 基本制約モデルのASP符号化は，被覆制約をASPの一貫性制約で記述した基本的な符号化である．
@@ -90,7 +70,7 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp1_sat.lp}
 
 
-基本モデルの符号化2は，一貫性制約を用いてクイーングラフ上の全てのマスは自身かその隣接頂点にクイーンが1つ以上存在しなければならないことを表現している．
+基本モデルの符号化2は，5行目で一貫性制約と個数制約を用いて全てのマスが被覆制約を満たさなければならないことを表現している．
 \newpage
 \section{改良モデルのASP符号化}
 \lstinputlisting[float=ht,caption={%
@@ -103,10 +83,10 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_asp.lp}
 
 改良モデルのASP符号化1では，基本モデルにおいて複数回出現する部分式をまとめるための補助ブール変数と制約を追加した．\par
 具体的には，\begin{itemize}
-	     \item 5行目から8行目でマス\code{(X,Y)}にクイーンが置かれていたらその行，列，対角線方向はアタック可能であるという推論，
-	     \item 10行目で一貫性制約を用いて各マス\code{(i,j)}に対して被覆制約を満たさなければならないという制約
+	     \item 5行目から8行目でマス\code{(X,Y)}にクイーンが置かれていたらその行，列，対角線方向は\code{attackable}であるという推論
+	     \item 10行目で一貫性制約を用いて各マス\code{(i,j)}に対する被覆制約
 	    \end{itemize}
-を記述している．
+を記述している．これにより，基本モデルよりも変数と節の数が減少することが期待される．
 
 \lstinputlisting[float=ht,caption={%
  改良モデルのASP符号化2},%
@@ -119,9 +99,9 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_sat.lp}
 \newpage
 改良モデルのASP符号化2では，
 \begin{itemize}
- \item 7行目から10行目で各行，各列，各対角線方向に変数\code{attackable}を定義，
- \item 12行目から15行目でその行，列，対角線方向にクイーンがひとつも置かれていないならば被覆制約を満たすことはないという制約，
- \item 17行目の一貫性制約で全てのマスは被覆制約を満たさなければならない制約
+ \item 7行目から10行目で各行，各列，各対角線方向に変数\code{attackable}を定義
+ \item 12行目から15行目でその行，列，対角線方向が\code{attackable}ならばクイーンがひとつ以上存在すること
+ \item 17行目の一貫性制約で全てのマスに対する被覆制約
 \end{itemize}
 を記述している．
 \newpage
@@ -139,7 +119,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp3_cc.lp}
 \begin{itemize}
  \item 7行目から15行目で各行，各列，各対角線上のクイーンの個数を表す補助整数変数を導入し，
  \item 18行目から21行目で各行，列，対角線のクイーンの総数が$k$でなければならない制約， 
- \item 24行目で\[
+ \item 24行目で重み付き個数制約を用いて\[
 													  M+N+P+Q>0   
 													 \]
 という形で全てのマスについて被覆制約
