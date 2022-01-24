@@ -1,8 +1,8 @@
-\section{実行実験}\label{chap:exp}
+\chapter{実行実験}\label{chap:exp}
 
 
 提案解法の有効性を評価するために，
-節~\ref{chap:encode}の符号化に基づくソルバー
+\ref{chap:encode}~章の符号化に基づくソルバー
 を開発し，実行実験を行った．
 
 \textbf{トポロジ制約のみの配電網問題.}
@@ -42,17 +42,10 @@ ASPシステムと実験環境は上で示したものと同じである．
 実験結果を表~\ref{table:enum}に示す．
 表中の * は，トポロジ制約のみの配電網問題の実行可能解の総数と一致することを
 表す．
-\textsf{fukui-tepco}を除き，実行可能解を全列挙することができた．
+解の総数が多い\textsf{fukui-tepco}を除き，実行可能解を全列挙することができた．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[t]
-  \centering
-  \includegraphics[scale=0.5]{fig/cactus.eps}
-  \caption{トポロジ制約のASP符号化の比較 (カクタスプロット)} 
-  \label{fig:cactus}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table*}[t]
+\begin{table*}[tb]
   \caption{トポロジ制約のASP符号化の比較 (解けた問題数)} 
   \label{table:kibo}
   \centering
@@ -76,21 +69,26 @@ ASPシステムと実験環境は上で示したものと同じである．
   \end{tabular}
 \end{table*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb]
+  \centering
+  \includegraphics[scale=0.7]{fig/cactus.eps}
+  \caption{トポロジ制約のASP符号化の比較 (カクタスプロット)} 
+  \label{fig:cactus}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[tb]
  \centering
  \caption{全解列挙の結果}
  \label{table:enum}
-\begin{tabular}[t]{c|c|c|c}
+\begin{tabular}[t]{c|c|r|r}
  \noalign{\hrule height 1pt}
- 問題名 & $J_i^{max}$ & 総CPU時間 & 総数 \\
+ 問題名 & $J_i^{max}$ & \multicolumn{1}{c|}{総CPU時間} & \multicolumn{1}{c}{総数} \\
  \noalign{\hrule height 1pt}
  %%%%%%%%
- %test & 200 & 0.008s & UNSAT \\
- test & 250 & 0.026s & 45 \\
- & 300 & 0.060s & 114 \\
- & 400 & 0.009s & 279* \\ \hline
- %baran32 & 300 & 0.013s & UNSAT \\
- baran32 & 350 & 0.116s & 51127* \\ \hline
+ test & 250 & 0.026 & 45 \\
+ & 300 & 0.060 & 114 \\
+ & 400 & 0.009 & 279* \\ \hline
+ baran32 & 350 & 0.116 & 50751* \\ \hline
  fukui-tepco & 300 & TO~(5日) & 358億+  \\
  \noalign{\hrule height 1pt}
 \end{tabular}

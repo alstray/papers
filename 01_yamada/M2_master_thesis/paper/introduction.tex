@@ -1,4 +1,5 @@
-\section{はじめに}\label{chap:intro}
+\chapter{はじめに}\label{chap:intro}
+\pagenumbering{arabic}
 
 電力網の構成および制御は，エネルギーの節約や安定した電力供給を支える重
 要な基盤技術である．
@@ -62,7 +63,12 @@ ASP 言語の高い表現力，
 装技術は確立されているとはいえない．
 
 %------------------------------------------
-\input{arch}
+\begin{figure*}[t]
+ \centering
+ \scalebox{0.85}{\input{arch}}
+ \caption{提案解法の概要図}
+ \label{fig:arch}
+\end{figure*}
 %------------------------------------------
 
 本論文では，電気制約として電流制約のみを考慮した配電網問題および配電網
@@ -115,14 +121,16 @@ Graph Coloring and its Generalizations~\footnote{%
 合計 1000 問の配電網遷移問題を生成しベンチマーク問題として使用した．
 その結果，すべての問題の到達可能性を判定することができ，
 得られた最短ステップ長の最大値は7であった．
+また，マルチショットASP解法を導入することにより，
+通常の解法と比較して，平均で3.8倍の高速化を実現した．
 
-% 本稿の構成は以下の通りである．
-% \ref{chap:problem}節で根付き全域森の定義を示し，
-% \ref{chap:asp}節で解集合プログラミングの説明を行う．
-% \ref{chap:encode}節で根付き全域森問題のASP符号化を示し，
-% \ref{chap:core}節で根付き全域森問題を遷移問題へ拡張を行う．
-% \ref{chap:exp}節で評価実験とその考察を述べ，最後に，
-% \ref{chap:conc}節で本稿をまとめる．
+ % 本稿の構成は以下の通りである．
+ % \ref{chap:problem}章で配電網問題及び，配電網遷移問題の定義を示し，
+ % \ref{chap:asp}章で解集合プログラミングの説明を行う．
+ % \ref{chap:encode}章で配電網問題のASP符号化を示し，
+ % \ref{chap:exp}章で評価実験とその考察を述べる．
+ % \ref{chap:core}章で配電網遷移問題へ拡張を行い，
+ % 最後に，\ref{chap:conc}章で本稿をまとめる．
 
 %%% Local Variables:
 %%% mode: japanese-latex

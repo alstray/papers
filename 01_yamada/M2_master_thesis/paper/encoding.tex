@@ -1,6 +1,6 @@
-﻿\section{配電網問題のASP符号化}\label{chap:encode}
+﻿\chapter{配電網問題のASP符号化}\label{chap:encode}
 
-第~\ref{chap:intro}節の図~\ref{fig:arch}に示したように，
+第~\ref{chap:intro}章の図~\ref{fig:arch}に示したように，
 提案解法では，まず与えられた問題インスタンスを ASP のファクト形式に変
 換した後，そのファクトと配電網問題を解くための ASP 符号化を結合した上
 で，高速 ASP システム{\clingo}を用いて解を求める．
@@ -13,7 +13,7 @@
 最後に，\ref{chap:electrical}節で電流制約のASP符号化を示す．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{配電網問題インスタンスのファクト形式}\label{chap:fact}
+\section{配電網問題インスタンスのファクト形式}\label{chap:fact}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -25,7 +25,7 @@ numbersep=5pt,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/test.lp}
+basicstyle=\ttfamily\footnotesize]{code/test.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 図~\ref{fig:test-input}で示した
@@ -60,7 +60,7 @@ DNETに公開されているYAML形式の問題インスタンスを，ほぼ一
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{補助アトムの導入}\label{chap:prepro}
+\section{補助アトムの導入}\label{chap:prepro}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -72,7 +72,7 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/prepro.lp}
+basicstyle=\ttfamily\footnotesize]{code/prepro.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 配電網(遷移)問題の制約を簡潔に記述するために，
@@ -129,7 +129,7 @@ basicstyle=\ttfamily\scriptsize]{code/prepro.lp}
 \end{itemize}
 
 
-\subsection{トポロジ制約のASP符号化}\label{chap:topology}
+\section{トポロジ制約のASP符号化}\label{chap:topology}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -141,7 +141,7 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/srf1.lp}
+basicstyle=\ttfamily\footnotesize]{code/srf1.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
   トポロジ制約の改良符号化},%
@@ -152,7 +152,7 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/srf2.lp}
+basicstyle=\ttfamily\footnotesize]{code/srf2.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
   トポロジ制約の有向符号化},%
@@ -163,7 +163,7 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/srf3.lp}
+basicstyle=\ttfamily\footnotesize]{code/srf3.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 第~\ref{chap:problem}節で述べたように，
@@ -223,7 +223,7 @@ ASP の重み付き個数制約を使って表している．
 他の部分は改良符号化と同じである．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{電流制約のASP符号化}\label{chap:electrical}
+\section{電流制約のASP符号化}\label{chap:electrical}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -235,7 +235,7 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/electrical.lp}
+basicstyle=\ttfamily\footnotesize]{code/electrical.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 電流制約のASP符号化をコード\ref{code:electrical.lp}に示す．

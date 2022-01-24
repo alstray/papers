@@ -1,5 +1,4 @@
-\section{配電網問題と配電網遷移問題}\label{chap:problem}
-
+\chapter{配電網問題と配電網遷移問題}\label{chap:problem}
 %\subsection{配電網問題}
 
 配電網問題は，
@@ -55,10 +54,14 @@ $J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[tb]
+\rotatebox{90}{
+\begin{minipage}{\textheight}
  \centering
- \scalebox{0.6}{\input{tikz/tikz-test-input}}
+ \scalebox{1.1}{\input{tikz/tikz-test-input}}
   \caption{配電網問題の例}
   \label{fig:test-input}
+\end{minipage}
+}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,10 +74,14 @@ $J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{figure}[tb]
+\rotatebox{90}{
+\begin{minipage}{\textheight}
  \centering
- \scalebox{0.6}{\input{tikz/tikz-test-output}}
+ \scalebox{1.1}{\input{tikz/tikz-test-output}}
  \caption{配電網問題(図\ref{fig:test-input})の解の一例}
  \label{fig:test-output}
+\end{minipage}
+}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
@@ -101,88 +108,73 @@ sw_{10},sw_{11},sw_{12},sw_{13},sw_{15}\}\]
 集合は，$S_2^{down}=\{s_{2},s_{3},s_{4},s_{5},s_{13}\}$となる．したがって，
 $J_{2}=I_{2}+I_{3}+I_{4}+I_{5}+I_{13}$のように計算される．
 
-
-% 次に例として，図\ref{fig:test-input}で示した配電網問題の解を図\ref{fig:test-output}に示す．
-% この解は電流制約を$V_{max}=300$として求められた解である．閉じたスイッチは，$\{sw_{1},sw_{2},
-% sw_{4},sw_{5},sw_{7},sw_{8},sw_{9},sw_{10},sw_{11},sw_{12},sw_{13},sw_{15}\}$である．
-% このスイッチの集合から決まる配電経路は，図\ref{fig:test-output}の通り，トポロジ制約を満たしている．
-% また，各変電所に$\{s_a,s_b,s_c\}$について，それぞれ，
-% $s_a^{down}=\{s_a,s_1,s_2,s_3,s_4,s_5,s_{13},s_{15},s_{21}\}$，
-% $s_b^{down}\{s_b,s_6,s_7,s_8,s_9,s_{10},s_{11},s_{12},s_{14},s_{16},s_{22}\}$，
-% $s_c^{down}=\{s_c,s_{17},s_{18},s_{19},s_{20}\}$である．
-% したがって，表\ref{table:current}より，各供給経路に対する電流値の合計は，$J_a=162$，$J_b=284$，$J_c=71$となり，
-% 電流制約も満たしている．
-
-% ここで，トポロジ制約を満たす配電網構成は，\textbf{根付き全域森}という部分グラフに対応する
-% ことが知られている~\cite{Minato:dnet:netuki}．
-% 根付き全域森は以下のように定義される．
-% \theoremstyle{definition}
-% \newtheorem*{definition*}{定義}
-% \begin{definition*}
-%   グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
-%   このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
-%   $G'=(V,E'), E' \subseteq E$ である．
-%   \begin{enumerate}
-%   \item $G'$はサイクルを持たない．(非閉路制約)
-%   \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
-%   \end{enumerate}
-% 本稿では，与えられたグラフ$G$から，根付き全域森
-% $G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}と呼ぶ．
-% \end{definition*}
-
-% 根付き全域森問題の入力例となるグラフを図\ref{fig:test-netsuki-input}に示す．
-% 図\ref{fig:test-netsuki-input}は，図\ref{fig:test-input}で示した配電網に対応しており，
-% 配電区間$\{s_i ~|~ 1 \leq i \leq 22\}$は，スイッチで区切られる1つのまとまりごとに
-% \textbf{ノード}に対応する．例えば，区間$\{s_2,s_3,s_4\}$は，ノード5に対応している．
-% スイッチ$\{sw_1,\ldots,sw_{16}\}$は，\textbf{辺}に対応する．
-% また，図中の色付きノード$\{r_1,r_2,r_3\}$は変電所を含むことを意味しており，
-% \textbf{根}に対応している．
-
-% 根付き全域森の例を図\ref{fig:test-netsuki-output}に示す．根付き全域森は，
-% 各連結成分が必ずちょうど1つの根をもつ木構造を形成することで，
-% 非閉路制約と根付き連結制約を満たす．図\ref{fig:test-netsuki-output}は，
-% 図\ref{fig:test-output}の配電網問題の解に対応している．
-
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% \begin{figure}[tbp]
-%  \centering
-%  \begin{minipage}[b]{0.45\linewidth}
+% \newcommand{\lw}[1]{\smash{\lower-15.ex\hbox{#1}}}
+% \begin{figure*}[tb]
+%   %\renewcommand{\arraystretch}{0.9}
+%   \tabcolsep = 3mm
 %   \centering
-%   \scalebox{0.6}{\input{tikz/tikz-test-netsuki-input}}
-%   \caption{配電網問題(図\ref{fig:test-input})に対応する根付き全域森問題}
-%   \label{fig:test-netsuki-input}
-%  \end{minipage}
-%  \begin{minipage}[b]{0.45\linewidth}
-%   \centering
-%   \scalebox{0.6}{\input{tikz/tikz-test-netsuki-output}}
-%   \caption{配電網問題の解(図\ref{fig:test-output})に対応する根付き全域森問題の解}
-%   \label{fig:test-netsuki-output}
-%  \end{minipage}
-% \end{figure}  
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\subsection{配電網遷移問題}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\newcommand{\lw}[1]{\smash{\lower-15.ex\hbox{#1}}}
+%   \begin{tabular}{ccc}
+%     $t=0$ (スタート状態) & & $t=1$\\
+%     \scalebox{0.45}{\input{tikz/tikz-test-core-0}}
+%     & \lw{$\Rightarrow$} & 
+%     \scalebox{0.45}{\input{tikz/tikz-test-core-1}}\\
+%     & & $\Downarrow$\\
+%     & & \\
+%     \scalebox{0.45}{\input{tikz/tikz-test-core-3}}
+%     & \lw{$\Leftarrow$} &
+%     \scalebox{0.45}{\input{tikz/tikz-test-core-2}}\\
+%     $t=3$ (ゴール状態) & & $t=2$
+%   \end{tabular}
+%   \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例}
+%   \label{fig:test-core}
+% \end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[tb]
-  %\renewcommand{\arraystretch}{0.9}
-  \tabcolsep = 3mm
-  \centering
-  \begin{tabular}{ccc}
-    $t=0$ (スタート状態) & & $t=1$\\
-    \scalebox{0.45}{\input{tikz/tikz-test-core-0}}
-    & \lw{$\Rightarrow$} & 
-    \scalebox{0.45}{\input{tikz/tikz-test-core-1}}\\
-    & & $\Downarrow$\\
-    & & \\
-    \scalebox{0.45}{\input{tikz/tikz-test-core-3}}
-    & \lw{$\Leftarrow$} &
-    \scalebox{0.45}{\input{tikz/tikz-test-core-2}}\\
-    $t=3$ (ゴール状態) & & $t=2$
-  \end{tabular}
-  \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例}
-  \label{fig:test-core}
+\rotatebox{90}{
+\begin{minipage}{\textheight}
+ \centering
+ \scalebox{1.1}{\input{tikz/tikz-test-core-0}}
+ \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例 \textbf{($\mathbf{t=0}$ (スタート状態))}}
+ \label{fig:test-core}
+\end{minipage}
+}
+\end{figure*}
+%
+\begin{figure*}[tb]
+\rotatebox{90}{
+\begin{minipage}{\textheight}
+ \centering
+ \scalebox{1.1}{\input{tikz/tikz-test-core-1}}
+ \setcounter{figure}{2}
+ \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例 \textbf{($\mathbf{t=1}$)}}
+ %\label{fig:test-output}
+\end{minipage}
+}
+\end{figure*}
+%
+\begin{figure*}[tb]
+\rotatebox{90}{
+\begin{minipage}{\textheight}
+ \centering
+ \scalebox{1.1}{\input{tikz/tikz-test-core-2}}
+ \setcounter{figure}{2}
+ \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例 \textbf{($\mathbf{t=2}$)}}
+ %\label{fig:test-output}
+\end{minipage}
+}
+\end{figure*}
+%
+\begin{figure*}[tb]
+\rotatebox{90}{
+\begin{minipage}{\textheight}
+ \centering
+ \scalebox{1.1}{\input{tikz/tikz-test-core-3}}
+ \setcounter{figure}{2}
+ \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例 \textbf{($\mathbf{t=3}$ (ゴール状態))}}
+ %\label{fig:test-output}
+\end{minipage}
+}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

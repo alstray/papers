@@ -1,4 +1,4 @@
-\section{配電網遷移問題への拡張}\label{chap:core}
+\chapter{配電網遷移問題への拡張}\label{chap:core}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
@@ -10,10 +10,21 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/core-input.lp}
+basicstyle=\ttfamily\footnotesize]{code/core-input.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=tb,caption={%
-  配電網遷移問題のASP符号化},%
+  配電網遷移問題のシングルショット符号化},%
+captionpos=b,frame=single,label=code:singleshot.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\small]{code/singleshot.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  配電網遷移問題のマルチショット符号化},%
 captionpos=b,frame=single,label=code:pw-core.lp,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
@@ -21,7 +32,7 @@ numbersep=5pt,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
+basicstyle=\ttfamily\small]{code/pw-core.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 配電網遷移問題は，配電網問題とその2つの実行可能解が与え
@@ -47,24 +58,56 @@ basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
 また，ゴール状態での閉じたスイッチは，\code{goal_switch/1}によって表される．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textbf{配電網遷移問題の ASP 符号化．}
+\textbf{シングルショット符号化．}
+配電網遷移問題のASP符号化をコード\ref{code:singleshot.lp}に示す．
+この符号化は，与えられた配電網遷移問題に対して，ステップ長\code{t}の解が
+存在するかを判定し，存在する場合はその解を返す論理プログラムである．
+配電網問題のトポロジ制約の有向符号化(コード\ref{code:srf3.lp})，
+及び，電流制約のASP符号化(コード\ref{code:electrical.lp})からの拡張点は，
+以下の通りである．
+\begin{itemize}
+ \item 新しくステップを表すアトム\code{t(TT)}を導入．
+ \item 制約を表すルールの各アトムにステップを表す項\code{TT}を
+       引数として追加．
+ \item スタート状態とステップ\code{0}，ゴール状態とステップ\code{t}を対応させる
+       ルールを追加．
+ \item 遷移制約を表すルールを追加．
+\end{itemize}
+2行目の\code{t(0..t).}は，\code{t(0).}，\code{t(1).}， ~... \code{t(t).}に展開され，
+各ステップの識別子を表す．定数\code{t}はステップ長を表す整数値であり，
+実行時に与えられる．5行目のルールは，スタート状態とステップ\code{0}の閉じたスイッチが
+一致することを強制する．同様に，8行目のルールで，ゴール状態とステップ\code{t}の閉じた
+スイッチが一致することを強制する．
 %
-配電網遷移問題のASP符号化をコード\ref{code:pw-core.lp}に示す．
-%実行時には前処理のASP符号化(コード\ref{code:prepro.lp})とともに実行する．
-この符号化は，ASPシステム \clingo のマルチショットASP解法ライブラリを用いており，
-\code{base}，\code{step(t)}，\code{check(t)}の3パートから構成される．
+遷移制約は，41--43行目のルールで表される．
+\code{changed(SW,t)}は，ステップ\code{t-1}とステップ\code{t}の間でスイッチ\code{SW}
+の状態が変化したことを意味する．
+43行目のルールで，各ステップ\code{t}において，変化したスイッチの数が\code{d}であること
+を保証している．
 
+\textbf{マルチショット符号化．}
+シングルショット符号化は， 配電網問題のトポロジ制約と電流制約の符号化の自然な拡張に
+なっている．この符号化を用いて遷移問題を解くには，ステップ長\code{t}を増やしながら，
+複数の問題を繰り返し解く必要がある．しかし，各問題中の制約の大部分は共通であるため，
+ASPシステムが同一の探索空間を何度も調べることになり，求解効率が低下するという問題点
+がある．
+
+この問題を解決するために，ASP システム \clingo のマルチショットASP解法を適用する．
+この解法は，ASPシステムが同様の探索失敗を避けるために獲得した学習節を(部分的に)
+保持することで，無駄な探索を行うことなく，制約を追加した論理プログラムを連続的に
+解くことができる．そのため，求解性能の向上が期待できる．
+
+ASPシステム \clingo のマルチショットASP解法ライブラリを用いたASP符号化を
+コード\ref{code:pw-core.lp}に示す．
+この符号化は，
+\code{base}，\code{step(t)}，\code{check(t)}の3パートから構成される．
+%
 初めに\code{base}パートには，ステップ\code{t=0}で満たすべき制約を記述する．
-ここでは5行目のルールで，スタート状態とステップ\code{0}での閉じたスイッチが
-一致することを強制している．
+ここでは5行目のルールで，スタート状態とステップ\code{0}の対応を記述している．
 %
 次に\code{step(t)}パートには，各ステップ\code{t}において満たすべき制約を記述する．
-ここでは，\ref{chap:encode}節で示した有向符号化と電流制約の符号化の各アトムにステップを
-表す項\code{t}を引数として追加したルールを記述している(12--39行目)．さらに，
-42--44行目には，遷移制約を表すルールを記述している．\code{changed(SW,t)}
-は，ステップ\code{t-1}とステップ\code{t}の間でスイッチ\code{SW}の状態が変化した
-ことを意味する．44行目のルールで，各ステップ\code{t}において，変化したスイッチの数
-が\code{d}であることを保証している．
+ここでは，有向符号化と電流制約の符号化を拡張したルールを記述している(12--39行目)．
+さらに，42--44行目に遷移制約を表すルールを記述している．
 %
 最後に，\code{step(t)}パートでは，プログラムの終了条件を記述する．
 ここでは，50行目でゴール状態とステップ\code{t}の対応を記述する．
@@ -72,6 +115,26 @@ basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
 の真偽を動的に操作することにより無効化される．
 
 \textbf{実行実験.}
+%
+DNETで公開されている実用規模の配電網問題
+({\sf fukui-tepco}，スイッチ数 468，変電所の数 72，$J^{max}=300$)をベースにした．
+この問題の実行可能解から，スタート状態を10個，ゴール状態を100個
+をランダムに選び，それらを組み合わせた計1000問の配電網遷移問題を生
+成し，ベンチマーク問題とした．
+実験に用いたASPシステムと実験環境は~\ref{chap:exp}章で示したものと同じである．
+
+シングルショット符号化(コード~\ref{code:singleshot.lp})と，
+マルチショット符号化(コード~\ref{code:pw-core.lp})の実行結果を
+表~\ref{table:core}に示す．
+左から順に，
+最短ステップ長，解けた問題数，各符号化の平均CPU時間(秒)，シングルショット符号化と
+マルチショット符号化の平均CPU時間の比率を示している．
+今回行った実行実験では，全てのベンチマーク問題の到達可能性を判定するこ
+とができ，すべて到達可能であった．
+また，最大で最短ステップ長が7の問題を解くことができた．
+マルチショットASP解法を導入することで，通常の解法と比較して，
+平均で3.8倍の高速化を実現することができた．
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table*}[t]
   \centering
@@ -81,21 +144,6 @@ basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
   %\input{table/core-experiment2}
 \end{table*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-DNETで公開されている実用規模の配電網問題
-({\sf fukui-tepco}，スイッチ数 468，変電所の数 72，$J^{max}=300$)をベースにした．
-この問題の実行可能解から，スタート状態を10個，ゴール状態を100個
-をランダムに選び，それらを組み合わせた計1000問の配電網遷移問題を生
-成し，ベンチマーク問題とした．
-実験に用いたASPシステムと実験環境は~\ref{chap:exp}節で示したものと同じである．
-
-配電網遷移問題のASP符号化(コード~\ref{code:pw-core.lp})の実行結果を
-表~\ref{table:core}に示す．
-左から順に，
-最短ステップ長，解けた問題数，平均CPU時間を示している．
-今回行った実行実験では，全てのベンチマーク問題の到達可能性を判定するこ
-とができ，すべて到達可能であった．
-また，最大で最短ステップ長が7の問題を解くことができた．
 
 %%% Local Variables:
 %%% mode: japanese-latex
