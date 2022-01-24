@@ -17,7 +17,8 @@ ASP ソルバーは安定モデル意味論~\cite{DBLP:conf/iclp/GelfondL88}に�
 
 解集合プログラミングが成功した応用事例の一つに，
 \textbf{カリキュラムベース・コース時間割}
-(Curriculum-Based Course TimeTabling; CB-CTT~\cite{DBLP:journals/anor/BonuttiCGS12})
+(Curriculum-Based Course TimeTabling; CB-CTT~\cite{%
+  anor/Banbara2019,DBLP:journals/anor/BonuttiCGS12})
 がある．
 CB-CTT は大学等での一週間の講義スケジュールを編成する
 求解困難な組合せ最適化問題である．
@@ -36,13 +37,13 @@ ASP ソルバーの系統的探索を活かして，未解決問題の最適値�
 ``計算時間相応の解精度''の両方を備えた統合的探索手法を実現することは
 重要な研究課題といえる．
 
-本論文では，解集合プログラミング技術を用いた
+本論文では，解集合プログラミングに基づく
 \textbf{優先度付き巨大近傍探索}
 (Large Neighborhood Prioritized Search; LNPS)
 の実装，および，
 開発したソルバー \textit{asprior}の性能評価について述べる．
 
-先行研究で提案した LNPS~\cite{jsai2021:kutaba}は，
+LNPS~\cite{jsai2021:kutaba}は，
 ASP の系統的探索と
 メタ戦略の一種である巨大近傍探索
 (Large Neighborhood Search; LNS~\cite{Pisinger10})
@@ -55,36 +56,24 @@ LNPS は，解の再構築の操作を，値割当てをなるべく維持した
 での再探索に置き換えることで，取り消されなかった変数への再割当てを許す．
 これによって，どの値割当てを取り消すかに依存しすぎない探索を行うことが
 できる点が特長である．
-% LNPS は，メタ戦略と同様に，近接最適性が成り立つ問題に対する有効性が期
-% 待できる．また，各反復の終了条件を適切に設定することで解の最適性も保証で
-% きる．
-
+LNPS は，メタ戦略と同様に，近接最適性が成り立つ問題に対する有効性が期
+待できる．また，各反復の終了条件を適切に設定することで解の最適性も保証で
+きる．
 開発した \textit{asprior} は，
 ASP ファクト形式の問題インスタンスと
 問題を解く ASP 符号化を入力とし，
-LNPS アルゴリズムを用いて解を求める汎用的なソルバーである
-(図~\ref{fig:arch}参照)．
+LNPS アルゴリズムを用いて解を求める汎用的なソルバーである．
 \textit{asprior} は，
-高速 ASP ソルバー {\clingo}%~\footnote{\url{https://potassco.org/clingo/}}
+高速 ASP ソルバー {\clingo}~\footnote{\url{https://potassco.org/clingo/}}
 の Python インターフェースを利用して実装されている．
 
-提案手法を評価するために，
-国際時間割競技会の CB-CTT 問題集(全21問)を用いて性能評価を行った．
+提案手法を評価するために，国際時間割競技会 ITC2007~\footnote{\url{http://www.cs.qub.ac.uk/itc2007/}}
+で使用された問題を含む CB-CTT 問題集(全61問)を用いて性能評価を行った．
 その結果，
-表~\ref{table:bench:result2}に示すように，
 既知の最良値との比について，
-通常の ASP 解法が$+437\%$であったのに対し，
-提案手法は，その比を$+16\%$まで大幅に改善できた．
-%
-さらに，
-comp07,
-comp09,
-comp13,
-comp18
-について，既知の最良値を更新することに成功した．
-今後の課題としては，
-アダプティブ LNPS への拡張や他の時間割問題への適用などが挙げられる．
-
+通常の ASP 解法が$+???\%$であったのに対し，
+提案手法は，その比を$+??\%$まで大幅に改善できた．
+さらに，11問について，既知の最良値を更新することに成功した．
 
 
 %%% Local Variables:
