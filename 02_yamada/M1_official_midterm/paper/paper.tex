@@ -1,6 +1,10 @@
-\documentclass[a4j,10pt]{jarticle}
+\documentclass[a4j,10pt,dvipdfmx]{jarticle}
 \usepackage{multicol}
 \usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{here}
 
 \newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
 
@@ -28,6 +32,14 @@
 \begin{document}
 \maketitle
 \thispagestyle{empty}
+
+\begin{figure}[H]
+  \centering
+  \input{bcr.tex}
+  \caption{提案ソルバーの構成図}
+  \label{fig:bcr}
+\end{figure}
+
 \begin{multicols}{1}
 %%%%% 本文ここから %%%%%
 
@@ -86,8 +98,17 @@ $k$彩色遷移問題のベンチマーク問題90問を用いて
 有効性を確認できた．
 
 \textbf{有界組合せ遷移の提案．} 
+有界組合せ遷移は，ASP に基づく組合せ遷移の解法である．
+基の組合せ遷移問題から遷移系列の長さに制限を加えた
+部分問題を生成し，長さを増やしつつ繰り返し解く．
+遷移系列が見つかれば基の組合せ遷移問題も到達可能となる．
+一般に到達不能は判定できないが，遷移系列の長さの
+上限値が既知である場合は判定可能となる．
+長さの上限値としては，基の組合せ問題の解の
+総数などがあげられる．
 
 \textbf{ソルバーの開発．}
+図\ref{fig:bcr}
 
 \section{まとめ}
 
