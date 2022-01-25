@@ -12,18 +12,17 @@
 
 \textbf{Power Distribution Network Problem} (PDNP) can be generally 
 defined as determining the configuration of power distribution network,
-subject to satisfy both topological and electrical constraints. 
+subject to both topological and electrical constraints. 
 % 
-The topological constraints are that power supply paths have
-no short circuit (disjoint, include no loop) and
-distribution network has no power failure (no disconnected section)．
+The topological constraints enforce that the configuration has
+no short circuit and no power failure.
 %
-The electrical constraints are include current capacity
-and voltage profile.
-%
-For all sections in the network, the line current must not exceed 
-the capacity and the voltage magnitude must be equal to or greater 
-than the lower limit.
+The electrical constraints enforce that
+the line current must not exceed the capacity
+and that
+the voltage magnitude must be
+greater than or equal to the lower limit in all sections of the
+network.
 
 % \textbf{配電網問題} (Power Distribution Network Problem)
 % は，一般に，供給経路に関する\textbf{トポロジ制約}と，
@@ -38,12 +37,13 @@ than the lower limit.
 %
 
 \textbf{Power Distribution Network Reconfiguration Problem} (PDNRP) can be
-defined as, given PDNP and two feasible models, determining the reachability
-from one model to the other while satisfying the reconfiguration constraints and,
-if reachable, searching the shortest path.
+defined as, for a given PDNP instance and two feasible configurations,
+determining the reachability from one configuration to another one
+while satisfying the transition constraints.
+This paper focuses on searching the shortest path of PDNRPs.
 %
-This problem is aimed for the application  of the control of distribution 
-network to restore power outage during disasters.
+This problem can be applied to the distribution network
+reconfiguration aiming to restore power outage during disasters.
 
 % \textbf{配電網遷移問題}は，配電網問題とその2つの実行可能解が与え
 % られたとき，一方の解から他方の解へ，遷移制約を満たしつつ実行可能解のみ
@@ -52,26 +52,23 @@ network to restore power outage during disasters.
 % この問題は，配電網の構成制御における災害時の停電復旧などへの応用を狙い
 % としている．
 
-In this paper, we propose Answer Set Programming (ASP) based approach to
-PDNP and PDNRP.
+In this paper, we propose an approach to solving PDNPs and PDNRPs
+based on Answer Set Programming (ASP).
 %
-In our approach, first, A given problem instance convert into 
+In our approach, at first, a problem instance is converted into 
 a set of ASP facts. 
 %
-Then, the facts combined with ASP-encoding
-for PDNP or PDNRP can be solved by using ASP solver 
-\textit{clingo}.
+Then, the facts combined with ASP encoding
+for PDNP/PDNRP solving can be solved by using ASP systems,
+in our case \textit{clingo}.
 %
-We develop three ASP encodings of topological constraints
-(\textsf{basic}, \textsf{choice}, \textsf{directed}).
+We develop three ASP encodings of topological constraints:
+\textsf{basic}, \textsf{choice}, and \textsf{directed}.
 %
-The encoding idea of \textsf{directed} convert undirected graph
-into directed graph. 
-%
-Specifically, each edge $u-v$ in undirected graph correspond to 
-two arcs $u-v$, $v-u$ in directed graph.
-%
-This idea simplify the description of acyclicity.
+In particular, \textsf{directed} encoding can concisely express 
+the acyclicity of PDNP by introducing
+two arcs $u \rightarrow v$ and $v \rightarrow u$ 
+for each edge $u-v$ in the original distribution network.
 
 % 本論文では，配電網問題および配電網遷移問題に対して，解集合プログラミン
 % グ(Answer Set Programing; ASP)を用いた解法を提案する．
@@ -84,29 +81,22 @@ This idea simplify the description of acyclicity.
 % 化して解く符号化である．
 % この有向グラフ化により，非閉路制約を簡潔に表現できる．
 
-To solve PDNRP, PDNPs need to be solved repeatedly.
+To solve a PDNRP, we need to repeatedly solve a series of PDNPs.
 %
-However, the performance of ASP system in solving 
-reconfiguration problems is not effective.
+Since most of the constraints in each PDNP are common,
+launching \textit{clingo} for each slows down the execution speed of PDNRP solving.
 %
-ASP system has to searches the same 探索空間 many time,
-because most of the constraint in each problem are common.
+To solve this overhead, we develop an encoding of PDNRP
+based on \textit{clingo}'s multi-shot ASP solving.
 %
-For that reason, we develop an effective encoding by using multi-shot 
-ASP solving.
-%
-This encoding is the natural extension of ASP encoding of PDNP.
-%
-Using multi-shot ASP solving, ASP system can (partly) retain learning
-clauses to avoid similar conflict.
-%
-Therefore, it can continuously solve the logic program with additional
-constraints without waste search.
+This method enables us to incrementally solve PDNRP without
+launching \textit{clingo} many times.
 
 % 配電網遷移問題を解くには，複数の配電網問題を繰り返し解く必要がある．
 % しかし，各問題中の制約の大部分は共通であるため，ASP システムが同一の
 % 探索空間を何度も調べることになり，求解効率が低下するという問題点がある．
 % この問題を解決するために，マルチショット ASP 解法を利用した符号化を提案する．
+%
 % この符号化は，配電網問題の ASP 符号化の自然な拡張となっている．
 % マルチショット ASP 解法を利用することにより，
 % ASP システムが同様の探索失敗を避けるために獲得した学習節を
@@ -114,12 +104,13 @@ constraints without waste search.
 % プログラムを連続的に解くことができる．
 
 To evaluate the effectiveness of our approach, we conduct experiments
-using PDNPs: only topological constraints, 3 instances published in DNET 
-(Power Distribution Network Tool), 82 instances based on
-Graph Coloring and its Generalizations.
+using 3 PDNP instances (consisting of only topological constraints)
+from \textit{Power Distribution Network Tool} (DNET) site and
+82 PDNP instances from
+\textit{Graph Coloring and its Generalizations} site.
 %
-These results show the encoding of \textsf{directed} solves more instances
-faster than \textsf{basic} and \textsf{choice}.
+The experimental results show that \textsf{directed} encoding efficiently
+solves more instances than the others.
 
 % 提案解法の有効性を評価するために，
 % DNET (Power Distribution Network Evaluation Tool)
@@ -130,15 +121,16 @@ faster than \textsf{basic} and \textsf{choice}.
 % その結果，有向符号化は，基本符号化と改良符号化と比較して，より多くの問
 % 題をより高速に解くことが確認できた．
 
-In the experiment of PDNRP, we use 1000 benchmark instances.
+For the experiment of PDNRP, we use 1000 benchmark instances based on
+\textsf{fukui-tepco}, which is a practical PDNP instance of DNET.
 %
-These instances are generated by choosing randomly pair from feasible
-models of a practical scale problem (\textsf{fukui-tepco}) published in DNET.
+These instances are randomly generated by choosing pairs of feasible
+configurations of \textsf{fukui-tepco}.
 %
-As a result, we are able to decide the rechability of all instances.
+As a result, we succeed in deciding the reachability of all instances.
 %
-In addition, by using multi-shot ASP solving, we achieve about 3.8 times 
-faster than normal solving.
+Furthermore, the multi-shot ASP solving is 3.8 times faster in average
+than standard ASP solving.
 
 % 配電網遷移問題の実行実験については，DNETで公開されている実用規模の
 % 問題({\sf fukui-tepco})に対して，実行可能解のペアをランダムに選び，
@@ -149,3 +141,6 @@ faster than normal solving.
 
 
 \end{document}
+
+% LocalWords:  PDNP PDNRP reachability PDNRPs PDNPs clingo encodings
+% LocalWords:  acyclicity DNET fukui tepco
