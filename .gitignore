@@ -2,7 +2,7 @@
 .DS_store
 
 ## LaTeX 中間生成ファイル
-/auto/
+/**/auto/
 *.dvi
 *.aux
 *.nav
