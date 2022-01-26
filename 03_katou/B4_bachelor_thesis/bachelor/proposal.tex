@@ -36,7 +36,7 @@ ASPシステムによって解が計算される．
 以下の制約を満たすとき，クイーングラフ$Q_{n}$にサイズが$k$の支配集合が存在する．
 \begin{itemize}
  \item クイーングラフ$Q_n$上のマスは，
-  ひとつ以上のクイーンにより被覆されていなければならない．
+  1つ以上のクイーンにより被覆されていなければならない．
 \end{itemize}
 本論文では，この制約を\textbf{被覆制約}と呼ぶ．
 
@@ -111,7 +111,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_sat.lp}
 \begin{itemize}
  \item 7--10行目で各行，各列，各対角線方向に変数\code{attackable}を定義
  \item 12--15行目でその行，列，対角線方向が\code{attackable}ならば
-  クイーンがひとつ以上存在すること
+  クイーンが1つ以上存在すること
  \item 17行目の一貫性制約で全てのマスに対する被覆制約
 \end{itemize}
 を記述している．
