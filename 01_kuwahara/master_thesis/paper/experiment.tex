@@ -51,9 +51,9 @@ CB-CTTの既存研究~\cite{anor/Kiefer2017}を参考に，
 \item 提案手法: LNPSを{\clingo}上に実装
  \begin{itemize}
   \item destroy 演算子 : R-0/3/5, DP, DR, SR-5/10, DPSR-1/2/3 の 10 種類
-  \item 初期解探索のオプション : 既存手法の usc
-  \item 初期解探索の打切り : conflict 数が 250 万以上，または restart 数が 5,000 以上
-  \item $re\mathchar`-search$ の打切り : conflict 数が 3 万以上
+  \item 初期解探索は，usc を用いた探索を行い，conflict 数が 250 万以上，または restart 数が 5,000 以上で打ち切る．
+  \item $re\mathchar`-search$ は，bb による探索を行い，conflict 数が 3 万以上で打ち切る．
+  
  \end{itemize}
 \end{itemize}
 
@@ -74,6 +74,9 @@ CB-CTT 問題を解くための ASP 符号化には，
 ASPソルバーには{\clingo}-5.4.0を利用し，
 1問あたりの制限時間は1時間とした．
 実験環境は，Mac OS, 3.2GHz Intel Core i7, 64GB メモリである．
+既存手法ASPでの予備実験で，usc での実行が bb のものに比べて
+平均的に良い性能を示したため，
+初期解探索は usc を採用した．
 
 \section{実験結果}
 
