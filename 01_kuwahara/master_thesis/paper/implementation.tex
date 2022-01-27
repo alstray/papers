@@ -49,7 +49,17 @@ ASP ソルバー{\clingo}では，\code{#heuristic}文を用いて，
 探索ヒューリスティックスをカスタマイズすることができる\footnote{%
 {\clingo}のデフォルト探索ヒューリスティックスは，
 SAT ソルバーと同じ VSIDS (Variable State Independent Decaying Sum)}．
-以下に例を示す．
+変更には, 論理プログラム上で以下のような表記を用いることで行う. 
+\begin{displaymath}
+\#heuristic \quad A~ : ~Body. ~~~[w,m]
+\end{displaymath}
+
+これは, \textit{Body}が成り立つ時, アトム$A$の変数ヒューリスティクスを重み
+$w$と指定子$m$に従って変更することを表している. 
+本論文では, 指定子として $true$ と $false$ を例にとり説明をする. 
+$true$はアトムに優先的に真を割り当てるようにする指定子であり, 
+$false$はアトムに優先的に偽を割り当てるようにする指定子である. 
+コード~\ref{code:heu.lp}に\textit{Body}を省略した例を示す．
 
 1行目のルールは，選択子を使ってアトム
 \code{a}と\code{b}を導入している．
@@ -65,11 +75,9 @@ SAT ソルバーと同じ VSIDS (Variable State Independent Decaying Sum)}．
 コード~\ref{code:heu.log}に \code{#heuristic}文を無効にした実行例，
 コード~\ref{code:heu2.log}に有効にした実行例を示す．
 これらの例より，\code{#heuristic}文を使うことによって，
-解の探索において優先度の高いアトムから順に値が割当てられている
+解の探索において優先度の高いアトムから順に
+指定子に従って値が割当てられている
 ことがわかる．
-
-
-
 
 LNPS の実装では，
 $destroy$で値割当てを取り消されなかった変数に対し，
