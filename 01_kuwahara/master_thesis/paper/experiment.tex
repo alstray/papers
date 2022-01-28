@@ -44,7 +44,7 @@ CB-CTTの既存研究~\cite{anor/Kiefer2017}を参考に，
 \begin{itemize}\compress
 \item 既存手法: ASPソルバー{\clingo}
  \begin{itemize}
-  \item 分子限定法による探索（以下 bb）と充足不能コアを用いた探索（以下 usc）
+  \item 分枝限定法による探索（以下 bb）と充足不能コアを用いた探索（以下 usc）
   の 2 通りで実行を行い，オプションは先行研究~\cite{anor/Banbara2019}
   によって結果の良かったものを使用した．
  \end{itemize}
@@ -133,7 +133,7 @@ ASPソルバーには{\clingo}-5.4.0を利用し，
 提案手法は，1問を除くすべての問題に対して，既存手法と同じかより良い解
 を得ていることが確認できる．
 各手法について，最適値および最良値を求めた問題数を比較すると，
-提案手法 \textsf{DPSR-1} と \textsf{DPSR-1} が9問と最も多く，次いで
+提案手法 \textsf{DPSR-1} と \textsf{DPSR-2} が9問と最も多く，次いで
 \textsf{SR-10}が7問であった．
 
 表~\ref{table:bench:result2}に，ITC2007問題集における
