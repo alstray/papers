@@ -28,7 +28,7 @@
 この問題は，配電網の構成制御における災害時の停電復旧などへの応用を狙い
 としている．
 
-\textbf{解集合プログラミング}(Answer Set Programing; ASP\cite{%
+\textbf{解集合プログラミング}(Answer Set Programming; ASP\cite{%
   Baral03:cambridge,%
   Gelfond88:iclp,%
   Inoue08:jssst,%
@@ -57,7 +57,7 @@ ASP 言語の高い表現力，
   Hayashi:dnet:model,
   Minato:dnet:ZDD,
   DBLP:journals/tsg/InoueTWKYKTMH14}．
-しかしながら，著者らの知る限り，解集合プログラミングを用いた解法は存在しない．
+しかしながら，著者の知る限り，解集合プログラミングを用いた解法は存在しない．
 また，配電網遷移問題を解くアルゴリズム，ヒューリスティックス
 などの実践的な研究開発はまだ始まったばかりであり，実用的なソルバーの実
 装技術は確立されているとはいえない．
@@ -76,7 +76,7 @@ ASP 言語の高い表現力，
 提案解法では，まず与えられた問題インスタンスを ASP のファクト形式に変
 換した後，そのファクトと配電網(遷移)問題を解くための ASP 符号化を結合
 した上で，
-高速 ASP システム{\clingo}~\footnote{\url{https://potassco.org/clingo/}}
+高速 ASP システム{\clingo}~\footnote{\url{https://potassco.org/}}
 を用いて解を求める(図~\ref{fig:arch}参照)．
 
 配電網問題を解くための ASP 符号化は，トポロジ制約，電流制約の2つのパー
@@ -112,7 +112,7 @@ DNET (Power Distribution Network Evaluation Tool)~\footnote{%
 Graph Coloring and its Generalizations~\footnote{%
 \url{https://mat.tepper.cmu.edu/COLOR04/}}
 に公開されているグラフを基に独自に生成したトポロジ制約のみの配電網問題
-(計82問)を用いて実行実験を行なった．
+(全82問)を用いて実行実験を行なった．
 その結果，有向符号化は，基本符号化と改良符号化と比較して，より多くの問
 題をより高速に解くことが確認できた．
 %
