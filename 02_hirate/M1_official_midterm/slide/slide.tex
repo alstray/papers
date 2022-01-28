@@ -25,6 +25,8 @@
 \title{解集合プログラミングを用いた\\ハミルトン閉路問題の解法}
 \author{平手 貴大}
 \date{2022年2月16日\\前期課程中間発表}
+\institute{番原研究室}
+
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\maketitle}
@@ -55,34 +57,7 @@
     およびその関連問題を対象とする．    
   \end{alertblock}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{コスト制約付きハミルトン路問題}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{center}
-  \includegraphics[width=0.8\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
-\end{center}
-\vfill
-\only<1>{
-\begin{itemize}
-\item Knuth の The Art of Computer Programming に記載されている米国本
-  土48州の隣接関係を表すグラフ
-\item 頂点数は48，辺の数は105
-\item 各辺に付与されている数字は州都の間の距離 (マイル)
-\end{itemize}
-}
-\only<2>{
-\begin{exampleblock}{}
-  西海岸ワシントン州 (WA) から 東海岸メーン州 (ME) までの距離の総和
-  がある閾値以下であるハミルトン路を求める問題を考える．
-\end{exampleblock}
-\begin{itemize}
-\item WA から ME までのハミルトン路は 6,876,928 通りあり，
-  最短ハミルトン路は 11,698 マイルである．
-\item 閾値を最短距離の 10\%増 (12,868 マイル) とした場合，
-  解の総数は 16,180 個ある．
-\end{itemize}
-}
-\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
 
@@ -107,6 +82,7 @@
     \end{itemize}
   \end{alertblock}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究目的}
   \begin{alertblock}{研究目的}
@@ -115,165 +91,31 @@
   \end{alertblock}
   \pause
   \begin{block}{研究内容}
-    \begin{enumerate}
-    \item \structure{ハミルトン閉路問題を解く3種類の ASP 符号化を考案．}
-      \begin{itemize}
-      \item \textsf{undirected}符号化，\textsf{directed}符号化，\textsf{acyclicity}符号化．
-      \item ASP の \alert{ルール7個}程度で簡潔に表現できることを確認．
-      \end{itemize}
-      \pause
-    \item \structure{FHCPベンチマーク問題集を用いた評価実験．}
-      \begin{itemize}
-      \item \alert{FHCP Challenge 国際競技会}で使用された頂点数が
-        66個から9,528個の HCPインスタンス(全1,001問)を使用した．
-      \item directed 符号化が879問と最も多くの問題を解き，
-        他の符号化と比較して，その優位性が確認できた．
-      \item FHCP Challenge 競技会の上位ソルバーの成績と比較した結果，
-        directed 符号化は\alert{実質2位}に相当する性能であった．
-      % \item FHCP Challenge 競技会の優勝ソルバーは985問，2位は614問を解
-      %   いていることから，directed 符号化は\alert{実質2位}に相当．
-      \end{itemize}
-      \pause
-    \item \structure{最短ハミルトン閉路問題，コスト制約付きハミルト
-        ン閉路問題への拡張，および評価実験．} (今回は省略)
-      \end{enumerate}
+   \begin{enumerate}
+    \item \structure{HCP を解く3種類の ASP 符号化の実装(卒業研究)}
+	  \begin{itemize}
+	   \item \textsf{undirected}符号化，\textsf{directed}符号化，\textsf{acyclicity}符号化．
+	  \end{itemize}
+	  \pause
+    \item \alert{FHCPベンチマーク問題集を用いた評価実験}
+	  \begin{itemize}
+	   \item \alert{FHCP Challenge 国際競技会}で使用された頂点数が
+		 66個から9,528個の HCPインスタンス(全1,001問)を使用した．
+	   \item directed 符号化が879問と最も多くの問題を解き，
+		 他の符号化と比較して，その優位性が確認できた．
+	   \item FHCP Challenge 競技会の上位ソルバーの成績と比較した結果，
+		 directed 符号化は\alert{実質2位}に相当する性能であった．
+	  \end{itemize}
+	  \pause
+    \item \structure{CEGARを用いた手法の実装}
+	  \begin{itemize}
+	   \item HCP の連結制約を緩和した問題について，導き出された反例を
+		 禁止する制約を追加しながらインクリメンタルに解く手法．
+	  \end{itemize}
+   \end{enumerate}
   \end{block}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASP 言語の構文(1)}
-  \begin{alertblock}{}\centering
-    ASP言語は論理プログラムをベースとする\footnotemark[1]．
-  \end{alertblock}
-\begin{itemize}
-\item \structure{論理プログラム}とは以下の形式の\structure{ルール}
-  の有限集合である．
-  \[
-    \underbrace{a_0}_{\textrm{ヘッド}}\ \texttt{:-}\
-    \underbrace{a_1\texttt{,}\dots\texttt{,}a_m\texttt{,}
-      \texttt{not}\ {a_{m+1}}\texttt{,}\dots\texttt{,}
-      \texttt{not}\ {a_n}\texttt{.}}_{\textrm{ボディ}}
-  \]
-\item $0\leq m\leq n$ であり，各$a_i$はアトム，
-  \texttt{not}は\structure{デフォルトの否定}，
-  ``\texttt{,}''は連言を表す．
-\item \alert{\bf 直観的な意味}は「$a_1,\ldots,a_m$がすべて成り立ち,
-  $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，$a_0$が成り立つ」である．
-\end{itemize}
- \footnotetext[1]{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASP 言語の構文(2)}
 
-\begin{itemize}
-\item ボディが空のルールは\structure{ファクト}と呼ばれ，
-  ``\texttt{:-}''は省略できる．
-  \[
-    \underbrace{a_0}_{\textrm{ヘッド}}\texttt{.}
-  \]
-\item ヘッドが空のルールは\structure{一貫性制約}と呼ばれる．
-  \[
-    \texttt{:-}\
-    \underbrace{a_1\texttt{,}\dots\texttt{,}a_m\texttt{,}
-      \texttt{not}\ {a_{m+1}}\texttt{,}\dots\texttt{,}
-      \texttt{not}\ {a_n}\texttt{.}}_{\textrm{ボディ}}
-  \]
-  例えば，\\[1em]
-  \begin{tabular}[t]{l|l}
-    \(\texttt{:-}\ a\texttt{.}\) &
-   「$a$ではない」という禁止を表す．\\
-    \(\texttt{:-}\ \texttt{not}\ a\texttt{.}\) &
-   「$a$でなければならない」という強制を表す．\\
-    \(\texttt{:-}\ \texttt{not}\ a_1\texttt{,} {a_{2}}\texttt{.}\)&
-  「$a_2$ならば$a_1$」を表す．
-  \end{tabular}
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}[shrink]{拡張構文}
-\begin{alertblock}{}\centering
-  組合せ問題やグラフ問題を解くのに便利な構文が用意されている．
-\end{alertblock}
-
-\begin{itemize}
-\item \structure{選択子}\\
-  \begin{center}
-   \code{\{}\(a_1\texttt{;}\dots\texttt{;}a_n\)\code{\}.}\\
-  \end{center}
-  アトム集合\(\{a_1,\dots,a_n\}\)の任意の部分集合が成り立つことを意味
-  する．
-\item \structure{個数制約}
-  \begin{center}
-   $lb$\ \code{\{}\(a_1\texttt{;}\dots\texttt{;}a_n\)\code{\}}\ $ub$\code{.}
-  \end{center}
-  $a_1,\dots,a_n$のうち，$lb$個以上$ub$個以下が成り立つことを意味する．
-\item \structure{\texttt{\#edge}宣言}
-  \[
-      \texttt{\#edge(X,Y): 
-      arc(X,Y)}.
-  \]
-  \code{arc(X,Y)}を満たす有向辺\code{X}~$\rightarrow$~\code{Y}
-  を辺集合としてもつグラフが，閉路をもたないことを保証する．
-\end{itemize}
-\vfill
-\pause
-組合せ最適化問題を解くために，最小化関数 (\structure{\texttt{\#minimize}}) 
-と最大化関数 (\structure{\texttt{\#maximize}}) 等も用意されている.
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{ASP を用いたハミルトン閉路問題(HCP)の解法}
-
-\begin{alertblock}{}\centering
-開発した HCP ソルバーの構成図は以下の通りである．
-\end{alertblock}
-\vfill  
-\begin{center}
-  \setlength{\unitlength}{1.0pt}
-  \small\footnotesize\scriptsize
-  \begin{picture}(280,57)(4,-10)
-    \put(  0, 20){\dashbox(50,24){\shortstack{HCP\\インスタンス}}}
-    \put( 60, 20){\framebox(50,24){変換器}}
-    \put(120, 20){\alert{\dashbox(50,24){\shortstack{ASPファクト}}}}
-    \put(120,-10){\alert{\dashbox(50,24){\shortstack{ASP符号化\\\tiny{(論理プログラム)}}}}}
-    \put(180, 20){\framebox(50,24){ASPシステム}}
-    \put(240, 20){\dashbox(50,24){HCPの解}}
-    \put( 50, 32){\vector(1,0){10}}
-    \put(110, 32){\vector(1,0){10}}
-    \put(170, 32){\vector(1,0){10}}
-    \put(230, 32){\vector(1,0){10}}
-    \put(170, +2){\line(1,0){4}}
-    \put(174, +2){\line(0,1){30}}
-  \end{picture}      
-\end{center}
-  
-\begin{enumerate}
-\item HCP インスタンスを ASP のファクト形式に変換する．
-\item \alert{ASP ファクト}と HCP を解く
-  \alert{ASP符号化(論理プログラム)}を入力として，
-  ASP システムを用いて解集合を計算する．
-\item 解集合を解釈して，もとの HCP の解を得る．
-\end{enumerate}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ハミルトン閉路問題の ASP ファクト表現}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{center}
-\scalebox{0.8}[0.8]{\input{fig/graph_example.tex}}
-\end{center}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{exampleblock}{\code{graph.lp}}
-\lstinputlisting[frame=none,numbers=none]{code/graph_example.lp} 
-\end{exampleblock}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{itemize}
-\item HCPの場合，距離を表すアトム\code{cost/3}は省略可．
-\end{itemize}
-
-\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{考案したハミルトン閉路問題の ASP 符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -290,7 +132,6 @@
 \begin{enumerate}
 \item \alert{\textsf{undirected}符号化}
   \begin{itemize}
-%  \item HCP の次数制約と連結制約を簡潔に表現した符号化．
   \item ASP の一貫性制約を用いて，\structure{連結制約を簡潔に表現}．
   \end{itemize}
 \item \alert{\textsf{directed}符号化}
@@ -307,84 +148,6 @@
   \end{itemize}
 \end{enumerate}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]{\code{undirected} 符号化}
-
-\begin{exampleblock}{\code{undirected.lp}}
-\lstinputlisting[numbers=none, frame=none]{code/hc1.lp}
-\end{exampleblock}
-
-\begin{itemize}
-\item \code{(1)}: 各辺\code{edge(X,Y)}に対して，その辺がハミルト
-      ン閉路に含まれるかどうかを意味するアトム\code{in(X,Y)}を導入する．
-\item \code{(2)}: 次数制約．
-      各頂点\code{node(X)}に対し，その次数が2に等しくなることを表す．
-\item \code{(3)}--\code{(5)}: 頂点\code{X}が始点\code{s}から到達可能で
-  あることを意味する補助アトム\code{reached(X)}を導入する．
-\item \code{(6)}: 連結制約．各頂点\code{node(X)}が，
-  始点から到達可能となることを表す．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]{ASP システム{\clingo}の実行例}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{center}
-\scalebox{0.8}[0.8]{\input{fig/graph_example_out.tex}}
-\end{center}
-
-\begin{exampleblock}{}
-\lstinputlisting[numbers=none,frame=none]{code/output.txt}
-\end{exampleblock}
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]{\code{directed} 符号化}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{exampleblock}{\code{directed.lp}}
-\lstinputlisting[numbers=none, frame=none]{code/hc2.lp}
-\end{exampleblock}
-
-\only<1>{
-\begin{itemize}
-\item \code{(1)}: 与えられた無向グラフの各辺 \code{edge(X,Y)} に対して，
-  \alert{弧 \code{X}~$\rightarrow$~\code{Y}}を表す
-  \code{in(X,Y)} と
-  \alert{弧 \code{Y}~$\rightarrow$~\code{X}}を表す
-  \code{in(Y,X)} の2個のアトムを導入し，
-  2つの弧のうち，高々1個がハミルトン閉路に含まれることを表す．
-\end{itemize}
-}
-\only<2>{
-\begin{itemize}
-\item \code{(2)}--\code{(3)}: 次数制約
-  \begin{itemize}
-  \item \code{(2)}: 各頂点\code{node(X)}の出次数が1に等しいことを表す．
-  \item \code{(3)}: 各頂点\code{node(X)}の入次数が1に等しいことを表す．
-  \end{itemize}
-\item \code{(4)}--\code{(6)}: 連結制約は，\textsf{undirected}符号化と同じ．
-\item \code{(7)}: 対称解を除去する制約
-\end{itemize}
-}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[shrink]{\code{acyclicity} 符号化}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{exampleblock}{\code{acyclicity.lp}}
-\lstinputlisting[numbers=none, frame=none]{code/hc3.lp}
-\end{exampleblock}
-
-\begin{itemize}
-\item HCP の連結制約を\alert{部分閉路を禁止する制約}に置き換える．
-\item \code{directed} 符号化との違いは，ルール \code{(4)} のみ．
-\item \code{(4)}: \code{\#edge} 宣言を用いて，
-  始点 \code{s} を含まない弧 \code{in(X,Y)} で構成される
-  有向グラフが閉路を含まないことを保証する．
-\item {\clingo}の \code{\#edge} 宣言は，
-  ASP Modulo Theories 技術によって実装されている．
-\end{itemize}
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験概要}
@@ -395,66 +158,24 @@
 \vfill
 
 \begin{exampleblock}{ベンチマーク問題}
-  \begin{enumerate}
-  \item \alert{ハミルトン閉路問題}
-    \begin{itemize}
-    \item FHCP ベンチマーク問題集 (計1,001問)
-    \item 時間制限: 30分／問
-    \end{itemize}
-  \item 最短ハミルトン路問題
-    \begin{itemize}
-    \item 米国本土48州の隣接関係を表すグラフ，グリッドグラフ
-    \item 時間制限: 3時間／問
-    \end{itemize}
-  \item コスト制約付きハミルトン路問題 (解の全列挙)
-    \begin{itemize}
-  \item 米国本土48州の隣接関係を表すグラフ
-%    \item コスト制約の閾値を変化させた計10問
-    \item 時間制限: 3時間／問
-    \end{itemize}
-    \end{enumerate}
-\end{exampleblock}
-
-\begin{itemize}
-  \item \structure{ASP システム}: {\clingo}-5.5.0
-  \item \structure{実験環境}: Mac OS, Intel Corei7 3.2GHz, 64GBメモリ
-\end{itemize}
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{HCP: ベンチマーク問題集}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{block}{}\centering
 Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 公開されている HCP インスタンス(全1,001問)を使用した．
-\end{block}
-\vfill
 \begin{itemize}
 \item FHCP Challenge 国際競技会(2015年--2016年)で使用
 \item 頂点数は66個から9,528個 (平均は約3000個)
 \item すべてハミルトン閉路が存在する(充足可能な)インスタンス
 \item 代表的な TSP ソルバー \textsf{Concorde}, \textsf{LKH}, \textsf{SLH}
   のうち，2つ以上で解くことが難しいと判断された問題で構成されている．
-\item 標準的な HCP ヒューリスティックスでは解くのが難しいように設計され
-  ている．
+% \item 標準的な HCP ヒューリスティックスでは解くのが難しいように設計されている．
 \end{itemize}
-
-\footnotetext[2]{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{HCP: 解けた問題数}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%
-\input{fig/cyclesat_table.tex}%label{sat_table}
-%%%%%%%%%%
+\end{exampleblock}
 
 \begin{itemize}
-\item \code{directed} 符号化が最も多い 879 問を解いた．
-\item \code{directed} 符号化は，どの頂点数の範囲においても良い結果を示
-  しており，その優位性が確認できる．
+  \item \structure{制限時間}: 30分/問
+  \item \structure{ASP システム}: {\clingo}-5.5.0
+  \item \structure{実験環境}: Mac OS, Intel Corei7 3.2GHz, 64GBメモリ
 \end{itemize}
+\footnotetext[2]{https://sites.flinders.edu.au/flinders-hamiltonian-cycle-project/}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -518,8 +239,9 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 
 \footnotetext[3]{http://fhcp.edu.au/fhcpcs}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめ}
+\begin{frame}{まとめと今後の課題}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{alertblock}{}\centering
 % ASP を用いたハミルトン閉路問題の解法について述べた．
@@ -551,179 +273,63 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
   \end{itemize}
 \end{block}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{}
-  \begin{center}\Huge
-    Appendix
-  \end{center}
+\begin{frame}{発表業績}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 業績
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{HCP: 解けなかった98問の内訳}
+%Appendix
+\begin{frame}[noframenumbering]{}
+ \thispagestyle{empty}
+ \Huge 付録
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%
-\input{fig/unkn98.tex}
-%%%%%%%%%%
-
+\begin{frame}[noframenumbering]{コスト制約付きハミルトン路問題}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\begin{center}
+  \includegraphics[width=0.8\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
+\end{center}
+\vfill
+\only<1>{
 \begin{itemize}
-\item 解けなかった問題の頂点数の平均は約4558個であり，
-      全体の平均値である約3099個と比較して大きかった．
+\item Knuth の The Art of Computer Programming に記載されている米国本
+  土48州の隣接関係を表すグラフ
+\item 頂点数は48，辺の数は105
+\item 各辺に付与されている数字は州都の間の距離 (マイル)
 \end{itemize}
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{最短ハミルトン閉路問題への拡張}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{exampleblock}{目的関数}
-\lstinputlisting[frame=none, numbers=none]{code/obj_minimize.lp} 
+}
+\only<2>{
+\begin{exampleblock}{}
+  西海岸ワシントン州 (WA) から 東海岸メーン州 (ME) までの距離の総和
+  がある閾値以下であるハミルトン路を求める問題を考える．
 \end{exampleblock}
+\begin{itemize}
+\item WA から ME までのハミルトン路は 6,876,928 通りあり，
+  最短ハミルトン路は 11,698 マイルである．
+\item 閾値を最短距離の 10\%増 (12,868 マイル) とした場合，
+  解の総数は 16,180 個ある．
+\end{itemize}
+}
+\end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{HCP: 解けた問題数}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+%%%%%%%%%%
+\input{fig/cyclesat_table.tex}%label{sat_table}
+%%%%%%%%%%
 
 \begin{itemize}
-\item \textsf{undirected}, \textsf{directed}, \textsf{acyclicity}
-  の各符号化に，上の目的関数を追加すればよい．
-\item \textsf{undirected} の場合は，\code{(2)} のルールは不要．
+\item \code{directed} 符号化が最も多い 879 問を解いた．
+\item \code{directed} 符号化は，どの頂点数の範囲においても良い結果を示
+  しており，その優位性が確認できる．
 \end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{コスト制約付きハミルトン閉路問題への拡張}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{exampleblock}{コスト制約}
-\lstinputlisting[frame=none, numbers=none]{code/cost_constraint.lp}
-\end{exampleblock}
 
-\begin{itemize}
-\item \textsf{undirected}, \textsf{directed}, \textsf{acyclicity}
-  の各符号化に，上のコスト制約を追加すればよい．
-\item 定数 \code{c} は閾値を表し，実際の値は実行に与えられる．
-\item \textsf{undirected} の場合は，\code{(2)} のルールは不要．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{最短ハミルトン路問題の実験結果}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{block}{}\centering
-  各符号化で得られた目的関数の値を示す．    
-\end{block}
-  
-\begin{center}
-\input{fig/min_table_tr.tex}%\label{min_table_tr}    
-\end{center}
-
-\begin{itemize}
-\item 最適値と最良値の数は，
-      \code{undirected} 符号化が5問で最も多い．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{コスト制約付きハミルトン路問題の実験結果}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{block}{}\centering
-  解の全列挙に要した CPU 時間(秒)を示す．
-\end{block}
-
-\begin{center}
-  \scalebox{0.7}[0.7]{
-    \input{fig/cost_table.tex}
-  }
-\end{center}
-
-%\includegraphics[width=0.7\linewidth]{fig/taocp_vol4fasc1b_p52_eq133.pdf}
-
-\begin{itemize}
-\item \code{acyclicity} 符号化が，より多くの問題を
-  高速に解き，平均 CPU 時間も最も短かった．
-\end{itemize}  
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{ハミルトン閉路問題の実験結果(解けた問題数)}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/cyclesat_table_old.tex}%label{sat_table_old}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{itemize}
-\item 1列目は問題の種類，２列目は問題数，
-  3列目以降は各符号化で解けた問題数を\textsf{SAT}，\textsf{UNSAT}，
-  \textsf{SAT+UNSAT} (\textsf{S+U}) 毎に示す．
-\item \textsf{undirected} と \textsf{acyclicity} は，
-  494問中490問を解き，\textsf{directed} よりも多くの問題を解いた．
-%% \item \textsf{SAT}に限定すると，\textsf{undirected} が，最も多くの問題を解いた．
-%% \item \textsf{UNSAT}に限定すると，\textsf{directed} と \textsf{acyclicity} 符号化が，
-%%   \textsf{undirected} より1問多く解いた．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{ハミルトン閉路問題の実験結果(カクタスプロット)}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[tb]
-\begin{center}
-  \includegraphics[width=0.7\linewidth]{fig/cactus_old.png}
-%\caption{ハミルトン閉路問題: カクタスプロット (\textsf{SAT+UNSAT})}
-\label{cactus}
-\end{center}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{itemize}
-\item \textsf{acyclicity}符号化は，
-  解けた問題数が同じ\textsf{undirected}符号化と比較して，
-  より高速に問題を解いていることが確認できた．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{ベンチマーク詳細(1/2)}
-\begin{itemize}
-\item \textsf{color04} (127問)\\
-  グラフ彩色問題の国際競技会
-  COLOR02/03/04~\footnote{\url{https://mat.tepper.cmu.edu/COLOR02/}}
-  で使用された問題インスタンス．
-\item \textsf{complete} (15問)\\
-  SATソルバーを用いた既存研究~{\scriptsize[Soh+,2014]}で提供された
-  完全グラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
-\item \textsf{knight} (11問)\\
-%  \cite{DBLP:conf/sat/EenS03}で用いられた
-  $N\times N$の騎士巡回問題(Knight's Tour)のインスタンス．\\
-  $N=8,12,20,30,40,50,60,70,80,90,100$の11通り．
-\item \textsf{tsplib} (9問)\\
-  巡回セールスマン問題のポータルサイトTSPLIBに公開されている
-  インスタンス\footnote{\url{http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/hcp/}}．
-\end{itemize}  
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{ベンチマーク詳細(2/2)}
-\begin{itemize}
-\item \textsf{grid} (12問)\\
-  $N$次の正方グリッドグラフのインスタンス($6\leq N\leq 17$)．
-\item \textsf{random} (320問)\\
-  SATソルバーを用いた既存研究~{\scriptsize[Soh+,2014]}で提供された
-  ランダムグラフのインスタンス~\footnote{\url{https://tsoh.org/scarab/jelia2014/}}．
-\item \textsf{usmap} (1問)\\
-  %図~\ref{fig:USmap}に示されたグラフ．
-  D.~E~.Knuth の教科書
-  The Art of Computer Programming 
-  に記載されている最短ハミルトン路問題の例．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{ベンチマークサイズ}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{fig/bench_size.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}[noframenumbering]{参考文献}
-% \bibliographystyle{jplain} % 参考文献スタイル
-% \bibliography{aisat,bachelor}    % 参考文献リスト
-% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
