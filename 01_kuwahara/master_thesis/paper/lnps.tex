@@ -32,7 +32,7 @@ Pisinger らが提案した巨大近傍探索(LNS~\cite{Pisinger10}) は，
 
 \begin{enumerate}\compress
 \item 初期解を$x$と置き，暫定解$x^{*} := x$ とする(1--2行目)．
-\item \label{lnps:repeat_start}
+\item \label{lns:repeat_start}
   以下の$destroy$と$repair$で$x$から得られた解を$x^{t}$
   と置く(4行目)．
   \begin{itemize}\compress
@@ -43,10 +43,10 @@ Pisinger らが提案した巨大近傍探索(LNS~\cite{Pisinger10}) は，
   \begin{itemize}\compress
   \item 例えば，「$x^{t}$が$x$より改善された解なら」という条件を用いる．
   \end{itemize}
-\item \label{lnps:repeat_end}
+\item \label{lns:repeat_end}
   $x^{t}$が暫定解$x^{*}$より改善された解なら，$x^{*} := x^{t}$とする(8--10行目)．
 \item 終了条件が満たされるまで，
-  ステップ~\ref{lnps:repeat_start}〜\ref{lnps:repeat_end}を繰り返す(11行目)．
+  ステップ~\ref{lns:repeat_start}〜\ref{lns:repeat_end}を繰り返す(11行目)．
   \begin{itemize}\compress
   \item 例えば，反復回数や制限時間などを終了条件に用いる．
   \end{itemize}
