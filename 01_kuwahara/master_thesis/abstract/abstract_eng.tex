@@ -1,7 +1,6 @@
 \documentclass[dvipdfmx,a4paper]{jsarticle}
 
-\title{A Research on ASP-based Integration of\\
-Systematic and Stochastic Local Search}
+\title{ASP-based Integration of Systematic and Stochastic Local Search}
 \author{Name：Kazuya Kuwahara}
 \date{Student ID：252005066}
 
@@ -19,19 +18,16 @@ Systematic and Stochastic Local Search}
 %近年，SAT ソルバーの実装技術を応用した高速 ASP ソルバーが実現され，
 %人工知能分野の諸問題を中心に実用的応用が急速に拡大している．
 
-\textbf{Answer Set Programming} (ASP) is 
-a declarative programming paradigm derived from 
-logic programming. 
-The ASP language is one of 
-knowledge representation languages 
+\textbf{Answer Set Programming (ASP)} is 
+a declarative programming paradigm derived from logic programming. 
+The ASP language is one of knowledge representation languages 
 based on first-order predicate logic. 
-ASP solvers are programs 
-calculating an answer set based on stable model semantics. 
+ASP solvers are computer programs that calculate answer sets of logic
+programs based on stable model semantics.
 In recent years, 
 efficient ASP solvers utilizing 
-SAT solving implementation techniques 
-enable us to solve practical problems, 
-especially in the field of AI.
+SAT techniques enable us to solve a wide range of
+practical problems in AI field.
 
 %解集合プログラミングが成功した応用事例の一つに，
 %\textbf{カリキュラムベース・コース時間割}
@@ -45,25 +41,19 @@ especially in the field of AI.
 %ASP ソルバーの系統的探索を活かして，未解決問題の最適値決定を含む優れた
 %性能を示している．
 
-\textbf{Curriculum-Based Course TimeTabling} (CB-CTT) 
-is one of the most successful 
-ASP applications. 
-CB-CTT problem is 
-a difficult combinatorial problem 
-defined as the task of 
-making a weekly schedule of 
-lectures in universities. 
-The problem is composed of 
-hard constraints which must be strictly satisfied 
-and soft ones which are not necessarily satisfied. 
-The objective of the problem is 
-to minimize the sum of soft constraints' 
-violations (penalty). 
+\textbf{Curriculum-Based Course TimeTabling (CB-CTT)} 
+is one of the most successful ASP applications.
+The CB-CTT problem is a difficult combinatorial optimization problem
+defined as the task of constructing a weekly schedule of lectures in
+universities.
+The problem has a set of hard and soft constraints.
+Hard constraints must be strictly satisfied.
+Soft constraints are not necessarily satisfied,
+but the sum of their violations should be minimal.
 For this problem, 
-ASP shows an excellent performance 
-including optimal value determination 
-of open problems, 
-taking advantage of its systematic search.
+ASP has succeeded in finding new optimal solutions of previously
+unsolved problems by taking advantage of its powerful systematic
+search.
 
 %しかし，その一方で，ソフト制約の種類が多い問題集においては，
 %確率的局所探索に基づくメタ戦略が，
@@ -74,18 +64,14 @@ taking advantage of its systematic search.
 %重要な研究課題といえる．
 
 On the other hand, 
-meta-heuristics based on 
-stochastic local search 
-find better solutions 
-at instances with many kinds of 
-soft constraints. 
-Therefore, 
-To actualize integrated search method 
-with both strength of systematic search 
-\textbf{``certificate optimality''} 
-and strength of stochastic local search 
-\textbf{``appropriate solution for computation time''} 
-is important research task.
+meta-heuristics based on stochastic local search 
+can often find better solutions for 
+large CB-CTT instances having more soft constraints. 
+It is therefore important to investigate 
+an integrated method that combines
+strength of systematic and stochastic local search, such as
+``guarantee of optimality'' and 
+``solution quality meeting the cost of computation time''.
 
 %本論文では，解集合プログラミングに基づく
 %\textbf{優先度付き巨大近傍探索}
@@ -116,37 +102,31 @@ is important research task.
 %の Python インターフェースを利用して実装されている．
 
 In this paper, 
-we discuss implementation of 
-ASP-based \textbf{Large Neighborhood Prioritized Search} (LNPS) 
-and evaluation of developed solver \textit{asprior}. 
-LNPS is a search method 
-integrating systematic search of ASP with 
-one of meta heuristics, Large Neighborhood Search (LNS). 
-LNS cancels assignments of 
-some variables in a solution, 
-and rebuild it by reassigning only canceled variables. 
-In contrast, LNPS 
-allows variables which is not canceled 
-to be reassigned 
-by replacing rebuilding with 
-re-search which just keeps assignments 
-as much as possible. 
-By this, we can search 
-which is not too dependent on 
-canceled variables. 
-LNPS as well as meta heuristics 
-can be expected effectiveness to 
-problems which have 
-proximal optimality. 
-Moreover, LNPS can certify 
-optimality of solutions by 
-setting appropriate end conditions of each iteration. 
-A general-purpose solver \textit{asprior} finds solutions 
-with LNPS algorithm, 
-taking a instance in the form of ASP facts and 
-ASP encoding for problems as input. 
-We implement \textit{asprior} using 
-Python interface of efficient ASP solver \textit{clingo}.
+we describe an ASP-based implementation of 
+   \textbf{Large Neighborhood Prioritized Search (LNPS)} 
+and present the resulting solver \textit{asprior}. 
+%
+LNPS is an integrated search method of
+systematic search and Large Neighborhood Search (LNS). 
+During optimal search,
+LNS destroys the value assignments of some variables in a
+temporary solution, and then repairs them by re-assigning values to
+the destroyed variables only.
+In contrast, LNPS allows for the re-assignment of undestroyed variables
+as well as the destroyed ones by 
+replacing re-assigning with re-search,
+while keeping the assignments of undestroyed variables as much as possible. 
+Thus, LNPS is able to search solutions without strongly 
+depending on the destroyed variables. 
+Furthermore, LNPS can guarantee the optimality of obtained solutions
+and can be effective for a wide range of problems having the proximate
+optimality property.
+%
+For a given a problem instance and ASP encoding for problem solving,
+the resulting solver \textit{asprior} finds solutions based on LNPS
+algorithm.
+\textit{asprior} is implemented by using Python interface of efficient
+ASP solver \textit{clingo}.
 
 %提案手法を評価するために，国際時間割競技会 ITC2007
 %で使用された問題を含む CB-CTT 問題集(全61問)を用いて性能評価を行った．
@@ -156,17 +136,22 @@ Python interface of efficient ASP solver \textit{clingo}.
 %提案手法は，その比を$+53\%$まで大幅に改善できた．
 %さらに，11問について，既知の最良値を更新することに成功した．
 
-We carried out experiments on CB-CTT problems (61 instances)
-including ITC2007 problems 
-in order to evaluate our approach. 
+To evaluate our approach,
+we carried out experiments on CB-CTT problems (61 instances in total)
+including ITC2007 competition instances.
 As a result, 
-the proposed approach greatly improves 
-the ratio to known upper bounds to $+53\%$ 
-from existing ASP solving's $+472\%$. 
-Moreover, it successfully 
-found new upper bounds of 11 instances.
+the proposed approach is able to greatly improve
+the ratio of previously best known bounds
+from $+472\%$ of standard ASP solving to $+53\%$.
+Moreover, we succeed in finding new upper bounds of 11 instances.
 
 \end{document}
 
 % LocalWords:  PDNP PDNRP reachability PDNRPs PDNPs clingo encodings
-% LocalWords:  acyclicity DNET fukui tepco
+% LocalWords:  acyclicity DNET fukui tepco TimeTabling CTT optimality
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
+% LocalWords:  combinatorial LNPS asprior LNS undestroyed ITC
