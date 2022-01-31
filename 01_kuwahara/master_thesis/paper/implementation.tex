@@ -54,11 +54,11 @@ SAT ソルバーと同じ VSIDS (Variable State Independent Decaying Sum)}．
 \#heuristic \quad A~ : ~Body. ~~~[w,m]
 \end{displaymath}
 
-これは, \textit{Body}が成り立つ時, アトム$A$の変数ヒューリスティクスを重み
+これは, \textit{Body}が成り立つ時, アトム$A$の変数ヒューリスティックスを重み
 $w$と指定子$m$に従って変更することを表している. 
 本論文では, 指定子として $true$ と $false$ を例にとり説明をする. 
-$true$はアトムに優先的に真を割り当てるようにする指定子であり, 
-$false$はアトムに優先的に偽を割り当てるようにする指定子である. 
+$true$はアトムに優先的に真を割当てるようにする指定子であり, 
+$false$はアトムに優先的に偽を割当てるようにする指定子である. 
 コード~\ref{code:heu.lp}に\textit{Body}を省略した例を示す．
 
 1行目のルールは，選択子を使ってアトム
@@ -154,9 +154,9 @@ $destroy$と$re\mathchar`-search$の反復実行を簡潔に実装できる．\\
 （以下，\code{heu} アトム）を生成し，
 リスト \code{heu_atoms} に加えていく(21--24行目)．
  \begin{itemize}
-  \item \code{heu} アトムに真が割り当てられる
+  \item \code{heu} アトムに真が割当てられる
   ことによって \code{#heuristic}文が有効になり，
-  再利用したいアトムに優先的な値割り当てが行われるように
+  再利用したいアトムに優先的な値割当てが行われるように
   なっている．
  \end{itemize}
 \item 前回の反復での \code{heu} アトムを削除する(25--26行目)．
@@ -167,7 +167,7 @@ $destroy$と$re\mathchar`-search$の反復実行を簡潔に実装できる．\\
   実行中でのプログラムへの動的な追加・削除が可能になる．
  \end{itemize}
 \item まだ基礎化されていない追加されたプログラムをそれぞれ基礎化する(32--33行目)．
-\item \code{heu} アトムに真を割り当てる(34--35行目)．
+\item \code{heu} アトムに真を割当てる(34--35行目)．
 \item \code{heu} アトムの入ったリストを別のリストへコピー
 して空にする(36--37行目)．
 \item $re\mathchar`-search$ を行って解（$x^{t}$）を得る(39行目)．

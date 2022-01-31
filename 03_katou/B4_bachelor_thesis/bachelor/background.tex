@@ -16,7 +16,7 @@ $S$を$G$の\textbf{支配集合}という．
 グラフ$G$と正の整数$k$が与えられたとき，
 サイズが$k$の$G$の支配集合が存在するかどうかを
 判定する問題を\textbf{支配集合問題}という．
-支配集合問題は\textbf{NP完全}に属する問題である．
+支配集合問題は\textbf{NP完全}に属する問題であることが証明されている~\cite{Jhonson79}．
 
 \section{クイーン支配問題}
 $n\times n$のチェス盤について各マスを頂点とし，
@@ -25,23 +25,27 @@ $n\times n$のチェス盤について各マスを頂点とし，
 サイズ$n\times n$のクイーングラフを$Q_n$で表す．
 例えば，サイズ3のチェス盤とクイーングラフ$Q_3$の対応関係は
 図~\ref{ex:queengraph_3}のようになる．
- \begin{figure}[tb]
+
+クイーングラフ$Q_n$と正の整数$k$が与えられたとき，
+サイズ$k$の$Q_n$の支配集合が存在するかどうか判定する問題を
+\textbf{クイーン支配問題}という． \par
+クイーングラフの支配数は，1862年に~\cite{Jaenisch62}で$\gamma(Q_8)=5$が示されてから研究されており，$n=3,11$を除いて$n \leq 132$で$\lceil n/2 \rceil \leq \gamma(Q_n) \leq \lceil n/2 \rceil +1 $であることが証明されている~\cite{Ostergard01}．
+
+クイーングラフ$Q_n$に対する既知の支配数$\gamma(Q_n)$は，
+表\ref{tb:queen_n}の通りである．
+図\ref{ex:queengraph5}は，$Q_5$の最小支配集合の例である．
+3個のクイーンを置いたとき，
+クイーンを移動させて全てのマスにアタック可能である．
+また，2個または1個のクイーンを置いたとき，
+クイーンを移動させて全てのマスにアタックすることは不可能である．
+
+ \begin{figure}[htb]
    \centering
    \includegraphics[width=1.0\linewidth]{fig/fig-queen_3_graph.pdf}
    \caption{$3 \times 3$のチェス盤とクイーングラフ$Q_3$の対応関係}
    \label{ex:queengraph_3}
  \end{figure}
 
-クイーングラフ$Q_n$と正の整数$k$が与えられたとき，
-サイズ$k$の$Q_n$の支配集合が存在するかどうか判定する問題を
-\textbf{クイーン支配問題}という．
-クイーングラフ$Q_n$に対する既知の支配数$\gamma(Q_n)$は，
-表\ref{tb:queen_n}の通りである．
-図\ref{ex:queengraph5}は，$Q_5$の最小支配集合の例である．
-3個のクイーンを置いたとき，
-クイーンを移動させて全てのマスにアタック可能である．
-また，2個以下のクイーンを置いたとき，
-クイーンを移動させて全てのマスにアタックすることは不可能である．
 \begin{table}[hbtp]
    \centering
    \caption{$n$と$\gamma(Q_n)$の対応表}
