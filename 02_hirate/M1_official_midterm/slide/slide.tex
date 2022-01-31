@@ -1,4 +1,4 @@
-% 2021-08-23 revised by Banbara
+% 2022-01-31 revised by Banbara
 \documentclass[dvipdfmx]{beamer}
 
 %\usepackage{bxdpx-beamer}% dvipdfmxなので必要
@@ -92,7 +92,7 @@
   \pause
   \begin{block}{研究内容}
    \begin{enumerate}
-    \item \structure{HCP を解く3種類の ASP 符号化の実装(卒業研究)}
+    \item \structure{HCP を解く3種類の ASP 符号化の考案 (卒業研究)}
 	  \begin{itemize}
 	   \item \textsf{undirected}符号化，\textsf{directed}符号化，\textsf{acyclicity}符号化．
 	  \end{itemize}
@@ -107,10 +107,10 @@
 		 directed 符号化は\alert{実質2位}に相当する性能であった．
 	  \end{itemize}
 	  \pause
-    \item \structure{緩和問題と CEGAR を用いた手法の実装}
+    \item \structure{マルチショットASP解法を用いた手法の考案}
 	  \begin{itemize}
-	   \item HCP の連結制約を緩和した問題について，導き出された反例を
-		 禁止する制約を追加しながらインクリメンタルに解く手法．
+	   \item HCP の連結制約を緩和した問題について，部分巡回路を禁
+             止する制約をインクリメンタルに追加しながら解く手法．
 	  \end{itemize}
    \end{enumerate}
   \end{block}
@@ -260,28 +260,29 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
   \item FHCP Challenge 競技会の上位ソルバーの成績と比較した結果，
     directed 符号化は\alert{実質2位}に相当する性能を示した．
   \end{itemize}
-\item \structure{\bf 緩和問題とCEGARを用いた手法の実装} (今回は省略)
+\item \structure{\bf マルチショットASP解法を用いた手法の考案} (今回は省略)
 \end{enumerate}
 
 \begin{block}{今後の課題}
   \begin{itemize}
-  \item 緩和問題と CEGAR を用いた手法の評価実験．
-  \item Residue Number System を用いた手法の実装．
+  \item マルチショットASP解法を用いた手法の改良
+    \begin{itemize}
+    \item Residue Number System を用いた
+      HCP の ASP 符号化
+    \end{itemize}
   \item 巡回セールスマン問題への拡張．
   \end{itemize}
 \end{block}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ 研究業績}
+\begin{frame}{研究発表業績}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{itemize}
- \item \structure{\bf 発表業績}
- \begin{itemize}
-  \item 平手貴大，宋剛秀，田村直之，番原睦則．解集合プログラミングを用いたハミルトン閉路問題の解法に関する考察．
-         日本ソフトウェア科学会第38回大会講演論文集，34-L，日本ソフトウェア科学会，2021年9月2日．
- \end{itemize}
-\end{itemize}
+  \begin{enumerate}
+  \item 平手貴大，宋剛秀，田村直之，番原睦則．
+    解集合プログラミングを用いたハミルトン閉路問題の解法に関する考察．
+    日本ソフトウェア科学会第38回大会講演論文集，34-L，2021年9月2日．
+  \end{enumerate}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
