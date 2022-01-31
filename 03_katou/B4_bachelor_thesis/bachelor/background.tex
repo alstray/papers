@@ -31,8 +31,10 @@ $n\times n$のチェス盤について各マスを頂点とし，
 \textbf{クイーン支配問題}という． \par
 クイーングラフの支配数は，1862年に~\cite{Jaenisch62}で$\gamma(Q_8)=5$が示されてから研究されており，$n=3,11$を除いて$n \leq 132$で$\lceil n/2 \rceil \leq \gamma(Q_n) \leq \lceil n/2 \rceil +1 $であることが証明されている~\cite{Ostergard01}．
 
-クイーングラフ$Q_n$に対する既知の支配数$\gamma(Q_n)$は，
-表\ref{tb:queen_n}の通りである．
+表\ref{tb:queen_n}にクイーングラフ$Q_n$に対する支配数$\gamma(Q_n)$の上下限を示した．
+
+
+
 図\ref{ex:queengraph5}は，$Q_5$の最小支配集合の例である．
 3個のクイーンを置いたとき，
 クイーンを移動させて全てのマスにアタック可能である．
@@ -48,14 +50,14 @@ $n\times n$のチェス盤について各マスを頂点とし，
 
 \begin{table}[hbtp]
    \centering
-   \caption{$n$と$\gamma(Q_n)$の対応表}
-   \begin{tabular}{c|c||c|c||c|c||c|c} \hline
+   \caption{$n$と$\gamma(Q_n)$の上下限}
+   \begin{tabular}{c|c||c|c||c|c||c|c||c|c} \hline
     $n$ & $\gamma(Q_{n})$ & $n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ \\ \hline \hline
-    1 &1 &6 &3 &11 &5 &16 &9 \\ \hline
-    2 &1 &7 &4 &12 &6 &17 &9 \\ \hline
-    3 &1 &8 &5 &13 &7 &18 &9 \\ \hline
-    4 &2 &9 &5 &14 &8 &19 &10 \\ \hline
-    5 &3 &10 &5 &15 &9 &20 &11 \\ \hline
+    1 &1 &6 &3 &11 &5 &16 &9 &21 &11\\ \hline
+    2 &1 &7 &4 &12 &6 &17 &9 &22 &11-12\\ \hline
+    3 &1 &8 &5 &13 &7 &18 &9 &23 &12\\ \hline
+    4 &2 &9 &5 &14 &8 &19 &10 &24 &12-13\\ \hline
+    5 &3 &10 &5 &15 &9 &20 &11 &25 &13\\ \hline
    \end{tabular}
    \label{tb:queen_n}
   \end{table}
