@@ -8,7 +8,7 @@
 \usetikzlibrary{shadows}
 %\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}} % しおりが文字化けしないように
 
-\usepackage{otf}
+\usepackage[deluxe]{otf}%hgt(太い明朝，ゴシック)を使うためのdeluxe
 \usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
 \renewcommand{\kanjifamilydefault}{\gtdefault}
 \usepackage{graphicx,xcolor} % 文字の色
@@ -97,7 +97,7 @@
 	   \item \textsf{undirected}符号化，\textsf{directed}符号化，\textsf{acyclicity}符号化．
 	  \end{itemize}
 	  \pause
-    \item \alert{FHCPベンチマーク問題集を用いた評価実験}
+    \item \alert{\bf FHCPベンチマーク問題集を用いた評価実験}
 	  \begin{itemize}
 	   \item \alert{FHCP Challenge 国際競技会}で使用された頂点数が
 		 66個から9,528個の HCPインスタンス(全1,001問)を使用した．
@@ -107,7 +107,7 @@
 		 directed 符号化は\alert{実質2位}に相当する性能であった．
 	  \end{itemize}
 	  \pause
-    \item \structure{CEGARを用いた手法の実装}
+    \item \structure{緩和問題と CEGAR を用いた手法の実装}
 	  \begin{itemize}
 	   \item HCP の連結制約を緩和した問題について，導き出された反例を
 		 禁止する制約を追加しながらインクリメンタルに解く手法．
@@ -249,26 +249,24 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 % \vfill
 
 \begin{enumerate}
-\item \structure{ハミルトン閉路問題を解く3種類の ASP 符号化を考案}
+\item \structure{HCP を解く3種類の ASP 符号化の実装(卒業研究)}
   \begin{itemize}
   \item ASP の \alert{ルール7個}程度で簡潔に表現できることを確認．
   \end{itemize}
-\item \structure{FHCPベンチマーク問題集を用いた評価実験}
+\item \structure{\bf FHCPベンチマーク問題集を用いた評価実験}
   \begin{itemize}
   \item \code{directed} 符号化が879問と最も多くの問題を解き，
     他の符号化と比較して，その優位性が確認できた．
   \item FHCP Challenge 競技会の上位ソルバーの成績と比較した結果，
     directed 符号化は\alert{実質2位}に相当する性能を示した．
   \end{itemize}
-\item \structure{最短ハミルトン閉路問題，コスト制約付きハミルト
-    ン閉路問題への拡張，および評価実験} (今回は省略)
+\item \structure{\bf 緩和問題とCEGARを用いた手法の実装} (今回は省略)
 \end{enumerate}
 
 \begin{block}{今後の課題}
   \begin{itemize}
-  \item 実験結果のより詳細な分析．\code{directed} 符号化が多くの問題を
-    解けた理由等
-  \item 緩和問題と CEGARを用いた解法~{\scriptsize[Soh+,2014]}の実装．
+  \item 緩和問題と CEGAR を用いた手法の評価実験．
+  \item Residue Number System を用いた手法の実装．
   \item 巡回セールスマン問題への拡張．
   \end{itemize}
 \end{block}
@@ -277,8 +275,15 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{発表業績}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 業績
+\begin{itemize}
+ \item \structure{\bf 論文投稿}
+ \begin{itemize}
+  \item 平手貴大，宋剛秀，田村直之，番原睦則．解集合プログラミングを用いたハミルトン閉路問題の解法に関する考察．
+         日本ソフトウェア科学会第38回大会講演論文集，34-L，日本ソフトウェア科学会，2021年9月2日．
+ \end{itemize}
+\end{itemize}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Appendix
 \begin{frame}[noframenumbering]{}

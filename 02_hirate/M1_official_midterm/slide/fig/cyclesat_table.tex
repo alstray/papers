@@ -1,0 +1,21 @@
+\begin{table}[t]\scriptsize
+  \centering
+  %\tabcolsep = 0.8mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{lr|rrr}
+    頂点数 & 問題数 & \textsf{undirected} & \textsf{directed} & \textsf{acyclicity}\\
+   \hline
+    $\:\:\:\:\:\,\, 0 \leq |V| < 1000$     & 171   & 156   & \alert{171}   & 156  \\ %
+    $1000 \leq |V| < 2000$  & 165   & 120   & \alert{159}   & 121  \\
+    $2000 \leq |V| < 3000$  & 177   & 125   & \alert{163}   & 80   \\
+    $3000 \leq |V| < 4000$  & 185   & 104   & \alert{147}   & 48   \\
+    $4000 \leq |V| < 5000$  & 128   & 92    & \alert{106}   & 30   \\
+    $5000 \leq |V| < 6000$  & 80    & 63    & \alert{70}    & 21   \\
+    $6000 \leq |V| < 7000$  & 55    & 39    & \alert{41}    & 20   \\
+    $7000 \leq |V| < 8000$  & 28    & 12    & \alert{15}    & 4    \\
+    $8000 \leq |V| < 9000$  & 10    & 2     & \alert{5}     & 1    \\
+    $9000 \leq |V| < 10000$  & 2     & \alert{2}     & \alert{2}     & 1    \\
+   \hline
+    合計 & 1001 & 715   & \alert{879}   & 482  
+  \end{tabular}
+\end{table}

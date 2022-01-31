@@ -1,0 +1,60 @@
+\renewcommand{\bibname}{参考文献}
+
+%%
+%% Figure 環境中で Table 環境の見出しを表示・カウンタの操作に必要
+%%
+\makeatletter
+\newcommand{\figcaption}[1]{\def\@captype{figure}\caption{#1}}
+\newcommand{\tblcaption}[1]{\def\@captype{table}\caption{#1}}
+%\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\makeatother
+
+
+%listingsの設定
+\lstset{float=t,
+  frame=single,
+  numbers=left,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  basicstyle=\ttfamily\footnotesize,
+  moredelim=[is][\color{red}\bfseries]{<\#}{\#>},
+}
+
+%Tikzの設定(ベン図)
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes}
+\tikzset{
+  set label/.style={fill=white,ellipse,inner sep=2}
+}
+\def\vennradius{2}
+\def\vennratio{0.8}
+\def\venncenterA{90:\vennratio*\vennradius}
+\def\venncenterB{-150:\vennratio*\vennradius}
+\def\venncenterC{-30:\vennratio*\vennradius}
+\def\venncolorA{blue}
+\def\venncolorB{red}
+\def\venncolorC{green!70!black}
+\def\venncircleA{(\venncenterA) circle [radius=\vennradius]}
+\def\venncircleB{(\venncenterB) circle [radius=\vennradius]}
+\def\venncircleC{(\venncenterC) circle [radius=\vennradius]}
+
+%%% For ASP
+\newcommand{\asap}{\textit{teaspoon}}
+\newcommand{\clasp}{\textit{clasp}}
+\newcommand{\gringo}{\textit{gringo}}
+\newcommand{\clingo}{\textit{clingo}}
+\newcommand{\dlv}{\textit{DLV}}
+\newcommand{\wasp}{\textit{WASP}}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\naf}[1]{\ensuremath{{\sim\!\!{#1}}}}
+\newcommand{\head}[1]{\ensuremath{\mathit{head}(#1)}}
+\newcommand{\body}[1]{\ensuremath{\mathit{body}(#1)}}
+%\newcommand{\atom}[1]{\ensuremath{\mathit{atom}(#1)}}
+\newcommand{\poslits}[1]{\ensuremath{{#1}^+}}
+\newcommand{\neglits}[1]{\ensuremath{{#1}^-}}
+\newcommand{\pbody}[1]{\poslits{\body{#1}}}
+\newcommand{\nbody}[1]{\neglits{\body{#1}}}
+%\newcommand{\Cn}[1]{\ensuremath{\mathit{Cn}(#1)}}
+\newcommand{\reduct}[2]{\ensuremath{#1^{#2}}}
+\newcommand{\mcode}[1]{\ensuremath{{\mbox{\code{#1}}}}}
