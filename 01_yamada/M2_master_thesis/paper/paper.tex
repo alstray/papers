@@ -1,0 +1,49 @@
+\documentclass[japanese,dvipdfmx]{jbook}
+
+\usepackage{master}
+\input{macro}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% タイトル
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bookname{修　士　論　文}
+\institute{名古屋大学大学院情報学研究科}
+\major{情報システム学専攻}
+\title{解集合プログラミングを用いた\\配電網問題の解法に関する研究}
+\date{2021年度}
+\author{山田 健太郎}
+\studentid{252005214}
+
+\begin{document}
+\maketitle
+
+\input{abstract}
+
+\tableofcontents    % 目次
+\listoffigures      % 図の目次
+\listoftables       % 表の目次
+\lstlistoflistings  % コードの目次
+
+\input{introduction}
+\input{problem}
+\input{asp}
+\input{encoding}
+\input{experiment}
+\input{reconfiguration}
+\input{conclusion}
+
+\bibliographystyle{jplain}
+\bibliography{bachelor,aisat}    % 参考文献リスト
+
+\input{ack}
+
+\includepdf{backtitle.pdf}
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
+

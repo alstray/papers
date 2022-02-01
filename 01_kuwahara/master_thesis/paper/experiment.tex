@@ -1,0 +1,209 @@
+\chapter{評価実験}
+
+提案手法の有効性を評価するために
+カリキュラムベース・コース時間割問題
+に対する実行実験を行なった．
+
+\section{destroy 演算}
+LNPS の$destroy$については，
+CB-CTTの既存研究~\cite{anor/Kiefer2017}を参考に，
+以下の3種類を実装した．
+\begin{itemize}\compress
+\item \textsf{Random} $N$ (\textsf{R-$N$})\\
+  暫定解から変数の値割当ての$N$\%をランダムに選んで取り消す．
+\item \textsf{Day-Period} (\textsf{DP})\\
+  曜日\textsf{D}と時限\textsf{P}をランダムに1組選び，
+  暫定解から\textsf{D}曜\textsf{P}限に関する
+  変数の値割当てをすべて取り消す．
+\item \textsf{Day-Room} (\textsf{DR})\\
+  曜日\textsf{D}と教室\textsf{R}をランダムに1組選び，
+  暫定解から\textsf{D}曜日の\textsf{R}教室に関する
+  変数の値割当てをすべて取り消す．
+\end{itemize}
+
+また，上記の destroy 演算を参考に以下の
+2種類を新たに考案し実装した．いずれも，
+科目に対する曜日と時限の割当てはできるだけ維持する
+ことで，教室の変更を促し，
+教室に関するソフト制約への違反を減らすことを
+狙いとしている．
+\begin{itemize}
+\item \textsf{Swap-Room} $N$ (\textsf{SR-$N$})\\
+  \textsf{Random} $N$ と同様に，
+  暫定解から変数の値割当ての$N$\%をランダムに選んで取り消す．
+  ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
+\item \textsf{Day-Period-Swap-Room} $N$ (\textsf{DPSR-$N$})\\
+  \textsf{Day-Period} と同様に，
+  曜日\textsf{D}と時限\textsf{P}をランダムに $N$ 組選び，
+  暫定解から\textsf{D}曜\textsf{P}限に関する変数の値割当てをすべて取り消す．
+  ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
+\end{itemize}
+
+\section{実験概要}
+比較した手法は以下の2つである．
+\begin{itemize}\compress
+\item 既存手法: ASPソルバー{\clingo}
+ \begin{itemize}
+  \item 分枝限定法による探索（以下 bb）と充足不能コアを用いた探索（以下 usc）
+  の 2 通りで実行を行い，オプションは先行研究~\cite{anor/Banbara2019}
+  によって結果の良かったものを使用した．
+ \end{itemize}
+\item 提案手法: LNPSを{\clingo}上に実装
+ \begin{itemize}
+  \item destroy 演算子 : R-0/3/5, DP, DR, SR-5/10, DPSR-1/2/3 の 10 種類
+  \item 初期解探索手法 : usc
+  \item 初期回探索の打ち切り : conflict 数が 250 万以上，または restart 数が 5,000 以上
+  \item $re\mathchar`-search$ 手法 : bb
+  \item $re\mathchar`-search$ の打ち切り : conflict 数が 3 万以上
+  
+ \end{itemize}
+\end{itemize}
+
+ベンチマーク問題には，
+国際時間割競技会ITC2007~\footnote{%
+  \url{http://www.cs.qub.ac.uk/itc2007/}}
+で公開されているカリキュラムベース・コース時間割(CB-CTT)の
+問題集(全21問)と，
+他の問題集(全40問)に対して，
+ソフト制約が最も多い UD5 を使って
+評価を行なった~\cite{GasperoMS/ITC2007,DBLP:journals/anor/BonuttiCGS12}．
+CB-CTT 問題を解くための ASP 符号化には，
+\textsf{teaspoon}符号化~\cite{anor/Banbara2019}
+を使用した．
+%
+
+既存手法と提案手法ともに，
+ASPソルバーには{\clingo}-5.4.0を利用し，
+1問あたりの制限時間は1時間とした．
+実験環境は，Mac OS, 3.2GHz Intel Core i7, 64GB メモリである．
+
+初期解探索と$re\mathchar`-search$
+の手法に関して，それぞれ usc と bb の両方
+での予備実験を行い，平均的に良い性能を示した
+探索手法を採用している．
+
+\section{実験結果}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[pt]\centering
+  \caption{ITC2007問題集の実験結果: 得られた最適値と最良値}
+  \vskip 1em
+  \label{table:bench:result1}
+  \begin{tableA}
+    \input{tables/ipsj2022_value}
+  \end{tableA}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[pt]\centering
+  \caption{ITC2007問題集: 他のアプローチとの比較}
+  \vskip 1em  
+  \label{table:bench:result2}
+  \begin{tableB}
+    \input{tables/ipsj2022_comparison}
+  \end{tableB}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[pt]\centering
+  \caption{他の問題集の実験結果: 得られた最適値と最良値}
+  \vskip 1em
+  \label{table:bench:result3}
+  \begin{tableC}
+    \input{tables/ipsj2022_value2}
+  \end{tableC}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[pt]\centering
+  \caption{他の問題集: 他のアプローチとの比較}
+  \vskip 1em  
+  \label{table:bench:result4}
+  \begin{tableB}
+    \input{tables/ipsj2022_comparison2}
+  \end{tableB}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+表~\ref{table:bench:result1}に，ITC2007問題集に対して
+各手法で得られた最適値および最良値を示す．
+提案手法 LNPS については，3回の実験で得られた値のうち
+最も良かった値が記されている．
+各問題ごとに全手法の中で最も良かった値を太字で表している．
+`$\ast$'付きの値は最適値を意味する．
+提案手法で最適値決定ができた3問については，
+いずれも初期解探索の段階で求められている．
+提案手法は，1問を除くすべての問題に対して，既存手法と同じかより良い解
+を得ていることが確認できる．
+各手法について，最適値および最良値を求めた問題数を比較すると，
+提案手法 \textsf{DPSR-1} と \textsf{DPSR-2} が9問と最も多く，次いで
+\textsf{SR-10}が7問であった．
+
+表~\ref{table:bench:result2}に，ITC2007問題集における
+他のアプローチとの比較結果を示す．
+左から順に，
+問題名，
+既知の最良値($\sharp$)，
+既存手法 ASP の最良値と$\sharp$との比，
+提案手法 LNPS の最良値と$\sharp$との比が示されている．
+既知の最良値は，これまでに，メタ戦略に基づく各種アルゴリズム，整数計画法，
+SAT, MaxSAT, SMT など様々な手法で求められた結果である~\cite{anor/Banbara2019}．
+既存手法の最良値は，各問題に対して，表~\ref{table:bench:result1}中の既存
+手法(2種類)で得られた値の中で良かった値を示している．
+同様に提案手法の最良値も，各問題に対して，表~\ref{table:bench:result1}中の提
+案手法(10種類)で得られた値の中で最も良い値を示している．
+また，既知の最良値との比は，以下の計算結果を百分率で表したものである．
+\[
+既知の最良値との比 = \frac{得られた最良値 - 既知の最良値}{既知の最良値}
+\]
+既存手法 ASP は，既知の最良値との比が$+437\%$と高く，解の精度が悪いこ
+とが確認できる．
+一方，提案手法 LNPS は，既知の最良値との比が$+16\%$まで抑えられており，
+既存手法と比較して約 27 倍改善されている．
+提案手法の比は，3回の実験で最も良かった値
+をもとに計算されているが，
+3回の実験で得られた値の平均値をもとに
+同様の比を求めたところ$+29\%$となり，
+値は劣るがこちらも既存手法と比較して大きく改善されている．
+さらに，提案手法は，comp07, comp09, comp13, comp18 
+の4問について，
+既知の最良値を更新することに成功した．
+
+表~\ref{table:bench:result3}に，他の問題集に対して
+各手法で得られた最適値および最良値を示す．
+各問題ごとに全手法の中で最も良かった値を太字で表している．
+こちらは表~\ref{table:bench:result1}と異なり１回の実験で
+得られた値が記されている．
+`$\ast$'付きの値は最適値を意味する．
+提案手法で最適値決定ができた3問については，
+いずれも初期解探索の段階で求められている．
+提案手法は，4問を除くすべての問題に対して，既存手法と同じかより良い解
+を得ている．うち1問は，同じ値が得られたが，
+既存手法のみ最適値決定ができている．
+各手法について，最適値および最良値を求めた問題数を比較すると，
+提案手法 \textsf{DPSR-2} が19問と最も多く，
+次いで \textsf{SR-5, DPSR-1, DPSR-3} が17問であった．
+
+表~\ref{table:bench:result4}に，他の問題集における
+他のアプローチとの比較結果を示す．
+表の見方は表~\ref{table:bench:result2}と同様である．
+こちらも既存手法 ASP は，既知の最良値との比が$+490\%$と解の精度が悪く，
+提案手法 LNPS では，既知の最良値との比が$+72\%$に抑えられており，
+既存手法と比較して約 7 倍改善されていることが確認できる．
+さらに，提案手法は，
+EA11, 
+test4, 
+erlangen2012\_1, 
+erlangen2012\_2, 
+erlangen2013\_1, 
+erlangen2013\_2, 
+erlangen2014\_1 の7問について，
+既知の最良値を更新することに成功した．
+このうち，erlangenシリーズの5問については
+実行終了まで初期解探索の打ち切り条件を満たさなかった．
+今回，初期解探索および$re\mathchar`-search$の打ち切り条件について
+ITC2007問題集のみを用いたチューニングを行なったため，
+適切なタイミングでの$re\mathchar`-search$への移行や，
+さらなる解精度の向上という点で改良の余地がある．
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:

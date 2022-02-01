@@ -1,0 +1,22 @@
+\begin{table}[t]\tiny
+%  \caption{ハミルトン閉路問題: 解けた問題数}
+  \label{sat_table_old}
+  \centering  
+  %\tabcolsep = 0.8mm
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{lr||rrr||rrr||rrr}\hline
+    問題種類 & 問題数 &\multicolumn{3}{c ||}{\textsf{undirected}} & \multicolumn{3}{c ||}{\textsf{directed}} & \multicolumn{3}{c}{\textsf{acyclicity}}\\
+%     &  &  &  & {\tiny \textsf{SAT+}} &  &  & {\tiny \textsf{SAT+}} &  &  & {\tiny \textsf{SAT+}}\\
+     &  & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{S+U}} & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{S+U}} & {\tiny \textsf{SAT}} & {\tiny \textsf{UNSAT}} & {\tiny \textsf{S+U}}\\
+    \hline
+    \textsf{color04} & 127 & 95 & 31 & 126 & 93 & 31 & 124 & 94 & 31 & 125\\
+    \textsf{complete} & 15 & 15 & 0 & 15 & 15 & 0 & 15 & 15 & 0 & 15\\
+    \textsf{knight} & 11 & 11 & 0 & 11 & 11 & 0 & 11 & 11 & 0 & 11\\
+    \textsf{tsplib} & 9 & 9 & 0 & 9 & 9 & 0 & 9 & 9 & 0 & 9\\
+    \textsf{grid} & 12 & 6 & 3 & 9 & 6 & 4 & 10 & 6 & 4 & 10\\
+    \textsf{random} & 320 & 169 & 151 & 320 & 168 & 151 & 319 & 169 & 151 & 320\\
+    \hline
+    合計 & 494 & \alert{305} & 185 & \alert{490} & 302 & \alert{186} & 488 & 304 & \alert{186} & \alert{490}\\
+    \hline
+  \end{tabular}
+\end{table}

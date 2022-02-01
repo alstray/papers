@@ -1,4 +1,101 @@
-\section{配電網遷移問題のASP符号化}
+\section{配電網遷移問題への拡張}\label{chap:core}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  配電網遷移問題(図~\ref{fig:test-core})のファクト表現},%
+captionpos=b,frame=single,label=code:test-core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/core-input.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=tb,caption={%
+  配電網遷移問題のASP符号化},%
+captionpos=b,frame=single,label=code:pw-core.lp,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+numbersep=5pt,%
+numbers=left,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\scriptsize]{code/pw-core.lp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+配電網遷移問題は，配電網問題とその2つの実行可能解が与え
+られたとき，一方の解(スタート状態)から他方の解(ゴール状態)へ，遷移制約
+を満たしつつ，実行可能解のみを経由して最短ステップ長でのスイッチの切替
+手順を求める問題である．
+各ステップ$t$で切替可能なスイッチの数を$d$個に制限する一般的な
+遷移制約を用いる．
+
+本節では，まず，配電網遷移問題インスタンスのASPファクト形式について述べる．
+次に，第~\ref{chap:encode}節で示した配電網問題のASP符号化を拡張し，
+配電網遷移問題のASP符号化を提案する．
+最後に，提案するASP符号化を用いて行った実行実験の結果を示す．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{ファクト形式．}
+配電網遷移問題は，配電網問題インスタンスに加え，
+新たにスタート状態とゴール状態が入力として与えられる．
+コード\ref{code:test-core.lp}に，
+配電網遷移問題の例(図\ref{fig:test-core})における
+スタート状態($t=0$)とゴール状態($t=3$)のファクト表現を示す．
+スタート状態における閉じたスイッチは，\code{init_switch/1}によって表される．
+また，ゴール状態での閉じたスイッチは，\code{goal_switch/1}によって表される．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{配電網遷移問題の ASP 符号化．}
+%
+配電網遷移問題のASP符号化をコード\ref{code:pw-core.lp}に示す．
+%実行時には前処理のASP符号化(コード\ref{code:prepro.lp})とともに実行する．
+この符号化は，ASPシステム \clingo のマルチショットASP解法ライブラリを用いており，
+\code{base}，\code{step(t)}，\code{check(t)}の3パートから構成される．
+
+初めに\code{base}パートには，ステップ\code{t=0}で満たすべき制約を記述する．
+ここでは5行目のルールで，スタート状態とステップ\code{0}での閉じたスイッチが
+一致することを強制している．
+%
+次に\code{step(t)}パートには，各ステップ\code{t}において満たすべき制約を記述する．
+ここでは，\ref{chap:encode}節で示した有向符号化と電流制約の符号化の各アトムにステップを
+表す項\code{t}を引数として追加したルールを記述している(12--39行目)．さらに，
+42--44行目には，遷移制約を表すルールを記述している．\code{changed(SW,t)}
+は，ステップ\code{t-1}とステップ\code{t}の間でスイッチ\code{SW}の状態が変化した
+ことを意味する．44行目のルールで，各ステップ\code{t}において，変化したスイッチの数
+が\code{d}であることを保証している．
+%
+最後に，\code{step(t)}パートでは，プログラムの終了条件を記述する．
+ここでは，50行目でゴール状態とステップ\code{t}の対応を記述する．
+なお，\code{t}がインクリメントされると，一つ前の不要になった終了条件は，\code{query(t)}
+の真偽を動的に操作することにより無効化される．
+
+\textbf{実行実験.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[t]
+  \centering
+  \caption{配電網遷移問題のASP符号化(コード~\ref{code:pw-core.lp})の実行結果}
+  \label{table:core}
+  \input{table/core-experiment}
+  %\input{table/core-experiment2}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+DNETで公開されている実用規模の配電網問題
+({\sf fukui-tepco}，スイッチ数 468，変電所の数 72，$J^{max}=300$)をベースにした．
+この問題の実行可能解から，スタート状態を10個，ゴール状態を100個
+をランダムに選び，それらを組み合わせた計1000問の配電網遷移問題を生
+成し，ベンチマーク問題とした．
+実験に用いたASPシステムと実験環境は~\ref{chap:exp}節で示したものと同じである．
+
+配電網遷移問題のASP符号化(コード~\ref{code:pw-core.lp})の実行結果を
+表~\ref{table:core}に示す．
+左から順に，
+最短ステップ長，解けた問題数，平均CPU時間を示している．
+今回行った実行実験では，全てのベンチマーク問題の到達可能性を判定するこ
+とができ，すべて到達可能であった．
+また，最大で最短ステップ長が7の問題を解くことができた．
 
 %%% Local Variables:
 %%% mode: japanese-latex
