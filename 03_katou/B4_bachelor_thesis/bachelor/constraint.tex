@@ -18,7 +18,7 @@
 ここで，$A_{ij}$はマス$(i,j)$と$Q_n$上で隣接している頂点の集合を表す．
 \end{description}
 
-このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model0}のように変数と節が生成される．なお，コード~\ref{code:3-2_model0}において，\code{(int  q_i_j  0  1)}は\code{q_i_j}が0または1の値を取る変数であること，\code{(= (+ q_1_1 ... q_3_3) 2)}は\code{(q_1_1 + ... + q_3_3 = 2)}であること，\code{(> (+ q_1_1 ... q_3_3) 0)}は\code{((q_1_1 + ... + q_3_3) > 0)}であることを表す．
+このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model0}のように変数と節が生成される．なお，コード~\ref{code:3-2_model0}において，\code{(int }  \code{q_i_j }  \code{0  1)}は\code{q_i_j}が0または1の値を取る変数であること，\code{(= (+ q_1_1 } \code{... } \code{q_3_3) 2)}は\code{(q_1_1 } \code{+ ... + } \code{q_3_3 = 2)}であること，\code{(> (+ q_1_1 } \code{... } \code{q_3_3) 0)}は\code{((q_1_1 } \code{+ ... + } \code{q_3_3) > 0)}であることを表す．
 
 生成された節に着目すると，(制約2)で生成される節において，例えば16-18行目の\code{(+ q_1_1 q_1_2 q_1_3 ...)}のように同じ部分式が複数の節で出現していることがわかる．
 \lstinputlisting[float=ht,caption={%
@@ -59,7 +59,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
  \item[(制約7)] $(r_i > 0) \vee (c_j >0) \vee (u_{a}>0) \vee (d_{b}>0) \qquad (1 \leq i,j \leq n)$
 \end{description}
 
-このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model1}のように変数と節が生成される．なお，コード~\ref{code:3-2_model1}において，\code{(imp (> r_1 0) }\code{(> (+ q_1_1 q_1_2 q_1_3) 0))}は\code{((r_1 > 0)} $\rightarrow$ \code{(q_1_1 + q_1_2 + q_1_3 > 0))}であること，\code{(or (> r_1 0) } \code{(> c_1 0) } \code{(> u_1 0)} \code{(> d_3 0))}は\code{(r_1 > 0} $\vee$ \code{c_1 > 0} $\vee$ \code{u_1 > 0} $\vee$ \code{d_1 > 0)}を表す．
+このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model1}のように変数と節が生成される．なお，コード~\ref{code:3-2_model1}において，\code{(imp (> r_1 0) }\code{(> (+ q_1_1 } \code{q_1_2 } \code{q_1_3) 0))}は\code{((r_1 > 0)} $\rightarrow$ \code{(q_1_1 } \code{+ q_1_2 } \code{+ q_1_3 } \code{> 0))}であること，\code{(or (> r_1 0) } \code{(> c_1 0) } \code{(> u_1 0)} \code{(> d_3 0))}は\code{(r_1 > 0} $\vee$ \code{c_1 > 0} $\vee$ \code{u_1 > 0} $\vee$ \code{d_1 > 0)}を表す．
 \lstinputlisting[float=ht,caption={%
 改良モデルの実行例($n=3,k=2$)},%
 captionpos=b,frame=single,label=code:3-2_model1,%
@@ -106,7 +106,7 @@ $r_i = s$のとき，行$i$にクイーンが$s$個存在することを意味�
  \label{fig:constraint}
 \end{figure}
 
-このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model2}のように変数と節が生成される．なお，\code{(int r_1 0 2)}は\code{r_1}が0,1,2のいずれかの値をとる整数変数であることを表す．
+このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model2}のように変数と節が生成される．なお，\code{(int } \code{r_1 0 } \code{2)}は\code{r_1}が0,1,2のいずれかの値をとる整数変数であることを表す．
 \lstinputlisting[float=ht,caption={%
 部分和モデルの実行例($n=3,k=2$)},%
 captionpos=b,frame=single,label=code:3-2_model2,%

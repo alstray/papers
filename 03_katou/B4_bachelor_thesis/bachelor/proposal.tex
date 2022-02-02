@@ -46,6 +46,8 @@ ASPシステムによって解が計算される．
 \code{u/1}は右上がり対角線の番号を，\code{d/1}は右下がり対角線の番号を表す．
 アトム\code{q/2}はクイーンの有無を表す．
 
+\newpage
+
 \section{基本制約モデルのASP符号化}
 基本制約モデルのASP符号化は，被覆制約をASPの一貫性制約で記述した基本的な符号化である．
 
@@ -61,7 +63,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp1_asp.lp}
 \begin{itemize}
  \item 5--8行目で，マス$(A,B)$にクイーンが置かれているならば，
   その隣接頂点はすべて被覆制約を満たすということ，
- \item 10行目で，全てのマスは被覆制約を満たさなければならないこと
+ \item 10行目で，全てのマスに対する被覆制約
 \end{itemize}
 を表現している．
 
@@ -76,8 +78,8 @@ basicstyle=\ttfamily\scriptsize]{code/qdp1_sat.lp}
 
 
 基本モデルの符号化2は，5行目で一貫性制約と個数制約を用いて
-全てのマスが被覆制約を満たさなければならないことを表現している．
-%\newpage
+全てのマスに対する被覆制約をを表現している．
+\newpage
 \section{改良モデルのASP符号化}
 \lstinputlisting[float=ht,caption={%
  改良モデルのASP符号化1},%
@@ -94,7 +96,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_asp.lp}
 \begin{itemize}
   \item 5--8行目でマス\code{(X,Y)}にクイーンが置かれていたら
     その行，列，対角線方向は\code{attackable}であるということ
-  \item 10行目で一貫性制約を用いて全てのマスに対する被覆制約
+  \item 10行目で一貫性制約を用いて，全てのマスに対する被覆制約
 \end{itemize}
 を記述している．
 
@@ -112,11 +114,11 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_sat.lp}
  \item 7--10行目で各行，各列，各対角線方向に変数\code{attackable}を定義
  \item 12--15行目でその行，列，対角線方向が\code{attackable}ならば
   クイーンが1つ以上存在すること
- \item 17行目の一貫性制約で全てのマスに対する被覆制約
+ \item 17行目で一貫性制約を用いて，全てのマスに対する被覆制約
 \end{itemize}
 を記述している．
 
-%\newpage
+\newpage
 \section{部分和モデルのASP符号化}
 
 \lstinputlisting[float=ht,caption={%
@@ -129,8 +131,8 @@ basicstyle=\ttfamily\scriptsize]{code/qdp3_cc.lp}
 
 部分和モデルのASP符号化1では，
 \begin{itemize}
- \item 7--15行目で各行，各列，各対角線上のクイーンの個数を表す補助整数変数を導入し，
- \item 18--21行目で各行，列，対角線のクイーンの総数が$k$でなければならない制約， 
+ \item 7--15行目で各行，各列，各対角線上のクイーンの個数を表す補助整数変数の導入
+ \item 18--21行目で各行，列，対角線のクイーンの総数が$k$でなければならない制， 
  \item 24行目で重み付き個数制約を用いて
 	$$M+N+P+Q>0$$
   という形で全てのマスについて被覆制約
