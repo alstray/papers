@@ -337,6 +337,76 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{マルチショットASP解法を用いた手法}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\begin{block}{HCP の緩和問題}
+  与えられた無向グラフ$G= (V,E)$に対して，以下の\alert{次数制約}を満たす
+  部分グラフ$G'= (V,E')$が存在するか判定する問題．
+  \begin{itemize}
+  \item $G'$の各頂点の次数が2 (\structure{次数制約})
+  \item $G'$が連結 (\structure{連結制約})
+  \end{itemize}
+\end{block}
+マルチショットASP解法を用いた手法では，HCPの連結制約を緩和することで発生する部分巡回路を
+インクリメンタルに禁止する．
+\vskip 0.5cm
+\begin{columns}
+\begin{column}[c]{0.50\textwidth}
+\centering
+\begin{tikzpicture}[line width=1.0pt, node distance=2cm]
+\node(1) at (3,3) [draw, circle]{$1$};
+\node(2) at (4.25,2.55) [draw, circle]{$2$};
+\node(3) at (4.6,1.4) [draw, circle]{$3$};
+\node(4) [below=1.5 of 2] [draw, circle]{$4$};
+\node(5) [below=2.45 of 1] [draw, circle]{$5$};
+\node(6) [left =1.7 of 4] [draw, circle]{$6$};
+\node(7) at (1.4,1.4) [draw, circle]{$7$};
+\node(8) at (1.75,2.55) [draw, circle]{$8$};
+\draw[red][ultra thick] (1) -- (2);
+\draw[red][ultra thick] (2) -- (3);
+\draw (2) -- (6);
+\draw (3) -- (4);
+\draw (3) -- (5);
+\draw[red][ultra thick] (3) -- (7);
+\draw (4)[red][ultra thick] -- (5);
+\draw (4)[red][ultra thick] -- (6);
+\draw (5)[red][ultra thick] -- (6);
+\draw (6) -- (7);
+\draw[red][ultra thick] (7) -- (8);
+\draw[red][ultra thick] (8) -- (1);
+\end{tikzpicture}
+\end{column}
+\begin{column}[c]{0.50\textwidth}
+\centering
+\begin{tikzpicture}[line width=0.8pt, node distance=2cm]
+\node(1) at (3,3) [draw, circle]{$1$};
+\node(2) at (4.25,2.55) [draw, circle]{$2$};
+\node(3) at (4.6,1.4) [draw, circle]{$3$};
+\node(4) [below=1.5 of 2] [draw, circle]{$4$};
+\node(5) [below=2.45 of 1] [draw, circle]{$5$};
+\node(6) [left =1.7 of 4] [draw, circle]{$6$};
+\node(7) at (1.4,1.4) [draw, circle]{$7$};
+\node(8) at (1.75,2.55) [draw, circle]{$8$};
+\draw[red][ultra thick] (1) -- (2);
+\draw (2) -- (3);
+\draw[red][ultra thick] (2) -- (6);
+\draw[red][ultra thick] (3) -- (4);
+\draw[red][ultra thick] (3) -- (5);
+\draw (3) -- (7);
+\draw[red][ultra thick] (4) -- (5);
+\draw (4) -- (6);
+\draw (5) -- (6);
+\draw[red][ultra thick] (6) -- (7);
+\draw[red][ultra thick] (7) -- (8);
+\draw[red][ultra thick] (8) -- (1);
+\end{tikzpicture}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
 
