@@ -41,12 +41,22 @@ $n\times n$のチェス盤について各マスを頂点とし，
 また，2個または1個のクイーンを置いたとき，
 クイーンを移動させて全てのマスにアタックすることは不可能である．
 
- \begin{figure}[htb]
-   \centering
-   \includegraphics[width=1.0\linewidth]{fig/fig-queen_3_graph.pdf}
-   \caption{$3 \times 3$のチェス盤とクイーングラフ$Q_3$の対応関係}
-   \label{ex:queengraph_3}
- \end{figure}
+\begin{figure}[htb]
+  \label{ex:queengraph_3}
+ \begin{minipage}[b]{0.35\linewidth}
+  \centering
+  \input{tikz/queen_3.tex}
+ \end{minipage} 
+ \begin{minipage}[b]{0.2\linewidth}
+  \centering
+  \input{tikz/arrow.tex}
+ \end{minipage}
+ \begin{minipage}[b]{0.35\linewidth}
+  \centering
+  \input{tikz/queen_3_graph.tex}
+ \end{minipage}
+ \caption{チェス盤とクイーングラフの対応関係}
+\end{figure}
 
 \begin{table}[hbtp]
    \centering
@@ -65,7 +75,7 @@ $n\times n$のチェス盤について各マスを頂点とし，
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.6 \linewidth]{fig/fig-queen_5.pdf}
+  \input{tikz/queen_5.tex}
   \caption{$Q_5$の最小支配集合の例}
   \label{ex:queengraph5}
 \end{figure}
