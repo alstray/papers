@@ -59,7 +59,7 @@
     \alert{\bf PSPACE完全}であることが知られている．
     \begin{itemize}
 %    \item 命題論理の充足可能性判定(SAT)の遷移問題~[Gopalan+,'09]
-    \item 独立点集合の遷移問題~[Ito+,'11]
+    \item 独立集合の遷移問題~[Ito+,'11]
 %    \item 集合被覆の遷移問題~[Ito+,'11]
     \item \structure{グラフ点彩色の遷移問題}~[Bonsma+,'09]
 %    \item 15パズル
@@ -100,7 +100,7 @@
     \end{itemize}
   \end{block}
   \begin{itemize}
-  \item 代表的な組合せ遷移問題の一つである．
+  \item 代表的な組合せ遷移問題の1つである．
   \item 一般に$k \geq 4$で PSPACE 完全であることが知られている．
   \end{itemize}
 
@@ -180,11 +180,11 @@
 
   \begin{exampleblock}{その後の研究内容}
     \begin{enumerate}
-      \item 組合せ遷移問題の解法として\alert{\bf 有界組合せ遷移}を提案．
+      \item 組合せ遷移問題の解法として\textbf{有界組合せ遷移}を提案．
  %     \item インクリメンタル ASP 解法を利用し，基本ソルバーの
  %       問題点を改良した改良ソルバーを考案・評価．
-      \item ASPに基づく組合せ遷移ソルバー recongo を実装．
-      \item $k$彩色遷移問題を用いたソルバーの評価実験．
+      \item \alert<2>{ASPに基づく組合せ遷移ソルバー recongo を実装．}
+      \item \alert<2>{$k$彩色遷移問題を用いたソルバーの評価実験．}
     \end{enumerate}
   \end{exampleblock}
 \end{frame}
@@ -279,7 +279,7 @@
   \end{figure}
 
   \begin{itemize}
-    \item recongo は基本ソルバーより多くの問題を高速に解いている．
+    \item recongo は基本ソルバーよりも多くの問題を高速に解いている．
     \item \code{unchanged} 符号化は，\code{changed}符号化より良い性能
       を示した．
   \end{itemize}
@@ -324,8 +324,8 @@
     \begin{itemize}
     \item \structure{独立集合遷移問題}への適用
       \begin{itemize}
-      \item 代表的な組合せ遷移問題の一つ
-      \item 組合せ遷移競技会 CoRe Challenge 2022 のベンチマーク問題
+      \item 代表的な組合せ遷移問題の1つ
+      \item 組合せ遷移国際競技会 CoRe Challenge 2022 のベンチマーク問題
       \end{itemize}
       \item 提案ソルバー recongo の改良
     \end{itemize}
