@@ -17,7 +17,8 @@ basicstyle=\ttfamily\footnotesize]{code/aspfact.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 本節では，グラフ彩色判定問題を例としてASPファクト形式について説明する．
-図のグラフをファクト形式で表したものをコード~\ref{code:asp.lp}に示す．
+図~\ref{fig:graph}のグラフを
+ファクト形式で表したものをコード~\ref{code:asp.lp}に示す．
 
 1行目と2行目はそれぞれ頂点数と辺数を宣言している．
 4行目ではアトム~\code{node}によって頂点1から頂点6まで表している．
@@ -30,7 +31,7 @@ basicstyle=\ttfamily\footnotesize]{code/aspfact.lp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-グラフ彩色判定問題のASP符号化},%
+color 符号化},%
 captionpos=b,frame=single,label=code:color.lp,%
 numbers=left,%
 breaklines=true,%
@@ -38,7 +39,8 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/color1.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-コード~\ref{code:color.lp}にグラフ彩色判定問題のASP符号化を示す．
+コード~\ref{code:color.lp}にグラフ彩色判定問題のASP符号化，
+\textsf{color}~符号化を示す．
 符号化中の~\code{k}は色数を表しており，実行時に与えられる．
 1行目では彩色する色数を指定している．
 2行目のルールでは各頂点~\code{node(X)}に対して，
@@ -53,7 +55,7 @@ basicstyle=\ttfamily\footnotesize]{code/color1.lp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-同色頂点数最小化問題のASP符号化},%
+minimize 符号化},%
 captionpos=b,frame=single,label=code:color1.lp,%
 numbers=left,%
 breaklines=true,%
@@ -61,10 +63,10 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/color_min.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-グラフ彩色における同色頂点数最小化問題のASP符号化は，
-グラフ彩色判定問題のASP符号化をベースにして，
+グラフ彩色における同色頂点数最小化問題のASP符号化，\textsf{minimize}~符号化は，
+\textsf{color}~符号化をベースにして，
 同色で彩色される頂点数を最小化関数(~\code{#minimize})を用いて最小化する符号化である．
-コード~\ref{code:color1.lp}に同色頂点数最小化問題のASP符号化を示す．
+コード~\ref{code:color1.lp}に\textsf{minimize}~符号化を示す．
 
 %符号化中の~\code{k}は色数を表しており，実行時に与えられる．
 1行目では，色~\code{v}を指定し，この色で彩色される頂点数を最小化する．
@@ -85,7 +87,7 @@ basicstyle=\ttfamily\footnotesize]{code/color_min.lp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-同色頂点数最大化問題のASP符号化},%
+maximize 符号化},%
 captionpos=b,frame=single,label=code:color2.lp,%
 numbers=left,%
 breaklines=true,%
@@ -93,11 +95,11 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/color_max.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-グラフ彩色における同色頂点数最大化問題のASP符号化は，
-同色頂点数最小化問題のASP符号化と同様に，
+グラフ彩色における同色頂点数最大化問題のASP符号化，\textsf{maximize}~符号化は，
+\textsf{color}~符号化と同様に，
 グラフ彩色判定問題のASP符号化をベースにして，
 同色で彩色される頂点数を最大化関数(~\code{#maximize})を用いて最大化する符号化である．
-コード~\ref{code:color2.lp}に同色頂点数最大化問題のASP符号化を示す．
+コード~\ref{code:color2.lp}に\textsf{maximize}~符号化を示す．
 
 %符号化中の~\code{k}は色数を表しており，実行時に与えられる．
 1行目では，色~\code{v}を指定し，この色で彩色される頂点数を最大化する.
@@ -118,7 +120,7 @@ basicstyle=\ttfamily\footnotesize]{code/color_max.lp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-多色頂点数最大化問題のASP符号化},%
+mult 符号化},%
 captionpos=b,frame=single,label=code:color3.lp,%
 numbers=left,%
 breaklines=true,%
@@ -126,10 +128,10 @@ columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\footnotesize]{code/color_mult.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-グラフ彩色における多色頂点数最大化問題のASP符号化は，
-グラフ彩色判定問題のASP符号化をベースにして，
+グラフ彩色における多色頂点数最大化問題のASP符号化，\textsf{mult}~符号化は，
+\textsf{color}~符号化をベースにして，
 多色で彩色できる頂点数を最大化する符号化である．
-コード~\ref{code:color3.lp}に多色頂点数最大化問題のASP符号化を示す．
+コード~\ref{code:color3.lp}に\textsf{mult}~符号化を示す．
 
 %符号化中の~\code{k}は色数を表しており，実行時に与えられる．
 %1行目では彩色する色数を指定している．

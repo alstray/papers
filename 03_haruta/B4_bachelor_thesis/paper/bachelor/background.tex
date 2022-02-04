@@ -8,7 +8,7 @@
     \begin{minipage}[t]{0.45\linewidth}
       \centering
       \includegraphics[keepaspectratio,clip,scale=0.2]{fig/order3.png}
-      \caption{~\code{McGregor}~グラフ~\code{order}~3の図}
+      \caption{~\code{order}3の~\code{McGregor}~グラフ}
       \label{fig:order3}
     \end{minipage}
     \begin{minipage}[t]{0.45\linewidth}
@@ -21,9 +21,9 @@
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\, グラフの各頂点を隣接する頂点と異なる色で彩色することを
-\textbf{グラフ彩色問題(\code{Graph Coloring})}もしくは
-\textbf{グラフ点彩色問題}と呼ばれる．
+グラフの各頂点を隣接する頂点と異なる色で彩色することを
+\textbf{グラフ彩色問題(Graph Coloring)}もしくは
+\textbf{グラフ点彩色問題}と呼ぶ．
 以下に本論文で対象となる問題群について述べる．
 
 \begin{itemize}
@@ -37,16 +37,19 @@
   グラフ彩色問題において，2色以上で彩色できる頂点数を最大化する問題である．
 \end{itemize}
 
-図~\ref{fig:order3}に~\code{McGregor}~グラフの~\code{order}~3の図を示す．
-このグラフの頂点には00から32までの頂点番号が振られており，
-頂点数が12で辺数が30のグラフである．
+図~\ref{fig:order3}は，D.~E~.Knuthの教科書
+The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
+に記載されている~\code{order}~3の~\code{McGregor}~グラフである．
+このグラフは，頂点数が12で辺数が30のグラフであり，
+各頂点には00から32までの頂点番号が振られている．
 次に，図~\ref{fig:order3mult}に図~\ref{fig:order3}における，
 グラフ彩色における多色頂点数最大化問題の解の一例を示す．
-図~\ref{fig:order3mult}より
-多色で彩色できる頂点は頂点番号30のみであり，
+図~\ref{fig:order3mult}は，
+赤と青で彩色されている頂点番号30のみ多色で彩色できることを表している．
+したがって，図~\ref{fig:order3mult}の
 グラフ彩色における多色頂点数最大化問題の解は1である．
-さらに，この解では頂点番号30は赤と青の2色で彩色できるため，
-図~\ref{fig:order3}のグラフ彩色問題の解の2つを圧縮して表している．
+また，図~\ref{fig:order3mult}は図~\ref{fig:order3}の
+グラフ彩色問題の解の2つを圧縮して表している．
 このように，グラフ彩色における多色頂点数最大化問題により，得られた解は，
 グラフ彩色問題の解の一部を圧縮した形の解が得られる．
 
