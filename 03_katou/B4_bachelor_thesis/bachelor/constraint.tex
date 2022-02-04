@@ -48,7 +48,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
   1のとき，行$i$にクイーンが1つ以上存在することを意味する．
  \item[(制約3)] $r_{i}>0 \rightarrow \bigvee\limits_{(i',j')\in R_{i}} q_{i'j'}=1 \qquad (1 \leq i \leq n)$ \par
   $r_{i}$が1のとき，行$i$上にクイーンが1つ以上配置されていることを意味する．
-  ここで，$R_i$は行$i$上に存在する頂点の集合を表す．
+  ここで，$R_i$は行$i$上のマスの集合を表す．
 \end{description}
 %
 各列，各右上がり対角線，各右下がり対角線についても同様に，
@@ -60,7 +60,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
  \item[(制約5)] $u_{a}>0 \rightarrow \bigvee\limits_{(i',j')\in U_{a}} q_{i'j'}=1 \qquad (1 \leq a \leq 2n-1)$ 
  \item[(制約6)] $d_{b}>0 \rightarrow \bigvee\limits_{(i',j')\in D_{b}} q_{i'j'}=1 \qquad (1 \leq b \leq 2n-1)$ \par
   ここで，$C_j$，$U_{a}$，$D_{b}$はそれぞれ列$j$，右上がり対角線$a$，
-  右下がり対角線$b$上に存在する頂点の集合を表す．
+  右下がり対角線$b$上のマスの集合を表す．
 \end{description}
 
 さらに，基本制約モデルの(制約2)を削除し，以下の(制約7)に置き換える．
@@ -76,6 +76,11 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
 \code{> 0))}であること，\code{(or (> r_1 0) } \code{(> c_1 0) } 
 \code{(> u_1 0)} \code{(> d_3 0))}は\code{(r_1 > 0} $\vee$ 
 \code{c_1 > 0} $\vee$ \code{u_1 > 0} $\vee$ \code{d_1 > 0)}を表す．
+
+コード~\ref{code:3-2_model0}の(制約2)と
+コード~\ref{code:3-2_model1}の(制約7)を比較すると，
+(制約7)では同じ部分式が複数の節で出現していないことがわかる．
+
 \lstinputlisting[float=ht,caption={%
 改良制約モデルの実行例($n=3,k=2$)},%
 captionpos=b,frame=single,label=code:3-2_model1,%
