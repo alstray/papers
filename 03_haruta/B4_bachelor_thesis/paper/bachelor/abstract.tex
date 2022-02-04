@@ -3,17 +3,55 @@
 \pagenumbering{roman}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-表紙を情報工学コース用のスタイルにするために，作成した{\tt jbachelor.sty}が
-必要である．
-TexStudioなどの便利なTex統合環境を利用するために，lualtexを使うとよい．
-platex と lualatex を切り替えるためには，このファイルの先頭を編集してlualatex用
-のltjbook.clsを使うようにする．
-\begin{verbatim}
-%%% for platex
-\documentclass[a4paper,12pt]{jbook}
-%%% for lualatex
-%\documentclass[a4paper,12pt]{ltjbook}
-\end{verbatim}
+本論文では，\code{McGregor}グラフ~\cite{Knuth:TAOCP:SAT}において．
+解集合プログラミング(ASP)を用いた
+グラフ彩色判定問題，グラフ彩色における同色頂点数最小化問題，
+同色頂点数最大化問題，多色頂点数最大化問題の解法
+について述べる．
+本研究では，グラフをASPファクト形式で表現した．
+また，グラフ彩色判定問題を始めとした各問題を解くASP符号化
+\textsf{color}，\textsf{minimize}，\textsf{maximize}，\textsf{mult}
+を提案した．
+\textsf{color}~符号化はグラフ彩色判定問題を解く符号化である．
+\textsf{minimize}~符号化は\textsf{color}~符号化をベースに，
+ASPシステムの最小化関数を用いて，
+グラフ彩色における同色頂点数最小化問題を解く符号化である．
+\textsf{maximize}~符号化は\textsf{color}~符号化をベースに，
+ASPシステムの最小化関数を用いて，
+グラフ彩色における同色頂点数最大化問題を解く符号化である．
+\textsf{mult}~符号化は\textsf{color}~符号化をベースに，
+ASPシステムの個数制約と最大化関数を用いて，
+グラフ彩色における多色頂点数最大化問題を解く符号化である．
+
+提案した4種の符号化を評価するために，
+新たにベンチマークを作成した．
+本研究では
+\code{McGregor}グラフ~\cite{Knuth:TAOCP:SAT}の
+~\code{order}3$\sim$140までの計138問を作成した．
+\textsf{color}~符号化では作成したベンチマーク138問を使用し，
+実験を行った．
+その結果，136問において彩色できると判定した．
+また，グラフ彩色問題を全解列挙する実験をベンチマーク8問を使用し行った．
+その結果，5問において全解列挙することができた．
+\textsf{minimize}~符号化では作成したベンチマーク問題の内，
+18問を使用し実験を行った．
+その結果，15問の最適値と新たに2問の解を発見した．
+\textsf{maximize}~符号化では作成したベンチマーク問題の内，
+36問を使用し実験を行った．
+その結果，31問の最適値と新たに17問の解を発見した．
+\textsf{mult}~符号化では作成したベンチマーク問題の内，
+13問を使用し実験を行った．
+その結果，10問の最適値と新たに2問の解を発見した．
+また，グラフ彩色問題の全解列挙と\textsf{mult}~符号化の実験結果より，
+グラフ彩色における多色頂点数最大化問題で得られる解の圧縮率を求めた．
+その結果，グラフのサイズが大きいほど圧縮率が減少していくことが確認できた．
+
+% \begin{verbatim}
+% %%% for platex
+% \documentclass[a4paper,12pt]{jbook}
+% %%% for lualatex
+% %\documentclass[a4paper,12pt]{ltjbook}
+% \end{verbatim}
 
 %%% Local Variables:
 %%% mode: japanese-latex
