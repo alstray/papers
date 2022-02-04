@@ -7,27 +7,23 @@
   \thicklines
   \setlength{\unitlength}{1.2pt}
   \small\footnotesize\scriptsize
-  \begin{picture}(280,57)(4,-10)
-    \put(  0, 20){\dashbox(50,24){\shortstack{QDP問題\\インスタンス}}}
-    \put( 60, 20){\framebox(50,24){変換器}}
-    \put(120, 20){\dashbox(50,24){\shortstack{ASPファクト}}}
-    \put(120,-10){\dashbox(50,24){\shortstack{ASP符号化\\(論理プログラム)}}}
-    \put(180, 20){\framebox(50,24){ASPシステム}}
-    \put(240, 20){\dashbox(50,24){\shortstack{QDP問題\\の解}}}
+  \begin{picture}(150,57)(4,-10)
+    \put(  0, 20){\dashbox(50,24){\shortstack{ASP符号化\\(論理プログラム)}}}
+    \put(  0,-20){\dashbox(50,24){\shortstack{入力$n,k$}}}
+    \put( 60, 20){\framebox(50,24){ASPシステム}}
+    \put(120, 20){\dashbox(50,24){\shortstack{QDP問題\\の解}}}
     \put( 50, 32){\vector(1,0){10}}
     \put(110, 32){\vector(1,0){10}}
-    \put(170, 32){\vector(1,0){10}}
-    \put(230, 32){\vector(1,0){10}}
-    \put(170, +2){\line(1,0){4}}
-    \put(174, +2){\line(0,1){30}}
+    \put( 50, -8){\line(1,0){4}}
+    \put( 54, -8){\line(0,1){40}}
   \end{picture}  
 \caption{ASP を用いたクイーン支配問題(QDP)の解法}
 \label{fig:arch}
 \end{figure}
 ASP を用いたクイーン支配問題の解法について述べる．
 図~\ref{fig:arch}に，解法の流れを示す．
-与えられたクイーン支配問題はASPファクトに変換される．
-ASPファクトはクイーン支配問題を解くASP符号化と結合され，
+クイーン支配問題を解くASP符号化に，入力として
+クイーングラフ$Q_n$の$n$と正の整数$k$を与えると，
 ASPシステムによって解が計算される．
 本論文では，ASPシステムとして{\clingo}を用いる．
 
@@ -52,39 +48,39 @@ ASPシステムによって解が計算される．
 基本制約モデルのASP符号化は，被覆制約をASPの一貫性制約で記述した基本的な符号化である．
 
 \lstinputlisting[float=ht,caption={%
-基本モデルのASP符号化1},%
+基本制約モデルのASP符号化1},%
 captionpos=b,frame=single,label=code:qdp1_asp.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp1_asp.lp}
 
-基本モデルの符号化1は，
+基本制約モデルの符号化1は，
 \begin{itemize}
- \item 5--8行目で，マス\code{(A,B)}にクイーンが置かれているならば，
+ \item 5--8行目で，マス\code{(A,B)}にクイーンが配置されているならば，
   マス\code{(A,B)}からクイーンが移動できるマスはすべて被覆制約を満たすということ，
- \item 10行目で，各マスに対する被覆制約
+ \item 10行目で，被覆制約
 \end{itemize}
 を表現している．
 
 %\newpage
 \lstinputlisting[float=ht,caption={%
-基本モデルのASP符号化2},%
+基本制約モデルのASP符号化2},%
 captionpos=b,frame=single,label=code:qdp1_sat.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp1_sat.lp}
 
 
-基本モデルの符号化2は，5行目で選択子と個数制約を用いて
-各マスに対する被覆制約を表現している．
+基本制約モデルの符号化2は，5--8行目で選択子と個数制約を用いて
+被覆制約を表現している．
 \newpage
 \section{改良制約モデルのASP符号化}
 \lstinputlisting[float=ht,caption={%
- 改良モデルのASP符号化1},%
+ 改良制約モデルのASP符号化1},%
 captionpos=b,frame=single,label=code:qdp2_asp.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp2_asp.lp}
@@ -94,64 +90,64 @@ basicstyle=\ttfamily\scriptsize]{code/qdp2_asp.lp}
 
 具体的には，
 \begin{itemize}
-  \item 5--8行目でマス\code{(X,Y)}にクイーンが置かれていたら
+  \item 5--8行目でマス\code{(X,Y)}にクイーンが配置されているならば
     その行，列，対角線方向はクイーンが移動できるということ
-  \item 10行目で一貫性制約を用いて，各マスに対する被覆制約
+  \item 10行目で一貫性制約を用いて，被覆制約
 \end{itemize}
-を記述している．
+を表現している．
 
 \lstinputlisting[float=ht,caption={%
- 改良モデルのASP符号化2},%
+ 改良制約モデルのASP符号化2},%
 captionpos=b,frame=single,label=code:qdp2_sat.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp2_sat.lp}
 
 \newpage
-改良モデルのASP符号化2では，
+改良制約モデルのASP符号化2では，
 \begin{itemize}
  \item 7--10行目で各行，各列，各対角線方向に変数\code{attackable}を定義
  \item 12--15行目でその行，列，対角線方向が\code{attackable}ならば
   クイーンが1つ以上配置されていること
- \item 17行目で一貫性制約を用いて，各マスに対する被覆制約
+ \item 17行目で一貫性制約を用いて，被覆制約
 \end{itemize}
-を記述している．
+を表現している．
 
 \newpage
-\section{部分和モデルのASP符号化}
+\section{部分和制約モデルのASP符号化}
 
 \lstinputlisting[float=ht,caption={%
- 部分和モデルのASP符号化1},%
+ 部分和制約モデルのASP符号化1},%
 captionpos=b,frame=single,label=code:qdp3_cc.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp3_cc.lp}
 
-部分和モデルのASP符号化1では，
+部分和制約モデルのASP符号化1では，
 \begin{itemize}
  \item 7--15行目で各行，各列，各対角線上のクイーンの個数を表す補助整数変数の導入
  \item 18--21行目で各行，列，対角線のクイーンの総数が$k$でなければならない制， 
  \item 24行目で重み付き個数制約を用いて
 	$$M+N+P+Q>0$$
-  という形で各マスに対する被覆制約
+  という形で，被覆制約
 \end{itemize}
 を表現している．
 
 \newpage
 \lstinputlisting[float=ht,caption={%
- 部分和モデルのASP符号化2},%
+ 部分和制約モデルのASP符号化2},%
 captionpos=b,frame=single,label=code:qdp3_ic.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 basicstyle=\ttfamily\scriptsize]{code/qdp3_ic.lp}
 
-部分和モデルのASP符号化2は，7行目から21行目までは部分和モデルのASP符号化1と同じである．
+部分和制約モデルのASP符号化2は，7行目から21行目までは部分和制約モデルのASP符号化1と同じである．
 24行目から29行目では，一貫性制約を用いて
 $$M>0 \vee N>0 \vee P>0 \vee Q>0$$
-という形で各マスに対する被覆制約を表現している．
+という形で，被覆制約を表現している．
 
 %%% Local Variables:
 %%% mode: latex

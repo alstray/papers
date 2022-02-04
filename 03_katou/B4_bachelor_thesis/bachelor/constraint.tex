@@ -1,10 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{クイーン支配問題の制約モデル}\label{chap:constraint}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-本章では，提案する基本制約モデル，改良制約モデル，部分和制約モデル
-についての説明を行う．
-各制約モデルにおいて，
-入力はクイーングラフ$Q_{n}$と正の整数$k$である．
+本章では，提案する3種類の符号化を考案する際に参考となった先行研究~\cite{yamamoto21}で提案された
+制約モデルである基本制約モデル，改良制約モデル，部分和制約モデルについての説明を行う．
+各制約モデルにおいて，入力はクイーングラフ$Q_{n}$と正の整数$k$である．
 
 \section{基本制約モデル}
 \begin{description}
@@ -18,7 +17,7 @@ q_{i'j'}) >0 \qquad (1 \leq i,j \leq n)$ \par
 ここで，$A_{ij}$はマス$(i,j)$にクイーンが移動できるマスの集合を表す．
 \end{description}
 
-このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model0}のように
+この制約モデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model0}のように
 変数と節が生成される．なお，コード~\ref{code:3-2_model0}において，
 \code{(int }  \code{q_i_j }  \code{0  1)}は\code{q_i_j}が
 0または1の値を取る変数であること，\code{(= (+ q_1_1 } \code{... } 
@@ -40,7 +39,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
 
 \newpage
 \section{改良制約モデル}
-本モデルでは，基本制約モデルにおいて複数回出現する部分式を
+本制約モデルでは，基本制約モデルにおいて複数回出現する部分式を
 まとめるための補助ブール変数と制約を追加する．
 
 各行に対して以下の補助ブール変数と制約を追加する．
@@ -69,7 +68,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
  \item[(制約7)] $(r_i > 0) \vee (c_j >0) \vee (u_{a}>0) \vee (d_{b}>0) \qquad (1 \leq i,j \leq n)$
 \end{description}
 
-このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model1}のように
+この制約モデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model1}のように
 変数と節が生成される．なお，コード~\ref{code:3-2_model1}において，
 \code{(imp (> r_1 0) }\code{(> (+ q_1_1 } \code{q_1_2 } 
 \code{q_1_3) 0))}は\code{((r_1 > 0)} $\rightarrow$ 
@@ -88,7 +87,7 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model1.log}
 
 \newpage
 \section{部分和制約モデル}
-本モデルでは，クイーンの個数を表す補助整数変数を追加し，
+本制約モデルでは，クイーンの個数を表す補助整数変数を追加し，
 行方向，列方向，対角線方向のクイーンの総数に関する制約を追加する．
 \begin{description}
  \item[(変数$r_i$)] $r_{i} \in \{0,...,k\}$ 
@@ -143,9 +142,9 @@ $r_1 = 1,r_2=1,r_3=0,r_4=0,r_5=1$であることがわかり，
  \label{fig:constraint}
 \end{figure}
 
-このモデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model2}のように変数と節が生成される．なお，\code{(int } \code{r_1 0 } \code{2)}は\code{r_1}が0,1,2のいずれかの値をとる整数変数であることを表す．
+この制約モデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model2}のように変数と節が生成される．なお，\code{(int } \code{r_1 0 } \code{2)}は\code{r_1}が0,1,2のいずれかの値をとる整数変数であることを表す．
 \lstinputlisting[float=ht,caption={%
-部分和モデルの実行例($n=3,k=2$)},%
+部分和制約モデルの実行例($n=3,k=2$)},%
 captionpos=b,frame=single,label=code:3-2_model2,%
 numbers=none,%
 breaklines=true,%

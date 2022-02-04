@@ -29,15 +29,15 @@ $S$を$G$の\textbf{支配集合 (dominating set)}という．
 $n\times n$のチェス盤について各マスを頂点とし，
 クイーンが移動できるマス同士が辺で結ばれているグラフを
 \textbf{クイーングラフ}という．
-サイズ$n\times n$のクイーングラフを$Q_n$と表す．
-例えば，サイズ$3 \times 3$のチェス盤とクイーングラフ$Q_3$の対応関係は
-図~\ref{ex:queengraph_3}のようになる．
+$n\times n$のクイーングラフを$Q_n$と表す．
+例として，サイズ$3 \times 3$のチェス盤とクイーングラフ$Q_3$の対応関係を
+図~\ref{ex:queengraph_3}に示す．
 
 クイーングラフ$Q_n$と正の整数$k$が与えられたとき，
-サイズ$k$の$Q_n$の支配集合が存在するかどうか判定する問題を
-\textbf{クイーン支配問題}という． \par
+サイズ$k$の$Q_n$の支配集合が存在するかどうかを判定する問題を
+\textbf{クイーン支配問題(Queen Domination Problem; QDP)}という． \par
 クイーングラフの支配数は，1862年に文献~\cite{Jaenisch62}で
-$\gamma(Q_8)=5$が示されてから研究されており，$n=3,11$を除いて
+$\gamma(Q_8)=5$が示されてから研究されており，その後，$n=3,11$を除いて
 $n \leq 132$に対して$\lceil n/2 \rceil \leq \gamma(Q_n) 
 \leq \lceil n/2 \rceil +1 $であることが証明されている
 ~\cite{Ostergard01}．
