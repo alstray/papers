@@ -1,6 +1,8 @@
 \documentclass[a4j,10pt]{jarticle}
 \usepackage{multicol}
-%%%%% 余白の設定 %%%%%%
+\usepackage[dvipdfmx]{graphicx,xcolor}
+\usepackage{caption} %multicolとfigureは上手く共存しない
+%%%%% 余白の設定 %%%%%%f
 \setlength{\textheight}{\paperheight}
 \setlength{\topmargin}{-15.4truemm}
 \addtolength{\topmargin}{-\headheight}
@@ -117,6 +119,13 @@ FHCP Challenge と呼ばれる国際競技会で使用されたもので，
 よって，\textsf{directed}符号化は，
 ASPのルール10個程度の簡潔なプログラムであるにもかかわらず，
 実質2位の成績に相当した．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{ \centering
+ \includegraphics[width=1.0\linewidth]{cactus.png}\\
+ \captionof{figure}{ハミルトン閉路問題: カクタスプロット}\label{cactus}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{まとめと今後の課題}
