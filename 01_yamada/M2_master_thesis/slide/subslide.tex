@@ -6,6 +6,81 @@
  \centering
  - 補足用 -
 \end{frame} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 配電網問題の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{配電網問題の例}
+ 
+ \begin{block}{配電網問題}
+  与えられた配電網$D=(S,SW)$から，以下の制約を満たす
+  配電網の構成(スイッチの開閉状態$X$)が存在するかどうかを判定する問題．
+%  \vspace{-0.5em}
+ \begin{itemize}\small
+  \item $X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}$ (\textbf{トポロジ制約})
+  \item $J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \quad J_i \leq J^{max} 
+        \quad (\forall s_{i}\in S)\qquad\qquad\qquad\qquad\quad~~$ (\textbf{電流制約})
+ \end{itemize}
+ \end{block}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{入力例}
+	\centering
+	\scalebox{0.3}{\input{tikz/tikz-test-input}}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.05\textwidth}\centering
+      $\Rightarrow$
+    \end{column}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{解の例}
+        \centering
+        \scalebox{0.3}{\input{tikz/tikz-test-output}}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 配電網遷移問題の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{配電網遷移問題の例(1/4)}
+ \vfill
+ \begin{figure}[t]
+  \centering
+  \scalebox{0.65}{\input{tikz/tikz-test-core-0}}
+  \vspace{-0.1cm}
+  \caption*{\structure{$\mathbf{t=0}$ \textbf{(スタート状態)}}}
+ \end{figure}
+\end{frame}
+%
+\begin{frame}{配電網遷移問題の例(2/4)}
+  \vfill
+ \begin{figure}[t]
+  \centering
+  \scalebox{0.65}{\input{tikz/tikz-test-core-1}}
+  \vspace{-0.1cm}
+  \caption*{\structure{$\mathbf{t=1}$}}
+ \end{figure}
+\end{frame}
+%
+\begin{frame}{配電網遷移問題の例(3/4)}
+  \vfill
+ \begin{figure}[t]
+  \centering\hspace{-0.1cm}
+  \scalebox{0.65}{\input{tikz/tikz-test-core-2}}
+  \vspace{-0.1cm}
+  \caption*{\structure{$\mathbf{t=2}$}}
+ \end{figure}
+\end{frame}
+%
+\begin{frame}{配電網遷移問題の例(4/4)}
+  \vfill
+ \begin{figure}[t]
+  \centering\hspace{-0.1cm}
+  \scalebox{0.65}{\input{tikz/tikz-test-core-3}}
+  \vspace{-0.1cm}
+  \caption*{\structure{$\mathbf{t=3}$ \textbf{(ゴール状態)}}}
+ \end{figure}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 卒業研究

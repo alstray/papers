@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPで問題を解く流れの図
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}
+
+ \def\nodehspace{1cm}
+ \def\nodevspace{0.5cm}
+
+ \tikzset{block/.style={rectangle, very thick, text centered, draw=black,
+ text width=3cm, minimum height=1.5cm}};
+
+ \tikzset{alertblock/.style={rectangle, very thick, draw=red,
+ text centered, text width=3cm, minimum height=1.5cm}};
+
+ \node[block](ins){配電網遷移問題\\インスタンス};
+ \node[block, right=0.6\nodehspace of ins] (conv){変換器};
+ \node[block, right=0.6\nodehspace of conv] (fact){ASPファクト};
+ \node[block, below=\nodevspace of fact](encode){ASP符号化\\(論理プログラム)};
+ \node[alertblock, right=1.2\nodehspace of fact](sys){ASPシステム};
+ \node[alertblock, below=\nodevspace of sys](recon){配電網遷移問題\\アルゴリズム};
+ \node[block, right=1.2\nodehspace of sys] (ans){配電網遷移問題\\の解};
+
+ \node[rectangle, draw=red, ultra thick, minimum width=3.6cm, minimum height=4cm,
+ below=-1.8cm of sys, label=above:\alert{\bf \Large 提案ソルバー}](solver){};
+
+
+ \foreach \u / \v / \name in {ins/conv/,conv/fact/,fact/sys/,sys/ans/}
+ \draw [very thick,->] (\u) to node[above]{\name} (\v);
+ 
+ \draw [very thick,->] (sys.225) -- (recon.135);
+ \draw [very thick,->] (recon.45) -- (sys.315);
+
+ \coordinate [right=\nodevspace of encode] (a);
+ \coordinate [above=2.0\nodehspace of a] (b);
+ \draw [very thick] (encode) -- (a) -- (b);
+ 
+\end{tikzpicture}
