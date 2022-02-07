@@ -14,8 +14,26 @@
     \begin{minipage}[t]{0.5\linewidth}
       \centering
       \includegraphics[keepaspectratio,clip,scale=0.2]{fig/order3_mult.png}
-      \caption{多色頂点数最大化問題の解の割当て}
+      \caption{~\code{order3}の多色頂点数最大化問題の実行可能解}
       \label{fig:order3mult}
+    \end{minipage}
+  \end{tabular}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tb]
+  \begin{tabular}{cc}
+    \begin{minipage}[t]{0.5\linewidth}
+      \centering
+      \includegraphics[keepaspectratio,clip,scale=0.2]{fig/order5.png}
+      \caption{~\code{order}5の~\code{McGregor}~グラフ}
+      \label{fig:order5}
+    \end{minipage}
+    \begin{minipage}[t]{0.5\linewidth}
+      \centering
+      \includegraphics[keepaspectratio,clip,scale=0.2]{fig/order5_mult.png}
+      \caption{~\code{order5}の多色頂点数最大化問題の実行可能解}
+      \label{fig:order5mult}
     \end{minipage}
   \end{tabular}
 \end{figure}
@@ -48,11 +66,18 @@ The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
 図~\ref{fig:order3mult}は，
 赤と青で彩色されている頂点番号30のみ多色で彩色できることを表している．
 したがって，図~\ref{fig:order3mult}の
-グラフ彩色における多色頂点数最大化問題の解は1である．
+グラフ彩色における多色頂点数最大化問題の最適値は1である．
 また，図~\ref{fig:order3mult}は図~\ref{fig:order3}の
-グラフ彩色問題の解の2つを圧縮して表している．
+グラフ彩色判定問題の実行可能解の2つを圧縮して表している．
 このように，グラフ彩色における多色頂点数最大化問題により，得られた解の割当ては，
 グラフ彩色問題の解の一部を圧縮した形の解が得られる．
+同様に図~\ref{fig:order5mult}に図~\ref{fig:order5}における，
+グラフ彩色における多色頂点数最大化問題の解の一例を示す．
+図~\ref{fig:order5mult}は，
+青と黄で彩色されている頂点番号12，24，33と
+緑と黄で彩色されている頂点番号50が多色で彩色できることを表している．
+したがって，図~\ref{fig:order5mult}の
+グラフ彩色における多色頂点数最大化問題の最適値は4である．
 
 
 %%% Local Variables:
