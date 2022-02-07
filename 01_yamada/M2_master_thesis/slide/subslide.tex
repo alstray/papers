@@ -39,6 +39,68 @@
  \end{itemize}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% 根付き全域森問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森問題}
+ \begin{alertblock}{}
+  トポロジ制約を満たす配電網構成は，グラフと根と呼ばれる特別なノードから，
+  \alert{\bf 根付き全域森}を求める部分グラフ探索問題に帰着できる．
+ \end{alertblock}
+ \vfill
+ \begin{block}{根付き全域森 (Spanning Rooted Forest) [川原・湊 '12]}
+  グラフ$G=(V,E)$と，
+  \textbf{根}と呼ばれる$V$上のノードが与えられたとき，
+  $G$上の根付き全域森とは，以下の条件を満たす$G$の部分グラフ$G'=(V,E'),\ E' \subseteq E$である．
+  \begin{enumerate}
+   \item $G'$はサイクルを持たない． (\alert{\bf 非閉路制約})
+   \item $G'$の各連結成分は，ちょうど1つの根を含む． (\alert{\bf 根付き連結制約})
+  \end{enumerate}
+ \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 根付き全域森問題の例
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{根付き全域森問題の例}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{入力例}
+	\centering
+	\input{tikz/tikz-input}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.05\textwidth}\centering
+      $\Rightarrow$
+    \end{column}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{解の例}
+        \centering
+        \input{tikz/tikz-out}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{itemize}
+  \item \structure{\bf 配電網とグラフの対応} \\
+	 \begin{center}
+      \begin{minipage}[c]{0.7\textwidth}
+	   \begin{block}{}
+		\centering
+		\begin{tabular}{c|ccc}
+		配電網 & セクション & スイッチ & 変電所 \\
+		\hline
+		グラフ & ノード & 辺 & 根
+		\end{tabular}
+	   \end{block}
+      \end{minipage}
+	 \end{center}\vfill
+   \item \structure{\bf 配電網問題のトポロジ制約}
+		 \begin{itemize}
+		  \item 停電(変電所と結ばれない家庭)
+		  \item 短絡(供給経路上のループ，複数の変電所と結ばれる家庭)
+		 \end{itemize}
+  \end{itemize}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 電気制約
