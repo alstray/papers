@@ -258,7 +258,7 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
   \item \code{directed} 符号化が879問と最も多くの問題を解き，
     他の符号化と比較して，その優位性が確認できた．
   \item FHCP Challenge 競技会の上位ソルバーの成績と比較した結果，
-    directed 符号化は\alert{実質2位}に相当する性能を示した．
+    \code{directed} 符号化は\alert{実質2位}に相当する性能を示した．
   \end{itemize}
 \item \structure{\bf マルチショットASP解法を用いた手法の考案} (今回は省略)
 \end{enumerate}
@@ -404,6 +404,108 @@ Flinders Hamiltonian Cycle Project (FHCP)~\footnotemark[2] で
 \end{column}
 \end{columns}
 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{剰余数系(Residue Number System; RNS)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+RNS は$n$個の互いに素な数$m_1,m_2,...,m_n$(RNSの法)に対して，
+各$m_i$それぞれの剰余によって整数を表すシステムである．
+% あるダイナミックレンジ内の任意の整数$X$は，RNS の法$m_i\ (i=1,...,n)$
+% それぞれの剰余によって一意に表現される．
+% 割り算を除く演算が法ごとに独立に行える．
+\begin{block}{中国剰余定理(Chinese Remainder Theorem)}
+互いに素な自然数$m_1,m_2,...,m_n$と整数$a_1,a_2,...,a_n$に対し，\\
+{\centering
+ $X = a_1\ (mod\ m_1)$\\
+ $X = a_2\ (mod\ m_2)$\\
+ $\vdots$\\
+ $X = a_n\ (mod\ m_n)$\\
+}
+を満たす整数$X$が，$mod\ m_1,m_2,...,m_n$において，一意に存在する．
+\end{block}
+
+\begin{exampleblock}{RNS 表現の例}
+ $0 \leq X < 15$において，$X = 8$のRNS 表現($mod\ 3,5$)は以下の通り．\\
+ \begin{itemize}
+  \item $X = (\ 2\ (mod\ 3),\ 3\ (mod\ 5)\ )$
+ \end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{RNS を用いたハミルトン閉路問題の ASP 符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\begin{block}{HCP の制約}
+  与えられた無向グラフ$G= (V,E)$に対して，以下の2つの制約を満たす
+  部分グラフ$G'= (V,E')$が存在するか判定する問題．
+  \begin{itemize}
+  \item $G'$の各頂点の次数が2 (\structure{次数制約})
+  \item $\prod_{i=1}^{n}m_i \geq |V|$を満たす互いに素な各法
+	$m_i\ (i=1,2,...,n)$に対して，
+	$G'$は長さ$l\, (= |V|\ (mod\ m_i))$の閉路を含む．(\alert{RNS 制約})
+  \end{itemize}
+\end{block}
+
+\begin{alertblock}{RNS 制約と 中国剰余定理}
+ 互いに素な自然数$m_1,m_2,...,m_n$と整数$|V|$に対し($\prod_{i=1}^{n}m_i \geq |V|$)，\\
+{\centering
+ $l = |V|\ (mod\ m_1)$\\
+ $l = |V|\ (mod\ m_2)$\\
+ $\vdots$\\
+ $l = |V|\ (mod\ m_n)$\\
+}
+を満たす整数$l$が，$0 < l \leq \prod_{i=1}^{n}m_i$において，一意に存在($l=|V|$)．
+\end{alertblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{RNS を用いたハミルトン閉路問題の ASP 符号化}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\begin{exampleblock}{RNS を用いた制約の例}
+ 法$m_1=3 ,m_2=5$を与える．
+ 下記の無向グラフ$G= (V,E)$と部分グラフ$G'= (V,E')$について，
+ HCP の制約は以下の通りである．
+ \begin{columns}
+  \begin{column}[c]{0.50\textwidth}
+   \begin{itemize}
+    \item $G'$の各頂点の次数が2
+    \item \alert{$G'$は長さ$l$の閉路}
+    \item \alert{$l = 2 = |V|\ (mod\ 3)$}
+    \item \alert{$l = 3 = |V|\ (mod\ 5)$}
+   \end{itemize}
+  \end{column}
+  \begin{column}[c]{0.50\textwidth}
+   \centering
+   \begin{tikzpicture}[line width=0.8pt, node distance=2cm]
+    \node(1) at (3,3) [draw, circle]{$1$};
+    \node(2) at (4.25,2.55) [draw, circle]{$2$};
+    \node(3) at (4.6,1.4) [draw, circle]{$3$};
+    \node(4) [below=1.5 of 2] [draw, circle]{$4$};
+    \node(5) [below=2.45 of 1] [draw, circle]{$5$};
+    \node(6) [left =1.7 of 4] [draw, circle]{$6$};
+    \node(7) at (1.4,1.4) [draw, circle]{$7$};
+    \node(8) at (1.75,2.55) [draw, circle]{$8$};
+    \draw (1) -- (2);
+    \draw (2) -- (3);
+    \draw (2) -- (6);
+    \draw (3) -- (4);
+    \draw (3) -- (5);
+    \draw (3) -- (7);
+    \draw (4) -- (5);
+    \draw (4) -- (6);
+    \draw (5) -- (6);
+    \draw (6) -- (7);
+    \draw (7) -- (8);
+    \draw (8) -- (1);
+   \end{tikzpicture}
+  \end{column}
+ \end{columns}
+\end{exampleblock}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
