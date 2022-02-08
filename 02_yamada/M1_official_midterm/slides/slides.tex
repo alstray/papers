@@ -280,7 +280,7 @@
 
   \begin{itemize}
     \item recongo は基本ソルバーよりも多くの問題を高速に解いている．
-    \item 最良の組合せでは，71問について到達可能性を判定できた．
+    \item \code{unchanged_inc}では，71問について到達可能性を判定できた．
 %    \item \code{unchanged} 符号化は，\code{changed}符号化より良い性能
 %      を示した．
   \end{itemize}
@@ -329,6 +329,10 @@
       \item 組合せ遷移国際競技会 CoRe Challenge 2022 のベンチマーク問題
       \end{itemize}
       \item 提案ソルバー recongo の改良
+      \begin{itemize}
+        \item 現在は最短経路を求める場合に適した構成
+        \item 経路の存在の判定や，最長経路を求める問題への適用
+      \end{itemize}
     \end{itemize}
   \end{exampleblock}
 \end{frame}
