@@ -28,6 +28,32 @@
     良ソルバーの優位性が確認できた．
   \end{itemize}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}
+  \frametitle{有界組合せ遷移の基本アイデア (提案)}
+  \begin{itemize}
+  \item 基の組合せ問題の変数集合
+    $\bm{x} = \{x_1,x_2,\ldots,x_n\}$
+    に対して，ステップ$t\geq 0$での各変数の値を表す変数集合
+    $\bm{x}^{t} = \{x_1^t,x_2^t,\ldots,x_n^t\}$を導入．
+  \item スタート状態から$\ell$ステップ遷移した後の各変数の値
+    $\bm{x}^{\ell}$が，ゴール状態を満足するかを判定するため，
+    論理式$\varphi_{\ell}$を構成する．
+  \end{itemize}
+  \begin{block}{}\centering\vskip-1em
+  \begin{align*}
+  \varphi_{\ell} &= S(\bm{x}^0)  & S: \textrm{スタート制約を表す論理式} \\
+  &\land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) & C: \textrm{組合せ制約を表す論理式} \\
+  &\land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t}) & T: \textrm{遷移制約を表す論理式} \\
+  &\land G(\bm{x}^\ell)  & G: \textrm{ゴール制約を表す論理式}
+  \end{align*}
+  \end{block}
+  \begin{itemize}
+  \item \bm{$\varphi_{\ell}$}が充足可能の場合，
+    ステップ長$\ell$の到達可能な遷移系列が存在する
+    ことを意味する．
+  \end{itemize}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[shrink]{有界組合せ遷移アルゴリズム}
 
@@ -80,32 +106,7 @@
     \end{itemize}
   \end{enumerate}
   \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}
-  \frametitle{有界組合せ遷移の基本アイデア (提案)}
-  \begin{itemize}
-  \item 基の組合せ問題の変数集合
-    $\bm{x} = \{x_1,x_2,\ldots,x_n\}$
-    に対して，ステップ$t\geq 0$での各変数の値を表す変数集合
-    $\bm{x}^{t} = \{x_1^t,x_2^t,\ldots,x_n^t\}$を導入．
-  \item スタート状態から$\ell$ステップ遷移した後の各変数の値
-    $\bm{x}^{\ell}$が，ゴール状態を満足するかを判定するため，
-    論理式$\varphi_{\ell}$を構成する．
-  \end{itemize}
-  \begin{block}{}\centering\vskip-1em
-  \begin{align*}
-  \varphi_{\ell} &= S(\bm{x}^0)  & S: \textrm{スタート制約を表す論理式} \\
-  &\land \bigwedge_{t=0}^{\ell} C(\bm{x}^t) & C: \textrm{組合せ制約を表す論理式} \\
-  &\land \bigwedge_{t=1}^{\ell} T(\bm{x}^{t-1},\bm{x}^{t}) & T: \textrm{遷移制約を表す論理式} \\
-  &\land G(\bm{x}^\ell)  & G: \textrm{ゴール制約を表す論理式}
-  \end{align*}
-  \end{block}
-  \begin{itemize}
-  \item \bm{$\varphi_{\ell}$}が充足可能の場合，
-    ステップ長$\ell$の到達可能な遷移系列が存在する
-    ことを意味する．
-  \end{itemize}
-\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %\begin{frame}%[shrink]
 %  \frametitle{有界組合せ遷移 (提案)} 
