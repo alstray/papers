@@ -5,7 +5,7 @@
 \begin{tikzpicture}[scale=0.5]
 
  % 設定
- \tikzset{node/.style={circle,draw=black,fill=white}}
+ \tikzset{node/.style={rectangle, draw=black,fill=white}}
 
  \definecolor{edge1}{RGB}{191,0,0}
  \definecolor{node1}{RGB}{249,200,200}
@@ -17,9 +17,9 @@
 
  % node %
  \node[circle, ultra thick, draw=edge1, fill=node1,minimum size=1cm](1){};
- \node[node, thick, fill=node1, draw=edge1, right=2cm of 1] (2){30A};
- \node[node, thick, fill=node1, draw=edge1, right=2cm of 2] (3){20A};
- \node[node, thick, fill=node1, draw=edge1, right=2cm of 3] (4){10A};
+ \node[node, thick, fill=node1, draw=edge1, right=2.5cm of 1] (2){};
+ \node[node, thick, fill=node1, draw=edge1, right=3cm of 2] (3){};
+ \node[node, thick, fill=node1, draw=edge1, right=2.5cm of 3] (4){};
 
  % 変電所 %
  \begin{scope}[scale=1.5]
@@ -34,9 +34,15 @@
  \draw [ultra thick, draw=edge1] [domain=0.159:0.284] plot(\x,-\x);
  \end{scope}
 
- \draw [line width=3.5pt, edge1] (1) -- node[above, font=\Large] {\textbf{60A}}(5,0) -- (2);
- \draw [line width=2.5pt, edge1] (2) -- node[above, font=\Large] {\textbf{30A}}(11,0) -- (3);
- \draw [line width=1.5pt, edge1] (3) -- node[above, font=\large] {\textbf{10A}}(17,0) -- (4);
+ \draw [line width=3.5pt, edge1] (1) -- %
+ node[above, font=\Large, label=below:\color{black}{$I_i\colon\quad$30A}]
+ {\textbf{$J_i\colon\quad$\!\!60A}}(5,0) -- (2);
+ 
+ \draw [line width=2.5pt, edge1] (2) -- %
+ node[above, font=\Large, label=below:\color{black}{20A}] {\textbf{30A}}(11,0) -- (3);
+
+ \draw [line width=1.5pt, edge1] (3) -- %
+ node[above, font=\large, label=below:\color{black}{10A}] {\textbf{10A}}(17,0) -- (4);
 
 \end{tikzpicture}
 

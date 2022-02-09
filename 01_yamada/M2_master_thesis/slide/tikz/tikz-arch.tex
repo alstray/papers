@@ -6,23 +6,24 @@
  \def\nodehspace{1cm}
  \def\nodevspace{0.5cm}
 
- \tikzset{block/.style={rectangle, very thick, text centered, draw=black,
+ \tikzset{block/.style={rectangle, very thick, text centered, draw=black, fill=cyan!10,
  text width=3cm, minimum height=1.5cm}};
 
- \tikzset{alertblock/.style={rectangle, very thick, draw=red,
+ \tikzset{alertblock/.style={rectangle, very thick, draw=red, fill=white,
  text centered, text width=3cm, minimum height=1.5cm}};
 
  \node[block](ins){配電網遷移問題\\インスタンス};
- \node[block, right=0.6\nodehspace of ins] (conv){変換器};
+ \node[block, densely dotted, right=0.6\nodehspace of ins] (conv){変換器};
  \node[block, right=0.6\nodehspace of conv] (fact){ASPファクト};
  \node[block, below=\nodevspace of fact](encode){ASP符号化\\(論理プログラム)};
- \node[alertblock, right=1.2\nodehspace of fact](sys){ASPシステム};
- \node[alertblock, below=\nodevspace of sys](recon){配電網遷移問題\\アルゴリズム};
- \node[block, right=1.2\nodehspace of sys] (ans){配電網遷移問題\\の解};
+ \node[alertblock, right=1.3\nodehspace of fact](sys1){ASPシステム};
+ \node[block, right=\nodehspace of sys1] (ans){配電網遷移問題\\の解};
 
- \node[rectangle, draw=red, ultra thick, minimum width=3.6cm, minimum height=4cm,
- below=-1.8cm of sys, label=above:\alert{\bf \Large 提案ソルバー}](solver){};
+ \node[rectangle, draw=red, ultra thick, minimum width=3.6cm, minimum height=4cm, fill=red!10,
+ below=-1.8cm of sys1, label=above:\alert{\bf \Large 提案ソルバー}](solver){};
 
+ \node[alertblock, right=1.3\nodehspace of fact](sys){ASPシステム};
+ \node[alertblock, below=\nodevspace of sys](recon){\alert{\bf 配電網遷移問題\\アルゴリズム}};
 
  \foreach \u / \v / \name in {ins/conv/,conv/fact/,fact/sys/,sys/ans/}
  \draw [very thick,->] (\u) to node[above]{\name} (\v);

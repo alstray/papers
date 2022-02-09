@@ -1,0 +1,82 @@
+\documentclass[dvipdfmx,11pt]{beamer}
+
+\usepackage[deluxe]{otf} 
+\usepackage{txfonts}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+\usepackage{listings}
+\usepackage{plistings}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{caption}
+\def\lstlistingname{コード}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+\newcommand{\lw}[1]{\smash{\lower-5.ex\hbox{#1}}}
+\newcommand{\redunderline}[1]{\textcolor{red}{\underline{\textcolor{black}{#1}}}}
+%%\usetheme{Frankfurt}
+\usetheme{Warsaw}
+\setbeamertemplate{navigation symbols}{} %スライドのボタン?(右下のやつ)を消す
+\setbeamersize{text margin left=1.5em,text margin right=1.5em} % 余白なくすやつ
+
+% footer setting %
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\hspace*{1ex} \insertshorttitle\hspace*{3em}
+    \textbf{ \insertframenumber{} / \inserttotalframenumber } \hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatletter
+
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+\lstset{
+ basicstyle=\ttfamily\color{black},
+ keepspaces=true,
+ escapechar=|,
+ columns=[l]{fullflexible},
+ commentstyle={\color{red}},
+ stringstyle={\color{blue}}}
+
+\title{解集合プログラミングを用いた\\配電網問題の解法に関する研究}
+\author[山田 健太郎]{山田 健太郎}
+\date{2022年2月10日\\前期課程修士論文審査会}
+\institute{番原研究室}
+
+%#################################################
+%# 本文 ##########################################
+%#################################################
+\begin{document}
+
+\pagestyle{empty}
+\thispagestyle{empty}
+\begin{alertblock}{}
+  しかし現状では，配電網遷移問題を効率的に解くソルバーの
+  \alert{\bf 実装技術は確立されていない}．
+ \end{alertblock}\typeout{=== Region from (point) to (mark) ===}
+
+\end{document}

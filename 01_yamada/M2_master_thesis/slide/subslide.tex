@@ -6,114 +6,6 @@
  \centering
  - 補足用 -
 \end{frame} 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 配電網問題の例
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網問題の例}
- 
- \begin{block}{配電網問題}
-  与えられた配電網$D=(S,SW)$から，以下の制約を満たす
-  配電網の構成(スイッチの開閉状態$X$)が存在するかどうかを判定する問題．
-%  \vspace{-0.5em}
- \begin{itemize}\small
-  \item $X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}$ (\textbf{トポロジ制約})
-  \item $J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \quad J_i \leq J^{max} 
-        \quad (\forall s_{i}\in S)\qquad\qquad\qquad\qquad\quad~~$ (\textbf{電流制約})
- \end{itemize}
- \end{block}
-  \begin{columns}
-    \begin{column}{0.45\textwidth}\centering
-      \begin{exampleblock}{入力例}
-	\centering
-	\scalebox{0.3}{\input{tikz/tikz-test-input}}
-      \end{exampleblock}
-    \end{column}
-    \begin{column}{0.05\textwidth}\centering
-      $\Rightarrow$
-    \end{column}
-    \begin{column}{0.45\textwidth}\centering
-      \begin{exampleblock}{解の例}
-        \centering
-        \scalebox{0.3}{\input{tikz/tikz-test-output}}
-      \end{exampleblock}
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 配電網遷移問題の例
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網遷移問題の例(1/4)}
- \vfill
- \begin{figure}[t]
-  \centering
-  \scalebox{0.65}{\input{tikz/tikz-test-core-0}}
-  \vspace{-0.1cm}
-  \caption*{\structure{$\mathbf{t=0}$ \textbf{(スタート状態)}}}
- \end{figure}
-\end{frame}
-%
-\begin{frame}{配電網遷移問題の例(2/4)}
-  \vfill
- \begin{figure}[t]
-  \centering
-  \scalebox{0.65}{\input{tikz/tikz-test-core-1}}
-  \vspace{-0.1cm}
-  \caption*{\structure{$\mathbf{t=1}$}}
- \end{figure}
-\end{frame}
-%
-\begin{frame}{配電網遷移問題の例(3/4)}
-  \vfill
- \begin{figure}[t]
-  \centering\hspace{-0.1cm}
-  \scalebox{0.65}{\input{tikz/tikz-test-core-2}}
-  \vspace{-0.1cm}
-  \caption*{\structure{$\mathbf{t=2}$}}
- \end{figure}
-\end{frame}
-%
-\begin{frame}{配電網遷移問題の例(4/4)}
-  \vfill
- \begin{figure}[t]
-  \centering\hspace{-0.1cm}
-  \scalebox{0.65}{\input{tikz/tikz-test-core-3}}
-  \vspace{-0.1cm}
-  \caption*{\structure{$\mathbf{t=3}$ \textbf{(ゴール状態)}}}
- \end{figure}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 卒業研究
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網問題のASP符号化(卒業研究)}
-   %\scalebox{0.9}{\centering\input{arch}}
-   \begin{block}{根付き全域森問題の2種類のASP符号化を考案}
-     \begin{itemize}
-     \item \alert{\bf 基本符号化}
-       \begin{itemize}
-       \item 根付き全域森問題の制約を，\textbf{ASPのルール7個}で簡潔に記述
-       \end{itemize}
-     \item \alert{\bf 改良符号化}
-       \begin{itemize}
-       \item ASPシステムは，変数を含む論理プログラムを，変数を含まない
-         論理プログラムに\textbf{基礎化}したのち解集合を計算する．
-       \item 根付き連結制約をASPの個数制約で表現することにより，
-         \textbf{基礎化後のルール数を少なく抑える}よう工夫されている．
-       \item これにより，改良符号化は大規模な問題への有効性が期待できる．
-       \end{itemize}
-     \end{itemize}
-   \end{block}
- \begin{itemize}
-  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
-  \setcounter{footnote}{1}
-  \item \textit{DNET}\footnote{https://github.com/takemaru/dnet}，
-        および，\textit{Graph Coloring and its Generalizations}
-        \footnote{https://mat.tepper.cmu.edu/COLOR04/}%
-        の問題をベースに独自に生成した配電網問題を用いて評価実験を行った.
-  \item 結果として，改良符号化は，基本符号化と比較して，より多くの問題を高速に解いた.
- \end{itemize}
-\end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% 根付き全域森問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -177,153 +69,210 @@
   \end{itemize}
 \end{frame}
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 配電網問題の例
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{配電網問題の例}
+ 
+%  \begin{block}{配電網問題}
+%   与えられた配電網$D=(S,SW)$から，以下の制約を満たす
+%   配電網の構成(スイッチの開閉状態$X$)が存在するかどうかを判定する問題．
+% %  \vspace{-0.5em}
+%  \begin{itemize}\small
+%   \item $X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}$ (\textbf{トポロジ制約})
+%   \item $J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \quad J_i \leq J^{max} 
+%         \quad (\forall s_{i}\in S)\qquad\qquad\qquad\qquad\quad~~$ (\textbf{電流制約})
+%  \end{itemize}
+%  \end{block}
+%   \begin{columns}
+%     \begin{column}{0.45\textwidth}\centering
+%       \begin{exampleblock}{入力例}
+% 	\centering
+% 	\scalebox{0.3}{\input{tikz/tikz-test-input}}
+%       \end{exampleblock}
+%     \end{column}
+%     \begin{column}{0.05\textwidth}\centering
+%       $\Rightarrow$
+%     \end{column}
+%     \begin{column}{0.45\textwidth}\centering
+%       \begin{exampleblock}{解の例}
+%         \centering
+%         \scalebox{0.3}{\input{tikz/tikz-test-output}}
+%       \end{exampleblock}
+%     \end{column}
+%   \end{columns}
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 辺の数の表
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{実験結果：解けた問題数による比較}
+ 
+% %\begin{textblock*}{\linewidth}(10pt, 30pt)
+% \begin{table}[t]
+%  \centering
+%  \input{table/table}
+% \end{table}\vfill
+
+% \begin{itemize}
+%  \item 有向符号化は，ベンチマーク問題85問中，\textbf{84問}を解いている．
+%  \item 大規模な問題に対しても有向符号化は，優位性を示した．
+% \end{itemize}\vfill
+% %\end{textblock*}
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 配電網遷移問題の例
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{配電網遷移問題の例(1/4)}
+%  \vfill
+%  \begin{figure}[t]
+%   \centering
+%   \scalebox{0.65}{\input{tikz/tikz-test-core-0}}
+%   \vspace{-0.1cm}
+%   \caption*{\structure{$\mathbf{t=0}$ \textbf{(スタート状態)}}}
+%  \end{figure}
+% \end{frame}
+% %
+% \begin{frame}{配電網遷移問題の例(2/4)}
+%   \vfill
+%  \begin{figure}[t]
+%   \centering
+%   \scalebox{0.65}{\input{tikz/tikz-test-core-1}}
+%   \vspace{-0.1cm}
+%   \caption*{\structure{$\mathbf{t=1}$}}
+%  \end{figure}
+% \end{frame}
+% %
+% \begin{frame}{配電網遷移問題の例(3/4)}
+%   \vfill
+%  \begin{figure}[t]
+%   \centering\hspace{-0.1cm}
+%   \scalebox{0.65}{\input{tikz/tikz-test-core-2}}
+%   \vspace{-0.1cm}
+%   \caption*{\structure{$\mathbf{t=2}$}}
+%  \end{figure}
+% \end{frame}
+% %
+% \begin{frame}{配電網遷移問題の例(4/4)}
+%   \vfill
+%  \begin{figure}[t]
+%   \centering\hspace{-0.1cm}
+%   \scalebox{0.65}{\input{tikz/tikz-test-core-3}}
+%   \vspace{-0.1cm}
+%   \caption*{\structure{$\mathbf{t=3}$ \textbf{(ゴール状態)}}}
+%  \end{figure}
+% \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 卒業研究
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{配電網問題のASP符号化(卒業研究)}
+%    %\scalebox{0.9}{\centering\input{arch}}
+%    \begin{block}{根付き全域森問題の2種類のASP符号化を考案}
+%      \begin{itemize}
+%      \item \alert{\bf 基本符号化}
+%        \begin{itemize}
+%        \item 根付き全域森問題の制約を，\textbf{ASPのルール7個}で簡潔に記述
+%        \end{itemize}
+%      \item \alert{\bf 改良符号化}
+%        \begin{itemize}
+%        \item ASPシステムは，変数を含む論理プログラムを，変数を含まない
+%          論理プログラムに\textbf{基礎化}したのち解集合を計算する．
+%        \item 根付き連結制約をASPの個数制約で表現することにより，
+%          \textbf{基礎化後のルール数を少なく抑える}よう工夫されている．
+%        \item これにより，改良符号化は大規模な問題への有効性が期待できる．
+%        \end{itemize}
+%      \end{itemize}
+%    \end{block}
+%  \begin{itemize}
+%   \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+%   \setcounter{footnote}{1}
+%   \item \textit{DNET}\footnote{https://github.com/takemaru/dnet}，
+%         および，\textit{Graph Coloring and its Generalizations}
+%         \footnote{https://mat.tepper.cmu.edu/COLOR04/}%
+%         の問題をベースに独自に生成した配電網問題を用いて評価実験を行った.
+%   \item 結果として，改良符号化は，基本符号化と比較して，より多くの問題を高速に解いた.
+%  \end{itemize}
+% \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 電気制約
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{電気制約の効率的な実装}
+%  \begin{itemize}
+%   \item \alert{\bf 電気制約}は，送電する電流$\cdot$電圧の適正範囲を保証する制約．
+%   \begin{itemize}
+%    \item 供給経路の各区間で許容電流を超えない．
+%    \item 電気抵抗による電圧降下が許容範囲を超えない．
+%    \item etc.
+%   \end{itemize}
+%   \item 電流と電圧が影響し合う\structure{\bf 実数ドメイン上の制約}によって表される．
+%   \item 実数ドメイン上の制約は，純粋なASPのみで扱うのは\alert{\bf 困難}．
+% 		\begin{itemize}
+% 		 \item \structure{\bf 方針1：} 簡易的な電流の電気制約について実装する．
+% 		 \item \structure{\bf 方針2：} ASPMT技術により，背景理論ソルバーと連携して厳密に\\
+%                \hspace{4zw}\!電流・電圧の制約を実装する．
+% 		\end{itemize}
+%  \end{itemize}
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 電気制約
+%% 電流制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{電気制約の効率的な実装}
- \begin{itemize}
-  \item \alert{\bf 電気制約}は，送電する電流$\cdot$電圧の適正範囲を保証する制約．
-  \begin{itemize}
-   \item 供給経路の各区間で許容電流を超えない．
-   \item 電気抵抗による電圧降下が許容範囲を超えない．
-   \item etc.
-  \end{itemize}
-  \item 電流と電圧が影響し合う\structure{\bf 実数ドメイン上の制約}によって表される．
-  \item 実数ドメイン上の制約は，純粋なASPのみで扱うのは\alert{\bf 困難}．
-		\begin{itemize}
-		 \item \structure{\bf 方針1：} 簡易的な電流の電気制約について実装する．
-		 \item \structure{\bf 方針2：} ASPMT技術により，背景理論ソルバーと連携して厳密に\\
-               \hspace{4zw}\!電流・電圧の制約を実装する．
-		\end{itemize}
- \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 電気制約 方針
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{電気制約 方針1}
- \begin{itemize}
-  \item 変電所を定電流源と仮定すると，各配電区間での電流の大きさは\structure{\bf 一定の値}として表される．
-  \item 供給経路が決まると，ある配電区間に流れる電流は，その配電区間以下の
-		電流の大きさの\alert{\bf 線形和}として表すことができる．
-  \item グラフでの直感的な意味は，各連結成分の\structure{\bf 根からの深さ}が大きくなるほど，
-		上流での電流は大きくなることを意味する．
-  \item 根からの深さを表す変数を導入することで，
-		各区間に流れる電流の値を計算することができ，\structure{\bf 電流の電気制約には対応可能}．
-		\begin{itemize}
-		 \item 実際には配電システム(三相交流)についての特殊な計算が必要．
-		\end{itemize}
- \end{itemize}\vfill
+\begin{frame}{電流制約}
+\begin{block}{電流制約}\small
+ \centering
+ \vskip -1em
+ \begin{align*}
+  J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \quad J_i \leq J^{max} 
+  \quad (\forall s_{i}\in S)
+ \end{align*}\vskip -1em
+\begin{tabular}{ll}
+ $S$ & セクションの集合 \\
+ $s_i^{down}$ & セクション$i$より下流にあるセクション \\
+ $I_i$ & セクション$i$の負荷電流 \\
+ $J_i$ & セクション$i$に流れる電流 \\
+ $J^{max}$ & 電流の許容範囲 (入力)
+\end{tabular}
+\end{block}\vfill
  \begin{exampleblock}{電流の計算例}
   \centering
   \input{tikz/tikz-current}
- \end{exampleblock} \vfill
+ \end{exampleblock}\vfill
+ \begin{itemize}
+  \item 電流が許容範囲を超えると電線が焼き切れる事故につながる．
+ \end{itemize}\vfill
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ルール数の比較
+%% 電流制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{基礎化後のルール数}
-  \begin{itemize}
-  \item グラフのノード数を$|V|$，根ノードの数を$|R|$とする．
-  \end{itemize}
-  \begin{table}[t]
-    \centering
-    \input{table/proposal}
-  \end{table}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 実験概要--根付き全域森
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{(卒業研究) 実験概要}
-  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
-  \setcounter{footnote}{1}
-  提案手法の有効性を評価するために，以下の実験を行った．
-  \begin{itemize}
-  \item \structure{\bf 比較するASP符号化:}
-    \begin{itemize}
-    \item 基本符号化
-    \item 改良符号化
-    \end{itemize}
-  \item \structure{\bf ベンチマーク問題:} 全85問
-    \begin{itemize}
-    \item DNET\footnote{https://github.com/takemaru/dnet}%
-      で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
-      16個，36個，\alert{\bf 468個})
-    \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
-      グラフ彩色問題をベースに，独自に生成した 82問 
-      \footnote{各問題に対し，全ノードのうち1/5個をランダムに根として与えた．}\\
-      \alert{\bf (20 $\leq$ 辺数 $\leq$ 49,629)}
-    \end{itemize}
-  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
-  \item \structure{\bf 制限時間:} 3600秒/問
-  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% カクタスプロット
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験結果(1/2) : カクタスプロット}
- \begin{figure}[h]
-  \centering
-  \includegraphics[scale=0.38]{fig/cactus.png}
- \end{figure}\vfill
-
-\begin{itemize}
- \item 改良符号化は，基本符号化と比較して，より多くの問題を高速に解いている．
-\end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 辺の数の表
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験結果(2/2) : 解けた問題数による比較}
-
-\begin{table}[t]
+\begin{frame}{電圧制約}
+\begin{block}{電圧制約}\small
  \centering
- \input{table/table}
-\end{table}\vfill
-
-\begin{itemize}
-\item 辺の数が4,000を超える問題では，改良符号化がより多くの問題を解いている．
-\item 改良符号化は，辺の数が40,000を超える問題も解けている．
-\item 大規模な問題に対する改良符号化の優位性が確認できた．
-\end{itemize}
+ \vskip -1em
+ \begin{align*}
+  V_i = V_0 - \displaystyle\sum_{s_j\in S_i^{up}\cup \{s_i\}} Z_j 
+  \left[
+  \displaystyle\sum_{s_k\in S_j^{down}} I_k + \frac{I_j}{2}
+  \right], \quad V_i, \geq V^{min} \quad (\forall s_{i}\in S)
+ \end{align*}\vskip -5pt
+\begin{tabular}{ll}
+ %$S$ & セクションの集合 \\
+ $s_i^{up}$ & セクション$i$より上流にあるセクション \\
+ $s_i^{down}$ & セクション$i$より下流にあるセクション \\
+ $I_i$ & セクション$i$の電流 \\
+ $Z_i$ & セクション$i$のインピーダンス \\
+ $V_i$ & セクション$i$における電圧 \\
+ $V^{min}$ & 電圧の許容範囲 (入力)
+\end{tabular}
+\end{block}\vfill
+ \begin{itemize}
+  \item 電圧が許容範囲を下回ると，電化製品などが適切に動作できない恐れがある．
+  \item 純粋なASPのみで扱うことが困難な制約である．
+ \end{itemize}\vfill
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 遷移問題
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{根付き全域森遷移問題の例}
-  \begin{itemize}
-  \item \structure{\bf 遷移制約}: 各ステップ$t$で変更可能な辺の数を
-    $d=2$個以下とする．
-  \end{itemize}
-\begin{exampleblock}{}
- \begin{figure}[h]
-  %\renewcommand{\arraystretch}{0.9}
-  \tabcolsep = 3mm  
-  \centering
-  \begin{tabular}{ccc}
-   \onslide<1-> $t=0$ (スタート状態) & & \onslide<2> $t=1$\\
-   \onslide<1-> \scalebox{0.8}{\input{tikz/tikz-trans-1}}
-   & \onslide<2> \lw{$\Rightarrow$} & 
-	\onslide<2> \scalebox{0.8}{\input{tikz/tikz-trans-2}}\\
-   & & \onslide<2> \lower1ex\hbox{$\Downarrow$} \\
-   & & \\
-   \onslide<1-> \scalebox{0.8}{\input{tikz/tikz-trans-4}}
-   & \onslide<2> \lw{$\Leftarrow$} &
-   \onslide<2> \scalebox{0.8}{\input{tikz/tikz-trans-3}}\\
-   \onslide<1->$t= \only<1>{\ ?} \only<2>{\structure{\bf 3}} $ (ゴール状態) 
-   & & \onslide<2> $t=2$
-  \end{tabular}
- \end{figure}
-\end{exampleblock}
-\end{frame}
-
 \backupend
 
 %%% Local Variables:
-%%% mode: japanese-latex
+%%% mode: japanese-lat
+
 %%% TeX-master: "slide.tex"
 %%% End:

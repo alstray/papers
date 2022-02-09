@@ -65,7 +65,7 @@
 \title{解集合プログラミングを用いた\\配電網問題の解法に関する研究}
 \author[山田 健太郎]{山田 健太郎}
 \date{2022年2月10日\\前期課程修士論文審査会}
-\institute{番原研究室}
+\institute{情報システム学専攻\\番原研究室}
 
 %#################################################
 %# 本文 ##########################################
@@ -114,17 +114,19 @@
   一方の解から他方の解へ，\alert{\bf 遷移制約}を満たしつつ，
   実行可能解のみを経由して到達できるかどうかを判定する問題．
   \begin{itemize}
-  \item 各ステップ$t$で変更可能なスイッチを$d$個以下に制限．(\textbf{遷移制約})
+  \item 各ステップ$t$で変更可能なスイッチを$d$個に制限．(\textbf{遷移制約})
   \item 本研究では，到達可能であればその最短経路を求めることが目的．
   %\item 最短ステップ長での辺の変更手順を求めることが目的となる．
   \end{itemize}
  \end{alertblock}
  \begin{itemize}
   \item 配電網の構成制御における災害時の停電復旧などへの応用が狙い．
-  \item 近年，理論計算機科学の分野を中心に発展している\structure{\bf 組合せ遷移問題}の一種．
+  \item 近年，理論計算機科学の分野を中心に急速に発展している
+        \structure{\bf 組合せ遷移問題}の一種．
  \end{itemize}
  \begin{alertblock}{}
-  しかしながら現状では，配電網遷移問題を効率的に解く\alert{\bf 実装技術は確立されていない}．
+  しかし現状では，配電網遷移問題を効率的に解くソルバーの
+  \alert{\bf 実装技術は確立されていない}．
  \end{alertblock}
  % \vspace{-0.3cm}
  %  \begin{columns}
@@ -149,11 +151,13 @@
 %% 解の遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{配電網遷移問題の例}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
   \begin{columns}
     \begin{column}{0.45\textwidth}\centering
       \begin{exampleblock}{スタート状態}
     \centering
-    \scalebox{0.25}{\input{tikz/tikz-test-core-0}}
+    \scalebox{0.35}{\input{tikz/tikz-test-core-start}}
       \end{exampleblock}
     \end{column}
     \begin{column}{0.05\textwidth}\centering
@@ -162,15 +166,16 @@
     \begin{column}{0.45\textwidth}\centering
       \begin{exampleblock}{ゴール状態}
         \centering
-        \scalebox{0.25}{\input{tikz/tikz-test-core-3-ex}}
+        \scalebox{0.35}{\input{tikz/tikz-test-core-goal}}
       \end{exampleblock}
     \end{column}
   \end{columns}
  \vfill
  \begin{itemize}
-  \item セクション数：25個，スイッチ数：15個，変電所数：3個
-  \item 各ステップで変更可能なスイッチを2個以下に制限．(\textbf{遷移制約})
-  \item スタート状態からゴール状態へ3ステップで到達可能．
+  \item セクション数：25個，スイッチ数：16個，変電所数：3個\footnote{%
+        変電所に直接つながるセクションの数}%
+  \item 各ステップで変更可能なスイッチを2個に制限．(\textbf{遷移制約})
+  \item スタート状態からゴール状態へ\structure{\bf 3ステップで到達可能}．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -197,7 +202,7 @@
          \alert{\bf 到達可能性を効率的に検査可能}
          \begin{itemize}
           \item ASPシステムを複数回起動するオーバヘッドを回避可能
-          \item 同様の探索失敗を避けるために獲得した学習節を利用可能
+          \item 同様の探索失敗を避けるために獲得した学習節を再利用可能
          \end{itemize}
    %\item 背景理論つきASPにより，様々な\textbf{背景理論ソルバーと連携可能}
    %\item 解の最適性を保証でき，最適解の列挙も可能
@@ -209,7 +214,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究目的}
   \begin{alertblock}{目的}
-   ASP技術を活用して，大規模な配電網遷移問題を効率良く解くシステムを構築
+   ASP技術を活用した大規模な配電網遷移問題を効率良く解くシステムを構築
    する．
   \end{alertblock}
   \vfill
@@ -218,17 +223,13 @@
  以下を中心に行う．
  \begin{itemize}
   \item 性能の良い配電網問題のASP符号化の考案
-  \item プランニングや有界モデル検査のための技法を適用
+  \item プランニングや有界モデル検査などの遷移問題を解く技法を応用
  \end{itemize}
 
 \end{exampleblock}
  \begin{block}{研究内容}
   \begin{enumerate}
    \item \structure{\bf 配電網問題のASP符号化の考案}
-   % \begin{itemize}
-   %  \item トポロジ制約のASP符号化を3種類
-   %  \item 電流制約に関するASP符号化を1種類
-   % \end{itemize}
    \item \structure{\bf マルチショットASP解法を用いた配電網遷移問題ソルバーの実装}
    \item \structure{\bf 実用規模の問題を含むベンチマークによる評価実験}
   \end{enumerate}
@@ -237,26 +238,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案手法
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{(提案)配電網問題のASP符号化}
-
+\begin{frame}{配電網問題のASP符号化}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
 \begin{block}{}
- \begin{itemize}
-  \item トポロジ制約は，供給経路内に\textbf{停電}や\textbf{短絡}がないことを保証する．
-  \item トポロジ制約を満たす配電網構成は，グラフと根と呼ばれる特別なノードから，
-        \structure{\bf 根付き全域森}と呼ばれる部分グラフに対応する．
- \end{itemize}
+\centering
+トポロジ制約に関して，\\
+基本符号化，改良符号化，有向符号化の3種類のASP符号化を考案
 \end{block}
  \vfill
- \begin{table}[t]
-  \centering
-  \input{table/proposal}
- \end{table}
- \vfill
  \begin{itemize}
-  %\item 根付き連結制約にASPの個数制約を用いることで，基礎化後のルール数を少なく抑えられる．
-  \item 有向符号化は，無向グラフの各辺$u-v$に対して，2つの弧$u\rightarrow v$と
-        $v\rightarrow u$を対応させることで有向グラフ化して解く符号化である．
-  \item これにより，非閉路制約をノードの入次数の制約で表現可能．
+  \item \structure{\bf トポロジ制約}は，供給経路内に\textbf{停電}\footnote{%
+        電力が供給されないセクション}%
+        や\textbf{短絡}\footnote{供給経路のループ，複数の変電所から供給を受けるセクション}
+        が存在しないことを保証する．
+  \item トポロジ制約のみの配電網問題は，与えられたグラフと根と呼ばれる特別なノードから，
+        \structure{\bf 根付き全域森}と呼ばれる部分グラフを探索する問題に帰着できる．
+  \item 特に，\structure{\bf 有向符号化}は，無向グラフの各辺$u-v$に対して，2つの弧$u\rightarrow v$と
+        $v\rightarrow u$を対応させることで有向グラフ化して解く符号化であり，
+        非閉路制約をノードの入次数の制約で簡潔に表現可能．
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -264,7 +264,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPに基づく配電網遷移問題ソルバーの実装}
  \centering
- \scalebox{0.55}{\input{tikz/tikz-arch}}
+ \scalebox{0.6}{\hspace{-1zw}\input{tikz/tikz-arch}}
  \vfill
  \begin{enumerate}
   \item 問題インスタンスをASPのファクト形式に変換する．
@@ -273,19 +273,19 @@
   \item 解集合を解釈して配電網遷移問題の解を得る．
  \end{enumerate}\vfill
  \begin{alertblock}{}
-  配電網遷移問題を解くアルゴリズムとして，シングルショットアルゴリズムと
-  マルチショットアルゴリズムの2種類を実装した．
+  配電網遷移問題を解くアルゴリズムとして，\textbf{シングルショットアルゴリズム}と
+  \alert{\bf マルチショットアルゴリズム}の2種類を実装した．
  \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案アプローチ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{(提案)配電網遷移問題を解くアルゴリズム}
+\begin{frame}{配電網遷移問題を解くアルゴリズム}
  \begin{block}{シングルショットアルゴリズム}
     \begin{itemize}
     \item 与えられたステップ長$t$の解が存在するかを判定する．
-    \item 解が見つかるまで，ステップ長$t$を増やしながら，複数の問題を
-          繰り返し解くことが必要である．
+    \item 解が見つかるまで，ステップ長$t$を増やしながらソルバーを呼び出し，
+          問題を繰り返し解く必要がある．
     \item 各問題中の制約の大部分は共通であるため，
       \textbf{同一の探索空間を何度も調べる}ことになり，
       \textbf{求解効率が低下}するという問題点がある．
@@ -296,7 +296,7 @@
    \begin{itemize}
    \item ASPシステム\textit{clingo}のマルチショット解法ライブラリを使用．
    \item 同様の探索失敗を避けるために獲得した学習節を保持することによって，
-		 \textbf{無駄な探索を行うことなく}，制約を追加した論理プログラムを
+		 \textbf{無駄な探索を行うことなく}，1回の呼び出しで制約を追加・削除しながら論理プログラムを
 		 連続的に解くことができる．
   \end{itemize}
  \end{alertblock}
@@ -304,7 +304,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験概要--根付き全域森
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験概要(トポロジ制約)}
+\begin{frame}{実験概要 (\textbf{配電網問題})}
   \renewcommand{\thefootnote}{\fnsymbol{footnote}}
   \setcounter{footnote}{1}
   \begin{itemize}
@@ -318,12 +318,12 @@
     \begin{itemize}
     \item DNET\footnote{https://github.com/takemaru/dnet}%
       で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
-      16個，36個，\textbf{468個})
+      16個，36個，468個)
     \item \textit{Graph Coloring and its Generalizations}
       \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
       グラフ彩色問題をベースに，独自に生成した 82問 
-      \footnote{各問題に対し，全ノードのうち1/5個をランダムに根として与えた．}\\
-      \alert{\bf (20 $\leq$ 辺数 $\leq$ 49,629)}
+      \footnote{各問題に対し，全ノードのうち1/5個をランダムに変電所として与えた．}\\
+      (20 $\leq$ 辺数 $\leq$ 49,629)
     \end{itemize}
   \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
   \item \structure{\bf 制限時間:} 3600秒/問
@@ -333,7 +333,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% カクタスプロット
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網問題：カクタスプロット}
+\begin{frame}{実験結果：カクタスプロット}
  \begin{figure}[h]
   \centering
   \includegraphics[scale=0.4]{fig/cactus.png}
@@ -344,62 +344,45 @@
 \end{itemize}\vfill
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 辺の数の表
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網問題：解けた問題数による比較}
- 
-%\begin{textblock*}{\linewidth}(10pt, 30pt)
-\begin{table}[t]
- \centering
- \input{table/table}
-\end{table}\vfill
-
-\begin{itemize}
- \item 有向符号化は，ベンチマーク問題85問中，\textbf{84問}を解いている．
- \item 大規模な問題に対しても有向符号化は，優位性を示した．
-\end{itemize}\vfill
-%\end{textblock*}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験内容--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験概要}
+\begin{frame}{実験概要 (\textbf{配電網遷移問題})}
   \renewcommand{\thefootnote}{\fnsymbol{footnote}}
   \setcounter{footnote}{1}
- 配電網遷移問題ベンチマークの作成，および，
- 提案手法の有効性を\\評価するために，以下の実験を行った．
+ 配電網遷移問題に対する，提案手法の有効性の評価実験を行った．
   \vfill
   \begin{itemize}
-  \item \structure{\bf 比較するASP符号化:}
+  \item \structure{\bf 比較する手法:}
     \begin{itemize}
-    \item シングルショット符号化
-    \item マルチショット符号化
+    \item シングルショットアルゴリズム
+    \item マルチショットアルゴリズム
     \end{itemize}
   \item \structure{\bf ベンチマーク問題:} 全1000問
     \begin{itemize}
     \item DNET \footnote{https://github.com/takemaru/dnet}
       で公開されている実用規模の配電網問題 (\structure{\bf fukui-tepco}，
-      スイッチ数 468，変電所の数 72)をベース
+      スイッチ数 468，変電所の数 72，許容電流 300A)をベース
     \item 実行可能解の中から，スタート状態を10個，ゴール状態を100個を
-          ランダムに選択して使用
+          ランダムに抽出し，それらを組み合わせて生成
     \end{itemize}
   \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
-   \item \structure{\bf 制限時間:} 10分
+   \item \structure{\bf 制限時間:} 10分/問
   \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験結果--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網遷移問題：平均CPU時間の比較}
+\begin{frame}{実験結果：平均CPU時間の比較}
+ \vfill
  \centering
  \vskip -2ex
  \scalebox{0.8}{\input{table/core-experiment}}
- \vskip 1em
+ \vfill
 \begin{itemize}
  \item 1000問全ての到達可能性を判定でき，全て到達可能であった．
  \item 今回生成した問題のうち，最長で最短ステップ数は7であった．
- \item マルチショット符号化は，シングルショット符号化と比較して，全ての
+ \item マルチショットは，シングルショットと比較して，全ての
 	   問題をより高速に解いており，\alert{\bf 平均で3.8倍の高速化}を実現している．
 \end{itemize}
 \end{frame}
@@ -407,28 +390,37 @@
 %% まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{まとめと今後の課題}
- \begin{block}{まとめ}
- \begin{enumerate}
-   \item \structure{\bf 配電網問題のASP符号化}
-   \begin{itemize}
-    \item トポロジ制約のASP符号化として\textbf{有向符号化}を新たに考案．
-    \item 実用規模のベンチマーク問題を用いて，有向符号化の優位性を確認．
-   \end{itemize}
-   \item \structure{\bf 配電網遷移問題のASP符号化}
-   \begin{itemize}
-    \item 配電網における災害時の停電復旧などに応用．
-    \item \textbf{シングルショット符号化}と\textbf{マルチショット符号化}の2種類のASP符号化を考案．
-    \item マルチショット符号化は，シングルショット符号化と比較して，\\ 
-          \textbf{平均で3.8倍の高速化}を実現．
-   \end{itemize}
- \end{enumerate}
- \end{block}
- \vfill
- \begin{alertblock}{今後の課題}
-  \begin{itemize}
-   \item 電圧制約を含む完全な配電網(遷移)問題への拡張
-  \end{itemize}
+ \begin{alertblock}{}
+  \centering
+  配電網遷移問題に対して，ASPを用いた解法を提案した．
  \end{alertblock}
+ \vfill
+  \begin{enumerate}
+   \item \structure{\bf 配電網問題のASP符号化の考案}
+         \begin{itemize}
+          %\item ASP言語の高い表現力を生かし，配電網遷移問題の制約を簡潔に記述できることを確認した．
+          \item 有向符号化は，無向グラフの各辺に2つの弧を対応させることで有向グラフ化して解く符号化
+                であり，非閉路制約を簡潔に表現できる．
+         \end{itemize}
+   \item \structure{\bf マルチショットASP解法を用いた配電網遷移問題ソルバーの実装}
+         \begin{itemize}
+          \item ASPシステムが同様の探索失敗を避けるために獲得した学習節を保持することで，
+                無駄な探索を避けることができる．
+         \end{itemize}
+   \item \structure{\bf 実用規模の問題を含むベンチマークによる評価実験}
+         \begin{itemize}
+          %\item 計1000問の到達可能性を判定し，ベンチマーク問題を作成．
+          \item マルチショットアルゴリズムは，シングルショットアルゴリズム
+                と比較して，\textbf{平均で3.8倍の高速化}を実現．
+         \end{itemize}
+  \end{enumerate}
+ \vfill
+ \begin{exampleblock}{今後の課題}
+\begin{itemize}
+ \item 電流制約だけでなく電圧制約も含む配電網遷移問題への拡張
+ \item 完全な問題は非線形な制約を含むため，ASP Modulo Theoriesを用いた解法を検討
+\end{itemize}
+ \end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 研究業績
@@ -441,14 +433,14 @@
         日本ソフトウェア科学会第37回大会講演論文集，3-L，日本ソフトウェア科学会，2020年9月8日．
   \item \alert{\bf カテゴリ1 採録}\\
         山田健太郎，湊真一，田村直之，番原睦則．解集合プログラミングを用いた配電網問題の解法．
-        第24回プログラミングおよびプログラミング言語ワークショップ．
+        第24回プログラミングおよびプログラミング言語ワークショップ，2022年3月．
  \end{itemize}
 \end{frame}
 %###########################################################
 %##### 補助スライド ########################################
 %###########################################################
 
-%\input{subslide}
+\input{subslide}
 
 \end{document}
 %%% Local Variables:
