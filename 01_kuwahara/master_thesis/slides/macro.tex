@@ -34,6 +34,19 @@
 \newcommand{\llw}[1]{\smash{\lower3.ex\hbox{#1}}}
 
 \newenvironment{tableA}{%
+  \tiny
+%  \tabcolsep = 2mm
+  %\renewcommand{\arraystretch}{1.1}
+  \begin{tabular}{c|rr|rrrrrrrrrr}
+    \multirow{3}{*}{問題名} & \multicolumn{2}{c|}{既存手法ASP} & \multicolumn{10}{c}{提案手法LNPS}\\\cline{2-13}
+     & \multirow{2}{*}{bb} & \multirow{2}{*}{usc} & \multicolumn{3}{c|}{R} & \multirow{2}{*}{DP} & \multirow{2}{*}{DR} & \multicolumn{2}{|c|}{SR} & \multicolumn{3}{c}{DPSR}\\
+     & & & \multicolumn{1}{c}{0} & \multicolumn{1}{c}{3} & \multicolumn{1}{c|}{5} & & & \multicolumn{1}{|c}{5} & \multicolumn{1}{c|}{10} & \multicolumn{1}{c}{1} & \multicolumn{1}{c}{2} & \multicolumn{1}{c}{3}\\\hline
+    }{%
+    %\hline
+  \end{tabular}
+}
+
+\newenvironment{tableAA}{%
   \scriptsize
 %  \tabcolsep = 2mm
   \renewcommand{\arraystretch}{0.78}
@@ -46,9 +59,9 @@
 }
 
 \newenvironment{tableB}{%
-  \scriptsize
+  \tiny
  % \tabcolsep = 2mm
-  \renewcommand{\arraystretch}{0.6}						
+  %\renewcommand{\arraystretch}{0.6}						
   \begin{tabular}[t]{c|r|rr|rr}
     \lw{問題名} & \lw{既知の最良値($\sharp$)} & \multicolumn{2}{c|}{既存手法 ASP} & \multicolumn{2}{c}{提案手法 LNPS}\\\cline{3-6}
      & & 最良値 & $\sharp$ との比 (\%) & 最良値 & $\sharp$ との比 (\%)\\\hline
@@ -93,7 +106,7 @@
  % \tabcolsep = 2mm
   %\renewcommand{\arraystretch}{0.6}						
   \begin{tabular}[t]{|r|r|}%\hline
-    \multicolumn{1}{|c|}{\small 既存手法 ASP~[Banbara+ '19]} & \multicolumn{1}{c|}{\small 提案手法 LNPS}\\%\cline{2-3}
+    \multicolumn{1}{|c|}{\small 既存手法 ASP} & \multicolumn{1}{c|}{\small 提案手法 LNPS}\\%\cline{2-3}
     \hline
     % \scriptsize{既知の最良値との比の平均 (\%)} & \scriptsize{既知の最良値との比の平均 (\%)}\\
     }{%
