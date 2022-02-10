@@ -119,29 +119,27 @@ $\gamma(G)$で表す．
 	 アタックできるかを判定する．
   \end{itemize}
  \end{block}
- \begin{block}{}
-  \begin{itemize}
-   \item クイーングラフの支配数は
-$n=3,11$を除いた$n \leq 132$で $\lceil n/2 \rceil 
-\leq \gamma(Q_{n}) \leq \lceil n/2 \rceil +1$
-であることが証明されている．%[\"{O}sterg{\aa}rd,Weakley,2001]．
-$1\leq n \leq 20$のクイーングラフの支配数は以下のとおりである．
-  \begin{table}[hbtp]
-   \centering
-   \begin{tabular}{|c|c||c|c||c|c||c|c|} \hline
-    $n$ & $\gamma(Q_{n})$ & $n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ \\ \hline
-    1 &1 &6 &3 &11 &5 &16 &9 \\ \hline
-    2 &1 &7 &4 &12 &6 &17 &9 \\ \hline
-    3 &1 &8 &5 &13 &7 &18 &9 \\ \hline
-    4 &2 &9 &5 &14 &8 &19 &10 \\ \hline
-    5 &3 &10 &5 &15 &9 &20 &11 \\ \hline
-   \end{tabular}
-  \end{table}
-  \end{itemize}
- \end{block}
+ \begin{itemize}
+  \item クイーングラフの支配数は
+	$n=3,11$を除いた$n \leq 132$で $\lceil n/2 \rceil 
+	\leq \gamma(Q_{n}) \leq \lceil n/2 \rceil +1$
+	であることが証明されている[\"{O}sterg{\aa}rd,Weakley,2001]．
+	$1\leq n \leq 20$のクイーングラフの支配数は以下のとおりである．
+	\begin{table}[hbtp]
+	 \centering
+	 \begin{tabular}{|c|c||c|c||c|c||c|c|} \hline
+	  $n$ & $\gamma(Q_{n})$ & $n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ \\ \hline
+	  1 &1 &6 &3 &11 &5 &16 &9 \\ \hline
+	  2 &1 &7 &4 &12 &6 &17 &9 \\ \hline
+	  3 &1 &8 &5 &13 &7 &18 &9 \\ \hline
+	  4 &2 &9 &5 &14 &8 &19 &10 \\ \hline
+	  5 &3 &10 &5 &15 &9 &20 &11 \\ \hline
+	 \end{tabular}
+	\end{table}
+ \end{itemize}
 \end{frame}
  
-
+ 
 %
 %クイーン支配問題の例
 %
@@ -196,7 +194,7 @@ $1\leq n \leq 20$のクイーングラフの支配数は以下のとおりであ
    \item クイーン支配問題を解く，3種類のASP符号化を考案．
 	 \begin{itemize}
 	  \item 基本符号化，改良符号化，部分和符号化．
-	  \item 先行研究[山本，2021]で提案された制約モデルを参考に考案．
+	  \item 先行研究[山本,2021]で提案された制約モデルを参考に考案．
 	 \end{itemize}
    \item クイーングラフと既知の支配数を用いて，3種のASP符号化の
 	 評価実験を行なった．
