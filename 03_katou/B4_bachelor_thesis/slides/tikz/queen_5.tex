@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+ \draw[gray] (-1.25,-1.25)--(-1.25,1.25);
+ \draw[gray] (-0.75,-1.25)--(-0.75,1.25);
+ \draw[gray] (-0.25,-1.25)--(-0.25,1.25); 
+ \draw[gray] (0.25,-1.25)--(0.25,1.25); 
+ \draw[gray] (0.75,-1.25)--(0.75,1.25); 
+ \draw[gray] (1.25,-1.25)--(1.25,1.25); 
+ \draw[gray] (-1.25,-1.25)--(1.25,-1.25); 
+ \draw[gray] (-1.25,-0.75)--(1.25,-0.75); 
+ \draw[gray] (-1.25,-0.25)--(1.25,-0.25); 
+ \draw[gray] (-1.25,0.25)--(1.25,0.25); 
+ \draw[gray] (-1.25,0.75)--(1.25,0.75); 
+ \draw[gray] (-1.25,1.25)--(1.25,1.25);
+ \foreach \x in {-1,-0.5,0,0.5,1}
+  \foreach \y in {-1,-0.5,0,0.5,1} 
+  \fill (\x,\y) circle (0.03);
+ \draw[magenta] (-1.25,1)--(1.25,1);
+ \draw[magenta] (-1,1.25)--(-1,-1.25);
+ \draw[magenta] (-1.25,1.25)--(1.25,-1.25);
+ \draw[magenta] (-1.25,0.75)--(-0.75,1.25);
+ \draw[blue] (-1.25,-1)--(1.25,-1);
+ \draw[blue] (-0.5,-1.25)--(-0.5,1.25);
+ \draw[blue] (-0.25,-1.25)--(-1.25,-0.25);
+ \draw[blue] (-0.74,-1.25)--(1.25,0.74);
+ \draw[yellow] (1,1.25)--(1,-1.25);
+ \draw[yellow] (-1.25,0.5)--(1.25,0.5);
+ \draw[yellow] (0.25,1.25)--(1.25,0.25);
+ \draw[yellow] (-0.76,-1.25)--(1.25,0.76);
+ \fill[magenta] (-1,1) circle (0.03);
+ \fill[yellow] (1,0.5) circle (0.03);
+ \fill[blue] (-0.5,-1) circle (0.03);
+  \matrix[matrix of nodes,nodes={inner sep=0pt,text width=0.5cm,
+align=center,minimum height=0.43cm}]{
+ \textcolor{magenta}{\symqueen} & \quad & \quad & \quad & \quad \\
+ \quad & \quad & \quad & \quad & \textcolor{yellow}{\symqueen} \\
+ \quad & \quad & \quad & \quad & \quad \\
+ \quad & \quad & \quad & \quad & \quad \\
+ \quad & \textcolor{blue}{\symqueen} & \quad & \quad & \quad \\};
+\end{tikzpicture}
+ 

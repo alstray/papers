@@ -1,0 +1,56 @@
+%%%% 補助スライド
+\appendix
+\backupbegin
+
+\begin{frame}{}
+ 補足
+\end{frame}
+
+\begin{frame}{クイーングラフ}
+ \begin{block}{クイーングラフ}
+  $n\times n$のチェス盤について各マスを頂点とし，
+  クイーンが移動できるマス同士が辺で結ばれているグラフを
+  \structure{クイーングラフ}といい，$Q_n$と表す．
+ \end{block}
+ \begin{exampleblock}{クイーングラフの例: $Q_3$}
+  例として，サイズ$3 \times 3$のチェス盤と
+  クイーングラフ$Q_3$の対応関係を下図に示す．
+  \begin{figure}[htb]
+   \label{ex:queengraph_3}
+   \begin{minipage}[b]{0.2\linewidth}
+    \centering
+    \input{tikz/queen_3.tex}
+   \end{minipage} 
+   \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \input{tikz/queen_3_graph.tex}
+   \end{minipage}
+  \end{figure}
+ \end{exampleblock}
+\end{frame}
+
+\begin{frame}\frametitle{実験結果}
+ \begin{itemize}
+  \item 各符号化に対して時間内の判定ができた数を比較する.
+ \end{itemize}
+ \begin{block}{}
+  \begin{table}[ht]
+   \centering
+   \begin{tabular}{c|c|c}
+    &SAT &UNSAT \\ \hline
+    基本符号化 &3 &3 \\
+    改良符号化 &5 &3 \\
+    部分和符号化 &{\color{red}7} &3 \\ \hline
+   \end{tabular}
+  \end{table}
+  \begin{itemize}
+   \item SATの問題では，\structure{部分和符号化}が
+	 最も多くの問題を解きその優位性を確認できた．
+   \item UNSATの問題ではどの符号化でも解けた問題数は
+	 変わらなかったが，UNSATを導くまでにかかった時間では
+	 \structure{部分和符号化}の優位性を確認できた．
+  \end{itemize}
+ \end{block}
+\end{frame}
+
+\backupend
