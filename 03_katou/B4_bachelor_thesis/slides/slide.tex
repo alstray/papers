@@ -1,0 +1,335 @@
+\documentclass[dvipdfmx,10pt]{beamer}
+%%%% Packages %%%%%
+\usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{skak}
+% \usepackage{amsmath,amssymb,amsthm}
+% \usepackage{multirow}
+% \usepackage{url}
+% \usepackage{tikz}
+% \usepackage{alltt}
+% \usepackage{bm}
+% \usepackage{listings,jlisting}
+% \usepackage{listings}
+% \lstset{
+%  basicstyle=\ttfamily\scriptsize,
+%  keepspaces=true,
+%  escapechar=|,
+%  columns=[l]{fullflexible}
+% }
+
+%%%% Fonts %%%%%
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+% \usepackage{otf} % otfパッケージ
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usetikzlibrary{shadows}
+\usetikzlibrary{positioning}
+\usepackage[deluxe]{otf} 
+\usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
+% \usepackage[T1]{fontenc} % 8bit フォント
+% \usepackage{minijs}
+% \usepackage{textcomp} % 欧文フォントの追加
+% \usepackage[utf8]{inputenc} % 文字コードをUTF-8
+
+%%%% Beamer %%%%%
+\usetheme{Warsaw}
+%\useinnertheme{rectangles}
+%\useoutertheme{smoothbars}
+%\setbeamercolor{enumerate}{fg=white, bg=black}
+%\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{navigation symbols}{} % 右下のアイコンを消す
+\useoutertheme{shadow}                 % 箱に影をつける
+\usefonttheme{professionalfonts}       % 数式の文字を通常の LaTeX と同じにする
+% \setbeamercovered{transparent} % 好みに応じてどうぞ
+\setbeamertemplate{footline}[frame number]
+\setbeamercolor{page number in head/foot}{fg=black} % ページ数を表示する
+% \setbeamerfont{footline}{size=\normalsize,series=\bfseries}
+% \setbeamerfont{footline}{size=\scriptsize,series=\mdseries}
+% \setbeamercolor{footline}{fg=black,bg=black}
+% \setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{items}[ball]
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+% \setbeamertemplate{enumerate items}[default]
+% \setbeamerfont{alerted text}{series=\bfseries}
+\begin{document}
+\title{解集合プログラミングを用いた\\クイーン支配問題の解法に関する考察}
+\author{101830080 \quad 加藤 聖人}
+\date{2021年度 卒業研究発表会 \\ 2022年2月18日}
+\institute{番原研究室}
+
+%
+%表紙
+%
+
+\begin{frame}\frametitle{}
+ \titlepage
+\end{frame}
+
+%
+%支配集合問題について
+%
+
+\begin{frame}\frametitle{支配集合問題}
+ \begin{block}{支配集合}
+  無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$に対して，
+任意の頂点$u \in V\setminus S$にも辺$(u,v) \in E$が存在し，
+$v \in S$を満たすとき，$S$を$G$の\structure{支配集合}という．
+  \begin{itemize}
+   \item 支配集合の要素数を\structure{サイズ}という．
+   \item サイズが最小の支配集合をグラフ$G$の\structure{最小支配集合}という．
+   \item 最小支配集合のサイズをグラフ$G$の\alert{支配数}といい，
+$\gamma(G)$で表す．
+  \end{itemize}
+ \end{block}
+ \begin{block}{支配集合問題}
+  グラフ$G$と正の整数$k$が与えられたとき，サイズが$k$の$G$の
+支配集合が存在するかどうかを判定する問題を\structure{支配集合問題}という．
+  \begin{itemize}
+   \item 支配集合問題はNP完全であることが知られている．
+  \end{itemize}
+ \end{block}
+\end{frame}
+
+%
+%クイーン支配問題
+%
+
+\begin{frame}\frametitle{クイーン支配問題(Queen Domination Problem; QDP)}
+ \begin{block}{}
+  サイズ$n\times n$のクイーングラフ$Q_n$と正の整数$k$が与えられたとき，
+  サイズ$k$の$Q_n$の支配集合が存在するかどうかを
+  判定する問題を\structure{クイーン支配問題}という．
+  \begin{itemize}
+   \item クイーングラフ$Q_n$は$n\times n$のチェス盤
+	 について各マスを頂点とし，クイーンが移動できる
+	 マス同士が辺で結ばれているグラフである．
+   \item つまり，$n \times n$の盤面に$k$個のクイーンを
+	 置いたとき，クイーンを移動させて全てのマスに
+	 アタックできるかを判定する．
+  \end{itemize}
+ \end{block}
+ \begin{block}{}
+  \begin{itemize}
+   \item クイーングラフの支配数は
+$n=3,11$を除いた$n \leq 132$で $\lceil n/2 \rceil 
+\leq \gamma(Q_{n}) \leq \lceil n/2 \rceil +1$
+であることが証明されている．%[\"{O}sterg{\aa}rd,Weakley,2001]．
+$1\leq n \leq 20$のクイーングラフの支配数は以下のとおりである．
+  \begin{table}[hbtp]
+   \centering
+   \begin{tabular}{|c|c||c|c||c|c||c|c|} \hline
+    $n$ & $\gamma(Q_{n})$ & $n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ \\ \hline
+    1 &1 &6 &3 &11 &5 &16 &9 \\ \hline
+    2 &1 &7 &4 &12 &6 &17 &9 \\ \hline
+    3 &1 &8 &5 &13 &7 &18 &9 \\ \hline
+    4 &2 &9 &5 &14 &8 &19 &10 \\ \hline
+    5 &3 &10 &5 &15 &9 &20 &11 \\ \hline
+   \end{tabular}
+  \end{table}
+  \end{itemize}
+ \end{block}
+\end{frame}
+ 
+
+%
+%クイーン支配問題の例
+%
+
+\begin{frame}{クイーングラフの支配集合の例:$Q_5$}
+  \begin{exampleblock}{}
+   下の図は$Q_5$の最小支配集合の例である．3個のクイーンを置いたとき，
+   クイーンを移動させてすべてのマスにアタック可能である．また，
+   2個以下のクイーンを置いたとき，クイーンを移動させて全てのマスに
+   アタックすることは不可能である．
+  \begin{center}
+   \scalebox{1.3}{
+   \input{tikz/queen_5.tex}
+   }
+  \end{center}
+ \end{exampleblock}
+\end{frame}
+
+%
+%ASPについて
+%
+
+\begin{frame}\frametitle{解集合プログラミング(Answer Set Programming; ASP)}
+ \begin{itemize}
+  \item \structure{ASP言語}は一階論理に基づいた知識表現言語の一種である．
+  \item \structure{ASPシステム}は論理プログラムから
+	安定モデル意味論[Gelfond and Lifschitz '88]に基づく
+	解集合を計算するシステムである．
+  \item 近年ではSAT技術を応用した高速ASPシステムが実現され，
+	システム検証，プランニング，システム生物学など様々な
+	分野への応用が拡大している．
+ \end{itemize}
+ \begin{alertblock}{クイーン支配問題に対してASPを用いる利点}
+  \begin{itemize}
+   \item ASP言語の高い表現力を活かし，クイーン支配問題の制約を簡潔に記述可能．
+   \item 個数制約を用いて，部分和を表す制約を簡潔に記述可能．
+   \item 高速な解列挙が可能．
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+ 
+%
+%研究目的と研究内容
+%
+
+\begin{frame}\frametitle{研究目的}
+ \begin{alertblock}{研究目的}
+  ASP技術を活用し，クイーン支配問題を効率よく解くソルバーの実現を目指す．
+ \end{alertblock}
+ \begin{block}{研究内容}
+  \begin{enumerate}
+   \item クイーン支配問題を解く，3種類のASP符号化を考案．
+	 \begin{itemize}
+	  \item 基本符号化，改良符号化，部分和符号化．
+	  \item 先行研究[山本，2021]で提案された制約モデルを参考に考案．
+	 \end{itemize}
+   \item クイーングラフと既知の支配数を用いて，3種のASP符号化の
+	 評価実験を行なった．
+  \end{enumerate}
+ \end{block}
+\end{frame}
+
+%
+%符号化3つ
+%
+
+\begin{frame}{提案する符号化}
+ \begin{block}{クイーン支配問題の表現}
+  与えられたクイーングラフ$Q_n$上に$k$個のクイーンを配置したとき，
+  以下の制約を満たすならばクイーングラフ$Q_{n}$にサイズが$k$の
+  支配集合が存在する．
+  \begin{itemize}
+   \item $Q_n$上のどのマスにも，1つ以上のクイーンが移動
+	 できなければならない(\alert{被覆制約})
+  \end{itemize}
+ \end{block}
+ \begin{itemize}
+  \item \alert{基本符号化}
+	\begin{itemize}
+	 \item クイーン支配問題の制約をASP の一貫性制約を
+	       用いて表現した符号化
+	\end{itemize}
+  \item \alert{改良符号化} 
+	\begin{itemize}
+	 \item 各行，列，対角線方向に対してクイーンが配置
+	       されているかどうかを表す補助アトムを導入し，
+	       基本符号化で複数回出現する制約式をまとめた符号化
+	\end{itemize}
+  \item \alert{部分和符号化}
+	\begin{itemize}
+	  \item 各行，各列，各対角線に対して配置されている
+		クイーンの個数を表す補助アトムを導入し，それぞれの
+		和がサイズ$k$に一致することをASPの個数制約を
+		用いて表した符号化
+	\end{itemize}
+ \end{itemize}
+\end{frame}
+
+%
+%実験内容
+%
+ 
+\begin{frame}\frametitle{実験概要}
+ \begin{block}{}
+  提案した3種の符号化について，クイーングラフ$Q_n$と
+  正の整数$k$を入力としてサイズ$k$の$Q_{n}$の支配集合の有無を判定した．
+ \end{block}
+ \begin{itemize}
+  \item \structure{比較するASP符号化:}
+	\begin{itemize}
+	 \item 基本符号化
+	 \item 改良符号化
+	 \item 部分和符号化
+	\end{itemize}
+  \item \structure{対象とする問題:}
+	\begin{itemize}
+	 \item クイーングラフ$Q_{n} \qquad (1 \leq n \leq 20)$
+	 \item $k=\gamma(Q_{n})$\quad (SAT)，$k=\gamma(Q_{n})-1$\quad (UNSAT)
+	\end{itemize}
+  \item \structure{使用ASPソルバ:} \textit{clingo-5.5.0}
+  \item \structure{実験環境:} Mac mini, 3.2GHz 6コア Intel Core i7, 64GBメモリ
+  \item \structure{制限CPU時間:} 3600 (sec)
+ \end{itemize}
+\end{frame}
+
+%
+%実験結果(基本1,改良1,部分和2)
+%
+
+\begin{frame}\frametitle{実験結果}
+ \begin{block}{}
+  解の有無の判定に要したCPU時間．
+ \end{block}
+ \begin{columns}
+  \begin{column}{0.50\textwidth}
+   \begin{table}[htbp]
+    \caption{SATの実験結果}
+    \scalebox{0.7}{
+    \input{table/exsat.tex}}
+   \end{table}
+  \end{column}
+  \begin{column}{0.50\textwidth}
+   \begin{table}[htbp]
+    \caption{UNSATの実験結果}
+    \scalebox{0.7}{
+    \input{table/exunsat.tex}}
+   \end{table}
+  \end{column}
+ \end{columns} 
+ \begin{itemize}
+  \item SATの問題では，\structure{部分和符号化}が$n=16$まで解くなど，
+	その優位性を確認できた．
+  \item UNSATの問題では，解けた問題数に差はなかったが，解なしが得られる
+	までにかかった時間は\structure{部分和符号化}が最も早かった．
+ \end{itemize}
+\end{frame}
+
+%
+%まとめと今後の課題
+%
+
+\begin{frame}\frametitle{まとめ}
+  \begin{itemize}
+   \item \structure{クイーン支配問題を解く3種類のASP符号化を考案．}
+	 \begin{itemize}
+	  \item ASPの高い表現力を活かし，クイーン支配問題を簡潔に
+		記述することができた．
+	 \end{itemize}
+   \item \structure{既知の支配数を用いた評価実験．}
+	 \begin{itemize}
+	  \item SATの問題では唯一$n=16$まで解くなど，部分和符号化の
+		優位性を確認できた．
+	  \item UNSATの問題では解を得るまでのCPU時間の観点から，
+		部分和符号化の優位性を確認できた．
+	 \end{itemize}
+  \end{itemize}
+ \begin{alertblock}{今後の課題}
+  \begin{itemize}
+   \item クイーン支配問題をより高速に解くASP符号化の考案．
+   \item 遷移問題への拡張．
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+
+%
+%付録
+%
+
+\input{subslide.tex}
+
+\end{document}
