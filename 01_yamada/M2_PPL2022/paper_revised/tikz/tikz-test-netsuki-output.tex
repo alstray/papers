@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 根付き全域森 (第2章で使う)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}[x=1.5cm,y=1.5cm,scale=0.7]
+
+ % 設定
+ \tikzset{root/.style={circle,draw=black,fill=gray!30,minimum size=1cm}}
+ \tikzset{node/.style={circle,draw=black,minimum size=1cm}}
+ 
+ % 補助線
+ % \draw [help lines,blue,step=2cm] (-3,0) grid (3,-3);
+
+
+ \node[node,fill=purple!60,label=above:$r_1$] (r1){$1$};
+
+ \node[node,fill=purple!60,left=of r1] (n1){$5$};
+ \node[node,fill=purple!60,left=of n1] (n2){$4$};
+ \node[node,fill=cyan!80,above=of n2] (n3){$6$};
+ \node[node,fill=purple!60,above=of n1] (n4){$8$};
+ \node[node,fill=cyan!80,above=of n3] (n5){$8$};
+ \node[node,fill=cyan!80,above=of n4] (n6){$9$};
+ \node[node,fill=cyan!80,above=of n5] (n7){$10$};
+ \node[node,fill=cyan!80,above=of n6] (n8){$11$};
+
+ \node[node,fill=cyan!80,right=of n8,label=above:$r_2$] (r2){$2$};
+ \node[node,fill=cyan!80,right=of r2] (n9){$14$};
+ \node[node,fill=yellow!80,right=of n9] (n10){$15$};
+ \node[node,fill=purple!60,right=of r1] (n11){$12$};
+ \node[node,fill=yellow!80,right=of n11] (n12){$13$};
+ 
+ \node[node,fill=yellow!80,label=right:$r_3$](r3) at ($(n10)!0.5!(n12)$) {$3$};
+ 
+ \foreach \v / \u in {r1/n1,n1/n2,n1/n4,n3/n5,n5/n7,n6/n8,n7/n8,n8/r2,
+ r2/n9,r1/n11,r3/n10,r3/n12}
+ \draw[thick] (\v) -- (\u);
+
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: paper.tex
+%%% End:

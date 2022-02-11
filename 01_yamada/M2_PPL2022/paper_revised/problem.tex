@@ -1,0 +1,219 @@
+\section{配電網問題と配電網遷移問題}\label{chap:problem}
+
+%\subsection{配電網問題}
+
+配電網問題は，
+与えられた配電網$D=(S,SW)$から，以下の制約(\ref{topology}), (\ref{electrical})を満たす
+配電網の構成(スイッチの開閉状態)が存在するかどうかを判定する問題である．
+$S$は配電区間を表すセクションの集合，
+$SW$は配電区間を結ぶスイッチの集合である．
+本論文では，配電網の構成を閉じたスイッチの集合$X\subset SW$で表す．
+すなわち，$X$がこの問題の実行可能解である．
+$I_{i}$は各セクション$s_{i}\in S$の電流，
+$J^{max}$はセクションにおける許容電流を表し，
+ともに入力として与えられる．
+% 
+\begin{eqnarray}
+& X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}   \label{topology}\\
+% & J_i = \displaystyle\sum_{j\in S_i^{down}} I_j \qquad (\forall s_{i}\in S)\nonumber\\
+% & J_i \leq J_{i}^{max} \qquad (\forall s_{i}\in S)\label{electrical}
+& J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \qquad J_i \leq J^{max}
+  \qquad (\forall s_{i}\in S)\label{electrical}
+\end{eqnarray}
+%
+
+制約~(\ref{topology})は\textbf{トポロジ制約}と呼ばれる．
+トポロジ制約を満たす配電網構成は，配電網$D$に対応するグラフから，
+\textbf{根付き全域森}と呼ばれる部分グラフを求める問題に帰着できる~\cite{Minato:dnet:netuki}．
+直観的には，セクションがノード，スイッチが辺，変電所が根ノードに対応する．
+根付き全域森の定義は以下の通りである．
+
+\theoremstyle{definition}
+\newtheorem*{definition*}{定義}
+\begin{definition*}
+  グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
+  このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
+  $G'=(V,E'), E' \subseteq E$ である．
+  \begin{itemize}
+  \item $G'$はサイクルを持たない．(非閉路制約)
+  \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
+  \end{itemize}
+\end{definition*}
+
+制約~(\ref{electrical})は\textbf{電流制約}と呼ばれる．
+$S_{i}^{down}$は，各セクション$s_{i}$に対して，自身を含む
+下流のセクションの集合を表す．
+$J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し，
+許容電流$J^{max}$以下でなければならない．
+%
+上で述べた配電網問題の定義は，論文~\cite{Minato:dnet:ZDD}に基づいている．
+論文~\cite{Minato:dnet:ZDD}では
+配電損失を最小にする最適化問題として定義されている．
+本論文では，後で述べる配電網遷移問題への拡張を主眼とするため，
+配電網問題を判定問題として定義している．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tb]
+ \centering
+ \scalebox{0.6}{\input{tikz/tikz-test-input}}
+  \caption{配電網問題の例}
+  \label{fig:test-input}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{table}[tbp]
+%  \centering
+%  \caption{負荷電流の一覧~(A)}
+%  \label{table:current}
+%  \input{table/current}
+% \end{table}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{figure}[tb]
+ \centering
+ \scalebox{0.6}{\input{tikz/tikz-test-output}}
+ \caption{配電網問題(図\ref{fig:test-input})の解の一例}
+ \label{fig:test-output}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{figure}[tbp]
+  \centering
+  \scalebox{0.8}{\input{tikz/tikz-test-netsuki-output}}
+  \caption{配電網問題の解(図\ref{fig:test-output})に対応する根付き全域森}
+  \label{fig:test-netsuki-output}
+\end{figure}  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+DNET
+% \footnote{\url{https://github.com/takemaru/dnet}}
+に公開されている配電網問題の例を図~\ref{fig:test-input}に示す．
+この例は，
+25箇所のセクション$S=\{s_{a},s_{b},s_{c},s_{1},\ldots, s_{22}\}$，
+16個のスイッチ$SW=\{sw_{1},\ldots, sw_{16}\}$，
+3箇所の変電所$\{s_{a}, s_{b}, s_{c}\}$
+から構成されている．
+ここでは，変電所に直接つながるセクションをそれぞれ変電所とする．
+%
+図\ref{fig:test-output}に，この配電網問題の解の一例を示す．
+閉じたスイッチは，
+\[X=\{sw_{1},sw_{2},sw_{4},sw_{5},sw_{7},sw_{8},sw_{9},%
+sw_{10},sw_{11},sw_{12},sw_{13},sw_{15}\}\]
+となる．
+変電所$s_{a}$から電力の供給を受けるセクションの端点を赤色で，
+変電所$s_{b}$からを青色で，
+変電所$s_{c}$からを黄色で表している．
+トポロジ制約を満たし，停電と短絡が発生しないことがわかる．
+図\ref{fig:test-output}の配電網問題の解に対応する根付き全域森を
+図\ref{fig:test-netsuki-output}に示す．
+例えば，セクション\{$s_a,s_1,s_{15}$\}は，ノード1に対応し，
+変電所$s_a,s_b,s_c$に対応する各ノードは，根$r_1,r_2,r_3$にそれぞれ対応する．
+また，電流制約について，例えば，セクション$s_2$の下流にあるセクションの
+集合は，$S_2^{down}=\{s_{2},s_{3},s_{4},s_{5},s_{13}\}$となる．したがって，
+$J_{2}=I_{2}+I_{3}+I_{4}+I_{5}+I_{13}$のように計算される．
+
+
+% 次に例として，図\ref{fig:test-input}で示した配電網問題の解を図\ref{fig:test-output}に示す．
+% この解は電流制約を$V_{max}=300$として求められた解である．閉じたスイッチは，$\{sw_{1},sw_{2},
+% sw_{4},sw_{5},sw_{7},sw_{8},sw_{9},sw_{10},sw_{11},sw_{12},sw_{13},sw_{15}\}$である．
+% このスイッチの集合から決まる配電経路は，図\ref{fig:test-output}の通り，トポロジ制約を満たしている．
+% また，各変電所に$\{s_a,s_b,s_c\}$について，それぞれ，
+% $s_a^{down}=\{s_a,s_1,s_2,s_3,s_4,s_5,s_{13},s_{15},s_{21}\}$，
+% $s_b^{down}\{s_b,s_6,s_7,s_8,s_9,s_{10},s_{11},s_{12},s_{14},s_{16},s_{22}\}$，
+% $s_c^{down}=\{s_c,s_{17},s_{18},s_{19},s_{20}\}$である．
+% したがって，表\ref{table:current}より，各供給経路に対する電流値の合計は，$J_a=162$，$J_b=284$，$J_c=71$となり，
+% 電流制約も満たしている．
+
+% ここで，トポロジ制約を満たす配電網構成は，\textbf{根付き全域森}という部分グラフに対応する
+% ことが知られている~\cite{Minato:dnet:netuki}．
+% 根付き全域森は以下のように定義される．
+% \theoremstyle{definition}
+% \newtheorem*{definition*}{定義}
+% \begin{definition*}
+%   グラフ$G=(V,E)$と，根と呼ばれる$V$上のノードの集合が与えられたとする．
+%   このとき，$G$上の根付き全域森とは，以下の制約を満たす$G$の部分グラフ
+%   $G'=(V,E'), E' \subseteq E$ である．
+%   \begin{enumerate}
+%   \item $G'$はサイクルを持たない．(非閉路制約)
+%   \item $G'$の各連結成分は，ちょうど1つの根を含む．(根付き連結制約)
+%   \end{enumerate}
+% 本稿では，与えられたグラフ$G$から，根付き全域森
+% $G'$を求める部分グラフ探索問題を\textbf{根付き全域森問題}と呼ぶ．
+% \end{definition*}
+
+% 根付き全域森問題の入力例となるグラフを図\ref{fig:test-netsuki-input}に示す．
+% 図\ref{fig:test-netsuki-input}は，図\ref{fig:test-input}で示した配電網に対応しており，
+% 配電区間$\{s_i ~|~ 1 \leq i \leq 22\}$は，スイッチで区切られる1つのまとまりごとに
+% \textbf{ノード}に対応する．例えば，区間$\{s_2,s_3,s_4\}$は，ノード5に対応している．
+% スイッチ$\{sw_1,\ldots,sw_{16}\}$は，\textbf{辺}に対応する．
+% また，図中の色付きノード$\{r_1,r_2,r_3\}$は変電所を含むことを意味しており，
+% \textbf{根}に対応している．
+
+% 根付き全域森の例を図\ref{fig:test-netsuki-output}に示す．根付き全域森は，
+% 各連結成分が必ずちょうど1つの根をもつ木構造を形成することで，
+% 非閉路制約と根付き連結制約を満たす．図\ref{fig:test-netsuki-output}は，
+% 図\ref{fig:test-output}の配電網問題の解に対応している．
+
+
+
+%\subsection{配電網遷移問題}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\newcommand{\lw}[1]{\smash{\lower-15.ex\hbox{#1}}}
+\begin{figure*}[tb]
+  %\renewcommand{\arraystretch}{0.9}
+  \tabcolsep = 3mm
+  \centering
+  \begin{tabular}{ccc}
+    $t=0$ (スタート状態) & & $t=1$\\
+    \scalebox{0.45}{\input{tikz/tikz-test-core-0}}
+    & \lw{$\Rightarrow$} & 
+    \scalebox{0.45}{\input{tikz/tikz-test-core-1}}\\
+    & & $\Downarrow$\\
+    & & \\
+    \scalebox{0.45}{\input{tikz/tikz-test-core-3}}
+    & \lw{$\Leftarrow$} &
+    \scalebox{0.45}{\input{tikz/tikz-test-core-2}}\\
+    $t=3$ (ゴール状態) & & $t=2$
+  \end{tabular}
+  \caption{配電網遷移問題 (遷移制約$d=2$) の解の一例}
+  \label{fig:test-core}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{配電網遷移問題}は，配電網問題とその2つの実行可能解が与え
+られたとき，一方の解(スタート状態)から他方の解(ゴール状態)へ，遷移制約
+を満たしつつ，実行可能解のみを経由して最短ステップ長でのスイッチの切替
+手順を求める問題である．
+% この問題は，配電網の構成制御における障害時の復旧予測への応用を狙いとし
+% ている．
+本研究では，
+各ステップ$t$で切替可能なスイッチの数を$d$個に制限する一般的な
+遷移制約を用いる．
+
+配電網遷移問題の解の一例を図\ref{fig:test-core}に示す．
+この例では，各ステップ$t$で切替可能なスイッチの数を$d=2$個に制限している．
+この解のステップ長は3であり，スタート状態($t=0$)からゴール状態($t=3$)
+まで，配電網問題の制約を満たしながら遷移していることがわかる．
+例えば，ステップ$t=0$から$t=1$への遷移では，スイッチ$\{sw_3,sw_5\}$が
+それぞれ切り替わっている．
+
+% 根付き全域森問題の入力例となるグラフを図\ref{fig:test-netsuki-input}に示す．
+% 図\ref{fig:test-netsuki-input}は，図\ref{fig:test-input}で示した配電網に対応しており，
+% 配電区間$\{s_i ~|~ 1 \leq i \leq 22\}$は，スイッチで区切られる1つのまとまりごとに
+% \textbf{ノード}に対応する．例えば，区間$\{s_2,s_3,s_4\}$は，ノード5に対応している．
+% スイッチ$\{sw_1,\ldots,sw_{16}\}$は，\textbf{辺}に対応する．
+% また，図中の色付きノード$\{r_1,r_2,r_3\}$は変電所を含むことを意味しており，
+% \textbf{根}に対応している．
+
+% 根付き全域森の例を図\ref{fig:test-netsuki-output}に示す．根付き全域森は，
+% 各連結成分が必ずちょうど1つの根をもつ木構造を形成することで，
+% 非閉路制約と根付き連結制約を満たす．図\ref{fig:test-netsuki-output}は，
+% 図\ref{fig:test-output}の配電網問題の解に対応している．
+
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
