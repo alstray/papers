@@ -1,0 +1,43 @@
+\documentclass[japanese,dvipdfmx]{jssst_ppl} %% 日本語 (default)
+% \documentclass[english]{jssst_ppl} %% English
+% \documentclass[japanese,draft]{jssst_ppl} %% You can use the draft option
+
+\input{macro}
+
+\title{解集合プログラミングを用いた配電網問題の解法}
+\author{山田 健太郎$^1$，湊 真一$^2$，田村 直之$^3$，番原 睦則$^1$}
+\inst{%
+$^1$ 名古屋大学大学院情報学研究科\\
+\texttt{\{yken66,banbara\}@nagoya-u.jp}
+\medskip\par%所属の区切り
+$^2$ 京都大学大学院情報学研究科\\
+\texttt{minato@i.kyoto-u.ac.jp}
+\medskip\par%所属の区切り
+$^3$ 神戸大学情報基盤センター\\
+\texttt{tamura@kobe-u.ac.jp}
+}
+\begin{document}
+\maketitle
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\input{introduction}
+\input{problem}
+\input{asp}
+\input{encoding}
+\input{experiment}
+\input{reconfiguration}
+\input{conclusion}
+
+\bibliographystyle{jplain}
+\bibliography{bachelor,aisat}    % 参考文献リスト
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:
+
