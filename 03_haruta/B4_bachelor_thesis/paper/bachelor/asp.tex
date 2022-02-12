@@ -59,56 +59,6 @@ ASP言語には，組合せ問題を解くために便利な拡張構文が用�
 なかでも{\clingo}は，高性能かつ高機能なASPシステムとして世界中で広く使
 われている．
 
-% 解集合の定義について簡単に説明する．上で述べたように，
-% 論理プログラム$P$は，(\ref{eq:rule})および(\ref{eq:constr})の形
-% 式をしたルール$r$の有限集合である．いくつか表記法を導入する．
-% \[\head{r}  = a_0 \quad 
-%   \pbody{r} = \{a_1,\dots,a_m\} \quad
-%   \nbody{r} = \{a_{m+1},\dots,a_n\}\]
-% $\head{r}$はルール$r$のヘッドを表す．
-% ルール$r$が(\ref{eq:constr})の形式の場合，$\head{r}$は空である．
-% $\pbody{r}$はルール$r$のボディにあるデフォルトの否定が付いていないアト
-% ムの集合を表す．逆に，
-% $\nbody{r}$はデフォルトの否定が付いているアトムの集合を表す．
-% 論理プログラム$P$のアトム集合$X$に関する\textbf{リダクト}
-% $\reduct{P}{X}$を以下のように定義する．
-% \[\reduct{P}{X}
-%   =
-%  \{\head{r}\leftarrow\pbody{r} \mid r\in P, \nbody{r}\cap X=\emptyset\}\]
-% そして，アトム集合$X$が$\reduct{P}{X}$の最小モデルであるとき，
-% $X$を$P$の\textbf{解集合}という．
-
-% 例として，論理プログラム
-% \(
-% P = \left\{
-%     p \leftarrow \naf{q}, \ 
-%     q \leftarrow \naf{p}
-% \right\}
-% \)  
-% の解集合を考える．以下にアトム集合$X$，リダクト$\reduct{P}{X}$，
-% $\reduct{P}{X}$の最小モデルを示す．
-
-% \[
-% %\tabcolsep = 2mm
-% \begin{array}{c|c|c}
-%        X                   & \reduct{P}{X}  & 
-% \reduct{P}{X}\textrm{の最小モデル}\\\hline
-% \{\phantom{p         ,q}\} & \{p\leftarrow,\quad q\leftarrow\}             & \{p,q\}    
-% \\\hline
-% \{         p\phantom{,q}\} & \{p\leftarrow\phantom{\quad q\leftarrow}\}    & \{p\}      
-% \\\hline
-% \{\phantom{p,}        q \} & \{\phantom{p\leftarrow,\quad} q \leftarrow\}  & \{q\}      
-% \\\hline
-% \{         p         ,q \} & \{\phantom{p\leftarrow,\quad q\leftarrow}\}   & \emptyset  
-% \\\hline
-% \end{array}
-% \]
-
-% これら4つのアトム集合のうち，
-% 解集合の条件$X=\reduct{P}{X}$を満たすのは，
-% $\{p\}$と$\{q\}$の2つである．
-% よって，論理プログラム$P$は$\{p\}$と$\{q\}$の2つの解集合をもつ．
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[tb]
   \centering
@@ -122,7 +72,7 @@ ASP言語には，組合せ問題を解くために便利な拡張構文が用�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[tb]
   \centering
-  \includegraphics[width=0.6\linewidth]{fig/graph.png}
+  \includegraphics[width=0.7\linewidth]{fig/graph.png}
   \caption{グラフ}
   \label{fig:graph}
 \end{figure}
@@ -133,7 +83,7 @@ captionpos=b,frame=single,label=code:colorsample.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/color.lp}
+basicstyle=\ttfamily\footnotesize]{code/color.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
 \code{color.lp}に対する{\clingo}の実行例},%
@@ -141,7 +91,7 @@ captionpos=b,frame=single,label=code:color.log,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/color.log}
+basicstyle=\ttfamily\footnotesize]{code/color.log}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 解集合プログラミングを用いた問題解法プロセスは，3つのステップからなる．
@@ -149,21 +99,22 @@ basicstyle=\ttfamily\scriptsize]{code/color.log}
 つぎに，ASP システムを用いて，論理プログラムの解集合を計算する．
 最後に，解集合を解釈して元の問題の解を得る．
 %
-ここでは，グラフ彩色問題を例として，各ステップ毎に解法プロセスを説明する．
+ここでは，グラフ彩色判定問題を例として，各ステップ毎に解法プロセスを説明する．
 ASP システムとしては{\clingo}を用いる．
 以降で示す論理プログラムのソースコードはすべて{\gringo}言語で書かれて
 おり，表記上の対応については表~\ref{tbl:map}の通りである．
 
-グラフ彩色問題とは，辺で結ばれたノードが同じ色にならないように，各ノー
-ドを塗り分ける問題である．
+グラフ彩色判定問題とは，辺で結ばれたノードが同じ色にならないように，各
+ノードを塗り分ける問題である．
 例として，図~\ref{fig:graph}のグラフを赤(\code{r})，青(\code{b})，緑
 (\code{g})の3色で塗り分ける問題を考える．
 この問題を表す論理プログラムをコード~\ref{code:colorsample.lp}に示す．
+本論文では，論理プログラムを\code{color}符号化と呼ぶ．
 
 2〜4行目は，ノード(\code{node})と辺(\code{edge})をファクトとし
 て書くことによって，図~\ref{fig:graph}のグラフを表している．
 ピリオド(``\code{.}'')はルールの終わりを表す終端記号である．
-7行目も同じく，色(\code{col})をファクトで表している．
+7行目も同じく，色(\code{c})をファクトで表している．
 %
 10行目のルールは，個数制約を使って「各ノードは一つの色で塗られる」とい
 う制約を表している．アトム\code{color(X,C)}は，ノード\code{X}が色
@@ -172,7 +123,7 @@ ASP システムとしては{\clingo}を用いる．
 \code{1 \{ color(X,r);color(X,b);color(X,g) \} 1}のように展開される．
 11行目のルールは，一貫性制約を使って「辺で結ばれたノード(\code{X}と
 \code{Y})は，同じ色(\code{C})で塗られない」という制約を表している．
-
+%
 ASP システムは解集合を計算して出力する．
 コード~\ref{code:color.log}に{\clingo}の実行例を示す．
 この出力から，ノード1と5は緑，ノード4と6は赤，ノード2と3は青に塗り分け

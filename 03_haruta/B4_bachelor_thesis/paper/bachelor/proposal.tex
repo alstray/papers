@@ -1,150 +1,155 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\chapter{グラフ彩色問題とその関連問題のASP符号化}\label{chap:encoding}
+\chapter{提案するASP符号化}\label{chap:encoding}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
+本章では，本論文が対象とする以下の3つの最適化問題を解く ASP 符号化につ
+いて述べる．
+
+\begin{itemize}
+\item 同色頂点数最小化問題
+\item 同色頂点数最大化問題
+\item 多色頂点数最大化問題
+\end{itemize}
+
+考案した ASP 符号化は，
+第~\ref{chap:asp}章で示した
+グラフ彩色判定問題の\code{color}符号化を拡張したものである．
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{ASPファクト形式}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \lstinputlisting[float=t,caption={%
+% 同色頂点数最小化問題のASP符号化},%
+% captionpos=b,frame=single,label=code:asp.lp,%
+% numbers=left,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\footnotesize]{code/aspfact.lp}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 本節では，グラフ彩色判定問題を例としてASPファクト形式について説明する．
+% 図~\ref{fig:graph}のグラフを
+% ファクト形式で表したものをコード~\ref{code:asp.lp}に示す．
+
+% 1行目と2行目はそれぞれ頂点数と辺数を宣言している．
+% 4行目ではアトム~\code{node}によって頂点1から頂点6まで表している．
+% 10行目ではアトム~\code{edge}によって辺を定義している．
+% \code{edge(X,Y)}は頂点~\code{X}と頂点~\code{Y}の間に辺が存在していることを意味する．
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{グラフ彩色判定問題のASP符号化}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \lstinputlisting[float=t,caption={%
+% color 符号化},%
+% captionpos=b,frame=single,label=code:color.lp,%
+% numbers=left,%
+% breaklines=true,%
+% columns=fullflexible,keepspaces=true,%
+% basicstyle=\ttfamily\footnotesize]{code/color1.lp}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% コード~\ref{code:color.lp}にグラフ彩色判定問題のASP符号化，
+% \textsf{color}~符号化を示す．
+% 符号化中の~\code{k}は色数を表しており，実行時に与えられる．
+% 1行目では彩色する色数を指定している．
+% 2行目のルールでは各頂点~\code{node(X)}に対して，
+% その頂点が色~\code{C}で彩色することを意味するアトム~\code{color(X,C)}が
+% 各頂点に対して唯一存在することを選択子を用いて導入している．
+% 3行目のルールでは各辺~\code{X-Y}に対して，
+% 頂点~\code{X}と頂点~\code{Y}が同じ色で彩色されることを禁止している．
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{ASPファクト形式}
+\section{同色頂点数最小化問題のASP符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-同色頂点数最小化問題のASP符号化},%
-captionpos=b,frame=single,label=code:asp.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/aspfact.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-本節では，グラフ彩色判定問題を例としてASPファクト形式について説明する．
-図~\ref{fig:graph}のグラフを
-ファクト形式で表したものをコード~\ref{code:asp.lp}に示す．
-
-1行目と2行目はそれぞれ頂点数と辺数を宣言している．
-4行目ではアトム~\code{node}によって頂点1から頂点6まで表している．
-10行目ではアトム~\code{edge}によって辺を定義している．
-\code{edge(X,Y)}は頂点~\code{X}と頂点~\code{Y}の間に辺が存在していることを意味する．
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{グラフ彩色判定問題のASP符号化}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
-color 符号化},%
-captionpos=b,frame=single,label=code:color.lp,%
-numbers=left,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/color1.lp}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-コード~\ref{code:color.lp}にグラフ彩色判定問題のASP符号化，
-\textsf{color}~符号化を示す．
-符号化中の~\code{k}は色数を表しており，実行時に与えられる．
-1行目では彩色する色数を指定している．
-2行目のルールでは各頂点~\code{node(X)}に対して，
-その頂点が色~\code{C}で彩色することを意味するアトム~\code{color(X,C)}が
-各頂点に対して唯一存在することを選択子を用いて導入している．
-3行目のルールでは各辺~\code{X-Y}に対して，
-頂点~\code{X}と頂点~\code{Y}が同じ色で彩色されることを禁止している．
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{グラフ彩色における同色頂点数最小化問題のASP符号化}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lstinputlisting[float=t,caption={%
-minimize 符号化},%
+  同色頂点数最小化問題のASP符号化 (\code{minimize}符号化)},%
 captionpos=b,frame=single,label=code:color1.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/color_min.lp}
+basicstyle=\ttfamily]{code/color_min.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-グラフ彩色における同色頂点数最小化問題のASP符号化，\textsf{minimize}~符号化は，
-\textsf{color}~符号化をベースにして，
-同色で彩色される頂点数を最小化関数(~\code{#minimize})を用いて最小化する符号化である．
-コード~\ref{code:color1.lp}に\textsf{minimize}~符号化を示す．
-
-%符号化中の~\code{k}は色数を表しており，実行時に与えられる．
-1行目では，色~\code{v}を指定し，この色で彩色される頂点数を最小化する．
-%3行目では彩色する色数を指定している．
-%5行目のルールでは各頂点~\code{node(X)}に対して，
-%その頂点が色Cで彩色することを意味する~\code{color(X,C)}が
-%各頂点に対して唯一存在することを選択子を用いて導入している．
-%6行目のルールでは各辺\code{X-Y}に対して，
-%頂点\code{X}と頂点\code{Y}が同じ色で彩色されることを禁止している．
-3-5行目は
-コード~\ref{code:color.lp}の1-3行目と同様である．
-7行目では~\code{#minimize}を利用することによって，
-色~\code{v}で彩色されている頂点数を最小化している．
+グラフ彩色に関する同色頂点数最小化問題は，グラフ彩色判定問題の実行可
+能解のうち，同色(例えば，赤色)で塗られる頂点数の最小値を求める問題である．
+%
+コード~\ref{code:color1.lp}にこの問題を解く ASP 符号化を示す．
+1行目は，\code{#const}宣言を用いて定数\code{v}を定義している．
+この定数\code{v}は，彩色の際に最小化したい色を表している．
+便宜上初期値を\code{1}としているが，実行に{\clingo}のコマンドラインオ
+プションから変更できる．
+3行目の定数\code{k}は，彩色に使用できる色数を表す．
+7行目は，\code{#minimize}関数を用いて，色\code{v}で塗られる頂点の個数
+を最小化している．その他のルールは，
+第~\ref{chap:asp}章で示した\code{color}符号化 (コー
+ド~\ref{code:colorsample.lp})と同じである．
+%
+本論文では，この符号化を\code{minimize符号化}と呼ぶ．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{グラフ彩色における同色頂点数最大化問題のASP符号化}
+\section{同色頂点数最大化問題のASP符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-maximize 符号化},%
+  同色頂点数最大化問題のASP符号化 (\code{maximize}符号化)},%
 captionpos=b,frame=single,label=code:color2.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/color_max.lp}
+basicstyle=\ttfamily]{code/color_max.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-グラフ彩色における同色頂点数最大化問題のASP符号化，\textsf{maximize}~符号化は，
-\textsf{color}~符号化と同様に，
-グラフ彩色判定問題のASP符号化をベースにして，
-同色で彩色される頂点数を最大化関数(~\code{#maximize})を用いて最大化する符号化である．
-コード~\ref{code:color2.lp}に\textsf{maximize}~符号化を示す．
-
-%符号化中の~\code{k}は色数を表しており，実行時に与えられる．
-1行目では，色~\code{v}を指定し，この色で彩色される頂点数を最大化する.
-%3行目では彩色する色数を指定している．
-%5行目のルールでは各頂点~\code{node(X)}に対して，
-%その頂点が色Cで彩色することを意味する~\code{color(X,C)}が
-%各頂点に対して唯一一つ存在することを選択子を用いて導入している．
-%6行目のルールでは各辺\code{X-Y}に対して，
-%頂点\code{X}と頂点\code{Y}が同じ色で彩色されることを禁止している．
-3-5行目はコード~\ref{code:color1.lp}と同様である．
-7行目では~\code{#maximize}を利用することによって，
-色~\code{v}で彩色されている頂点数を最大化している．
-
+グラフ彩色に関する同色頂点数最大化問題は，グラフ彩色判定問題の実行可
+能解のうち，同色(例えば，赤色)で塗られる頂点数の最大値を求める問題である．
+コード~\ref{code:color2.lp}にこの問題を解く ASP 符号化を示す．
+\code{minimize符号化}との違いは，コード~\ref{code:color1.lp}の
+\code{#minimize}関数を\code{#maximize}関数に置き換えた点である．
+%
+本論文では，この符号化を\code{maximize符号化}と呼ぶ．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{グラフ彩色における多色頂点数最大化問題のASP符号化}
+\section{多色頂点数最大化問題のASP符号化}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=t,caption={%
-mult 符号化},%
+  多色頂点数最大化問題のASP符号化 (\code{mult}符号化)},%
 captionpos=b,frame=single,label=code:color3.lp,%
 numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\footnotesize]{code/color_mult.lp}
+basicstyle=\ttfamily]{code/color_mult.lp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-グラフ彩色における多色頂点数最大化問題のASP符号化，\textsf{mult}~符号化は，
-\textsf{color}~符号化をベースにして，
-多色で彩色できる頂点数を最大化する符号化である．
-コード~\ref{code:color3.lp}に\textsf{mult}~符号化を示す．
+多色頂点数最大化問題は，グラフ彩色判定問題の制約を満たしつつ，
+多色(2色以上)で塗られる頂点数の最大値を求める問題である．
+この問題の最適解は，基のグラフ彩色判定問題の複数の実行可能解に対応す
+るため，基の問題の圧縮解とみなすことができる．
 
-%符号化中の~\code{k}は色数を表しており，実行時に与えられる．
-%1行目では彩色する色数を指定している．
-%3行目のルールでは各頂点~\code{node(X)}に対して，
-%その頂点が色Cで彩色することを意味する~\code{color(X,C)}が
-%各頂点に対して存在することを選択子を用いて導入している．
-%4行目のルールでは各辺\code{X-Y}に対して，
-%頂点\code{X}と頂点\code{Y}が同じ色で彩色されることを禁止している．
-1-3行目は，それぞれコード~\ref{code:color.lp}の1-3行目と同様である．
-5行目では各頂点~\code{node(X)}に対して，彩色できる色が2色以上ある場合，
-多色で彩色できることを意味するアトム~\code{mult(X)}を個数制約を用いて導入している．
-7行目では~\code{#maximize}を利用することによって，
-~\code{mult(X)}の数，つまり多色で彩色できる頂点数を最大化している．
+コード~\ref{code:color3.lp}にこの問題を解く ASP 符号化を示す．
+この符号化は，他の符号化と同様，グラフ彩色判定問題を解く
+\code{color}符号化 (コード~\ref{code:colorsample.lp})
+をベースとしている．
+他の符号化との大きな違いは，2行目の個数制約に上限値がなく，
+各頂点が少なくとも一つの色で塗られる，すなわち，多色彩色を許す点である．
+また，多色彩色可能な頂点を表す補助アトム~\code{mult(X)}を導入している
+点も異なる．
+5行目のルールでは，各頂点\code{X}に対して，\code{X}が2色以上で彩色でき
+る場合，\code{mult(X)}を生成している．
+7行目は，\code{#maximize}関数を使って，
+\code{mult(X)}の数，つまり多色で彩色できる頂点数を最大化している．
+%
+本論文では，この符号化を\code{mult}符号化と呼ぶ．
+
+
 
 %%% Local Variables:
 %%% mode: latex
