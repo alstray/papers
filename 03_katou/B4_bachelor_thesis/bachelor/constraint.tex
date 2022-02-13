@@ -1,24 +1,52 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{クイーン支配問題の制約モデル}\label{chap:constraint}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-本章では，提案する3種類の符号化を考案する際に参考となった先行研究~\cite{yamamoto21}で提案された
-制約モデルである基本制約モデル，改良制約モデル，部分和制約モデルについての説明を行う．
-各制約モデルにおいて，入力はクイーングラフ$Q_{n}$と正の整数$k$である．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+本章では，クイーン支配問題に対する3種類の制約モデル
+(制約充足問題としての表現~\cite{yamamoto21})について述べる．
+第~\ref{chap:proposal}章で提案する ASP 符号化は，
+これらの制約モデルに基づいている．
+% を考案する際に参考となった先行研究で提案された
+% 制約モデルである基本制約モデル，改良制約モデル，部分和制約モデルについての説明を行う．
+% 各制約モデルにおいて，入力はクイーングラフ$Q_{n}$と正の整数$k$である．
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{基本制約モデル}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstinputlisting[float=t,caption={%
+  基本制約モデルの例: $QDP(3,2)$},%
+captionpos=b,frame=single,label=code:3-2_model0,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+basicstyle=\ttfamily\footnotesize]{code/qdp_3-2_model0.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+まず最初に，クイーン支配問題$QDP(n,k)$に対する基本制約モデルを示す．
+
 \begin{description}
- \item[(変数$q_{ij}$)] $q_{ij} \in \{0,1\}$ \par
-1のとき，マス$(i,j)$にクイーンが配置されることを意味する．
- \item[(制約1)] $\sum\limits_{i,j=1}^{n} q_{ij} = k$ \par
-クイーングラフ上のクイーンの総数が$k$であることを意味する．
- \item[(制約2)] $(\bigvee\limits_{(i',j')\in A_{ij}} 
-q_{i'j'}) >0 \qquad (1 \leq i,j \leq n)$ \par
-マス$(i,j)$に1つ以上のクイーンが移動できることを意味する．
-ここで，$A_{ij}$はマス$(i,j)$にクイーンが移動できるマスの集合を表す．
+\item[(変数$q_{ij}$)]
+  \[q_{ij} \in \{0,1\}\]
+  1のとき，マス$(i,j)$にクイーンが配置されることを意味する．
+\item[(制約1)]
+  \[\sum\limits_{i,j=1}^{n} q_{ij} = k\]
+  クイーングラフ上のクイーンの総数が$k$であることを意味する．
+\item[(制約2)]
+  \[\bigvee\limits_{(i',j')\in A_{ij}} q_{i'j'} >0 \qquad (1 \leq i,j \leq n)\]
+  マス$(i,j)$に1つ以上のクイーンが移動できることを意味する．
+  ここで，$A_{ij}$はマス$(i,j)$にクイーンが移動できるマスの集合を表す．
 \end{description}
 
-この制約モデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model0}のように
-変数と節が生成される．なお，コード~\ref{code:3-2_model0}において，
+コード~\ref{code:3-2_model0}にクイーン支配問題$QDP(3,2)$に対する基本
+制約モデルの例を示す．このコード例は制約ソルバー
+\textsf{Sugar}~\cite{%
+CSC06:TamuraB08,
+DBLP:journals/constraints/TamuraTKB09,
+CSC08:TamuraTB08}~\footnote{%
+\url{https://cspsat.gitlab.io/sugar/}}
+の入力形式で記述されている．
+コード~\ref{code:3-2_model0}において，
 \code{(int }  \code{q_i_j }  \code{0  1)}は\code{q_i_j}が
 0または1の値を取る変数であること，\code{(= (+ q_1_1 } \code{... } 
 \code{q_3_3) 2)}は\code{(q_1_1 } \code{+ ... + } 
@@ -29,25 +57,31 @@ q_{i'j'}) >0 \qquad (1 \leq i,j \leq n)$ \par
 生成された節に着目すると，(制約2)で生成される節において，
 例えば16-18行目の\code{(+ q_1_1 q_1_2 q_1_3 ...)}のように
 同じ部分式が複数の節で出現していることがわかる．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{改良制約モデル}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=ht,caption={%
-基本制約モデルの実行例($n=3,k=2$)},%
-captionpos=b,frame=single,label=code:3-2_model0,%
+  改良制約モデルの例: $QDP(3,2)$},%
+captionpos=b,frame=single,label=code:3-2_model1,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
+basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model1.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newpage
-\section{改良制約モデル}
-本制約モデルでは，基本制約モデルにおいて複数回出現する部分式を
-まとめるための補助ブール変数と制約を追加する．
+改良制約モデルは，基本制約モデルにおいて複数回出現する部分式をまとめる
+補助変数を導入した制約モデルである．
 
-各行に対して以下の補助ブール変数と制約を追加する．
 \begin{description}
- \item[(変数$r_i$)] $r_{i} \in \{0,1\} \qquad (1 \leq i \leq n)$\par
-  1のとき，行$i$にクイーンが1つ以上存在することを意味する．
- \item[(制約3)] $r_{i}>0 \rightarrow \bigvee\limits_{(i',j')\in R_{i}} q_{i'j'}=1 \qquad (1 \leq i \leq n)$ \par
-  $r_{i}$が1のとき，行$i$上にクイーンが1つ以上配置されていることを意味する．
+\item[(変数$r_i$)]
+  \[r_{i} \in \{0,1\} \qquad (1 \leq i \leq n)\]
+  $r_{i} = 1$のとき，行$i$にクイーンが1つ以上存在することを意味する．
+\item[(制約3)]
+  \[r_{i}>0 \rightarrow \bigvee\limits_{(i',j')\in R_{i}} q_{i'j'}=1 \qquad (1 \leq i \leq n)\]
+  $r_{i} = 1$ならば，行$i$上にクイーンが1つ以上配置されていることを意味する．
   ここで，$R_i$は行$i$上のマスの集合を表す．
 \end{description}
 %
@@ -68,32 +102,51 @@ basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model0.log}
  \item[(制約7)] $(r_i > 0) \vee (c_j >0) \vee (u_{a}>0) \vee (d_{b}>0) \qquad (1 \leq i,j \leq n)$
 \end{description}
 
-この制約モデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model1}のように
-変数と節が生成される．なお，コード~\ref{code:3-2_model1}において，
+コード~\ref{code:3-2_model1}にクイーン支配問題$QDP(3,2)$に対する
+改良制約モデルの例を示す．
+コード~\ref{code:3-2_model1}において，
 \code{(imp (> r_1 0) }\code{(> (+ q_1_1 } \code{q_1_2 } 
 \code{q_1_3) 0))}は\code{((r_1 > 0)} $\rightarrow$ 
 \code{(q_1_1 } \code{+ q_1_2 } \code{+ q_1_3 } 
 \code{> 0))}であること，\code{(or (> r_1 0) } \code{(> c_1 0) } 
 \code{(> u_1 0)} \code{(> d_3 0))}は\code{(r_1 > 0} $\vee$ 
 \code{c_1 > 0} $\vee$ \code{u_1 > 0} $\vee$ \code{d_1 > 0)}を表す．
-
+%
 コード~\ref{code:3-2_model0}の(制約2)と
 コード~\ref{code:3-2_model1}の(制約7)を比較すると，
 (制約7)では同じ部分式が複数の節で出現していないことがわかる．
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{部分和制約モデル}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht]
+ \begin{minipage}[b]{0.45\linewidth}
+  \centering
+  \input{tikz/graph1.tex}
+ \end{minipage}
+ \begin{minipage}[b]{0.45\linewidth}
+  \input{tikz/graph2.tex}
+ \end{minipage}
+ \caption{部分和制約モデルにおける制約伝播の例}
+ \label{fig:constraint}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstinputlisting[float=ht,caption={%
-改良制約モデルの実行例($n=3,k=2$)},%
-captionpos=b,frame=single,label=code:3-2_model1,%
+  部分和制約モデルの例: $QDP(3,2)$},%
+captionpos=b,frame=single,label=code:3-2_model2,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model1.log}
+basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model2.log}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\newpage
-\section{部分和制約モデル}
 本制約モデルでは，クイーンの個数を表す補助整数変数を追加し，
 行方向，列方向，対角線方向のクイーンの総数に関する制約を追加する．
+
 \begin{description}
  \item[(変数$r_i$)] $r_{i} \in \{0,...,k\}$ 
  \item[(制約8)] $r_{i} = \sum\limits _{(i',j') \in R_{i}} q_{i'j'} \qquad (1 \leq i \leq n)$ \par
@@ -119,7 +172,8 @@ c_{j} =\sum\limits_{a=1}^{2n-1}
 u_{a} =\sum\limits_{b=1}^{2n-1} 
 d_{b} = k$ \par
 各行，各列，各対角線ごとにクイーンの個数を足し合わせると
-クイーンの総数$k$に等しいことを意味する．\par
+クイーンの総数$k$に等しいことを意味する．
+\end{description}
 
 部分和制約モデルにより起こる制約伝播を図~\ref{fig:constraint}に示す．
 説明のため，上から行1,行2, \dots , 行5とする．
@@ -135,25 +189,15 @@ $r_1 = 1,r_2=1,r_3=0,r_4=0,r_5=1$であることがわかり，
 図~\ref{fig:constraint}の右の図のように制約伝播が起こる．
 これにより，探索空間の枝刈りが期待できる．
 
-\begin{figure}[htb]
- \begin{minipage}[b]{0.45\linewidth}
-  \centering
-  \input{tikz/graph1.tex}
- \end{minipage}
- \begin{minipage}[b]{0.45\linewidth}
-  \input{tikz/graph2.tex}
- \end{minipage}
- \caption{部分和制約モデルにおける制約伝播の例}
- \label{fig:constraint}
-\end{figure}
 
-この制約モデルを$n=3,k=2$で実行すると，コード~\ref{code:3-2_model2}のように変数と節が生成される．なお，\code{(int } \code{r_1 0 } \code{2)}は\code{r_1}が0,1,2のいずれかの値をとる整数変数であることを表す．
-\lstinputlisting[float=ht,caption={%
-部分和制約モデルの実行例($n=3,k=2$)},%
-captionpos=b,frame=single,label=code:3-2_model2,%
-numbers=none,%
-breaklines=true,%
-columns=fullflexible,keepspaces=true,%
-basicstyle=\ttfamily\scriptsize]{code/qdp_3-2_model2.log}
+コード~\ref{code:3-2_model2}にクイーン支配問題$QDP(3,2)$に対する
+部分和制約モデルの例を示す．
+\code{(int } \code{r_1 0 } \code{2)}は\code{r_1}が0,1,2のいずれかの値
+をとる整数変数であることを表す．
 
-\end{description}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
+
