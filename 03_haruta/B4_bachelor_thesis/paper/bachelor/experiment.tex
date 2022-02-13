@@ -2,7 +2,7 @@
 \chapter{実行実験}\label{chap:experiments}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-第4章で提案した ASP 符号化の有効性を評価するために，
+第4章で考案した ASP 符号化の有効性を評価するために，
 \code{McGregor}グラフをベンチマークとして実行実験を行った．
 彩色に使う色数は$k=4$とした．
 使用した ASP システムは{\clingo}のバージョン5.5.0である．
@@ -27,7 +27,7 @@ $N$次の\code{McGregor}グラフ ($3 \leq N\leq 140$: 計138問)
 の単解を求める実験を行った．
 {\clingo}のオプションには\textit{trendy}を使用し，
 制限時間は1問30分とした．
-その結果，$3 \leq N\leq 140$ の136問について，
+その結果，$3 \leq N\leq 138$ の136問について，
 制限時間内に実行可能解を求めることができた．
 
 さらに，グラフ彩色問題の実行可能解を全列挙する実験も行った．
@@ -55,7 +55,7 @@ $3 \leq N\leq 7$の\code{McGregor}グラフに対して，
   \begin{minipage}[t]{0.45\linewidth}
     \centering
     \input{fig/min_total.tex}%table:min
-    \caption{同色頂点数最小化問題の実験結果}
+    \caption{実験結果: 同色頂点数最小化問題}
     \label{table:min}
   \end{minipage}
   \begin{minipage}[t]{0.45\linewidth}
@@ -101,13 +101,13 @@ Knuth の教科書にない最適値を発見することができた．
   \begin{minipage}[t]{0.3\linewidth}
     \centering
     \input{fig/mult_total.tex}%table:mult
-    \caption{多色頂点数最大化問題の実験結果}
+    \caption{実験結果: 多色頂点数最大化問題}
     \label{table:mult}
   \end{minipage}
   \begin{minipage}[t]{0.65\linewidth}
     \centering
     \input{fig/table.tex}%table:com
-    \caption{多色頂点数最大化問題の解の個数}
+    \caption{実験結果: 多色頂点数最大化問題の解の個数}
     \label{table:com}
   \end{minipage}
 \end{table}
