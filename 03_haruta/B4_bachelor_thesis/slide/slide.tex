@@ -27,80 +27,71 @@
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\maketitle}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{グラフ彩色問題と関連問題}
+%  \begin{itemize}
+%   \item \alert{グラフ彩色問題}
+%         \begin{itemize}
+% 	 \item 与えられた有限無向グラフ$G$の隣接する頂点が
+% 	       同色にならないように各頂点を塗りわけるときに，
+% 	       必要となる最小の色数を求める問題.
+% 	 \item 最適化コンパイラのレジスタ割り付けや
+% 	       無線の周波数割り当て等の応用がある．
+%         \end{itemize}
+%   \item \alert{グラフ彩色判定問題}
+%         \begin{itemize}
+%          \item 自然数$k\geq 3$について，
+% 	       グラフ$G$が$k$色以下で彩色可能かどうかを決定する問題．
+%         \end{itemize}
+%  \end{itemize}
+
+%  \begin{alertblock}{}
+%   \centering
+%   グラフ彩色問題はNP困難，グラフ彩色判定問題はNP完全である．
+%  \end{alertblock}
+% \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{グラフ彩色問題と関連問題}
- \begin{itemize}
-  \item \alert{グラフ彩色問題}
-        \begin{itemize}
-	 \item 与えられた有限無向グラフ$G$の隣接する頂点が
-	       同色にならないように各頂点を塗りわけるときに，
-	       必要となる最小の色数を求める問題.
-	 \item 最適化コンパイラのレジスタ割り付けや
-	       無線の周波数割り当て等の応用がある．
-        \end{itemize}
-  \item \alert{グラフ彩色判定問題}
-        \begin{itemize}
-         \item 自然数$k\geq 3$について，
-	       グラフ$G$が$k$色以下で彩色可能かどうかを決定する問題．
-        \end{itemize}
- \end{itemize}
-
- \begin{alertblock}{}
-  \centering
-  グラフ彩色問題はNP困難，グラフ彩色判定問題はNP完全である．
- \end{alertblock}
+  \begin{block}{グラフ彩色判定問題}\centering
+    与えられた有限無向グラフ$G$と色数$k\geq 3$に対して，
+    隣接する頂点が同色にならないように$G$を$k$色以下で彩色可能かど
+    うかを決定する問題
+    \begin{itemize}
+    \item 代表的な組合せ問題で，NP完全であることが知られている．
+    \item 最適化コンパイラのレジスタ割り付けや無線の周波数割り当て等の応用がある．
+    \end{itemize}
+  \end{block}
+  \pause
+  \begin{alertblock}{本研究が対象とするグラフ彩色最適化問題}
+    \begin{itemize}
+    \item \textbf{同色頂点数最小化(最大化)問題}
+      \begin{itemize}
+      \item グラフ彩色判定問題の実行可能解のうち，同色(例えば，赤色)で
+        塗られる頂点数の最小値(最大値)を求める問題
+      \end{itemize}
+    \item \textbf{多色頂点数最大化問題}
+      \begin{itemize}
+      \item グラフ彩色判定問題の制約を満たしつつ，
+        多色(2色以上)で塗られる頂点数の最大値を求める問題である.
+      \item この問題の最適解は，基のグラフ彩色判定問題の複数の実行可能解に
+        対応し，\alert{\bf 基の問題の圧縮解}とみなすことができる．
+      \end{itemize}
+    \end{itemize}
+  \end{alertblock}
+ % \begin{alertblock}{}
+ %  \centering
+ %  本研究では，グラフ彩色に関する最適化問題を対象とする.%%% あってますか？
+ % \end{alertblock}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{グラフ彩色問題と関連問題}
- \begin{itemize}
-  \item \alert{グラフ彩色における同色頂点数最小化問題}
-        \begin{itemize}
-         \item グラフ彩色判定問題の実行可能解のうち，
-	       同色(例えば，赤色)で塗られる頂点数の最小値を求める問題である.
-        \end{itemize}
-  \item \alert{グラフ彩色における同色頂点数最大化問題}
-        \begin{itemize}
-         \item グラフ彩色判定問題の実行可能解のうち，
-	       同色(例えば，赤色)で塗られる頂点数の最大値を求める問題である.
-        \end{itemize}
-  \item \alert{グラフ彩色における多色頂点数最大化問題}
-        \begin{itemize}
-         \item グラフ彩色判定問題の制約を満たしつつ，
-	       多色(2色以上)で塗られる頂点数の最大値を求める問題である.
-         \item この問題の最適解は，基のグラフ彩色判定問題の複数の実行可能解に
-               対応し，基の問題の圧縮解とみなすことができる．
-        \end{itemize}
- \end{itemize}
+\begin{frame}{多色頂点数最大化問題の例 [Knuth TAOCP '15]}
+  \begin{block}{}\centering
+    5次の \code{McGregor}グラフに対する最適解の一例を示す．
+  \end{block}
 
- \begin{alertblock}{}
-  \centering
-  本研究では，グラフ彩色に関する最適化問題を対象とする.%%% あってますか？
- \end{alertblock}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ \code{McGregor} グラフ[Knuth2015]}
- \begin{exampleblock}{5次の \code{McGregor} グラフ}
-  \begin{center}
-   \includegraphics[scale=0.2]{fig/order5.png}
-  \end{center}
- \end{exampleblock}
-
- \begin{itemize}
-  % \item D.~E~.Knuthの教科書
-  %        The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
-  %        に記載されているグラフである．
-  \item \code{McGregor} グラフの各区画が頂点に，区画の隣接関係が辺に対応．
-  \item グラフを構成する頂点や辺は次数$n$によって定まり，
-	頂点数は$N=n*(n+1)$個，辺数は$3N-6$本である．\cite{Knuth:TAOCP:SAT}
-  \item 次数$n$に関わらず，4色で彩色可能であることが知られている．
- \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{多色頂点数最大化問題}
- \begin{tabular}{cc}
+  \begin{tabular}{cc}
   \begin{minipage}[t]{0.5\linewidth}
    \centering
    \includegraphics[scale=0.2]{fig/order5.png}
@@ -111,20 +102,16 @@
   \end{minipage}
  \end{tabular}
 
- \begin{exampleblock}{}
-  5次の McGregorグラフが与えられ，4色以下で塗り分けるときに，
-  多色(2色以上)で塗られる頂点数の最大値を求める問題を考える．
- \end{exampleblock}
-
  \begin{itemize}
-  \item 最適値は4で，
-	頂点番号\code{12}, \code{24}, \code{33}, \code{50}
-	が2色で彩色できる．
-  \item この最適解は，色数4のグラフ彩色判定問題における
-	\alert{16}個の実行可能解の圧縮解とみなすことができる．
+ \item グラフの各区画が頂点に，区画の隣接関係が辺に対応する．
+ \item 次数に関わらず，4色で彩色可能であることが知られている．
+ \item 最適値は4で，
+   頂点番号\code{12}, \code{24}, \code{33}, \code{50}
+   が2色で彩色されている．
+ \item この最適解は，基のグラフ彩色判定問題における
+   \alert{\bf 16個の実行可能解の圧縮解}とみなすことができる．
  \end{itemize}
 \end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{解集合プログラミング(Answer Set Programming; ASP)}
  \begin{itemize}
@@ -142,83 +129,85 @@
   \begin{itemize}
    \item ASP言語の高い表現力により，記号制約を簡潔に記述可能．
    \item 充足不能コアを用いた最適化探索が可能．
-   \item 高速ASPシステムを用いた高速な解探索，解列挙が可能．
+%   \item 高速ASPシステムを用いた高速な解探索，解列挙が可能．
   \end{itemize}
  \end{alertblock}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究目的と内容}
- \begin{alertblock}{研究目的}%%% 自分で書き換えてみてほしい
-  \begin{itemize}
-   \item グラフ彩色判定問題とその関連問題に対して，
-         ASP符号化を提案し，評価する．
-   \item 得られた解を利用した，グラフ彩色問題の実行可能解の圧縮．
-  \end{itemize}
+ \begin{alertblock}{研究目的}\centering
+   ASP 技術を活用して，グラフ彩色最適化問題を効率良く解くソルバーの実
+   現を目指す．
  \end{alertblock}
 
  \begin{block}{研究内容}
   \begin{enumerate}
-   \item \structure{グラフ彩色判定問題とその関連問題を解くASP符号化の考案}
-         \begin{itemize}
-          \item %color符号化，
-                minimize符号化，
-                maximize符号化，mult符号化．
-         \end{itemize}
-   \item \structure{ベンチマーク問題を用いた評価実験}
-         \begin{itemize}
-%          \item McGregorグラフを表すベンチマーク問題(計138問)を新たに作成．
-          \item グラフ彩色判定問題，同色頂点数最小化問題，
-                同色頂点数最大化問題，多色頂点数最大化問題
-                のそれぞれに対して実験を行った．
-          \item グラフ彩色判定問題の実行可能解の全列挙を行った．(発表省略)
-         \end{itemize}
-   \item \structure{グラフ彩色判定問題の実行可能解の圧縮についての調査}
-         \begin{itemize}
-          \item 多色頂点数最大化問題の一つの最適解が表現する，
-		基のグラフ彩色判定問題の実行可能解の数を調査した．
-         \end{itemize}
-  \end{enumerate}
+   \item \structure{3つのグラフ彩色最適化問題を解くASP符号化を考案}
+     \begin{itemize}
+     \item 同色頂点数最小化問題
+     \item 同色頂点数最大化問題
+     \item 多色頂点数最大化問題
+     \end{itemize}
+   \item \structure{\code{McGregor}グラフをベンチマークとした評価実験}
+     \begin{itemize}
+     \item Knuth の教科書に記載されたいない最適値を生成することができた．
+     \item 充足不能コアを用いた最適化探索の有効性が確認できた．
+     \end{itemize}
+   \item \structure{多色頂点数最大化問題に関する考察}
+     \begin{itemize}
+     \item 12次の\code{McGregor}グラフの最適解が，基のグラフ彩色判定問
+       題の\alert{\bf 約680億}もの実行可能解を表していることがわかった．
+     \end{itemize}
+   \end{enumerate}
  \end{block}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{考案するASP符号化}
- \begin{block}{グラフ彩色判定問題の表現}
-  与えられた有限無向グラフ$G$と自然数$k\geq 3$について，
-  以下2つの制約を満たすように$G$の各頂点を
-  $k$色以下で彩色可能かを決定する問題．
-  \begin{itemize}
-   \item $G$の各頂点は一つの色で彩色される．(彩色制約)
-   \item $G$の隣接する頂点は同色で彩色されない．(隣接制約)
-  \end{itemize}
- \end{block}
- \begin{enumerate}
-   \item \structure{color符号化}:
-         \begin{itemize}
-          \item グラフ彩色判定問題の彩色制約と隣接制約を簡潔に表現した．
-         \end{itemize}
-  \item \alert{minimize符号化}:%%% 同色頂点数最小化問題と記述したい
-        \begin{itemize}
-         \item color符号化をベースに，
-               ASPの最小化関数~\texttt{\#minimize} を用いて，
-	       同色で塗られる頂点数を最小化する目的関数を追加．
-        \end{itemize}
-  \item \alert{maximize符号化}:%%% 同色頂点数最大化問題と記述したい
-        \begin{itemize}
-         \item color符号化をベースに，
-               ASPの最大化関数~\texttt{\#maximize} を用いて，
-	       同色で塗られる頂点数を最大化する目的関数を追加．
-        \end{itemize}
-  \item \alert{mult符号化}:%%% 多色頂点数最大化問題と記述したい
-        \begin{itemize}
-         \item color符号化をベースに，
-	       1つの頂点を多色で彩色できるように彩色制約の上限を緩和．
-         \item ASPの最大化関数~\texttt{\#maximize} を用いて，
-	       多色で彩色できる頂点数を最大化する目的関数を追加．
-        \end{itemize}
- \end{enumerate}
+\begin{frame}{多色頂点数最大化問題のASP符号化 (提案)}
+
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{多色頂点数最大化問題のASP符号化 (提案)}
+% TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
+
+%   \begin{block}{グラフ彩色判定問題の表現}
+%   与えられた有限無向グラフ$G$と自然数$k\geq 3$について，
+%   以下2つの制約を満たすように$G$の各頂点を
+%   $k$色以下で彩色可能かを決定する問題．
+%   \begin{itemize}
+%    \item $G$の各頂点は一つの色で彩色される．(彩色制約)
+%    \item $G$の隣接する頂点は同色で彩色されない．(隣接制約)
+%   \end{itemize}
+%  \end{block}
+%  \begin{enumerate}
+%    \item \structure{color符号化}:
+%          \begin{itemize}
+%           \item グラフ彩色判定問題の彩色制約と隣接制約を簡潔に表現した．
+%          \end{itemize}
+%   \item \alert{minimize符号化}:%%% 同色頂点数最小化問題と記述したい
+%         \begin{itemize}
+%          \item color符号化をベースに，
+%                ASPの最小化関数~\texttt{\#minimize} を用いて，
+% 	       同色で塗られる頂点数を最小化する目的関数を追加．
+%         \end{itemize}
+%   \item \alert{maximize符号化}:%%% 同色頂点数最大化問題と記述したい
+%         \begin{itemize}
+%          \item color符号化をベースに，
+%                ASPの最大化関数~\texttt{\#maximize} を用いて，
+% 	       同色で塗られる頂点数を最大化する目的関数を追加．
+%         \end{itemize}
+%   \item \alert{mult符号化}:%%% 多色頂点数最大化問題と記述したい
+%         \begin{itemize}
+%          \item color符号化をベースに，
+% 	       1つの頂点を多色で彩色できるように彩色制約の上限を緩和．
+%          \item ASPの最大化関数~\texttt{\#maximize} を用いて，
+% 	       多色で彩色できる頂点数を最大化する目的関数を追加．
+%         \end{itemize}
+%  \end{enumerate}
+% \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{frame}{実験概要}
@@ -245,40 +234,130 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験概要}
- \begin{block}{}
-  考案した符号化の有効性を評価するために各問題の実験を行った．
+ \begin{block}{}\centering
+   考案した符号化の有効性を評価するために各問題の実験を行った．
  \end{block}
-
-\begin{itemize}
- \item \structure{対象とする問題}:
-       \begin{enumerate}
-        \item グラフ彩色判定問題: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 140$)
-              \begin{itemize}
-               \item \structure{制限時間}: 30分/問
-              \end{itemize}
-        \item 同色頂点数最小化問題: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 20$)%%% BB法とUSC法は?
-              \begin{itemize}
-               \item \structure{制限時間}: 1時間/問
-              \end{itemize}
-        \item 同色頂点数最大化問題: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 38$)%%% BB法とUSC法は?
-              \begin{itemize}
-               \item \structure{制限時間}: 1時間/問
-              \end{itemize}
-        \item 多色頂点数最大化問題: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 15$)%%% BB法とUSC法は?
-              \begin{itemize}
-               \item \structure{制限時間}: 1時間/問
-              \end{itemize}
-       \end{enumerate}
+ \vfill
+ \begin{itemize}
+ \item \structure{ベンチマーク問題}: $N$次の\code{McGregor}グラフ
+   \begin{itemize}
+   \item 同色頂点数最小化問題: $3 \leq N\leq 20$
+   \item 同色頂点数最大化問題: $3 \leq N\leq 38$
+   \item 多色頂点数最大化問題: $3 \leq N\leq 15$
+   \end{itemize}
+ % \item \structure{使用したASP符号化 (提案)}
+ %   \begin{itemize}
+ %   \item 同色頂点数最小化問題のASP符号化
+ %   \item 同色頂点数最大化問題のASP符号化
+ %   \item 多色頂点数最大化問題のASP符号化
+ %   \end{itemize}
  \item \structure{ASPシステム}: \textit{clingo}-5.5.0
- \item \structure{実験環境}: Mac mini Intel Core i7 3.2GHz 64GBメモリ
-\end{itemize}  
+ \item \structure{最適値探索の戦略}: 分枝限定法(BB)と充足不能コア(USC)
+ \item \structure{制限時間}: 1時間/問
+ \item \structure{実験環境}: Mac mini Intel Core i7 3.2GHz 64GBメモリ  
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{多色頂点数最大化問題の実験結果(最適値と最良値)}
+ % \begin{block}{}
+ %  \structure{問題}: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 15$: 計13問)
+ % \end{block}
+ 
+ \begin{center}
+     \tabcolsep = 5mm
+     \renewcommand{\arraystretch}{0.9}
+     \input{fig/mult_total.tex}
+ \end{center}
 
- \begin{alertblock}{グラフ彩色判定問題の実験結果}
-  $3 \leq N\leq 138$ の計136問は，
-  制限時間内に実行可能解を求められた.
- \end{alertblock}
+ \begin{itemize}
+ \item BB法では7問，USC法では10問の最適値を求めることができた．
+ \item $N = 11,12$ の2問について，Knuth の教科書に未記載の
+   最適値を発見することができた．
+ \end{itemize}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{多色頂点数最大化問題の実験結果に関する考察}
+  \begin{alertblock}{}\centering
+    多色頂点数最大化問題の最適解が，基のグラフ彩色判定問題のいくつの実
+    行可能解を表現しているかについて調査した．
+  \end{alertblock}
+  \vfill
+ 
+  \begin{center}
+    \input{fig/table.tex}
+  \end{center}
+
+ \begin{itemize}
+  % \item 多色頂点数最大化問題で最適値を発見できた
+  %       $3 \leq N\leq 12$までの計10問の解の圧縮に成功した．
+  \item $N = 12$ では基のグラフ彩色判定問題の
+    \alert{\bf 約680億}もの実行可能解を表していることがわかった．
+ \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{まとめと今後の課題}
+
+  \begin{enumerate}
+   \item \structure{3つのグラフ彩色最適化問題を解くASP符号化を考案}
+     \begin{itemize}
+       \item ASPの高い表現力により簡潔に記述できることが確認できた．
+     \end{itemize}
+   \item \structure{\code{McGregor}グラフをベンチマークとした評価実験}
+     \begin{itemize}
+     \item 21問について，Knuth の教科書に記載されたいない最適値を生成することができた．
+     \item 充足不能コアを用いた最適化探索の有効性が確認できた．
+     \end{itemize}
+   \item \structure{多色頂点数最大化問題に関する考察}
+     \begin{itemize}
+     \item 12次の\code{McGregor}グラフの最適解が，基のグラフ彩色判定問
+       題の\alert{\bf 約680億}もの実行可能解を表していることがわかった．
+     \end{itemize}
+   \end{enumerate}
+
+   \begin{block}{今後の課題}
+     \begin{itemize}
+     \item 対称性除去を用いた考案ASP符号化の改良
+     \item McGregorグラフ以外のグラフでの評価実験
+     \item 多色頂点数最大化問題のASP符号化を応用し，
+       様々な組合せ問題の実行可能解の圧縮可能性を調査
+     \end{itemize}
+   \end{block}
+ \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[noframenumbering]{参考文献}
+ \bibliographystyle{jplain} % 参考文献スタイル
+ \bibliography{aisat,bachelor}    % 参考文献リスト
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\begin{frame}[noframenumbering]{}
+ \thispagestyle{empty}
+ \Huge 付録
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ \code{McGregor} グラフ[Knuth2015]}
+ \begin{exampleblock}{5次の \code{McGregor} グラフ}
+  \begin{center}
+   \includegraphics[scale=0.2]{fig/order5.png}
+  \end{center}
+ \end{exampleblock}
+
+ \begin{itemize}
+  % \item D.~E~.Knuthの教科書
+  %        The Art of Computer Programming~\cite{Knuth:TAOCP:SAT}
+  %        に記載されているグラフである．
+  \item \code{McGregor} グラフの各区画が頂点に，区画の隣接関係が辺に対応．
+  \item グラフを構成する頂点や辺は次数$n$によって定まり，
+	頂点数は$N=n*(n+1)$個，辺数は$3N-6$本である．\cite{Knuth:TAOCP:SAT}
+  \item 次数$n$に関わらず，4色で彩色可能であることが知られている．
+ \end{itemize}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{同色頂点数最小化問題の実験結果(最適値と最良値)}
  \begin{block}{}
@@ -317,97 +396,6 @@
   \item 17問について，新たに最適値を発見することができた．
  \end{itemize}
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{多色頂点数最大化問題の実験結果(最適値と最良値)}
- \begin{block}{}
-  \structure{問題}: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 15$: 計13問)
- \end{block}
- 
- \begin{center}
-  \input{fig/mult_total.tex}
- \end{center}
-
- \begin{itemize}
-  \item BB法が優れていた問題は3問，
-        USC法が優れていた問題は3問．
-  \item BB法では7問，USC法では10問において，
-	最適値を求めていた．
-  \item $N = 11,12$ の2問について
-	新たに最適値を発見することができた．
- \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実行可能解の圧縮}
- \begin{block}{}
-  多色頂点数最大化問題の一つの最適解が表現する，
-  基のグラフ彩色判定問題の実行可能解の数を調査した．
- \end{block}
- 
- \begin{center}
-  \input{fig/table.tex}
- \end{center}
-
- \begin{itemize}
-  % \item 多色頂点数最大化問題で最適値を発見できた
-  %       $3 \leq N\leq 12$までの計10問の解の圧縮に成功した．
-  \item $N = 12$ では基のグラフ彩色判定問題の
-	約680億もの実行可能解を表していることがわかった．
- \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{まとめと今後の課題}
- \begin{enumerate}
-  \item \structure{グラフ彩色判定問題とその関連問題を解くASP符号化の提案}
-        \begin{itemize}
-         \item ASPの高い表現力により簡潔に記述できることが確認できた．
-        \end{itemize}
-  \item \structure{ベンチマーク問題を用いた評価実験}
-        \begin{itemize}
-         % \item グラフ彩色判定問題，同色頂点数最小化問題，
-         %       同色頂点数最大化問題，多色頂点数最大化問題
-         %       のそれぞれに対する実験を行った．
-         \item 同色頂点数最小化問題，同色頂点数最大化問題．多色頂点数最大化問題
-               において，新たに21問の最適値を発見した．
-         \item グラフ彩色判定問題の実行可能解の全解列挙を行った．(省略)
-        \end{itemize}
-  \item \structure{グラフ彩色判定問題の実行可能解の圧縮についての調査}
-        \begin{itemize}
-         % \item 多色頂点数最大化問題で発見した10問の最適値について
-         %       基のグラフ彩色判定問題の実行可能解の圧縮することに成功した．
-	 \item $12$次の\code{McGregor}では，多色頂点数最大化
-	       問題の最適解の一つが，基のグラフ彩色判定問題の
-	       約680億もの実行可能解を表していた．
-        \end{itemize}
- \end{enumerate}
-
- \begin{block}{今後の課題}
-  \begin{itemize}
-   \item ASP符号化の改良
-         \begin{itemize}
-          \item 対称性の除去の実装等．
-         \end{itemize}
-   \item McGregorグラフ以外のグラフでの評価実験
-  \end{itemize}
- \end{block}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{参考文献}
- \bibliographystyle{jplain} % 参考文献スタイル
- \bibliography{aisat,bachelor}    % 参考文献リスト
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[noframenumbering]{}
- \thispagestyle{empty}
- \Huge 付録
-\end{frame}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[noframenumbering]{グラフ彩色問題の実行可能解の全解列挙(1/2)}
  \thispagestyle{empty}
@@ -443,7 +431,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 
+
 %%% Local Variables:
 %%% mode: japanese-latex
-%%% TeX-master: 
+%%% TeX-master: t
 %%% End:
