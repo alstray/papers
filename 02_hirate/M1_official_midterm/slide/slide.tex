@@ -478,7 +478,7 @@ RNS は$n$個の互いに素な数$m_1,m_2,...,m_n$(RNSの法)に対して，
   \begin{column}[c]{0.50\textwidth}
    \begin{itemize}
     \item $G'$の各頂点の次数が2
-    \item \alert{$G'$は長さ$l$の閉路}
+    \item \alert{$G'$は長さ$l$の閉路を含む．}
     \item \alert{$l = 2 = |V|\ (mod\ 3)$}
     \item \alert{$l = 3 = |V|\ (mod\ 5)$}
    \end{itemize}
@@ -494,18 +494,18 @@ RNS は$n$個の互いに素な数$m_1,m_2,...,m_n$(RNSの法)に対して，
     \node(6) [left =1.7 of 4] [draw, circle]{$6$};
     \node(7) at (1.4,1.4) [draw, circle]{$7$};
     \node(8) at (1.75,2.55) [draw, circle]{$8$};
-    \draw (1) -- (2);
+    \draw[red][ultra thick] (1) -- (2);
     \draw (2) -- (3);
-    \draw (2) -- (6);
-    \draw (3) -- (4);
-    \draw (3) -- (5);
+    \draw[red][ultra thick] (2) -- (6);
+    \draw[red][ultra thick] (3) -- (4);
+    \draw[red][ultra thick] (3) -- (5);
     \draw (3) -- (7);
-    \draw (4) -- (5);
+    \draw[red][ultra thick] (4) -- (5);
     \draw (4) -- (6);
     \draw (5) -- (6);
-    \draw (6) -- (7);
-    \draw (7) -- (8);
-    \draw (8) -- (1);
+    \draw[red][ultra thick] (6) -- (7);
+    \draw[red][ultra thick] (7) -- (8);
+    \draw[red][ultra thick] (8) -- (1);
    \end{tikzpicture}
   \end{column}
  \end{columns}
