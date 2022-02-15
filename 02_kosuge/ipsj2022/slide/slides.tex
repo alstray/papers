@@ -203,15 +203,15 @@
 % alldifferent制約の直接符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldiff}制約の直接符号化}
+    \frametitle{{\alldifferent}制約の直接符号化}
     直接符号化法はSAT符号化法の中で最も広く用いられている手法である．
     \begin{alertblock}{直接符号化法(Direct Encoding: DE)}
         各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，$x = a$を意味する命題変数\alert{\bf $\dE{x}{a}$}を用いる．
     \end{alertblock}
-    \begin{block}{{\alldiff}制約を直接符号化法で表す利点}
+    \begin{block}{{\alldifferent}制約を直接符号化法で表す利点}
         \begin{itemize}
-            \item {\alldiff}制約を$\neq$に分解してSAT符号化し，DEと相性の良いat-least-one制約をヒント制約として追加することができる．
-            \item {\alldiff}制約を擬似ブール符号化してからSATに符号化することができる．
+            \item {\alldifferent}制約を$\neq$に分解してSAT符号化し，DEと相性の良いat-least-one制約をヒント制約として追加することができる．
+            \item {\alldifferent}制約を擬似ブール符号化してからSATに符号化することができる．
         \end{itemize}
     \end{block}
 \end{frame}
@@ -222,20 +222,20 @@
 % 順序符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldiff}制約の順序符号化}
+    \frametitle{{\alldifferent}制約の順序符号化}
     % \begin{itemize}
-    %     \item 2000年以降，命題論理の充足可能性判定問題を解くSAT ソルバーの性能が飛躍的に向上し，{\alldiff}制約を含む制約充足問題をSAT に符号化して解く手法の研究が進められた．
+    %     \item 2000年以降，命題論理の充足可能性判定問題を解くSAT ソルバーの性能が飛躍的に向上し，{\alldifferent}制約を含む制約充足問題をSAT に符号化して解く手法の研究が進められた．
     % \end{itemize}
     \begin{alertblock}{順序符号化法(Order Encoding: OE)}
         各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，$x \le a$を意味する命題変数\alert{\bf $\oE{x}{a}$}を用いる．
     \end{alertblock}
-    \begin{block}{{\alldiff}制約を順序符号化法で表す利点}
+    \begin{block}{{\alldifferent}制約を順序符号化法で表す利点}
         \begin{itemize}
-            \item {\alldiff}制約を$\neq$に分解してSAT符号化し，OEと相性の良い鳩の巣原理をヒント制約として追加することができる．
+            \item {\alldifferent}制約を$\neq$に分解してSAT符号化し，OEと相性の良い鳩の巣原理をヒント制約として追加することができる．
         \end{itemize}
     \end{block}
     \begin{itemize}
-        \item 順序符号化法に基づいたSAT型制約ソルバーSugarが，2008年国際制約ソルバー競技会のグローバル制約部門で第1位になるなど，{\alldiff}制約に対して優れた性能を示している．
+        \item 順序符号化法に基づいたSAT型制約ソルバーSugarが，2008年国際制約ソルバー競技会のグローバル制約部門で第1位になるなど，{\alldifferent}制約に対して優れた性能を示している．
     \end{itemize}
 \end{frame}
 
@@ -247,23 +247,30 @@
 \begin{frame}
     \frametitle{研究概要}
     \begin{alertblock}{研究目的}
-        チャネリング制約を用いて{\alldiff}制約をSAT符号化し，
-        クイーングラフ彩色問題を題材として比較評価する．
+        % チャネリング制約を用いて{\alldifferent}制約をSAT符号化し，
+        % クイーングラフ彩色問題を題材として比較評価する．
+        {\alldifferent}制約を高速化するために新たなSAT符号化を実装し，比較評価する
     \end{alertblock}
     \begin{block}{研究内容}
         \begin{enumerate}
-            \item {\alldiff}制約の整数変数を直接符号化法(DE)と順序符号化法(OE)のいずれかでSAT符号化
-            \item {\alldiff}制約の表現方法を4種類実装
-                \begin{itemize}
-                    \item $\neq$の形に分解
-                    \item {\alldiff}制約の擬似ブール符号化(基本PB,PB3,PB4)
-                \end{itemize}
-            \item {\alldiff}制約の高速化手法を2種類実装
-                \begin{itemize}
-                    \item 鳩の巣原理を用いたヒント制約(PHP)
-                    \item at-least-one制約を用いたヒント制約(ALT1)
-                \end{itemize}
+            % \item {\alldifferent}制約の整数変数を直接符号化法(DE)と順序符号化法(OE)のいずれかでSAT符号化
+            % \item {\alldifferent}制約の表現方法を4種類実装
+            %     \begin{itemize}
+            %         \item $\neq$の形に分解
+            %         \item {\alldifferent}制約の擬似ブール符号化(基本PB,PB3,PB4)
+            %     \end{itemize}
+            % \item {\alldifferent}制約の高速化手法を2種類実装
+            %     \begin{itemize}
+            %         \item 鳩の巣原理を用いたヒント制約(PHP)
+            %         \item at-least-one制約を用いたヒント制約(ALT1)
+            %     \end{itemize}
+            % \item クイーングラフ彩色問題($5\leq N \leq 12$)を用いた評価実験
+            % \item OEとDEを融合させるチャネリング制約の実装
+            \item 順序符号化法と直接符号化法をチャネリング制約を用いて融合させる手法を実装
             \item クイーングラフ彩色問題($5\leq N \leq 12$)を用いた評価実験
+                \begin{itemize}
+                    \item チャネリング制約の有無・{\alldifferent}制約の表現方法・{\alldifferent}制約の高速化手法の有無を切り替え，計12符号化を比較した．
+                \end{itemize}
         \end{enumerate}
     \end{block}
 \end{frame}
@@ -274,7 +281,7 @@
 % チャネリング制約を用いたalldifferent制約のSAT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{チャネリング制約を用いた{\alldiff}制約のSAT符号化}
+    \frametitle{チャネリング制約を用いた{\alldifferent}制約のSAT符号化}
     \begin{block}{基本的アイデア}
         各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，順序符号化法(OE)と直接符号化法(DE)の両方の命題変数を導入し，以下のような制約を追加する．
         \footnote{$a-1 \in \Dom(x)$の場合は，$\lnot\oE{x}{a-1}$は省略}
@@ -286,7 +293,7 @@
         \begin{itemize}
             % \item $\Alldiff$を$\land x_i \neq x_j$の形に分解し，各々の$x_i \neq x_j$をOEとDEのいずれかを用いてSAT符号化することができる．
             \item OEで有効性が確認されている鳩の巣原理(PHP)に基づくヒント制約と$n=d$の場合にDEで有効性が確認されているat-least-one制約(ALT1)を組み合わせて利用することができる．
-            % \item {\alldiff}制約を$\land x_i \neq x_j$の形に分解する代わりに，擬似ブール(PB)制約に符号化し，その後，SAT符号化することができる．
+                % \item {\alldifferent}制約を$\land x_i \neq x_j$の形に分解する代わりに，擬似ブール(PB)制約に符号化し，その後，SAT符号化することができる．
         \end{itemize}
     \end{alertblock}
 \end{frame}
@@ -297,7 +304,7 @@
 % 比較に用いたalldifferent制約の符号化一覧
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{比較に用いた{\alldiff}制約の符号化一覧}
+    \frametitle{比較に用いた{\alldifferent}制約の符号化一覧}
     \begin{block}{}\centering
         {\tiny \input{tables/model}}
     \end{block}
@@ -329,7 +336,9 @@
             \end{itemize}
         \item \structure{SATソルバー}: Sugar ver.2.3.3 ,GlueMiniSat 2.2.10-193
         \item \structure{制限時間}: 1問あたり2時間\\
-            N=12についてはN=11で性能のよかった上位3符号化を制限時間を72時間に伸ばして実験を行った
+            \begin{itemize}
+                \item N=12についてはN=11で性能のよかった上位3符号化を制限時間を72時間に伸ばして実験を行った
+            \end{itemize}
         \item \structure{実験環境}: Mac mini, 3.2GHz, 64GB メモリ
     \end{itemize}
 \end{frame}
@@ -362,9 +371,9 @@
     \begin{enumerate}
         \item \structure{{\alldifferent}制約に対して，12個の実装方法を提案}
             \begin{itemize}
-                % \item 比較のため高速制約ソルバー Sugarのデフォルト設定の手法とチャネリング制約を用いた提案手法に{\alldiff}制約の高速化手法を合わせて実装した．
+                % \item 比較のため高速制約ソルバー Sugarのデフォルト設定の手法とチャネリング制約を用いた提案手法に{\alldifferent}制約の高速化手法を合わせて実装した．
                 \item 整数変数の符号化方法(OE,OE $\equ$ DE)，\\
-                    {\alldiff}制約の表現手法($\neq$分解,基本PB,PB3,PB4)と\\
+                    {\alldifferent}制約の表現手法($\neq$分解,基本PB,PB3,PB4)と\\
                     ヒント制約(PHP,ALT1)を組み合わせて実装した．
             \end{itemize}
         \item \structure{クイーングラフ彩色問題($8 \leq N \leq 12$)を用いた評価実験}
@@ -373,8 +382,13 @@
                 \item N=12のクイーングラフ彩色問題において解を求めることができた．
             \end{itemize}
     \end{enumerate}
+    \begin{exampleblock}{今後の課題}
+        \begin{itemize}
+            \item 今回性能の良かった符号化をSugarに組み込む
+            \item クイーングラフ彩色問題以外で実験を回す
+        \end{itemize}
+    \end{exampleblock}
 \end{frame}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -382,9 +396,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{12次クイーングラフ彩色問題の解}
-        \begin{exampleblock}{}\centering
-            \includegraphics[width=5cm]{images/qgcp_12.jpg}
-        \end{exampleblock}
+    \begin{exampleblock}{}\centering
+        \includegraphics[width=5cm]{images/qgcp_12.jpg}
+    \end{exampleblock}
 \end{frame}
 % %%%% 補助スライド
 
