@@ -82,9 +82,13 @@
 
 \begin{frame}\frametitle{支配集合問題}
  \begin{block}{支配集合}
-  無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$に対して，
-任意の頂点$u \in V\setminus S$にも辺$(u,v) \in E$が存在し，
-$v \in S$を満たすとき，$S$を$G$の\structure{支配集合}という．
+%   無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$に対して，
+% 任意の頂点$u \in V\setminus S$にも辺$(u,v) \in E$が存在し，
+% $v \in S$を満たすとき，$S$を$G$の\structure{支配集合}という．
+無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$と，
+その隣接頂点の集合との和集合が$V$と一致するとき，
+$S$を$G$の\structure{支配集合}という．
+
   \begin{itemize}
    \item 支配集合の要素数を\structure{サイズ}という．
    \item サイズが最小の支配集合をグラフ$G$の\structure{最小支配集合}という．
