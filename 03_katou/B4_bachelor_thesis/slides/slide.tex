@@ -187,7 +187,7 @@ $S$を$G$の\alert{\bf 支配集合}という．
 %
 
 \begin{frame}\frametitle{研究目的}
- \begin{alertblock}{研究目的}
+ \begin{alertblock}{研究目的}\centering
   ASP技術を活用し，支配集合問題を効率よく解くソルバーの実現．
  \end{alertblock}
 
@@ -251,7 +251,7 @@ $S$を$G$の\alert{\bf 支配集合}という．
 % 部分和符号化
 %
 
-\begin{frame}\frametitle{部分和符号化の制約モデルによる行方向の推論}
+\begin{frame}\frametitle{部分和符号化の特徴: 行方向の推論}
   \begin{itemize}
    % \item \structure{\bf アトム$q(i,j)$:} \quad $q(i,j)=\{0,1\}$
    % 	 \begin{itemize}
@@ -271,6 +271,8 @@ $S$を$G$の\alert{\bf 支配集合}という．
 	 u_{i+j}>0 \vee d_{i-j} > 0  \qquad (1\leq i,j \leq n)$ 
 	 \begin{itemize}
 	  \item マス$(i,j)$にクイーンが1つ以上移動できる．
+	  \item $c_{j}$, $u_{i+j}$, $d_{i-j}$は，
+		列方向，対角線方向の補助アトム
 	 \end{itemize}
   \end{itemize}
  \begin{exampleblock}{例:$Q_{5},k=3$}
