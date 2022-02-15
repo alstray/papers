@@ -2,6 +2,7 @@
 
 %\usepackage{bxdpx-beamer}
 \usepackage{listings,jlisting}
+%\usepackage{plistings}
 \usepackage{graphicx,xcolor} %文字の色
 \usepackage[deluxe]{otf}
 \usepackage{txfonts}
@@ -151,7 +152,7 @@
      \end{itemize}
    \item \structure{\code{McGregor}グラフをベンチマークとした評価実験}
      \begin{itemize}
-     \item Knuth の教科書に記載されたいない最適値を生成することができた．
+     \item Knuth の教科書に記載されていない最適値を生成することができた．
      \item 充足不能コアを用いた最適化探索の有効性が確認できた．
      \end{itemize}
    \item \structure{多色頂点数最大化問題に関する考察}
@@ -165,6 +166,26 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{多色頂点数最大化問題のASP符号化 (提案)}
+
+\begin{exampleblock}{}
+ \lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily]{code/color_mult.lp}
+\end{exampleblock}
+
+ \begin{itemize}
+  \item \code{c(1..k)}は色を表すアトム\code{c(1)},\ldots,\code{c(k)}の略記である．
+        %1行目のkは彩色に使用できる色数を定義している．
+  \item 2行目は，各頂点\code{X}が各色\code{C}で彩色されることを意味するアトム\code{color(X,C)}を導入し，
+        真になる個数を1以上に強制している．
+        %1つ以上の色で彩色されることを意味している．
+  \item 3行目は，各辺\code{(X,Y)}に対して，頂点\code{X}と頂点\code{Y}が同じ色\code{C}で彩色されないことを表している．
+        %隣接する頂点は同色で彩色されないことを意味している．
+  \item 5--6行目では，頂点\code{X}が2色以上で彩色されることを意味する補助アトム\code{mult(X)}を導入し，
+        その数を最大化している．
+
+
+  % \item 5行目では2色以上で彩色される頂点が存在している場合，新たなアトム(mult(X))を作成している．
+  % \item 6行目では5行目で作成したアトムの数を最大化している．
+ \end{itemize}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
