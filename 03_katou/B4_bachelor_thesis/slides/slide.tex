@@ -82,27 +82,27 @@
 
 \begin{frame}\frametitle{支配集合問題}
  \begin{block}{支配集合}
-%   無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$に対して，
+% 無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$に対して，
 % 任意の頂点$u \in V\setminus S$にも辺$(u,v) \in E$が存在し，
 % $v \in S$を満たすとき，$S$を$G$の\structure{支配集合}という．
 無向グラフ$G=(V,E)$の頂点の部分集合$S\subset V$と，
 その隣接頂点の集合との和集合が$V$と一致するとき，
-$S$を$G$の\structure{支配集合}という．
+$S$を$G$の\alert{\bf 支配集合}という．
+\begin{itemize}
+\item 支配集合の要素数を\structure{\bf サイズ}という．
+\item サイズが最小の支配集合をグラフ$G$の\structure{\bf 最小支配集合}という．
+\item 最小支配集合のサイズをグラフ$G$の\structure{\bf 支配数}といい，
+  $\gamma(G)$で表す．
+\end{itemize}
+\end{block}
 
+\begin{block}{支配集合問題}
+  グラフ$G$と正の整数$k$が与えられたとき，サイズ$k$の支配集合が存在す
+  るかどうかを判定する問題を\alert{\bf 支配集合問題}という．
   \begin{itemize}
-   \item 支配集合の要素数を\structure{サイズ}という．
-   \item サイズが最小の支配集合をグラフ$G$の\structure{最小支配集合}という．
-   \item 最小支配集合のサイズをグラフ$G$の\alert{支配数}といい，
-$\gamma(G)$で表す．
-  \end{itemize}
- \end{block}
- \begin{block}{支配集合問題}
-  グラフ$G$と正の整数$k$が与えられたとき，サイズが$k$の$G$の
-支配集合が存在するかどうかを判定する問題を\structure{支配集合問題}という．
-  \begin{itemize}
-   \item 支配集合問題はNP完全であることが知られている．
-   \item 支配集合問題は，スケジューリング，電波塔配置問題など多くの現実の
-	 問題に応用されている．
+  \item 支配集合問題は\structure{\bf NP完全}であることが知られている．
+  \item 支配集合問題は，スケジューリング，電波塔配置問題などの問題に応
+    用されている．
   \end{itemize}
  \end{block}
 \end{frame}
@@ -110,25 +110,23 @@ $\gamma(G)$で表す．
 %
 %クイーン支配問題
 %
-
 \begin{frame}\frametitle{クイーン支配問題(Queen Domination Problem; QDP)}
- \begin{alertblock}{} \centering
-    本発表では，支配集合問題のインスタンスの一種である\\
-    \alert{クイーン支配問題}を対象とする．
-  \end{alertblock}
- \begin{block}{}
-  サイズ$n\times n$のクイーングラフ$Q_n$と正の整数$k$が与えられたとき，
-  サイズ$k$の$Q_n$の支配集合が存在するかどうかを
-  判定する問題を\structure{クイーン支配問題}という．
-  \begin{itemize}
-   \item クイーングラフ$Q_n$は$n\times n$のチェス盤
-	 について各マスを頂点とし，クイーンが移動できる
-	 マス同士が辺で結ばれているグラフである．
-   \item つまり，$n \times n$の盤面に$k$個のクイーンを
-	 置いたとき，クイーンを移動させて全てのマスに
-	 アタックできるかを判定する．
-  \end{itemize}
- \end{block}
+
+  \begin{alertblock}{クイーン支配問題}\centering
+    $n\times n$のクイーングラフ$Q_n$と正の整数$k$が与えられたとき，
+    サイズ$k$の支配集合が存在するかどうかを判定する問題
+ \end{alertblock}
+ \vfill
+ \begin{itemize}
+ \item $Q_n$は$n\times n$のチェス盤について各マスを頂点とし，
+   クイーンが移動できるマス同士が辺で結ばれているグラフである．
+ \item $n\times n$の盤面に$k$個のクイーンを置いたとき，クイーンを移
+   動させて全てのマスにアタックできるかを判定する．
+ \item 古くから研究されており，1862年に文献[Jaenisch,1862]で
+   支配数$\gamma(Q_8)=5$が示されている．
+ \item これまで，$1\leq n\leq 25$の支配数$\gamma(Q_n)$が求められ
+   ている~\footnote{\url{https://oeis.org/A075458}}．
+ \end{itemize}
 \end{frame}
  
  
@@ -136,61 +134,39 @@ $\gamma(G)$で表す．
 %クイーン支配問題の例
 %
 
-\begin{frame}{クイーン支配問題の例:$Q_5$}
-  \begin{exampleblock}{}
+\begin{frame}{クイーン支配問題の例}
+  \begin{exampleblock}{$Q_5$の最小支配集合}
   \begin{center}
    \scalebox{1.3}{
    \input{tikz/queen_5.tex}
    }
   \end{center}
  \end{exampleblock}
- 上の図は$Q_5$の最小支配集合の例である．
+ \vfill
  \begin{itemize}
   \item 3個のクイーンを置いたとき，クイーンを
 	移動させてすべてのマスにアタック可能である．
-  \item 2個以下のクイーンを置いたとき，クイーンを移動させて
+  \item 2個以下の場合，クイーンを移動させて
 	全てのマスにアタックすることは不可能である．
-  \item したがって，$\gamma(Q_{5})=3$となる．
+  \item したがって，支配数は$\gamma(Q_{5})=3$となる．
  \end{itemize}
 \end{frame}
 
 
-%
-%クイーン支配問題の支配数等に関する背景知識
-%
-
-\begin{frame}{クイーン支配問題の支配数}
-  \begin{itemize}
-    \item クイーン支配問題の支配数は，1862年に文献[Jaenisch,1862]で
-	    $\gamma(Q_8)=5$が示されてから研究されている．
-    \item $n=3,11$を除いた$n \leq 132$で $\lceil n/2 \rceil 
-	    \leq \gamma(Q_{n}) \leq \lceil n/2 \rceil +1$
-	 であることが証明されている[\"{O}sterg{\aa}rd,Weakley,2001]．
-%    \item THE ON-LINE ENCYCLOPEDIA OF INTEGER SEQUENCES には，
-%    $1\leq n\leq 25$に対する$\gamma(Q_n)$
-%    が掲載されている~\footnote{\url{https://oeis.org/A075458}}．
-  \end{itemize}
- \begin{exampleblock}{$Q_{n}$の支配数$(1 \leq n \leq 20)$}
-  \centering
-  \begin{tabular}{c|c||c|c||c|c||c|c}%\hline
-    $n$ & $\gamma(Q_{n})$ & $n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ \\ \hline
-    1 &1 &6 &3 &11 &5 &16 &9 \\ %\hline
-    2 &1 &7 &4 &12 &6 &17 &9 \\ %\hline
-    3 &1 &8 &5 &13 &7 &18 &9 \\ %\hline
-    4 &2 &9 &5 &14 &8 &19 &10 \\ %\hline
-    5 &3 &10 &5 &15 &9 &20 &11 \\ %\hline
-  \end{tabular}
- \end{exampleblock}
-\end{frame}
 
 %
 %ASPについて
 %
 
 \begin{frame}\frametitle{解集合プログラミング(Answer Set Programming; ASP)}
- \begin{itemize}
+  \begin{block}{}\centering
+    ASP は論理プログラミングから派生した宣言的プログラミングパラダイム
+    の一種である．
+  \end{block}
+  \vfill
+  \begin{itemize}
   \item \structure{ASP言語}は一階論理に基づいた知識表現言語の一種である．
-  \item \structure{論理プログラム}は，ASP のルールの有限集合である．
+%  \item \structure{論理プログラム}は，ASP のルールの有限集合である．
   \item \structure{ASPシステム}は論理プログラムから
 	安定モデル意味論[Gelfond and Lifschitz '88]に基づく
 	解集合を計算するシステムである．
@@ -198,10 +174,12 @@ $\gamma(G)$で表す．
 	システム検証，プランニング，システム生物学など様々な
 	分野への応用が拡大している．
  \end{itemize}
- \begin{alertblock}{クイーン支配問題に対してASPを用いる利点}
+ \begin{alertblock}{支配問題に対してASPを用いる利点}
   \begin{itemize}
-   \item ASP言語の高い表現力を活かし，クイーン支配問題の制約を簡潔に記述可能．
-   % \item 個数制約を用いて，部分和を表す制約を簡潔に記述可能．
+   \item ASP言語の高い表現力を活かし，支配集合問題の制約を簡潔に記述可能．
+   \item 拡張性が高く，様々な定式化を簡単に試すことができる．
+   \item 遷移問題への拡張も容易．
+     % \item 個数制約を用いて，部分和を表す制約を簡潔に記述可能．
    % \item 高速な解列挙が可能．
   \end{itemize}
  \end{alertblock}
@@ -215,15 +193,22 @@ $\gamma(G)$で表す．
  \begin{alertblock}{研究目的}
   ASP技術を活用し，支配集合問題を効率よく解くソルバーの実現．
  \end{alertblock}
+
+ \begin{itemize}
+ \item 本研究ではクイーン支配問題を対象とする．
+ \item SAT型制約ソルバーを用いた既存研究~[山本,2021]で提案された制約モ
+   デルを応用する．
+ \end{itemize}
+
  \begin{block}{研究内容}
   \begin{enumerate}
-   \item クイーン支配問題を解く，3種類のASP符号化を考案．
-	 \begin{itemize}
-	  \item 基本符号化，改良符号化，部分和符号化．
-	  \item 先行研究[山本,2021]で提案された制約モデルを参考に考案．
-	 \end{itemize}
-   \item $n$次のクイーン支配問題と既知の支配数を用いて，3種のASP符号化の
-	 評価実験を行なった．
+   \item クイーン支配問題を解く3種類のASP符号化を考案した．
+     \begin{itemize}
+     \item 基本符号化
+     \item 改良符号化
+     \item 部分和符号化
+     \end{itemize}
+   \item クイーン支配問題 ($Q_{n}: 1\leq n\leq 20$) を用いた評価実験を行った．
   \end{enumerate}
  \end{block}
 \end{frame}
@@ -232,99 +217,103 @@ $\gamma(G)$で表す．
 %符号化3つ
 %
 
-\begin{frame}{提案する符号化}
- % \begin{block}{クイーン支配問題の表現}
- %  与えられたクイーングラフ$Q_n$上に$k$個のクイーンを配置したとき，
- %  以下の制約を満たすならばクイーングラフ$Q_{n}$にサイズが$k$の
- %  支配集合が存在する．
- %  \begin{itemize}
- %   \item $Q_n$上のどのマスにも，1つ以上のクイーンが移動
- % 	 できなければならない(\alert{被覆制約})
- %  \end{itemize}
- % \end{block}
- \begin{block}{}\centering
-   クイーン支配問題を解く3つのASP符号化を提案した．
- \end{block}
- \begin{enumerate}
-   \item \alert{基本符号化}
+\begin{frame}{考案したASP符号化}
+
+  \begin{block}{クイーン支配問題の制約}
+    \begin{itemize}
+    \item チェスの盤面上に$k$個のクイーンが配置される(個数制約)
+    \item どのマスにも，1つ以上のクイーンが移動できる(移動制約)
+    \end{itemize}
+  \end{block}
+
+  \begin{enumerate}
+  \item \structure{\bf 基本符号化}
+    \begin{itemize}
+    \item マス$(i,j)$に対して，クイーンの有無を表すアトム$q(i,j)$を導
+      入する．
+    \item $q(i,j)$を用いて，個数制約を表現する．
+    \item マスごとに移動制約を満たすかどうかチェックする．
+    \end{itemize}
+ \item \structure{\bf 改良符号化}
    \begin{itemize}
-     \item クイーン支配問題の制約を，ASP の一貫性制約を
-      用いて簡潔に表現．
+    \item 個数制約は基本符号化と同じ．
+    \item 各行，各列，各対角線ごとにクイーンの有無を表す補助アトムを導入し，
+      移動制約を満たすかどうかチェックする．      
    \end{itemize}
-   \item \alert{改良符号化}
+ \item \alert{\bf 部分和符号化}
    \begin{itemize}
-      \item 各行，各列，各対角線に対して，
-        クイーンが配置されているかどうかを表す補助アトム
-        を導入する．
-      \item 基本符号化で複数回出現する制約式をまとめている．
-   \end{itemize}
-   \item \alert{部分和符号化}
-   \begin{itemize}
-      \item 各行，各列，各対角線に対して，
-        クイーンの個数を表す補助アトムを導入する．
-      \item 行，列，対角線のそれぞれの和が
-        サイズ$k$に一致することを，ASPの
-        個数制約を用いて表現している．
+   \item 各行，各列，各対角線ごとに
+     クイーンの個数を表す補助アトムを導入し，
+     個数制約と移動制約を表現する．
    \end{itemize}
  \end{enumerate}
 \end{frame}
 
+
 %
-%実験内容
+% 部分和符号化
 %
- 
-\begin{frame}\frametitle{実験概要}
- \begin{block}{}
-  提案した3種の符号化について，$n$次のクイーン支配問題
-  と既知の支配数を用いて，支配集合の有無を判定した．
- \end{block}
- \begin{itemize}
-  \item \structure{比較するASP符号化:}
-	\begin{itemize}
-	 \item 基本符号化
-	 \item 改良符号化
-	 \item 部分和符号化
-	\end{itemize}
-  \item \structure{対象とする問題:}
-	\begin{itemize}
-	 \item クイーングラフ$Q_{n} \qquad (1 \leq n \leq 20)$
-	 \item $k=\gamma(Q_{n})$\quad (SAT)，$k=\gamma(Q_{n})-1$\quad (UNSAT)
-	\end{itemize}
-  \item \structure{使用ASPソルバ:} \textit{clingo-5.5.0}
-  \item \structure{実験環境:} Mac mini, 3.2GHz 6コア Intel Core i7, 64GBメモリ
-  \item \structure{制限CPU時間:} 3600 (sec)
- \end{itemize}
+\begin{frame}\frametitle{部分和符号化}
+TODO
 \end{frame}
+
+
+%
+% 実験概要
+%
+\begin{frame}\frametitle{実験概要}
+  \begin{block}{}\centering
+    考案したASP符号化の有効性を評価するために実験を行った．    
+  \end{block}
+  \vfill
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化}
+    \begin{itemize}
+    \item 基本符号化
+    \item 改良符号化
+    \item 部分和符号化
+    \end{itemize}
+  \item \structure{\bf クイーン支配問題}
+    \begin{itemize}
+    \item クイーングラフ $Q_{n}$ \quad ($1 \leq n \leq 20)$
+    \item サイズ$k$には，充足可能(\textsf{SAT})なケースとし
+      て既知の支配数$k=\gamma(Q_{n})$，
+      充足不能(\textsf{UNSAT})なケースとして$k=\gamma(Q_{n})-1$ を使用．
+    \end{itemize}
+  \item \structure{\bf ASP システム:} \textit{clingo-5.5.0}
+  \item \structure{\bf 制限CPU時間:} 3600秒 / 1問
+  \item \structure{\bf 実験環境:} Mac mini, 3.2GHz 6コア Intel Core i7, 64GBメモリ
+  \end{itemize}
+\end{frame}
+
 
 %
 %実験結果(基本1,改良1,部分和2)
 %
 
-\begin{frame}\frametitle{実験結果}
- \begin{block}{}
-  解の有無の判定に要したCPU時間．
- \end{block}
+\begin{frame}\frametitle{実験結果: 求解に要した CPU 時間 (秒)}
+
  \begin{columns}
   \begin{column}{0.50\textwidth}
    \begin{table}[htbp]
-    \caption{SATの実験結果}
-    \scalebox{0.7}{
+     \caption{$k=\gamma(Q_{n})$ (\textsf{SAT})}
+     \scalebox{0.7}{
     \input{table/exsat.tex}}
    \end{table}
   \end{column}
   \begin{column}{0.50\textwidth}
    \begin{table}[htbp]
-    \caption{UNSATの実験結果}
+     \caption{$k=\gamma(Q_{n})-1$ (\textsf{UNSAT})}
     \scalebox{0.7}{
     \input{table/exunsat.tex}}
    \end{table}
   \end{column}
  \end{columns} 
  \begin{itemize}
-  \item SATの問題では，\structure{部分和符号化}が$n=16$まで解き，
-	その優位性を確認できた．
-  \item UNSATの問題では，解けた問題数に差はなかったが，解なしが得られる
-	までにかかった時間は\structure{部分和符号化}が最も早かった．
+ \item 充足可能(\textsf{SAT})の問題では，部分和符号化が$n=16$まで解き，
+   その優位性を確認できた．
+ \item 充足不能(\textsf{UNSAT})の問題では，解けた問題数に差はなかったが，
+   判定の要したCPU時間は部分和符号化が最も短かった．
  \end{itemize}
 \end{frame}
 
@@ -333,26 +322,34 @@ $\gamma(G)$で表す．
 %
 
 \begin{frame}\frametitle{まとめ}
-  \begin{itemize}
-   \item \structure{クイーン支配問題を解く3種類のASP符号化を考案．}
-	 \begin{itemize}
-	  \item ASPの高い表現力を活かし，クイーン支配問題を簡潔に
-		記述することができた．
-	 \end{itemize}
-   \item \structure{既知の支配数を用いた評価実験．}
-	 \begin{itemize}
-	  \item SATの問題では唯一$n=16$まで解くなど，部分和符号化の
-		優位性を確認できた．
-	  \item UNSATの問題では解を得るまでのCPU時間の観点から，
-		部分和符号化の優位性を確認できた．
-	 \end{itemize}
-  \end{itemize}
- \begin{alertblock}{今後の課題}
-  \begin{itemize}
-   \item 支配集合問題をより高速に解くASP符号化の考案．
-   \item 遷移問題への拡張．
-  \end{itemize}
- \end{alertblock}
+
+  \begin{block}{}\centering
+    ASP を用いたクイーン支配問題の解法について述べた．
+  \end{block}
+  \vfill
+  \begin{enumerate}
+  \item クイーン支配問題を解く3種類のASP符号化を考案した．
+    \begin{itemize}
+    \item ASPの表現力を活かして，クイーン支配問題を簡潔に記述できるこ
+      とを確認した．
+    \end{itemize}
+  \item クイーン支配問題 ($Q_{n}: 1\leq n\leq 20$) を用いた評価実験を行った．
+    \begin{itemize}
+    \item 充足可能(\textsf{SAT})の問題について，
+      部分和符号化が$n=16$まで解き，その優位性を確認できた．
+    \end{itemize}
+  \end{enumerate}
+  \vfill
+  \begin{block}{今後の課題}
+    \begin{itemize}
+    \item 支配集合問題を解くASP符号化の改良
+      \begin{itemize}
+      \item 現時点では，SAT型制約ソルバーを用いた既存研究~[山本,2021]
+        と比較して性能面で劣っている．
+      \end{itemize}
+    \item 遷移問題への拡張
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 %
@@ -362,3 +359,7 @@ $\gamma(G)$で表す．
 \input{subslide.tex}
 
 \end{document}
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:

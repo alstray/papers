@@ -29,6 +29,36 @@
  \end{exampleblock}
 \end{frame}
 
+
+%
+%クイーン支配問題の支配数等に関する背景知識
+%
+
+\begin{frame}{クイーン支配問題の支配数}
+  \begin{itemize}
+    \item クイーン支配問題の支配数は，1862年に文献[Jaenisch,1862]で
+	    $\gamma(Q_8)=5$が示されてから研究されている．
+    \item $n=3,11$を除いた$n \leq 132$で $\lceil n/2 \rceil 
+	    \leq \gamma(Q_{n}) \leq \lceil n/2 \rceil +1$
+	 であることが証明されている[\"{O}sterg{\aa}rd,Weakley,2001]．
+%    \item THE ON-LINE ENCYCLOPEDIA OF INTEGER SEQUENCES には，
+%    $1\leq n\leq 25$に対する$\gamma(Q_n)$
+%    が掲載されている~\footnote{\url{https://oeis.org/A075458}}．
+  \end{itemize}
+ \begin{exampleblock}{$Q_{n}$の支配数$(1 \leq n \leq 20)$}
+  \centering
+  \begin{tabular}{c|c||c|c||c|c||c|c}%\hline
+    $n$ & $\gamma(Q_{n})$ & $n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ &$n$ & $\gamma(Q_{n})$ \\ \hline
+    1 &1 &6 &3 &11 &5 &16 &9 \\ %\hline
+    2 &1 &7 &4 &12 &6 &17 &9 \\ %\hline
+    3 &1 &8 &5 &13 &7 &18 &9 \\ %\hline
+    4 &2 &9 &5 &14 &8 &19 &10 \\ %\hline
+    5 &3 &10 &5 &15 &9 &20 &11 \\ %\hline
+  \end{tabular}
+ \end{exampleblock}
+\end{frame}
+
+
 \begin{frame}{基本符号化の制約モデル}
  \begin{block}{}
   \begin{description}
