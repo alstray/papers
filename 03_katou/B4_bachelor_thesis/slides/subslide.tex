@@ -29,7 +29,131 @@
  \end{exampleblock}
 \end{frame}
 
-\begin{frame}\frametitle{実験結果}
+\begin{frame}{基本符号化の制約モデル}
+\begin{itemize}
+ \item 基本符号化の制約モデルを以下に示す．
+\end{itemize}
+ \begin{block}{}
+  \begin{description}
+   \item[{\color{black} (アトム$q_{ij}$})] 
+	      $q_{ij} \in \{0,1\} 
+	      \qquad (1 \leq i,j \leq n)$ \par
+	      \begin{itemize}
+	       \item $q_{ij}$が1のとき，マス$(i,j)$にクイーンが
+		     配置されることを意味する．
+	      \end{itemize}
+   \item[{\color{black}(制約 1)}] 
+	      $\sum\limits_{i,j=1}^{n} q_{ij} = k$ \par
+	      \begin{itemize}
+	       \item $n \times n$上のクイーンの総数が
+		     $k$個であることを意味する．
+	      \end{itemize}
+   \item[{\color{black}(制約 2)}] 
+	      $\bigvee\limits_{i',j' \in A_{ij}}q_{i'j'} > 0$ \par
+	      \begin{itemize}
+	       \item マス$(i,j)$に移動できるクイーンが一つ以上
+		     配置されていることを意味する．
+	      \end{itemize}
+	      
+  \end{description}
+ \end{block}
+ \begin{alertblock}{}
+  \begin{itemize}
+   \item (制約 2)中に同じ部分式が何度も出現してしまう(以下は$Q_3$の例)．
+   \begin{align*}
+    {\color{red} q_{11}>0 \vee q_{12}>0 \vee q_{13}>0} 
+    \vee q_{21}>0 \vee q_{22}>0 \vee q_{31}>0 \vee q_{33}>0 \\
+    {\color{red} q_{11}>0 \vee q_{12}>0 \vee q_{13}>0} 
+    \vee q_{21}>0 \vee q_{22}>0 \vee q_{23}>0 \vee q_{32}>0 \\
+    {\color{red} q_{11}>0 \vee q_{12}>0 \vee q_{13}>0} 
+    \vee q_{22}>0 \vee q_{23}>0 \vee q_{31}>0 \vee q_{33}>0 
+   \end{align*}
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+
+\begin{frame}{改良符号化の制約モデル}
+ \begin{alertblock}{}
+  改良符号化では，基本符号化において複数回出現する，
+  リテラルの選言部分をまとめるための補助アトムを導入する．
+ \end{alertblock}
+ \begin{block}{}
+  \begin{itemize}
+   \item 各行$i$に対してアトム$r_{i}$と制約3を追加する．
+	 \begin{description}
+	  \item[{\color{black} (アトム$r_{i}$})] 
+		     $r_{i} \in \{0,1\}$  $(1 \leq i \leq n)$ 
+		     \vskip .5em
+	  \item[{\color{black} (制約 3)}] 
+		     $r_{i}>0 \rightarrow \bigvee\limits_{i',j' 
+		     \in R_{ij}}q_{i'j'} = 1 \quad (1\leq i \leq n)$ \par
+		     $r_{i}$が1のとき，行$i$にクイーンがひとつ以上
+		     配置されることを意味する．
+	 \end{description}
+   \item 各列，各右上がり対角線，各右下がり対角線に対しても同様に\\
+	 補助アトム$c_j$，$u_{i+j}$，$d_{i-j}$と(制約 4)，
+	 (制約 5)，(制約 6)を追加する
+  \end{itemize} 
+ \end{block}
+ \begin{block}{}
+  \begin{itemize}
+   \item 基本符号化の(制約 2)を削除し，(制約 7)を追加する．
+	 \begin{description}
+	  \item[{\color{black} (制約 7)}] $r_{i} \vee c_{j} \vee u_{i+j} 
+		     \vee d_{i-j} > 0  \qquad 1\leq i,j \leq n$
+	 \end{description}
+  \end{itemize} 
+ \end{block}
+\end{frame}
+
+\begin{frame}{部分和符号化の制約モデル}
+ \begin{alertblock}{}
+  部分和符号化では，各行，各列，各対角線ごとのクイーンの個数を表す
+  補助アトムを導入し，行方向，列方向，対角線方向それぞれに対し
+  クイーンの総数に関する(制約 8)を追加する．
+ \end{alertblock}
+ \begin{block}{}
+  \begin{description}
+   \item[{\color{black} (アトム$r_{i}$)}] $r_{i} \in \{0,...,k\} \qquad (1 \leq i \leq n)$
+   \item[{\color{black} (制約 8)}] $\sum\limits_{i=1}^{n}r_{i} = \sum\limits_{j=1}^{n}c_{j} = \sum\limits_{i+j=2}^{2n}u_{i+j} = \sum\limits_{i-j=1-n}^{n-1}d_{i-j} = k$
+  \end{description}
+各列，各右上がり対角線，各右下がり対角線に対しても同様に\\
+補助アトム$c_j$，$u_{i+j}$，$d_{i-j}$と(制約 9)，(制約 10)，(制約 11)を追加する．
+ \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{部分和符号化における行方向の追加制約による推論}
+ \begin{block}{}
+  \begin{description}
+   \item[(追加制約1)] $r_{i}=\sum\limits_{(i',j')\in \mbox{行}i} 
+	      q_{i'j'} \qquad (1 \leq i \leq n)$ 
+	      \begin{itemize}
+	       \item 行$i$のクイーンの個数を$r_i$とする．
+	      \end{itemize}
+   \item[(追加制約2)] $\sum\limits_{i=1}^{n}r_{i} = k$
+	      \begin{itemize}
+	       \item 行ごとのクイーンの合計は盤面全体の数に一致する．
+	      \end{itemize}
+  \end{description}
+ \end{block}
+ \begin{exampleblock}{例:$n=5,k=3$のとき}
+  \begin{columns}
+   \begin{column}{0.30\textwidth}
+    \centering
+    \input{tikz/graph1.tex}
+   \end{column}
+   \begin{column}{0.30\textwidth}
+    \centering
+    \input{tikz/graph2.tex}
+   \end{column}
+  \end{columns}
+  \begin{itemize}
+   \item 左の図の状態から，追加制約2によって右の状態を推論できる．
+  \end{itemize}
+ \end{exampleblock}
+\end{frame}
+
+\begin{frame}{実験結果}
  \begin{itemize}
   \item 各符号化に対して時間内の判定ができた数を比較する.
  \end{itemize}
