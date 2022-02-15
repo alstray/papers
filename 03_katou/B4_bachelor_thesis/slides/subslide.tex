@@ -72,14 +72,13 @@
    \item[{\color{black}(制約 1)}] 
 	      $\sum\limits_{i,j=1}^{n} q_{ij} = k$ \par
 	      \begin{itemize}
-	       \item $n \times n$上のクイーンの総数が
+	       \item 盤面上のクイーンの総数が
 		     $k$個であることを意味する．
 	      \end{itemize}
    \item[{\color{black}(制約 2)}] 
-	      $\bigvee\limits_{i',j' \in A_{ij}}q_{i'j'} > 0$ \par
+	      $\bigvee\limits_{(i',j') \in A_{ij}}q_{i'j'} > 0$ \par
 	      \begin{itemize}
-	       \item マス$(i,j)$に移動できるクイーンが一つ以上
-		     配置されていることを意味する．
+	       \item マス$(i,j)$に1つ以上のクイーンが移動できることを意味する．
 	      \end{itemize}
 	      
   \end{description}
@@ -112,12 +111,12 @@
 		     $r_{i} \in \{0,1\}$  $(1 \leq i \leq n)$ 
 		     \vskip .5em
 	  \item[{\color{black} (制約 3)}] 
-		     $r_{i}>0 \rightarrow \bigvee\limits_{i',j' 
+		     $r_{i}>0 \rightarrow \bigvee\limits_{(i',j') 
 		     \in R_{ij}}q_{i'j'} = 1 \quad (1\leq i \leq n)$ \par
 		     $r_{i}$が1のとき，行$i$にクイーンがひとつ以上
 		     配置されることを意味する．
 	 \end{description}
-   \item 各列，各右上がり対角線，各右下がり対角線に対しても同様に\\
+   \item 各列，各右上がり対角線，各右下がり対角線に対しても同様に
 	 補助アトム$c_j$，$u_{i+j}$，$d_{i-j}$と(制約 4)，
 	 (制約 5)，(制約 6)を追加する
   \end{itemize} 
@@ -126,8 +125,8 @@
   \begin{itemize}
    \item 基本符号化の(制約 2)を削除し，(制約 7)を追加する．
 	 \begin{description}
-	  \item[{\color{black} (制約 7)}] $r_{i} \vee c_{j} \vee u_{i+j} 
-		     \vee d_{i-j} > 0  \qquad 1\leq i,j \leq n$ 
+	  \item[{\color{black} (制約 7)}] $r_{i}>0 \vee c_{j}>0 \vee 
+		     u_{i+j}>0 \vee d_{i-j} > 0  \qquad 1\leq i,j \leq n$ 
 	 \end{description}
   \end{itemize} 
  \end{block}
@@ -144,41 +143,41 @@
    \item[{\color{black} (アトム$r_{i}$)}] $r_{i} \in \{0,...,k\} \qquad (1 \leq i \leq n)$
    \item[{\color{black} (制約 8)}] $\sum\limits_{i=1}^{n}r_{i} = \sum\limits_{j=1}^{n}c_{j} = \sum\limits_{i+j=2}^{2n}u_{i+j} = \sum\limits_{i-j=1-n}^{n-1}d_{i-j} = k$
   \end{description}
-各列，各右上がり対角線，各右下がり対角線に対しても同様に\\
+各列，各右上がり対角線，各右下がり対角線に対しても同様に
 補助アトム$c_j$，$u_{i+j}$，$d_{i-j}$と(制約 9)，(制約 10)，(制約 11)を追加する．
  \end{block}
 \end{frame}
 
-\begin{frame}\frametitle{部分和符号化における行方向の追加制約による推論}
- \begin{block}{}
-  \begin{description}
-   \item[(追加制約1)] $r_{i}=\sum\limits_{(i',j')\in \mbox{行}i} 
-	      q_{i'j'} \qquad (1 \leq i \leq n)$ 
-	      \begin{itemize}
-	       \item 行$i$のクイーンの個数を$r_i$とする．
-	      \end{itemize}
-   \item[(追加制約2)] $\sum\limits_{i=1}^{n}r_{i} = k$
-	      \begin{itemize}
-	       \item 行ごとのクイーンの合計は盤面全体の数に一致する．
-	      \end{itemize}
-  \end{description}
- \end{block}
- \begin{exampleblock}{例:$n=5,k=3$のとき}
-  \begin{columns}
-   \begin{column}{0.30\textwidth}
-    \centering
-    \input{tikz/graph1.tex}
-   \end{column}
-   \begin{column}{0.30\textwidth}
-    \centering
-    \input{tikz/graph2.tex}
-   \end{column}
-  \end{columns}
-  \begin{itemize}
-   \item 左の図の状態から，追加制約2によって右の状態を推論できる．
-  \end{itemize}
- \end{exampleblock}
-\end{frame}
+% \begin{frame}\frametitle{部分和符号化における行方向の追加制約による推論}
+%  \begin{block}{}
+%   \begin{description}
+%    \item[(追加制約1)] $r_{i}=\sum\limits_{(i',j')\in \mbox{行}i} 
+% 	      q_{(i'j')} \qquad (1 \leq i \leq n)$ 
+% 	      \begin{itemize}
+% 	       \item 行$i$のクイーンの個数を$r_i$とする．
+% 	      \end{itemize}
+%    \item[(追加制約2)] $\sum\limits_{i=1}^{n}r_{i} = k$
+% 	      \begin{itemize}
+% 	       \item 行ごとのクイーンの合計は盤面全体の数に一致する．
+% 	      \end{itemize}
+%   \end{description}
+%  \end{block}
+%  \begin{exampleblock}{例:$n=5,k=3$のとき}
+%   \begin{columns}
+%    \begin{column}{0.30\textwidth}
+%     \centering
+%     \input{tikz/graph1.tex}
+%    \end{column}
+%    \begin{column}{0.30\textwidth}
+%     \centering
+%     \input{tikz/graph2.tex}
+%    \end{column}
+%   \end{columns}
+%   \begin{itemize}
+%    \item 左の図の状態から，追加制約2によって右の状態を推論できる．
+%   \end{itemize}
+%  \end{exampleblock}
+% \end{frame}
 
 \begin{frame}{実験結果}
  \begin{itemize}
@@ -195,11 +194,11 @@
    \end{tabular}
   \end{table}
   \begin{itemize}
-   \item SATの問題では，\structure{部分和符号化}が
+   \item {\sf SAT}の問題では，部分和符号化が
 	 最も多くの問題を解きその優位性を確認できた．
-   \item UNSATの問題ではどの符号化でも解けた問題数は
-	 変わらなかったが，UNSATを導くまでにかかった時間では
-	 \structure{部分和符号化}の優位性を確認できた．
+   \item {\sf UNSAT}の問題ではどの符号化でも解けた問題数は
+	 変わらなかったが，求解までにかかった時間では
+	 部分和符号化の優位性を確認できた．
   \end{itemize}
  \end{block}
 \end{frame}
