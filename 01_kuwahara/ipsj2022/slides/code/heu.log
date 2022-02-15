@@ -1,0 +1,11 @@
+% clingo heu.lp -n 0
+clingo version 5.4.0
+Reading from heu.lp
+Solving...
+Answer: 1
+
+Answer: 2
+b
+Answer: 3
+a
+SATISFIABLE
