@@ -1,0 +1,112 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%% 補助スライド
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+\backupbegin
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{~}
+    \centering
+    - 補足用 -
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 鳩の巣原理を用いたヒント制約(PHP)~[田島・田村,2008]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{鳩の巣原理を用いたヒント制約(PHP)~[田島・田村,2008]}
+    SAT符号化された{\alldifferent}制約に，鳩の巣原理を用いたヒントを加える
+    と求解速度が向上することが知られている．
+    \begin{block}{}
+        $alldifferent(x_{1},\ldots,x_{n})$について，$x_i \in
+        \{\ell,\ell+1,\ldots,u\}$であるとき，以下の2つの制約を追加する．
+        \[
+            \bigvee_{i=1}^{n}x_{i}\geq \ell+n-1 \qquad
+            \bigvee_{i=1}^{n}x_{i}\leq u-n+1
+        \]
+    \end{block}
+    \begin{exampleblock}{例}
+        $alldifferent(x_1, x_2, x_3)$について, $x_i \in \{1,2,3\}$であるとき，以下の制約が追加される．
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            (x_1\geq 3) \lor (x_2 \geq 3) \lor (x_3 \geq 3)\\
+            (x_1\leq 1) \lor (x_2 \leq 1) \lor (x_3 \leq 1)
+        \end{eqnarray*}
+    \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% at-least-one制約
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{at-least-one制約を用いたヒント制約(ALT1)}
+    \vspace{-3mm}
+    \begin{block}{}
+        $alldfifferent(x_1,x_2,\ldots,x_n)$について, $x_i \in \{\ell, \ell+1,\ldots, u\}$かつ$u-\ell=n-1$であるときに以下の制約を追加する.\\
+        \vspace{-3mm}
+        $$\bigvee_{i=1}^n x_{ia}=1 \qquad (a \in \{\ell, \ell+1, \ldots, u\})$$
+    \end{block}
+    \begin{exampleblock}{at-least-one制約を用いたヒント制約の例}
+        $alldifferent(x_1, x_2, x_3, x_4)$について, $x_i \in \{1, 2, 3, 4\}$であるときには以下の制約が追加される.
+        \vspace{-3mm}
+        \begin{eqnarray*}
+            (x_1=1) \lor (x_2=1) \lor (x_3=1) \lor (x_4=1)\\
+            (x_1=2) \lor (x_2=2) \lor (x_3=2) \lor (x_4=2)\\
+            (x_1=3) \lor (x_2=3) \lor (x_3=3) \lor (x_4=3)\\
+            (x_1=4) \lor (x_2=4) \lor (x_3=4) \lor (x_4=4)
+        \end{eqnarray*}
+    \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% alldifferent制約の擬似ブール符号化
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{{\alldiff}制約の擬似ブール符号化}
+    {\alldiff}制約を$\neq$で表現する他にブール基数制約で表現することができる．
+    \begin{exampleblock}{}
+        $x_i \in \{ 1 \dots d \}, n \geq d$ である $\Alldiff$に対して，$p_{ij}=1 \Llra x_i=j$である$n$行$d$列の0-1行列($p_{ij}$)を導入する．
+        \begin{displaymath}
+            \begin{array}{cccc}
+             & & &
+             \begin{array}{cccc}
+                 1&2&\dots&d
+             \end{array}\\
+                (p_{ij})&=&
+                \begin{array}{c}x_1\\ x_2\\ \vdots\\ x_n \end{array}&
+                \left(
+                    \begin{array}{cccc}
+                        p_{11}&p_{12}&\dots&p_{1d}\\
+                        p_{21}&p_{22}&\dots&p_{2d}\\
+                        \vdots&\vdots&\ddots&\vdots\\
+                        p_{n1}&p_{n2}&\dots&p_{nd}
+                \end{array}\right)
+            \end{array}
+        \end{displaymath}
+        \begin{itemize}
+            \item 各$x_i$はちょうど一つの値をとる．
+                % $$ \sum_{j=l}^{u} p_{ij}=1 \; (i \in \{1,2,\ldots,n\}) $$
+            \item 各列について1となるのは高々1つである．
+                % $$ \sum_{i=1}^{n} p_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\})$$
+                % これは$n=d$の時には等号にできる
+                % $$\sum_{i=1}^{n} p_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\})$$
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\backupend
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "slide"
+%%% End:
