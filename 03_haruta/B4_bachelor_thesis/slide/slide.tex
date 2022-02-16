@@ -327,7 +327,7 @@
      \end{itemize}
    \item \structure{\code{McGregor}グラフをベンチマークとした評価実験}
      \begin{itemize}
-     \item 21問について，Knuth の教科書に記載されたいない最適値を生成することができた．
+     \item 21問について，Knuth の教科書に記載されていない最適値を生成することができた．
      \item 充足不能コアを用いた最適化探索の有効性が確認できた．
      \end{itemize}
    \item \structure{多色頂点数最大化問題に関する考察}
@@ -362,7 +362,8 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ \code{McGregor} グラフ[Knuth2015]}
+\begin{frame}[noframenumbering]{ \code{McGregor} グラフ[Knuth2015]}
+ \thispagestyle{empty}
  \begin{exampleblock}{5次の \code{McGregor} グラフ}
   \begin{center}
    \includegraphics[scale=0.2]{fig/order5.png}
@@ -380,7 +381,8 @@
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{同色頂点数最小化問題の実験結果(最適値と最良値)}
+\begin{frame}[noframenumbering]{同色頂点数最小化問題の実験結果(最適値と最良値)}
+ \thispagestyle{empty}
  \begin{block}{}
   \structure{問題}: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 20$: 計18問)
  \end{block}
@@ -400,14 +402,19 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{同色頂点数最大化問題の実験結果(最適値と最良値)}
+\begin{frame}[noframenumbering]{同色頂点数最大化問題の実験結果(最適値と最良値)}
+ \thispagestyle{empty}
  \begin{block}{}
   \structure{問題}: $N$次の\code{McGregor}グラフ ($3 \leq N\leq 38$: 計36問)
  \end{block}
  
+
  \begin{center}
-  \input{fig/max_total.tex}
+  \begin{table}[tb]\scriptsize
+   \input{fig/max_total.tex}
+  \end{table}
  \end{center}
+
 
  \begin{itemize}
   \item BB法が優れていた問題は3問，
