@@ -1,66 +1,7 @@
 \documentclass[dvipdfmx,10pt]{beamer}
 %%%% Packages %%%%%
-\usepackage{bxdpx-beamer}% dvipdfmxなので必要
-\usepackage{graphicx}
-\usepackage{color}
-\usepackage{skak}
-% \usepackage{amsmath,amssymb,amsthm}
-% \usepackage{multirow}
-\usepackage{url}
-\usepackage{tikz}
-% \usepackage{alltt}
-% \usepackage{bm}
-% \usepackage{listings,jlisting}
-% \usepackage{listings}
-% \lstset{
-%  basicstyle=\ttfamily\scriptsize,
-%  keepspaces=true,
-%  escapechar=|,
-%  columns=[l]{fullflexible}
-% }
+\input{macro.tex}
 
-%%%% Fonts %%%%%
-\renewcommand{\kanjifamilydefault}{\gtdefault}
-% \usepackage{otf} % otfパッケージ
-\usetikzlibrary{matrix}
-\usetikzlibrary{shadows}
-\usetikzlibrary{positioning}
-\usepackage[deluxe]{otf} 
-\usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
-\usepackage[T1]{fontenc} % 8bit フォント
-\usepackage{minijs}
-\usepackage{textcomp} % 欧文フォントの追加
-\usepackage[utf8]{inputenc} % 文字コードをUTF-8
-
-%%%% Beamer %%%%%
-\usetheme{Warsaw}
-%\useinnertheme{rectangles}
-%\useoutertheme{smoothbars}
-%\setbeamercolor{enumerate}{fg=white, bg=black}
-%\setbeamertemplate{frametitle}[default][center]
-\setbeamertemplate{navigation symbols}{} % 右下のアイコンを消す
-\useoutertheme{shadow}                 % 箱に影をつける
-\usefonttheme{professionalfonts}       % 数式の文字を通常の LaTeX と同じにする
-% \setbeamercovered{transparent} % 好みに応じてどうぞ
-\setbeamertemplate{footline}[frame number]
-\setbeamercolor{page number in head/foot}{fg=black} % ページ数を表示する
-% \setbeamerfont{footline}{size=\normalsize,series=\bfseries}
-% \setbeamerfont{footline}{size=\scriptsize,series=\mdseries}
-% \setbeamercolor{footline}{fg=black,bg=black}
-% \setbeamertemplate{blocks}[rounded][shadow=true]
-\setbeamertemplate{items}[ball]
-% exclude apprendix slides from framenumber %
-\newcommand{\backupbegin}{
-   \newcounter{framenumberappendix}
-   \setcounter{framenumberappendix}{\value{framenumber}}
-}
-\newcommand{\backupend}{
-   \addtocounter{framenumberappendix}{-\value{framenumber}}
-   \addtocounter{framenumber}{\value{framenumberappendix}} 
-}
-
-% \setbeamertemplate{enumerate items}[default]
-% \setbeamerfont{alerted text}{series=\bfseries}
 \begin{document}
 \title{解集合プログラミングを用いた\\クイーン支配問題の解法に関する考察}
 \author{101830080 \quad 加藤 聖人}
@@ -171,7 +112,7 @@ $S$を$G$の\alert{\bf 支配集合}という．
 	システム検証，プランニング，システム生物学など様々な
 	分野への応用が拡大している．
  \end{itemize}
- \begin{alertblock}{支配問題に対してASPを用いる利点}
+ \begin{alertblock}{支配集合問題に対してASPを用いる利点}
   \begin{itemize}
    \item ASP言語の高い表現力を活かし，支配集合問題の制約を簡潔に記述可能．
    \item 拡張性が高く，様々な定式化を簡単に試すことができる．
@@ -267,8 +208,8 @@ $S$を$G$の\alert{\bf 支配集合}という．
 	 \begin{itemize}
 	  \item 行ごとのクイーンの合計は盤面全体の数に一致する．
 	 \end{itemize}
-   \item \structure{\bf 移動制約:}\quad $r_{i}>0 \vee c_{j}>0 \vee 
-	 u_{i+j}>0 \vee d_{i-j} > 0  \qquad (1\leq i,j \leq n)$ 
+   \item \structure{\bf 移動制約:}\quad $(r_{i}>0 \vee c_{j}>0 \vee 
+	 u_{i+j}>0 \vee d_{i-j} > 0) =1  \quad (1\leq i,j \leq n)$ 
 	 \begin{itemize}
 	  \item マス$(i,j)$にクイーンが1つ以上移動できる．
 	  \item $c_{j}$, $u_{i+j}$, $d_{i-j}$は，
@@ -277,15 +218,15 @@ $S$を$G$の\alert{\bf 支配集合}という．
   \end{itemize}
  \begin{exampleblock}{例:$Q_{5},k=3$}
   \begin{columns}
-   \begin{column}{0.3\textwidth}
+   \begin{column}{0.45\textwidth}
     \centering
-    \scalebox{0.9}{
+    \scalebox{1}{
     \input{tikz/graph1.tex}
     }
    \end{column}
-   \begin{column}{0.3\textwidth}
+   \begin{column}{0.45\textwidth}
     \centering
-    \scalebox{0.9}{
+    \scalebox{1}{
     \input{tikz/graph2.tex}
     }
    \end{column}
