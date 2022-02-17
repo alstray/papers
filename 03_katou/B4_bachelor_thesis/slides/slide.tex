@@ -41,8 +41,7 @@ $S$を$G$の\alert{\bf 支配集合}という．
   るかどうかを判定する問題を\alert{\bf 支配集合問題}という．
   \begin{itemize}
   \item 支配集合問題は\structure{\bf NP完全}であることが知られている．
-  \item 支配集合問題は，スケジューリング，電波塔配置問題などの問題に応
-    用されている．
+  \item 支配集合問題は，スケジューリング，電波塔配置問題などに応用がある．
   \end{itemize}
  \end{block}
 \end{frame}
@@ -116,7 +115,7 @@ $S$を$G$の\alert{\bf 支配集合}という．
   \begin{itemize}
    \item ASP言語の高い表現力を活かし，支配集合問題の制約を簡潔に記述可能．
    \item 拡張性が高く，様々な定式化を簡単に試すことができる．
-   \item 遷移問題への拡張も容易．
+   % \item 遷移問題への拡張も容易．
      % \item 個数制約を用いて，部分和を表す制約を簡潔に記述可能．
    % \item 高速な解列挙が可能．
   \end{itemize}
@@ -208,8 +207,8 @@ $S$を$G$の\alert{\bf 支配集合}という．
 	 \begin{itemize}
 	  \item 行ごとのクイーンの合計は盤面全体の数に一致する．
 	 \end{itemize}
-   \item \structure{\bf 移動制約:}\quad $(r_{i}>0 \vee c_{j}>0 \vee 
-	 u_{i+j}>0 \vee d_{i-j} > 0) =1  \quad (1\leq i,j \leq n)$ 
+   \item \structure{\bf 移動制約:}\quad $r_{i}>0 \vee c_{j}>0 \vee 
+	 u_{i+j}>0 \vee d_{i-j} > 0  \quad (1\leq i,j \leq n)$ 
 	 \begin{itemize}
 	  \item マス$(i,j)$にクイーンが1つ以上移動できる．
 	  \item $c_{j}$, $u_{i+j}$, $d_{i-j}$は，
@@ -293,7 +292,7 @@ $S$を$G$の\alert{\bf 支配集合}という．
  \item 充足可能(\textsf{SAT})の問題では，部分和符号化が$n=16$まで解き，
    その優位性を確認できた．
  \item 充足不能(\textsf{UNSAT})の問題では，解けた問題数に差はなかったが，
-   判定の要したCPU時間は部分和符号化が最も短かった．
+   判定に要したCPU時間は部分和符号化が最も短かった．
  \end{itemize}
 \end{frame}
 
