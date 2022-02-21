@@ -72,17 +72,14 @@
 % alldifferent制約の擬似ブール符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldiff}制約の擬似ブール符号化(PB)}
+    \frametitle{{\alldiff}制約の擬似ブール符号化(PB) (\only<1>{1}\only<2>{2}/2)}
     % {\alldiff}制約をブール基数制約で表現することができる．
     \begin{exampleblock}{}
         $x_i \in \{ 1 \dots d \}, n \geq d$ である $\Alldiff$に対して，$p_{ij}=1 \Llra x_i=j$である$n$行$d$列の0-1行列($p_{ij}$)を導入する．
         % \vspace{-3mm}
         \begin{displaymath}
-            \begin{array}{cccc}
-             & & &
-             \begin{array}{cccc}
-                 1&2&\dots&d
-             \end{array}\\
+            \begin{array}{ccccc}
+             & & & \begin{array}{cccc}  1\;\;&2&\;\dots&d \end{array}&\\
                 (p_{ij})&=&
                 \begin{array}{c}x_1\\ x_2\\ \vdots\\ x_n \end{array}&
                 \left(
@@ -91,17 +88,29 @@
                         p_{21}&p_{22}&\dots&p_{2d}\\
                         \vdots&\vdots&\ddots&\vdots\\
                         p_{n1}&p_{n2}&\dots&p_{nd}
-                \end{array}\right)
+                \end{array}\right)&
+                \begin{array}{c} \alert<1>{= 1}\\ \alert<1>{= 1}\\ \alert<1>{\vdots}\\ \alert<1>{= 1} \end{array}\\
+                & & & \begin{array}{cccc}  
+                \alert<2>{\rotatebox[origin=c]{-90}{$\leq$}}\;\;&
+                \alert<2>{\rotatebox[origin=c]{-90}{$\leq$}}&
+                \alert<2>{\dots}\;&
+                \alert<2>{\rotatebox[origin=c]{-90}{$\leq$}} 
+                \end{array}&\\
+                & & & \begin{array}{cccc}  \alert<2>{1}\;\;&\alert<2>{1}&\;\alert<2>{\dots}\;&\alert<2>{1} \end{array}&
             \end{array}
         \end{displaymath}
         \begin{itemize}
+            \only<1>{
             \item 各$x_i$はちょうど一つの値をとる．
             \vspace{-3mm}
                 % $$ \sum_{j=1}^{d} p_{ij}=1 \; (i \in \{1,2,\ldots,n\}) $$
             $$ p_{i1} + \ldots + p_{id} = 1 \; (i \in \{1,2,\ldots,n\})$$
-            \item 各列について1となるのは高々1つである．
+            }
+            \only<2>{
+            \item 各列について1となるのは高々1つである. \footnote{n=dのときはちょうど1つである.}
             \vspace{-3mm}
             $$ p_{1j} + \ldots + p_{nj} \leq 1 \; (j \in \{1,2,\ldots,d\})$$
+            }
                 % $$ \sum_{i=1}^{n} p_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\})$$
                 % これは$n=d$の時には等号にできる
                 % $$\sum_{i=1}^{n} p_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\})$$
@@ -109,47 +118,91 @@
     \end{exampleblock}
 \end{frame}
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % PB3
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}
-%     \frametitle{PB3}
-%     {\alldiff}制約をブール基数制約
-%     \begin{exampleblock}{}
-%         $x_i \in \{ 1 \dots d \}, n \geq d$ である $\Alldiff$に対して，$p_{ij}=1 \Llra x_i=j$である$n$行$d$列の0-1行列($p_{ij}$)を導入する．
-%         \vspace{-3mm}
-%         \begin{displaymath}
-%             \begin{array}{cccc}
-%              & & &
-%              \begin{array}{cccc}
-%                  1&2&\dots&d
-%              \end{array}\\
-%                 (p_{ij})&=&
-%                 \begin{array}{c}x_1\\ x_2\\ \vdots\\ x_n \end{array}&
-%                 \left(
-%                     \begin{array}{cccc}
-%                         p_{11}&p_{12}&\dots&p_{1d}\\
-%                         p_{21}&p_{22}&\dots&p_{2d}\\
-%                         \vdots&\vdots&\ddots&\vdots\\
-%                         p_{n1}&p_{n2}&\dots&p_{nd}
-%                 \end{array}\right)
-%             \end{array}
-%         \end{displaymath}
-%         \begin{itemize}
-%             \item 各$x_i$はちょうど一つの値をとる．
-%             \vspace{-3mm}
-%                 % $$ \sum_{j=1}^{d} p_{ij}=1 \; (i \in \{1,2,\ldots,n\}) $$
-%             $$ p_{i1} + \ldots + p_{id} = 1 \; (i \in \{1,2,\ldots,n\})$$
-%             \item 各列について1となるのは高々1つである．
-%             \vspace{-3mm}
-%             $$ p_{1j} + \ldots + p_{nj} \leq 1 \; (j \in \{1,2,\ldots,d\})$$
-%                 % $$ \sum_{i=1}^{n} p_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\})$$
-%                 % これは$n=d$の時には等号にできる
-%                 % $$\sum_{i=1}^{n} p_{ij} = 1 \; (j \in \{l,l+1,\ldots,u\})$$
-%         \end{itemize}
-%     \end{exampleblock}
-% \end{frame}
-%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PB3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{{\alldiff}制約の擬似ブール符号化(PB3)[大野 '19]}
+    \begin{exampleblock}{}
+        PBの制約に加えて，各列$j$の和を表す変数$y_j$を追加を導入し以下の制約を追加する
+        \begin{itemize}
+            \item $p_{1j} + \ldots + p_{nj} = y_j$
+            \item $y_1 + \ldots + y_d = n$
+        \end{itemize}
+        % \vspace{-3mm}
+        \begin{displaymath}
+            \begin{array}{ccccc}
+             & & & \begin{array}{cccc}  1\;\;&2&\;\dots&d \end{array}&\\
+                (p_{ij})&=&
+                \begin{array}{c}x_1\\ x_2\\ \vdots\\ x_n \end{array}&
+                \left(
+                    \begin{array}{cccc}
+                        p_{11}&p_{12}&\dots&p_{1d}\\
+                        p_{21}&p_{22}&\dots&p_{2d}\\
+                        \vdots&\vdots&\ddots&\vdots\\
+                        p_{n1}&p_{n2}&\dots&p_{nd}
+                \end{array}\right)&
+                \begin{array}{c} = 1\\ = 1\\ \vdots\\ = 1 \end{array}\\
+                & & & \begin{array}{cccc}
+                    \alert{\rotatebox[origin=c]{-90}{$=$}}\;\;\;\;&
+                    \alert{\rotatebox[origin=c]{-90}{$=$}}\;\;\;&
+                    \alert{\dots}&
+                    \;\alert{\rotatebox[origin=c]{-90}{$=$}}\;\;
+                \end{array}&\\
+                & & & \begin{array}{cccc}  \alert{y_1}\;\;&\alert{y_2}&\;\alert{\dots}\;&\alert{y_d} \end{array}&\alert{=n} 
+            \end{array}
+        \end{displaymath}
+    \end{exampleblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PB4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{{\alldiff}制約の擬似ブール符号化(PB4)[大野 '19]}
+    \begin{exampleblock}{}
+        $n<d$の時，0-1行列($p_{ij}$)に$n+1$行目を追加し，{\alldifferent}制約を以下のように表す．
+        \begin{itemize}
+            \item $p_{i1} + \dots + p_{id} = 1$
+            \item $p_{(n+1)1} + \dots + p_{(n+1)d} = d-n$
+            \item $p_{1j} + \dots + p_{(n+1)d} = 1$
+        \end{itemize}
+        % \vspace{-3mm}
+        \begin{displaymath}
+            \begin{array}{ccccc}
+             & & & \begin{array}{cccc}  \;\;\;\;1\;\;\;\;&\;\;\;\;2\;\;\;\;&\dots&\;\;\;\;d\;\;\;\; \end{array}&\\
+                (p_{ij})&=&
+                \begin{array}{c}x_1\\ x_2\\ \vdots\\ x_n \end{array}&
+                \left(
+                    \begin{array}{cccc}
+                        \;\;\;\;p_{11\;\;\;\;}&\;\;\;\;p_{12\;\;\;\;}&\dots&\;\;\;\;p_{1d\;\;\;\;}\\
+                        \;\;\;\;p_{21\;\;\;\;}&\;\;\;\;p_{22\;\;\;\;}&\dots&\;\;\;\;p_{2d\;\;\;\;}\\
+                        \;\;\;\;\vdots\;\;\;\;&\;\;\;\;\vdots\;\;\;\;&\ddots&\;\;\;\;\vdots\;\;\;\;\\
+                        \;\;\;\;p_{n1\;\;\;\;}&\;\;\;\;p_{n2\;\;\;\;}&\dots&\;\;\;\;p_{nd\;\;\;\;}
+                \end{array}\right)&
+                \begin{array}{l} = 1\\ = 1\\ \vdots\\ = 1  \end{array}\\
+                                                                    & & \begin{array}{c}\alert{x_{n+1}}\\ \\ \\ \end{array}& \begin{array}{cccc}  
+                \alert{p_{(n+1)1}}&\alert{p_{(n+1)2}}&\alert{\dots}&\alert{p_{(n+1)d}} \\
+                \rotatebox[origin=c]{-90}{$=$}&\rotatebox[origin=c]{-90}{$=$}&\dots & \rotatebox[origin=c]{-90}{$=$}\\
+                1&1&\dots&1
+                \end{array}& \begin{array}{c}\alert{=d-n}\\ \\ \\ \end{array}
+            \end{array}
+        \end{displaymath}
+    \end{exampleblock}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{クイーングラフ彩色問題}
+    \begin{itemize}
+        \item クイーングラフ彩色問題の大きさ$N>9$で2か3の倍数である時，解を求めることが難しい．
+        \item $N$が2と3の素数である時，チェスのナイトの動きで彩色すればN色で塗ることができる．
+        \item 現在では上記のN以外に$N=\{12, 14, 15, 16, 18, 20, 21, 22, 24, 26, 28, 30, 32\}$に対して解が発見されている．
+    \end{itemize}
+
+\end{frame}
 \backupend
 
 %%% Local Variables:
