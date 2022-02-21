@@ -20,7 +20,7 @@
 \usefonttheme{professionalfonts} %数式文字のLaTeX化
 
 
-\title{解集合プログラミングを用いたグラフ彩色問題の解法に関する考察}
+\title{解集合プログラミングを用いた\\グラフ彩色問題の解法に関する考察}
 \author{101830314 春田 穂高}
 \institute{番原研究室}
 \date{2021年度 卒業研究発表会\\2022年2月18日}
@@ -165,7 +165,7 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{多色頂点数最大化問題のASP符号化 (提案)}
+\begin{frame}{多色頂点数最大化問題のASP符号化 (考案)}
 
 \begin{exampleblock}{}
  \lstinputlisting[frame=none,numbers=left,basicstyle=\ttfamily]{code/color_mult.lp}
@@ -313,7 +313,7 @@
   % \item 多色頂点数最大化問題で最適値を発見できた
   %       $3 \leq N\leq 12$までの計10問の解の圧縮に成功した．
   \item $N = 12$ では基のグラフ彩色判定問題の
-    \alert{\bf 約680億}もの実行可能解を表していることがわかった．
+    \alert{\bf $2^{36}$(約$680$億)}もの実行可能解を表していることがわかった．
  \end{itemize}
 \end{frame}
 
@@ -376,7 +376,7 @@
   %        に記載されているグラフである．
   \item \code{McGregor} グラフの各区画が頂点に，区画の隣接関係が辺に対応．
   \item グラフを構成する頂点や辺は次数$n$によって定まり，
-	頂点数は$N=n*(n+1)$個，辺数は$3N-6$本である．\cite{Knuth:TAOCP:SAT}
+	頂点数は$N=n*(n+1)$個，辺数は$3N-6$本である．%\cite{Knuth:TAOCP:SAT}
   \item 次数$n$に関わらず，4色で彩色可能であることが知られている．
  \end{itemize}
 \end{frame}
