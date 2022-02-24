@@ -207,7 +207,7 @@
     \begin{block}{直接符号化法(Direct Encoding: DE)}
         各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，$x = a$を意味する命題変数\alert{\bf $\dE{x}{a}$}を用いる．
     \end{block}
-    \begin{exampleblock}{{$\Alldiff \; (x_i \in \{\ell,\dots,u\})$}の直接符号化}
+    \begin{exampleblock}{{$alldifferent(x_{1},x_{2},\ldots, x_{n}) \; (x_i \in \{\ell,\dots,u\})$}の直接符号化}
     \begin{flalign*}
         &\bigwedge_{1 \leq i < j \leq n} (\lnot \dE{x_i}{a} \lor \lnot \dE{x_j}{a})  \qquad  (a \in \{\ell,\ldots, u\}) \\
         &\bigvee_{i=1}^n \dE{x_i}{a}  \qquad  (a \in \{\ell,\ldots, u\}) \qquad(if\;n=u-\ell)\qquad{\color[HTML]{000C79} \bf (ALT1)} 
@@ -231,7 +231,7 @@
     \begin{block}{順序符号化法(Order Encoding: OE)}
         各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，$x \le a$を意味する命題変数\alert{\bf $\oE{x}{a}$}を用いる．
     \end{block}
-    \begin{exampleblock}{{$\Alldiff \; (x_i \in \{\ell,\dots,u\})$}の順序符号化}
+    \begin{exampleblock}{{$alldifferent(x_{1},x_{2},\ldots, x_{n}) \; (x_i \in \{\ell,\dots,u\})$}の順序符号化}
         % \begin{itemize}
             % \item $x \neq y$を$x-y \leq -1 \lor y-x \leq -1$のように線形制約に置き換えてから符号化する．
             % \item $x=a$を$(\lnot \oE{x}{a} \lor \oE{x}{a-1})$ として符号化する.
