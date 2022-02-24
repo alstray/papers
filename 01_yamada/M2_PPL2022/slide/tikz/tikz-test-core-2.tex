@@ -1,0 +1,152 @@
+\begin{tikzpicture}
+
+ % setting
+ \tikzset{customer/.style={rectangle,thick,draw=black,minimum size=0.5cm}}
+ \tikzset{on_switch/.style={rectangle,fill=black}}
+ \tikzset{off_switch/.style={rectangle,draw=black,fill=white}}
+ 
+ \tikzset{node distance =1cm};
+
+ % substation (x, y, label)
+ \newcommand{\substation}[3]{
+ \draw [very thick] (#1,#2) circle [radius=0.225cm] node[draw=none,minimum size=1cm](#3){};
+ \draw [very thick] (#1+0.225,#2)--(#1+0.35,#2)--(#1+0.35,#2+0.3);
+ \draw [very thick] (#1-0.225,#2)--(#1-0.35,#2)--(#1-0.35,#2-0.3);
+ \draw [very thick] (#1,#2+0.225)--(#1,#2+0.35);
+ \draw [very thick] (#1,#2-0.225)--(#1,#2-0.35);
+ \draw [very thick] [domain=-0.284:-0.159] plot(\x+#1,\x+#2);
+ \draw [very thick] [domain=0.159:0.284] plot(\x+#1,\x+#2);
+ \draw [very thick] [domain=-0.284:-0.159] plot(\x+#1,-\x+#2);
+ \draw [very thick] [domain=0.159:0.284] plot(\x+#1,-\x+#2);
+ }
+
+ %switch node (position, label, cap)
+ %% right switch
+ \newcommand{\swnodeR}[4]{
+ \coordinate[#1] (#2);
+ \node[#1,customer] (#2){#4};
+ \node[circle, draw=black, text width=0.2cm, 
+ right=0cm of #2, scale=0.3, thick] {};
+ \node[right=0cm of #2,scale=0.3, minimum size=0.8cm] (#3){};
+ }
+ %% left switch
+ \newcommand{\swnodeL}[4]{
+ %\coordinate[#1] (#2);
+ \node[#1,customer] (#2){#4};
+ \node[circle, draw=black, fill=white, text width=0.2cm, 
+ left=0cm of #2, scale=0.3, thick] (#3){};
+ }
+ % above switch
+ \newcommand{\swnodeA}[4]{
+ \coordinate[#1] (#2);
+ \node[#1,customer] (#2){#4};
+ \node[circle, draw=black, text width=0.2cm, 
+ above=0cm of #2, scale=0.3, thick] (#3){};
+ }
+ % below switch
+ \newcommand{\swnodeB}[4]{
+ \coordinate[#1] (#2);
+ \node[#1,customer] (#2){#4};
+ \node[circle, draw=black, text width=0.2cm, 
+ below=0cm of #2, scale=0.3, thick] {};
+ \node[below=0cm of #2,scale=0.3,minimum size=0.8cm] (#3){};
+ }
+ 
+ \substation{0}{0}{sub};
+ 
+ % root1
+ \node[customer,fill=purple!60,below =4.5cm of sub] (root1) { };
+ \swnodeL{left =of root1,fill=purple!60}{node1}{sw1}{ };
+ 
+ \swnodeR{left=of node1,fill=purple!60}{node2}{sw2}{ };
+ \node[customer,left=of node2,fill=purple!60] (junc1){ };
+ \swnodeL{left =of junc1,fill=purple!60}{node3}{sw3}{ };
+ \swnodeA{above= of junc1,fill=purple!60}{node4}{sw4}{ }
+
+ \swnodeR{left=of node3,fill=purple!60}{node5}{sw5}{ };
+ \swnodeA{above =of node5,fill=purple!60}{node6}{sw6}{ };
+
+ \swnodeB{above =of node6,fill=purple!60}{node7}{sw7}{ };
+ \swnodeA{above =of node7,fill=purple!60}{node29}{sw29}{ };
+
+ \swnodeB{above =of node29,fill=cyan!80}{node30}{sw30}{ };
+ 
+ \swnodeB{above =of node4,fill=purple!60}{node8}{sw8}{ };
+ \swnodeA{above =of node8,fill=purple!60}{node31}{sw31}{ };
+ 
+ \swnodeB{above =of node31,fill=cyan!80}{node32}{sw32}{ };
+
+ \swnodeR{right =of root1,fill=purple!60}{node17}{sw17}{ };
+
+ \swnodeL{right =of node17,fill=purple!60}{node18}{sw18}{ };
+
+ % root2
+ \node[customer,fill=black!20,above=4.5cm of sub, fill=cyan!80] (root2) { };
+ \swnodeL{left =of root2,fill=cyan!80}{node9}{sw9}{ };
+
+ \swnodeR{left=of node9,fill=cyan!80}{node10}{sw10}{ };
+ \node[customer,left=of node10,fill=cyan!80] (junc2){ };
+ \swnodeL{left =of junc2,fill=cyan!80}{node11}{sw11}{ };
+ \swnodeB{below =of junc2,fill=cyan!80}{node12}{sw12}{ };
+ 
+ \swnodeR{left =of node11,fill=cyan!80}{node13}{sw13}{ };
+ \swnodeB{below =of node13,fill=cyan!80}{node14}{sw14}{ };
+ 
+ \swnodeA{below =of node14,fill=cyan!80}{node15}{sw15}{ };
+
+ \swnodeA{below =of node12,fill=cyan!80}{node16}{sw16}{ };
+
+ \swnodeR{right =of root2,fill=cyan!80}{node22}{sw22}{ };
+
+ \swnodeL{right =of node22,fill=cyan!80}{node23}{sw23}{ };
+ 
+ % root3
+ \node[customer,fill=black!20,right=5.2cm of sub,fill=yellow!80] (root3) { };
+ \swnodeB{below =1.4of root3,fill=yellow!80}{node24}{sw24}{ };
+ \swnodeA{above =1.4of root3,fill=yellow!80}{node25}{sw25}{ };
+
+ \swnodeA{below =of node24,fill=yellow!80}{node19}{sw19}{ };
+ \swnodeL{below =1.3of node19,fill=yellow!80}{node20}{sw20}{ };
+ 
+ \swnodeR{left =of node20,fill=purple!60}{node21}{sw21}{ };
+
+ \swnodeB{above =of node25,fill=cyan!80}{node26}{sw26}{ };
+ \swnodeL{above =1.3of node26,fill=cyan!80}{node27}{sw27}{ };
+
+ \swnodeR{left =of node27,fill=cyan!80}{node28}{sw28}{ };
+ 
+ % sections
+ \foreach \v / \u / \t in {root1/sub/$s_a$,root1/node1/$s_1$,node2/junc1/$s_2$, %
+ junc1/node3/$s_3$,junc1/node4/$s_4$,node5/node6/$s_5$,node7/node29/$s_6$,node30/node15/$s_7$, %
+ sub/root2/$s_b$,root2/node9/$s_8$,node10/junc2/$s_9$,junc2/node11/$s_{10}$,node12/junc2/$s_{11}$, %
+ node14/node13/$s_{12}$,node8/node31/$s_{13}$,node32/node16/$s_{14}$,node17/root1/$s_{15}$, %
+ node22/root2/$s_{16}$,root3/sub/$s_c$,node24/root3/$s_{17}$,root3/node25/$s_{18}$, %
+ node20/node19/$s_{19}$,node26/node27/$s_{20}$,node21/node18/$s_{21}$,node28/node23/$s_{22}$} %
+ \draw[thick] (\v) --  node[auto=right]{\t} (\u);
+
+ % switches
+ %% horizontal
+ \foreach \v / \u / \t in {sw1/sw2/$sw_{1}$,sw3/sw5/$sw_{2}$,sw9/sw10/$sw_{11}$,
+ sw11/sw13/$sw_{12}$,sw18/sw17/$sw_{13}$,sw23/sw22/$sw_{15}$,sw27/sw28/$sw_{16}$}
+ \draw[very thick] (\v) -- node[below=0.2of \v]{\t} (\u.center);
+ 
+ \foreach \v / \u in {sw20/sw21}
+ \draw[very thick] (\v) -- (\u.45);
+ %% vertical
+ \foreach \v / \u / \t in {sw4/sw8/$sw_{4}$,sw6/sw7/$sw_{3}$,sw15/sw14/$sw_{7}$,%
+ sw16/sw12/$sw_{8}$,sw19/sw24/$sw_{9}$}
+ \draw[very thick] (\v) -- node[auto=below]{\t~~~~~~~~~~} (\u.center);
+
+ \foreach \v / \u in {sw29/sw30,sw31/sw32,sw25/sw26}
+ \draw[very thick] (\v) -- (\u.-30);
+
+ \coordinate[above=0.3of node26](C);
+ \draw[very thick, draw=red] (C) circle[x radius=0.8,y radius=1.8];
+
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: paper.tex
+%%% End:
