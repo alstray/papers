@@ -1,0 +1,61 @@
+\usepackage{bxdpx-beamer}% dvipdfmxなので必要
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{skak}
+% \usepackage{amsmath,amssymb,amsthm}
+% \usepackage{multirow}
+\usepackage{url}
+\usepackage{tikz}
+% \usepackage{alltt}
+% \usepackage{bm}
+% \usepackage{listings,jlisting}
+% \usepackage{listings}
+% \lstset{
+%  basicstyle=\ttfamily\scriptsize,
+%  keepspaces=true,
+%  escapechar=|,
+%  columns=[l]{fullflexible}
+% }
+
+%%%% Fonts %%%%%
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+% \usepackage{otf} % otfパッケージ
+\usetikzlibrary{matrix}
+\usetikzlibrary{shadows}
+\usetikzlibrary{positioning}
+\usepackage[deluxe]{otf} 
+\usepackage{txfonts} % 数式・英文ローマン体を Lxfont にする
+\usepackage[T1]{fontenc} % 8bit フォント
+\usepackage{minijs}
+\usepackage{textcomp} % 欧文フォントの追加
+\usepackage[utf8]{inputenc} % 文字コードをUTF-8
+
+%%%% Beamer %%%%%
+\usetheme{Warsaw}
+%\useinnertheme{rectangles}
+%\useoutertheme{smoothbars}
+%\setbeamercolor{enumerate}{fg=white, bg=black}
+%\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{navigation symbols}{} % 右下のアイコンを消す
+\useoutertheme{shadow}                 % 箱に影をつける
+\usefonttheme{professionalfonts}       % 数式の文字を通常の LaTeX と同じにする
+% \setbeamercovered{transparent} % 好みに応じてどうぞ
+\setbeamertemplate{footline}[frame number]
+\setbeamercolor{page number in head/foot}{fg=black} % ページ数を表示する
+% \setbeamerfont{footline}{size=\normalsize,series=\bfseries}
+% \setbeamerfont{footline}{size=\scriptsize,series=\mdseries}
+% \setbeamercolor{footline}{fg=black,bg=black}
+% \setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{items}[ball]
+% exclude apprendix slides from framenumber %
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+% \setbeamertemplate{enumerate items}[default]
+% \setbeamerfont{alerted text}{series=\bfseries}
