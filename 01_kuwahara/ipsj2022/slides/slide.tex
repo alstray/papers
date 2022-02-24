@@ -129,6 +129,14 @@
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{CB-CTT に対する既存ASPの結果~[Banbara+ '19]}
+  \centering
+  \scriptsize
+  \begin{tableC}
+    \input{tables/data_comparison}
+  \end{tableC}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{研究概要}
   \begin{alertblock}{研究目的}\centering
     ASP 技術を用いて，
@@ -140,8 +148,8 @@
 
   \begin{itemize}
   \item \structure{方針}:
-    先行研究で提案した\structure{優先度付き巨大近傍探索 (LNPS)}%~[坡山ほか '18]
-    をベースに，ASP に適した探索手法に関する研究開発を進める．
+    先行研究~[桑原+ '21]で提案した\structure{優先度付き巨大近傍探索 (LNPS)}%~[坡山ほか '18]
+    をベースに，ASP に適した探索手法の研究開発を進める．
   \end{itemize}
 
   \begin{block}{研究内容}
@@ -157,7 +165,7 @@
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{LNPS: 優先度付き巨大近傍探索~[桑原ほか '21]}
+\begin{frame}{LNPS: 優先度付き巨大近傍探索~[桑原+ '21]}
   \begin{alertblock}{}\centering
     組合せ最適化問題の最適値探索において，
     暫定解に含まれる変数の値割当ての一部をランダムに選んで取り
@@ -290,7 +298,7 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ITC2007問題集: 他のアプローチとの比較}
+\begin{frame}{ITC2007問題集（UD5）: 他のアプローチとの比較}
   \begin{center}
   \begin{tableB}
     \input{tables/ipsj2022_comparison}
@@ -458,14 +466,6 @@
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CB-CTT に対する既存ASPの結果~[Banbara+ '19]}
-  \centering
-  \scriptsize
-  \begin{tableC}
-    \input{tables/data_comparison}
-  \end{tableC}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{\textsf{\#heuristic}文 (1/3)}
 \begin{exampleblock}{コード例}
 \lstinputlisting[frame=none,label=code:heu.lp,%
