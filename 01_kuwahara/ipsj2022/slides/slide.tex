@@ -38,11 +38,14 @@
 %%%% My macro %%%%%
 \input{macro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{解集合プログラミングに基づく系統的探索と確率的局所探索の統合的
-  手法に関する研究}
-\date{2021年度 修士学位論文審査会\\2022年2月9日}
-\institute{名古屋大学大学院情報学研究科}
-\author{桑原 和也}
+\title{解集合プログラミングを用いた優先度付き巨大近傍探索の実装と評価}
+\author{桑原 和也$^{*1}$~
+宋 剛秀$^{*2}$~
+田村 直之$^{*2}$~
+番原 睦則$^{*1}$}
+\institute{名古屋大学$^{*1}$~
+神戸大学$^{*2}$}
+\date{情報処理学会 第84回全国大会\\2022年3月3日}
 \begin{document}
 \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -137,13 +140,13 @@
 
   \begin{itemize}
   \item \structure{方針}:
-    先行研究の\structure{優先度付き巨大近傍探索 (LNPS)}~[坡山ほか '18]
+    先行研究で提案した\structure{優先度付き巨大近傍探索 (LNPS)}%~[坡山ほか '18]
     をベースに，ASP に適した探索手法に関する研究開発を進める．
   \end{itemize}
 
   \begin{block}{研究内容}
     \begin{enumerate}
-    \item 優先度付き巨大近傍探索 (LNPS) の改良
+    %\item 優先度付き巨大近傍探索 (LNPS) の改良
     \item 組合せ最適化ソルバーaspriorの実装
      \begin{itemize}
       \item LNPSを高速ASPソルバー \textit{clingo} 上に実装
@@ -154,7 +157,7 @@
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{LNPS: 優先度付き巨大近傍探索}
+\begin{frame}{LNPS: 優先度付き巨大近傍探索~[桑原ほか '21]}
   \begin{alertblock}{}\centering
     組合せ最適化問題の最適値探索において，
     暫定解に含まれる変数の値割当ての一部をランダムに選んで取り
@@ -287,61 +290,6 @@
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{CB-CTT に対する destroy 演算子}
-\begin{block}{既存研究~[Kieferほか'16]を参考に実装}
-  \centering
-    \begin{enumerate}
-    \item \structure{\bf Random $N$ (R-$N$)}
-      %\begin{itemize}
-      %\item \small 暫定解から変数の値割当ての N\%をランダムに選んで取り消す.
-      %\end{itemize}
-    \item \structure{\bf Day-Period (DP)}
-      %\begin{itemize}
-      %\item \small 曜日 D と時限 P をランダムに 1 組選び，
-      %暫定解から D 曜 P 限に関する変数の値割当てをすべて取り消す.
-      %\item 教室に関するソフト制約のペナルティを減らすことが狙い．
-   %\end{itemize}
-  \item \structure{\bf Day-Room (DR)}
-   %\begin{itemize}
-   %\item \small 曜日 D と教室 R をランダムに 1 組選び，
-   %暫定解から D 曜日の R 教室に関する変数の値割当てをすべて取り消す.
-   %\item 時限に関するソフト制約のペナルティを減らすことが狙い．
-   %\end{itemize}
-  \end{enumerate}
-\end{block}
-   
-\begin{alertblock}{新しく考案した destroy 演算子}
- \begin{enumerate}
- \setcounter{enumi}{3}
-  \item \structure{\bf Swap-Room $N$ (SR-$N$)}
-   \begin{itemize}
-    \item \small Random $N$ と同様に，
-    暫定解から変数の値割当ての $N$ \%をランダムに選んで取り消す．
-    ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
-   \end{itemize}
-  \item \structure{\bf DP-Swap-Room $N$ (DPSR-$N$)}
-   \begin{itemize}
-    \item \small Day-Period と同様に，
-    曜日 D と時限 P をランダムに $N$ 組選び，
-   暫定解から D 曜 P 限に関する変数の値割当てをすべて取り消す.
-    ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
-   \end{itemize}
-  \end{enumerate}
-\end{alertblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{ITC2007問題集: 得られた最適値と最良値}
-\begin{center}
-  \begin{tableA}
-    \input{tables/ipsj2022_value}
-  \end{tableA}
-  \end{center}
-  \begin{itemize}\small
-  \item 提案手法は，既存のASPより，多くの問題でより良い解を生成した．
-  \item 提案手法の中では，\textsf{DPSR-1/2} ，\textsf{SR-10}が良い性能を示した．
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ITC2007問題集: 他のアプローチとの比較}
   \begin{center}
   \begin{tableB}
@@ -361,10 +309,10 @@
     %\item 系統的探索の長所(最適性の保証)と確率的局所探索の長所(解精度)
       %の両方を活かした探索
     %\end{itemize}
-  \item \structure{LNPS の改良}
-   \begin{itemize}
-    \item 新たなdestroy演算子を考案
-   \end{itemize}
+  %\item \structure{LNPS の改良}
+   %\begin{itemize}
+    %\item 新たなdestroy演算子を考案
+   %\end{itemize}
   \item \structure{組合せ最適化ソルバー asprior の実装}
     \begin{itemize}
     \item ASPソルバー{\clingo}のマルチショットASP解法
@@ -415,18 +363,6 @@
 \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{研究業績}
- \begin{itemize}
-  \small
-\item 桑原和也, 田村直之, 番原睦則.
-  ``解集合プログラミングに基づく系統的探索と確率的局所探索の統合的手法に関する一考察''.
-  2021年度人工知能学会全国大会 (第35回).
-  2021年6月9日
-\item 桑原和也, 宋剛秀, 田村直之, 番原睦則.
-  ``解集合プログラミングを用いた優先度付き巨大近傍探索の実装と評価 ''.
-  2022年情報処理学会第84回全国大会. 2022年3月3日 (発表予定)
- \end{itemize}
-\end{frame}
 % 補助スライド
 \appendix
 \backupbegin
@@ -620,6 +556,61 @@ basicstyle=\ttfamily\small]
 % \bigskip
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{CB-CTT に対する destroy 演算子}
+\begin{block}{既存研究~[Kieferほか'16]を参考に実装}
+  \centering
+    \begin{enumerate}
+    \item \structure{\bf Random $N$ (R-$N$)}
+      %\begin{itemize}
+      %\item \small 暫定解から変数の値割当ての N\%をランダムに選んで取り消す.
+      %\end{itemize}
+    \item \structure{\bf Day-Period (DP)}
+      %\begin{itemize}
+      %\item \small 曜日 D と時限 P をランダムに 1 組選び，
+      %暫定解から D 曜 P 限に関する変数の値割当てをすべて取り消す.
+      %\item 教室に関するソフト制約のペナルティを減らすことが狙い．
+   %\end{itemize}
+  \item \structure{\bf Day-Room (DR)}
+   %\begin{itemize}
+   %\item \small 曜日 D と教室 R をランダムに 1 組選び，
+   %暫定解から D 曜日の R 教室に関する変数の値割当てをすべて取り消す.
+   %\item 時限に関するソフト制約のペナルティを減らすことが狙い．
+   %\end{itemize}
+  \end{enumerate}
+\end{block}
+   
+\begin{alertblock}{新しく考案した destroy 演算子}
+ \begin{enumerate}
+ \setcounter{enumi}{3}
+  \item \structure{\bf Swap-Room $N$ (SR-$N$)}
+   \begin{itemize}
+    \item \small Random $N$ と同様に，
+    暫定解から変数の値割当ての $N$ \%をランダムに選んで取り消す．
+    ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
+   \end{itemize}
+  \item \structure{\bf DP-Swap-Room $N$ (DPSR-$N$)}
+   \begin{itemize}
+    \item \small Day-Period と同様に，
+    曜日 D と時限 P をランダムに $N$ 組選び，
+   暫定解から D 曜 P 限に関する変数の値割当てをすべて取り消す.
+    ただし，科目に対する曜日と時限の割当てはできるだけ維持する．
+   \end{itemize}
+  \end{enumerate}
+\end{alertblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{ITC2007問題集: 得られた最適値と最良値}
+\begin{center}
+  \begin{tableA}
+    \input{tables/ipsj2022_value}
+  \end{tableA}
+  \end{center}
+  \begin{itemize}\small
+  \item 提案手法は，既存のASPより，多くの問題でより良い解を生成した．
+  \item 提案手法の中では，\textsf{DPSR-1/2} ，\textsf{SR-10}が良い性能を示した．
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{day-periodによるdestroy}
  \begin{block}{}
  \begin{itemize}
