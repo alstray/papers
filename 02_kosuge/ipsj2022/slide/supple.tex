@@ -72,7 +72,7 @@
 % alldifferent制約の擬似ブール符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldiff}制約の擬似ブール符号化(PB) (\only<1>{1}\only<2>{2}/2)}
+    \frametitle{{\alldiff}制約の擬似ブール符号化(基本PB) (\only<1>{1}\only<2>{2}/2)}
     % {\alldiff}制約をブール基数制約で表現することができる．
     \begin{exampleblock}{}
         $x_i \in \{ 1 \dots d \}, n \geq d$ である $\Alldiff$に対して，$p_{ij}=1 \Llra x_i=j$である$n$行$d$列の0-1行列($p_{ij}$)を導入する．
@@ -149,7 +149,14 @@
                     \alert{\dots}&
                     \;\alert{\rotatebox[origin=c]{-90}{$=$}}\;\;
                 \end{array}&\\
-                & & & \begin{array}{cccc}  \alert{y_1}\;\;&\alert{y_2}&\;\alert{\dots}\;&\alert{y_d} \end{array}&\alert{=n} 
+                & & & \begin{array}{cccc}  \alert{y_1}\;\;&\alert{y_2}&\;\alert{\dots}\;&\alert{y_d} \end{array}&\alert{=n} \\
+                & & & \begin{array}{cccc}  
+                \;\rotatebox[origin=c]{-90}{$\leq$}\;&
+                \;\rotatebox[origin=c]{-90}{$\leq$}\;&
+                \;\dots\;&
+                \;\rotatebox[origin=c]{-90}{$\leq$}\; 
+                \end{array}&\\
+                & & & \begin{array}{cccc}  \;1\;\;&\;1\;&\;\dots\;&\;1\; \end{array}&
             \end{array}
         \end{displaymath}
     \end{exampleblock}
