@@ -1,0 +1,81 @@
+\section{実行実験}\label{sec:experiment}
+
+\begin{table}[tbp]
+  \centering
+  \caption{ベンチマーク問題のグラフについて}
+  \begin{tabular}{lrrr|r}
+    \input{table/graph.tex}
+  \end{tabular}
+  \label{tab:graph}
+\end{table}
+
+\begin{table*}[tbp]
+  \centering
+  \caption{shortest の実験結果}
+  \begin{tabular}{lr|lr|rrrrr}
+    \input{table/1st_shortest.tex}
+  \end{tabular}
+  \label{tab:1st_shortest}
+\end{table*}
+
+\begin{table*}[tbp]
+  \centering
+  \caption{longest の実験結果}
+  \begin{tabular}{l|rrrrrrrr}
+    \input{table/1st_longest.tex}
+  \end{tabular}
+  \label{tab:1st_longest}
+\end{table*}
+
+提案手法の評価のために，二つの実験を行った．
+初めに，shortest の実験について述べる．
+shortest では，コード\ref{code:exact1.lp}に
+5個のヒントを組み合わせた32通りで実験を行った．
+ベンチマーク問題には，CoRe Challenge 2022のベンチマーク問題のうち，
+第1弾ベンチマーク問題11問を利用した．
+事前に各グラフと独立集合のサイズに対して全解列挙の実験を行い，
+遷移系列の長さの上限値を全解数から1ひいた値とした．
+ベンチマーク問題で使用するグラフについてまとめたものを
+表\ref{tab:graph}に示す．
+各列は左から順に，グラフ名，グラフの頂点数，辺数，
+独立集合のサイズ，そのサイズの独立集合の総数となっている．
+また ASP システムには{\clingo}-5.5.1を利用し，
+1問あたりの制限時間は10分とした．
+実験環境は，
+
+表\ref{tab:1st_shortest}に実験結果を示す．
+各列は左から順に，インスタンス名，独立集合のサイズ，到達可能性，
+遷移長，各符号化における CPU 時間(秒)に対応している．
+遷移長は，到達可能なものについては最短路の遷移長を，
+到達不能なものについては遷移長の上限値を記載している．
+符号化の CPU 時間には，ヒントを利用しないもの (nohint)，
+ヒントをすべて利用したもの (allhint) に加えて，
+総 CPU 時間の短かった3個の組み合わせを記載している．
+赤色の CPU 時間は各インスタンスをもっともはやく解いたものである．
+実験の結果，すべての問題で最短路を求めることができた．
+特にヒント h を使用した場合は nohint と比べて約90{\%}
+の効率化ができており，ヒント h の優位性が確認できた．
+
+つぎに，longest の実験について述べる．
+longest では，コード\ref{code:exact1.lp}とヒント noloop に
+3個のヒント (d1, d2, h) を組み合わせた8通りで実験を行った．
+ベンチマーク問題には，%CoRe Challenge 2022のベンチマーク問題の
+第1弾ベンチマーク問題11問のうち，shortest で到達可能性を判定できた
+7問を利用した．
+遷移系列の長さの上限値は shortest と同じものを用いている．
+ASP システムには{\clingo}-5.5.1を利用し，
+1問あたりの制限時間は30分とした．
+実験環境は，
+
+表\ref{tab:1st_longest}に実験結果を示す．
+各列は左から順に，インスタンス名，各符号化で求められた
+最長の遷移系列に対応している．
+* がついた値は最適値と判定できた値である．
+また赤色の値は各インスタンスごとの最良値である．
+- は一つも解が見つからなかったことを示す．
+実験の結果，7問中4問で最適値が求まった．
+一方，\code{hc-power-12_01}では最短である長さ69の遷移系列が求まらない符号化が
+存在した．
+これは，noloop の処理によるオーバーヘッドが大きいことと，
+ヒント h と noloop の相性がよくないことの2点が原因として
+考えられる．
