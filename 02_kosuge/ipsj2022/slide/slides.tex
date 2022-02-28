@@ -83,297 +83,298 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % alldifferent制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldifferent}制約}
-    \begin{alertblock}{}\centering
-        \alert{\bm{$alldifferent(x_{1},x_{2},\ldots, x_{n})$}}\\[1em]
-        \begin{itemize}
-            \item 整数上の変数$x_{i}$が互いに異なることを表す制約である．
-            \item 制約プログラミングにおける代表的なグローバル制約の一つである．
-        \end{itemize}
-    \end{alertblock}
+  \frametitle{{\alldifferent}制約}
+  \begin{alertblock}{}\centering
+    \alert{\bm{$alldifferent(x_{1},x_{2},\ldots, x_{n})$}}\\[1em]
     \begin{itemize}
-        \item この制約は，
-            $$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$
-            を意味する．
-        \item {\alldifferent}制約は，時間割問題，グラフ彩色問題，組合せデザイン
-            など様々な制約充足問題に現れる．
-        \item {\alldifferent}制約を効率良く解くことは重要
-            な研究課題である．
+    \item 整数上の変数$x_{i}$の値が互いに異なることを表す制約である．
+    \item 制約プログラミングにおける代表的なグローバル制約の一つである．
     \end{itemize}
+  \end{alertblock}
+  \begin{itemize}
+  \item この制約は，
+    $$\bigwedge_{1 \leq i < j \leq n} x_i \neq x_j$$
+    を意味する．
+  \item {\alldifferent}制約は，時間割問題，グラフ彩色問題，組合せデザイン
+    など様々な制約充足問題に現れる．
+  \item {\alldifferent}制約を効率良く解くことは重要
+    な研究課題である．
+  \end{itemize}
 \end{frame}
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % alldifferent制約の適用例
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldifferent}制約の適用例}
-    \begin{block}{クイーングラフ彩色問題}
-        $N$個ずつの$N$個のグループからなるクイーン (計$N^2$個) を，
-        $N\times N$のチェス盤に，同じグループのクイーン同士が互いに取られ
-        ないように配置する問題
-    \end{block}
-    \begin{exampleblock}{}\centering
-        \begin{columns}
-            \begin{column}{0.48\textwidth}\centering
-                \includegraphics[width=3cm]{images/qgcp_5.jpg}
-            \end{column}
-            \begin{column}{0.48\textwidth}\centering
-                \includegraphics[width=3cm]{images/qgcp_5_c.jpg}
-            \end{column}
-        \end{columns}
-    \end{exampleblock}
-    \begin{itemize}
-        \item この問題は{\alldifferent}制約のみを用いて記述できる．
-        \item Knuthの教科書 The Art of Computer Programming Volume 4 Fascicle 6でも
-            取り上げられている~[Knuth '15]．
-    \end{itemize}
+  \frametitle{{\alldifferent}制約の適用例}
+  \begin{block}{クイーングラフ彩色問題}
+    $N$個ずつの$N$個のグループからなるクイーン (計$N^2$個) を，
+    $N\times N$のチェス盤に，同じグループのクイーン同士が互いに取られ
+    ないように配置する問題
+  \end{block}
+  \begin{exampleblock}{}\centering
+    \begin{columns}
+      \begin{column}{0.45\textwidth}\centering
+        \includegraphics[width=3cm]{images/qgcp_5.jpg}
+      \end{column}
+      \begin{column}{0.45\textwidth}\centering
+        \includegraphics[width=3cm]{images/qgcp_5_c.jpg}
+      \end{column}
+    \end{columns}
+  \end{exampleblock}
+  \begin{itemize}
+  \item この問題は{\alldifferent}制約のみを用いて記述できる．
+  \item Knuthの教科書 TAOCP でも取り上げられている~[Knuth '15]．
+  % \item 2005 年までに，11 以上 26 以下のすべての N に対し解が発見され
+  %   たが，現時点でも $N = 27$の解が存在するかどうかは未解決である．
+  \end{itemize}
 \end{frame}
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % alldifferent制約の実装技術
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldifferent}制約の実装に関する既存研究}
-    % alldifferent制約はおそらく制約プログラミングにおいて最もよく知られ，最も影響力があり，最も研究されているグローバル制約である．\\
-    % これはおそらくマッチング理論との関係によるもので，
-    % この理論計算機科学の重要な分野はalldifferent制約に対する効率的なフィルタリングアルゴリズムの基礎を提供した．\\
-    マッチング理論はalldifferent制約に対する効率的なフィルタリングアルゴリズムの基礎を提供した．\\
+\frametitle{{\alldifferent}制約の既存研究}
 
-    \begin{block}{マッチング理論に基づく{\alldiff}制約に対するアーク整合性アルゴリズム[Régin]}
-        変数の集合$X$，それらのドメインの和を$D(X)$とし，\\
-        二部グラフ$G = (X, D(X), E), E = \{\{x, d\} | x \in X, d \in D(x)\}$を表す．
-        \[
-            x_1 \in \{b, c, d, e\}, x_2 \in \{b, c\}, x_3 \in \{a, b, c, d\}, x_4 \in \{b, c\},
-        \]
-        \[
-            alldifferent(x_1, x_2, x_3, x_4)
-        \]
-        を考える．
-    \end{block}
+\begin{itemize}
+\item グラフ理論に基づくアーク整合性アルゴリズム[R\'{e}gin '94]
+  \begin{itemize}
+  \item R\'{e}gin のアルゴリズムに対して様々な改良が提案．
+  \item サーベイ論文~[Gent '08]
+  \end{itemize}
+\item \alert{\bf SAT 符号化を用いた手法}
+  \begin{itemize}
+  \item 直接符号化法~[de Kleer '89, Walsh '00]
+  \item 順序符号化法~[Crawford+ '94, 田村+ '06, 田村+ '09]
+  \item ラダー符号化法~[Gent+ '04]
+  \item 区間符号化法~[Bessiere+ '09]
+  \end{itemize}
+\item PB 符号化を用いた手法~[大野+ '19]
+  \begin{itemize}
+  \item alldifferent 制約を擬似ブール(Pseudo-Boolean; PB)制約に符号化．
+  \item PB 制約をSATに符号化して解くことも可能．
+  \end{itemize}
+\end{itemize}
 \end{frame}
+
+%\begin{frame}
+%   \frametitle{{\alldifferent}制約の実装に関する既存研究}
+%   % alldifferent制約はおそらく制約プログラミングにおいて最もよく知られ，最も影響力があり，最も研究されているグローバル制約である．\\
+%   % これはおそらくマッチング理論との関係によるもので，
+%   % この理論計算機科学の重要な分野はalldifferent制約に対する効率的なフィルタリングアルゴリズムの基礎を提供した．\\
+%   マッチング理論はalldifferent制約に対する効率的なフィルタリングアルゴリズムの基礎を提供した．\\
+
+%   \begin{block}{マッチング理論に基づく{\alldiff}制約に対するアーク整合性アルゴリズム[Régin]}
+%     変数の集合$X$，それらのドメインの和を$D(X)$とし，\\
+%     二部グラフ$G = (X, D(X), E), E = \{\{x, d\} | x \in X, d \in D(x)\}$を表す．
+%     \[
+%       x_1 \in \{b, c, d, e\}, x_2 \in \{b, c\}, x_3 \in \{a, b, c, d\}, x_4 \in \{b, c\},
+%     \]
+%     \[
+%       alldifferent(x_1, x_2, x_3, x_4)
+%     \]
+%     を考える．
+%   \end{block}
+% \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 研究概要
+% 研究目的
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{研究概要}
-    \begin{alertblock}{研究目的}
-        % チャネリング制約を用いて{\alldifferent}制約をSAT符号化し，
-        % クイーングラフ彩色問題を題材として比較評価する．
-        {\alldifferent}制約を効率よく解くために順序符号化を改良した新たなSAT符号化を実装し，比較評価する
-    \end{alertblock}
-    \begin{block}{研究内容}
-        \begin{enumerate}
-            % \item {\alldifferent}制約の整数変数を直接符号化法(DE)と順序符号化法(OE)のいずれかでSAT符号化
-            % \item {\alldifferent}制約の表現方法を4種類実装
-            %     \begin{itemize}
-            %         \item $\neq$の形に分解
-            %         \item {\alldifferent}制約の擬似ブール符号化(基本PB,PB3,PB4)
-            %     \end{itemize}
-            % \item {\alldifferent}制約の高速化手法を2種類実装
-            %     \begin{itemize}
-            %         \item 鳩の巣原理を用いたヒント制約(PHP)
-            %         \item at-least-one制約を用いたヒント制約(ALT1)
-            %     \end{itemize}
-            % \item クイーングラフ彩色問題($5\leq N \leq 12$)を用いた評価実験
-            % \item OEとDEを融合させるチャネリング制約の実装
-            \item 順序符号化法と直接符号化法をチャネリング制約を用いて融合させる手法を実装
-            \item クイーングラフ彩色問題($5\leq N \leq 12$)を用いた評価実験
-                \begin{itemize}
-                    \item チャネリング制約の有無・{\alldifferent}制約の表現方法・{\alldifferent}制約のヒント制約の有無を切り替え，計12符号化を比較した．
-                \end{itemize}
-        \end{enumerate}
-    \end{block}
+  \frametitle{研究目的}
+  \begin{alertblock}{研究目的}\centering
+    {\alldifferent}制約を効率よく解くために，新しい SAT 符号化法を考案・実装・評価する．
+  \end{alertblock}
+  \vfill
+  \begin{itemize}
+  \item \structure{方針}: 順序符号化法をベースに研究開発を進める．
+  \item \structure{理由}: 順序符号化法に基づく SAT型 制約ソルバー　
+    Sugar および Fun-sCOP が，国際制約ソルバー競技会で優勝するなど優れ
+    た性能を示している．
+  \end{itemize}
+  \vfill  
+  \begin{block}{研究内容}
+    \begin{enumerate}
+    \item \alert{\bf チャネリング制約を導入し}，順序符号化法と直接符号
+      化法を結合した SAT 符号化法を考案した．
+    \item クイーングラフ彩色問題を用いて，提案手法を評価した．
+    \end{enumerate}
+  \end{block}
 \end{frame}
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % alldifferent制約の直接符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldifferent}制約の直接符号化}
-    \begin{block}{直接符号化法(Direct Encoding: DE)}
-        各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，$x = a$を意味する命題変数\alert{\bf $\dE{x}{a}$}を用いる．
-    \end{block}
-    \begin{exampleblock}{{$alldifferent(x_{1},x_{2},\ldots, x_{n}) \; (x_i \in \{\ell,\dots,u\})$}の直接符号化}
-    \begin{flalign*}
-        &\bigwedge_{1 \leq i < j \leq n} (\lnot \dE{x_i}{a} \lor \lnot \dE{x_j}{a})  \qquad  (a \in \{\ell,\ldots, u\}) \\
-        &\bigvee_{i=1}^n \dE{x_i}{a}  \qquad  (a \in \{\ell,\ldots, u\}) \qquad(if\;n=u-\ell)\qquad{\color[HTML]{000C79} \bf (ALT1)} 
-    \end{flalign*}
-    \end{exampleblock}
-    \begin{alertblock}{{\alldifferent}制約を直接符号化法で表す利点}
-        \begin{itemize}
-            % \item {\alldifferent}制約を$\neq$に分解してSAT符号化し，DEと相性の良いat-least-one制約をヒント制約として追加することができる．
-            \item {\alldifferent}制約をnot-equal制約ではなく，\structure{擬似ブール(PB)制約}で表し，直接符号化できる．
-        \end{itemize}
-    \end{alertblock}
+  \frametitle{直接符号化法を用いた手法~{\footnotesize [de Kleer '89, Walsh '00]}}
+  \begin{block}{直接符号化法(Direct Encoding; DE)}
+    各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，
+    $x = a$を意味する命題変数\alert{\bf $\dE{x}{a}$}を用いる．
+  \end{block}
+  \begin{exampleblock}{$alldifferent(x_{1},x_{2},\ldots, x_{n})$, $x_i\in \{\ell,\dots,u\}$の符号化}\small
+    \[
+      \begin{array}[t]{ccc}
+        \bm{\displaystyle\bigwedge_{1 \leq i < j \leq n} \lnot\dE{x_i}{a} \lor \lnot \dE{x_j}{a}}
+        & (a \in \{\ell,\ldots, u\}) & (\neq\textrm{分解})\\
+        \bm{\displaystyle\bigvee_{i=1}^n \dE{x_i}{a}}
+        & (a \in \{\ell,\ldots, u\}) & \textsf{(ALT1)}\\
+        & (if\ n=u-\ell+1)& 
+      \end{array}
+    \]
+  \end{exampleblock}
+
+  \begin{alertblock}{利点}
+    \begin{itemize}
+    \item ($\neq$分解)する代わりに，{\alldifferent}制約のPB符号化を利用できる．
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 順序符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldifferent}制約の順序符号化}
-    \begin{block}{順序符号化法(Order Encoding: OE)}
-        各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，$x \le a$を意味する命題変数\alert{\bf $\oE{x}{a}$}を用いる．
-    \end{block}
-    \begin{exampleblock}{{$alldifferent(x_{1},x_{2},\ldots, x_{n}) \; (x_i \in \{\ell,\dots,u\})$}の順序符号化}
-        % \begin{itemize}
-            % \item $x \neq y$を$x-y \leq -1 \lor y-x \leq -1$のように線形制約に置き換えてから符号化する．
-            % \item $x=a$を$(\lnot \oE{x}{a} \lor \oE{x}{a-1})$ として符号化する.
-        % \end{itemize}
-        % \begin{flalign*}
-        %     &\bigvee_{i=1}^{n} \lnot \oE{x_i}{\ell+n-2} \qquad \bigvee_{i=1}^{n} \oE{x_i}{u-n+1} \qquad {\color[HTML]{000C79} \bf (PHP)}
-        % \end{flalign*}
-        \begin{displaymath}
-            \begin{array}{l}
-            \bigwedge\limits_{1 \leq i < j \leq n} (\lnot \oE{x_i}{a} \lor \oE{x_i}{a-1} \\
-            \qquad \qquad \qquad \lor \lnot \oE{x_j}{a} \lor \oE{x_j}{a-1})  \qquad (a \in \{\ell,\ldots, u\}) \\
-            \bigvee\limits_{i=1}^{n} \lnot \oE{x_i}{\ell+n-2} \qquad \bigvee\limits_{i=1}^{n} \oE{x_i}{u-n+1} \qquad {\color[HTML]{000C79} \bf (PHP)}
-            \end{array}
-        \end{displaymath}
-    \end{exampleblock}
-    \begin{alertblock}{{\alldifferent}制約を順序符号化法で表す利点}
-        \begin{itemize}
-            \item {\alldifferent}制約を$\neq$に分解してSAT符号化し，OEと相性の良い鳩の巣原理をヒント制約として追加することができる．
-        \end{itemize}
-    \end{alertblock}
-    % \begin{itemize}
-    %     \item 順序符号化法に基づいたSAT型制約ソルバーSugarが，2008年国際制約ソルバー競技会のグローバル制約部門で第1位になるなど，{\alldifferent}制約に対して優れた性能を示している．
-    % \end{itemize}
+  \frametitle{順序符号化法を用いた手法~{\footnotesize [田村+ '06, 田村+ '09]}}
+  \begin{block}{順序符号化法(Order Encoding; OE)}
+    各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，
+    $x \le a$を意味する命題変数\alert{\bf $\oE{x}{a}$}を用いる．
+  \end{block}
+  \begin{exampleblock}{$alldifferent(x_{1},x_{2},\ldots, x_{n})$, $x_i\in \{\ell,\dots,u\}$の符号化}\small
+    \[
+      \begin{array}[t]{ccc}
+        \bm{\displaystyle\bigwedge_{1 \leq i < j \leq n} x_i > x_j \lor x_i < x_j}
+        & \textrm{と変換したのち符号化} & (\neq\textrm{分解})\\
+        \bm{\displaystyle\bigvee_{i=1}^{n} \lnot\oE{x_i}{\ell+n-2}},
+        &  \bm{\displaystyle\bigvee\limits_{i=1}^{n} \oE{x_i}{u-n+1}}& \textsf{(PHP)}
+      \end{array}
+    \]
+  \end{exampleblock}
+
+  \begin{alertblock}{利点}
+    \begin{itemize}
+    \item 鳩の巣原理を応用したヒント制約(PHP)が利用できる．
+    \item 互いに異なる$n$変数が$n-1$のサイズのドメインに入らないことを表す~[田島+ '07]
+    \end{itemize}
+  \end{alertblock}  
 \end{frame}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % チャネリング制約を用いたalldifferent制約のSAT符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{チャネリング制約を用いた{\alldifferent}制約のSAT符号化}
-    \begin{block}{基本的アイデア}
-        各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，順序符号化法(OE)と直接符号化法(DE)の両方の命題変数を導入し，以下のような制約を追加する．
-        \footnote{$a-1 \in \Dom(x)$の場合は，$\lnot\oE{x}{a-1}$は省略}
-        \[
-            \dE{x}{a} \Llra \lnot\oE{x}{a-1} \land \oE{x}{a}
-        \]
-    \end{block}
-    \begin{alertblock}{チャネリング制約を用いる利点}
-        \begin{itemize}
-            % \item $\Alldiff$を$\land x_i \neq x_j$の形に分解し，各々の$x_i \neq x_j$をOEとDEのいずれかを用いてSAT符号化することができる．
-            \item OEで有効性が確認されている鳩の巣原理(PHP)に基づくヒント制約と$n=d$の場合にDEで有効性が確認されているat-least-one制約(ALT1)を組み合わせて利用することができる．
-                % \item {\alldifferent}制約を$\land x_i \neq x_j$の形に分解する代わりに，擬似ブール(PB)制約に符号化し，その後，SAT符号化することができる．
-        \end{itemize}
-    \end{alertblock}
-\end{frame}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 比較に用いたalldifferent制約の符号化一覧
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{比較に用いた{\alldifferent}制約の符号化一覧}
-    \begin{block}{}\centering
-        {\tiny \input{tables/model}}
-    \end{block}
+  \frametitle{(提案) チャネリング制約を用いた手法}
+  \begin{alertblock}{基本的アイデア}
+    各整数変数$x$と各整数定数$a \in \Dom(x)$に対して，OE と DE の両方
+    の命題変数を導入し，それらの変数をつなぐ\alert{\bf チャネリング制約}
+    を追加する\footnotemark[1]．
+    \[
+      \bm{\dE{x}{a} \Llra \lnot\oE{x}{a-1} \land \oE{x}{a}}
+    \]
+  \end{alertblock}
+  \vfill
+  \begin{block}{長所と短所}
     \begin{itemize}
-        \item 3列目以降のDE・ODは直接符号化法と順序符号化法のどちらを用いてSAT符号化するのかを表している．
-        \item 符号化1は高速制約ソルバーSugarのデフォルト設定と同じである．
-        \item 符号化2-11はチャネリング制約を用いた提案手法である．
-        \item 符号化3は先行研究であるI.Gentのものと同じ設定である．
+    \item \structure{長所}: OE と DE の双方の長所をもつ
+      \begin{itemize}
+      \item {\alldifferent}制約を($\neq$分解)する代わりに，PB 符号化を利用できる．
+      \item ヒント制約(ALT1)と(PHP)を同時に利用できる．
+      \end{itemize}
+    \item \structure{短所}: SAT符号化後の節数が増える．
     \end{itemize}
+  \end{block}
+  \footnotetext[1]{$a-1 \notin \Dom(x)$の場合は，$\lnot\oE{x}{a-1}$は省略}
 \end{frame}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 実験概要
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{実験概要}
-    実装したSAT符号化及び{\alldifferent}制約の高速化手法を評価するために，以下の実験を行なった．
+  \frametitle{実験概要}
+
+  \begin{block}\centering
+    提案手法の有効性を評価するために，以下の実験を行なった．
+  \end{block}
+
+  \vfill
+
+  \begin{itemize}
+  \item \structure{比較に用いた{\alldifferent}制約の符号化法(計12個)}
+  \item \structure{ベンチマーク問題}
     \begin{itemize}
-        \item \structure{比較に用いた実装(12個)}
-            % \vspace{-3mm}
-            % \begin{block}{}\centering
-            %     {\fontsize{4pt}{5pt}\selectfont \input{tables/model}}
-            % \end{block}
-        \item \structure{ベンチマーク問題}
-            \begin{itemize}
-                \item $N$次クイーングラフ彩色問題 ($8\leq N\leq 12$)
-            \end{itemize}
-        \item \structure{SATソルバー}: Sugar ver.2.3.3 ,GlueMiniSat 2.2.10-193
-        \item \structure{制限時間}: 1問あたり2時間\\
-            \begin{itemize}
-                \item N=12についてはN=11で性能のよかった上位3符号化を制限時間を72時間に伸ばして実験を行った
-            \end{itemize}
-        \item \structure{実験環境}: Mac mini, 3.2GHz, 64GB メモリ
+    \item $N$次クイーングラフ彩色問題
+    \item $8\leq N\leq 12$
     \end{itemize}
+  \item \structure{PB符号化}: 論文~[大野+ '19]のPB, PB3, PB4 の3つを使用
+  \item \structure{SATソルバー}: GlueMiniSat 2.2.10-193
+  \item \structure{制限時間}: 1問あたり2時間
+    \begin{itemize}
+    \item $N=12$については，$N=11$で性能のよかった上位3つの符号化法に
+      対して，制限時間を72時間に延ばして実験を行った．
+    \end{itemize}
+  \item \structure{実験環境}: Mac mini, 3.2GHz, 64GB メモリ
+  \end{itemize}
 \end{frame}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% 比較に用いたalldifferent制約の符号化一覧
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{比較に用いた{\alldifferent}制約の符号化法}
+    \begin{block}{}\centering\footnotesize\scriptsize
+      \input{tables/model}
+    \end{block}
+    \begin{itemize}
+        \item 0と1は，既存の順序符号化法のみを使用．
+        \item 1は，高速SAT型制約ソルバー Sugar と同じ．
+        \item 2--11は，チャネリング制約を用いた提案手法．
+%        \item 符号化3は先行研究であるI.Gentのものと同じ設定である．
+    \end{itemize}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 実験結果
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{実験結果: 求解に要したCPU時間(秒)}
-    \begin{block}{}\centering
-        {\tiny \input{tables/result}}
-    \end{block}
-    \begin{itemize}
-        \item 既存の順序符号化法のみを用いた手法(符号化 1)よりもチャネリング制約を用いた手法(符号化 2-11)の方が優れている
-        \item 解を求めることが困難な$N=12$について符号化 9で求めることができた．
-    \end{itemize}
+  \frametitle{実験結果: 求解に要したCPU時間(秒)}
+  \begin{block}{}\centering
+    \tiny
+    \input{tables/result}
+  \end{block}
+  \begin{itemize}
+  \item 既存の順序符号化法(0--1)と比較して，チャネリング制約を用
+    いた提案手法は優れた性能を示している．
+  \item クイーングラフ彩色問題の SAT 解法について様々な方法を調
+    べた論文~[田村+'17]でも成功していない$N=12$を解くことができた．
+  \end{itemize}
 \end{frame}
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{まとめ}
-    \begin{enumerate}
-        \item \structure{{\alldifferent}制約に対して，12個の実装方法を提案}
-            \begin{itemize}
-                % \item 比較のため高速制約ソルバー Sugarのデフォルト設定の手法とチャネリング制約を用いた提案手法に{\alldifferent}制約の高速化手法を合わせて実装した．
-                \item 整数変数の符号化方法(OE,OE $\equ$ DE)，\\
-                    {\alldifferent}制約の表現手法($\neq$分解,基本PB,PB3,PB4)と\\
-                    ヒント制約(PHP,ALT1)を組み合わせて実装した．
-            \end{itemize}
-        \item \structure{クイーングラフ彩色問題($8 \leq N \leq 12$)を用いた評価実験}
-            \begin{itemize}
-                \item 既存の手法に比べてチャネリング制約の優位性が確認できた．
-                \item N=12のクイーングラフ彩色問題において解を求めることができた．
-            \end{itemize}
-    \end{enumerate}
-    \begin{exampleblock}{今後の課題}
-        \begin{itemize}
-            \item 今回性能の良かった符号化をSugarに組み込む
-            \item クイーングラフ彩色問題以外で実験を回す
-        \end{itemize}
-    \end{exampleblock}
+  \frametitle{まとめ}
+
+  \begin{itemize}
+  \item {\alldifferent}制約の SAT 符号化について，チャネリング制約を導
+    入し，既存の順序符号化法と直接符号化法を結合した SAT 符号化法を考案
+    した．
+  \item 提案手法を比較・評価するために，$N=8$ から $N=12$ までの
+    クイーングラフ彩色問題を用いた実験を行った．
+  \item 既存の順序符号化法と比較して，チャネリング制約を用いた提案手法
+    の優位性が確認できた．
+  \end{itemize}
+
+\begin{exampleblock}{今後の課題}
+  \begin{itemize}
+  \item 提案手法を高速SAT型制約ソルバーSugarに組み込む．
+  \item {\alldifferent}制約で記述できる他の問題での実験．
+  \end{itemize}
+\end{exampleblock}
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % 12次クイーングラフ彩色問題の解
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -386,3 +387,8 @@
 
 \input{supple}
 \end{document}
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:

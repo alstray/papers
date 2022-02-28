@@ -1,16 +1,16 @@
  \begin{tabular}[c] {cl||r|r|r|r|r}
-符号化 &                                           & $N=8$                     & $N=9$                    & $N=10$                    & $N=11$                    & $N=12$ \\
-       &                                           & \UNSAT                   & \UNSAT                  & \UNSAT                   & \SAT                     & \SAT  \\\hline
-  0    & OE+$\neq$                                 & 20.120                  & 1296.917               & 3017.705                & TO                      & -    \\
-  1    & OE+$\neq$+PHP                             & 0.118                   & 479.376                & TO                      & TO                      & -    \\
+符号化法 &                                           & $N=8$                     & $N=9$                    & $N=10$                    & $N=11$                    & $N=12$ \\
+       &                                           & \UNSAT                   & \UNSAT                  & \UNSAT                   & \SAT                     & \SAT  \\\hline\hline
+  0    & OE+$\neq$分解                                 & 20.120                  & 1296.917               & 3017.705                & TO                      & -    \\
+  1    & OE+$\neq$分解+PHP                             & 0.118                   & 479.376                & TO                      & TO                      & -    \\\hline
   2    & OE$\Leftrightarrow$DE+$\neq$分解          & 11.532                  & 1333.950               & TO                      & TO                      & -    \\
   3    & OE$\Leftrightarrow$DE+$\neq$分解+ALT1     & \textcolor{red}{0.005}  & 1.600                  & 25.872                  & 758.905                 & -    \\
   4    & OE$\Leftrightarrow$DE+$\neq$分解+PHP      & 0.047                   & 364.726                & TO                      & TO                      & -    \\
   5    & OE$\Leftrightarrow$DE+$\neq$分解+PHP+ALT1 & 0.006                   & 1.571                  & 24.978                  & 311.325                 & TO   \\
-  6    & OE$\Leftrightarrow$DE+基本PB                  & \textcolor{red}{0.005}  & 1.605                  & 27.360                  & 761.812                 & -    \\
-  7    & OE$\Leftrightarrow$DE+基本PB+PHP              & \textcolor{red}{0.005}  & 1.525                  & 25.105                  & 610.408                 & -    \\
+  6    & OE$\Leftrightarrow$DE+PB                  & \textcolor{red}{0.005}  & 1.605                  & 27.360                  & 761.812                 & -    \\
+  7    & OE$\Leftrightarrow$DE+PB+PHP              & \textcolor{red}{0.005}  & 1.525                  & 25.105                  & 610.408                 & -    \\
   8    & OE$\Leftrightarrow$DE+PB3                 & 0.006                   & \textcolor{red}{0.884} & 21.967                  & 446.034                 & -    \\
-  9    & OE$\Leftrightarrow$DE+PB3+PHP             & 0.006                   & 1.195                  & 22.950                  & \textcolor{red}{81.861} & 142694.686   \\
+  9    & OE$\Leftrightarrow$DE+PB3+PHP             & 0.006                   & 1.195                  & 22.950                  & \textcolor{red}{81.861} & \textcolor{red}{142694.686}   \\
   10   & OE$\Leftrightarrow$DE+PB4                 & 0.007                   & 1.069                  & \textcolor{red}{21.644} & 954.395                 & -    \\
-  11   & OE$\Leftrightarrow$DE+PB4+PHP             & 0.006                   & 1.147                  & 26.128                  & 332.564                 & TO   \\\hline
+  11   & OE$\Leftrightarrow$DE+PB4+PHP             & 0.006                   & 1.147                  & 26.128                  & 332.564                 & TO 
  \end{tabular}
