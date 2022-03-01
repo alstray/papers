@@ -240,6 +240,89 @@
  \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの構文}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  \begin{alertblock}{}\centering
+    ASPの言語は論理プログラムをベースとしている~\footnotemark．
+  \end{alertblock}\vfill
+  \begin{itemize}
+  \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
+    \begin{center}
+      \begin{minipage}[c]{0.7\textwidth}
+        \begin{block}{}\centering \vskip -1em
+         \begin{align*}
+         \underbrace{a_0}_{\text{ヘッド}} \quad\text{\code{:-}}\quad
+         \underbrace{a_1 \text{\code{,}}\ldots\text{\code{,}} a_m \text{\code{,}}%
+         \ \text{\code{not}}~ a_{m+1} \text{\code{,}}\ldots\text{\code{,}} \text{\code{not}}~a_n
+         \text{\code{.}}}_{\text{ボディ}}
+         \end{align*}
+        \end{block}        
+      \end{minipage}
+   \end{center}\vfill
+    $0 \leq m \leq n$ であり，各 $a_i$ はアトム，
+    \code{not}は\structure{\bf デフォルトの否定}，\\
+    ``\code{,}''は連言(AND)を表す．
+        % ``\code{:-}''の左辺を\structure{\bf ヘッド}，
+		% 右辺を\structure{\bf ボディ}と呼ぶ．
+  \item \alert{\bf 直感的な意味}は，
+    「$a_1,\ldots,a_m$がすべて成り立ち，
+    $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
+    $a_0$が成り立つ」である．
+  \end{itemize}
+  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの拡張構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの構文}
+\begin{itemize}
+   \item ボディが空のルールを\structure{\bf ファクト}と呼び，``\code{:-}''は省略できる．
+         \begin{align*}
+          \underbrace{a_0}_{\text{ヘッド}}\text{\code{.}}
+         \end{align*}\vfill
+  \item ヘッドが空のルールを\structure{\bf 一貫性制約}と呼ぶ．
+        \begin{align*}
+         \text{\code{:-}}\quad\underbrace{a_1 \text{\code{,}}\ldots\text{\code{,}} a_m \text{\code{,}}%
+         \ \text{\code{not}}~ a_{m+1} \text{\code{,}}\ldots\text{\code{,}} \text{\code{not}}~a_n
+         \text{\code{.}}}_{\text{ボディ}}
+        \end{align*}
+        例えば，\redunderline{`` \code{:-} $a_1$\code{,} \code{not}~$a_{2}$ ''} は，\\
+        「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの拡張構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの拡張構文}
+\begin{alertblock}{}\centering
+  組合せ問題を解くための便利な構文が用意されている．
+\end{alertblock}
+\begin{itemize}
+ \item \structure{\bf 選択子}
+   \begin{center}
+     \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}
+   \end{center}
+   アトム集合 $\{a_1,\dots,a_n\}$
+   の任意の部分集合が成り立つことを意味する．
+       \vfill
+ \item \structure{\bf 個数制約}
+   \begin{center}
+     $lb$\ \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}\ $ub$
+   \end{center}
+   $a_1,\dots,a_n$ のうち，
+   $lb$個以上，$ub$個以下が成り立つことを意味する．
+ % \item \structure{\bf 重み付き個数制約}
+ %   \begin{center}
+ %     $lb$ \code{\#sum\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
+ %   \end{center}
+ %   $a_1,\dots,a_n$のうち，
+ %   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案手法
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{ASPに基づく配電網遷移問題ソルバーの実装}
@@ -258,88 +341,86 @@
  \end{alertblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 提案手法
+%% 解の遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{配電網問題のASP符号化}
+\begin{frame}{配電網のトポロジ制約}
   \renewcommand{\thefootnote}{\fnsymbol{footnote}}
   \setcounter{footnote}{1}
-\begin{block}{}
-\centering
-トポロジ制約に関して，\\
-基本符号化，改良符号化，有向符号化の3種類のASP符号化を考案
-\end{block}
+  \begin{block}{}
+   トポロジ制約のみの配電網問題は，グラフと根と呼ばれる特別なノードから，
+   \structure{\bf 根付き全域森}を求める部分グラフ探索問題に帰着できる．
+  \end{block}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{配電網}
+    \centering
+    \scalebox{0.35}{\input{tikz/tikz-test-input}}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.05\textwidth}\centering
+      $\Leftrightarrow$
+    \end{column}
+    \begin{column}{0.45\textwidth}\centering
+      \begin{exampleblock}{グラフ表現}
+        \centering
+       \scalebox{0.5}{\input{tikz/tikz-test-netsuki-input}}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
  \vfill
- \begin{itemize}
-  \item \structure{\bf トポロジ制約}は，供給経路内に\textbf{停電}\footnote{%
-        電力が供給されないセクション}%
-        や\textbf{短絡}\footnote{供給経路のループ，複数の変電所から供給を受けるセクション}
-        が存在しないことを保証する．
-  \item トポロジ制約のみの配電網問題は，与えられたグラフと根と呼ばれる特別なノードから，
-        \structure{\bf 根付き全域森}と呼ばれる部分グラフを探索する問題に帰着できる．
-  \item 特に，\structure{\bf 有向符号化}は，無向グラフの各辺$u-v$に対して，2つの弧$u\rightarrow v$と
-        $v\rightarrow u$を対応させることで有向グラフ化して解く符号化であり，
-        非閉路制約をノードの入次数の制約で簡潔に表現可能．
+  \begin{itemize}
+   \item \structure{\bf 停電}(変電所と結ばれないセクション)
+   \item \structure{\bf 短絡}(供給経路上のループ，複数の変電所と結ばれるセクション)
  \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASPの構文
+%% 提案手法
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの構文}
-  \begin{alertblock}{}\centering
-    ASPの言語は論理プログラムをベースとしている~\footnotemark．
-  \end{alertblock}
-  \begin{itemize}
-  \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
-    \begin{center}
-      \begin{minipage}[c]{0.7\textwidth}
-        \begin{block}{}\centering
-          $a_0$\quad\code{:-}\quad$a_1$\code{,}\ldots\code{,}$a_m$\code{,}
-          \ \code{not}~$a_{m+1}$\code{,}\ldots\code{,} \code{not}~$a_n$\code{.}
-        \end{block}        
-      \end{minipage}
-   \end{center}\vfill
-    $0 \leq m \leq n$ であり，各 $a_i$ はアトム，
-    \code{not}は\structure{\bf デフォルトの否定}，\\
-    ``\code{,}''は連言(AND)を表す．``\code{:-}''の左辺を\structure{\bf ヘッド}，
-		右辺を\structure{\bf ボディ}と呼ぶ．
-  \item \alert{\bf 直感的な意味}は，
-    「$a_1,\ldots,a_m$がすべて成り立ち，
-    $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
-    $a_0$が成り立つ」である．
-  \item ボディが空のルールを\structure{\bf ファクト}と呼び，``\code{:-}''は省略できる．
-  \item ヘッドが空のルールを\structure{\bf 一貫性制約}と呼ぶ．例えば，\hspace{-1ex}
-    ``\code{:-} $a_1$\code{,} \code{not}~$a_{2}$''は，
-    「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
-  \end{itemize}
-  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
+\begin{frame}{トポロジ制約のASP符号化}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+\begin{block}{}
+ \centering
+ トポロジ制約に関して，\\
+ 基本符号化，改良符号化，有向符号化の3種類のASP符号化を考案
+\end{block}
+ \vfill
+ \begin{itemize}
+  % \item \structure{\bf トポロジ制約}は，供給経路内に\textbf{停電}\footnote{%
+  %       電力が供給されないセクション}%
+  %       や\textbf{短絡}\footnote{供給経路のループ，複数の変電所から供給を受けるセクション}
+  %       が存在しないことを保証する．
+  % \item トポロジ制約のみの配電網問題は，与えられたグラフと根と呼ばれる特別なノードから，
+  %       \structure{\bf 根付き全域森}と呼ばれる部分グラフを探索する問題に帰着できる．
+  \item 基本符号化は，根付き連結制約を\textit{at-least-one}制約と，
+        \textit{at-most-one}制約を用いて表現する基本的な符号化である．
+  \item 改良符号化は，根付き連結制約をASPの個数制約を用いることにより，
+        基礎化後のルール数を少なく抑えるように工夫した符号化である．
+  \item \structure{\bf 有向符号化}は，無向グラフの各辺$u-v$に対して，2つの弧$u\rightarrow v$と
+        $v\rightarrow u$を対応させることで有向グラフ化して解く符号化であり，
+        非閉路制約をノードの入次数の制約で簡潔に表現できる．
+ \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ASPの拡張構文
+%% 提案手法
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPの拡張構文}
-\begin{alertblock}{}\centering
-  組合せ問題を解くための便利な構文が用意されている．
-\end{alertblock}
-\begin{itemize}
- \item \structure{\bf 選択子}
-   \begin{center}
-     \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}
-   \end{center}
-   アトム集合 $\{a_1,\dots,a_n\}$
-   の任意の部分集合が成り立つことを意味する．
- \item \structure{\bf 個数制約}
-   \begin{center}
-     $lb$\ \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}\ $ub$
-   \end{center}
-   $a_1,\dots,a_n$ のうち，
-   $lb$個以上，$ub$個以下が成り立つことを意味する．
- \item \structure{\bf 重み付き個数制約}
-   \begin{center}
-     $lb$ \code{\#sum\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
-   \end{center}
-   $a_1,\dots,a_n$のうち，
-   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
-\end{itemize}
+\begin{frame}[fragile]{グラフ表現のASPファクト形式}
+\begin{figure}[t]
+ \centering
+ \scalebox{0.45}{\input{tikz/tikz-test-netsuki-input}}
+\end{figure}
+\begin{exampleblock}{}
+\begin{lstlisting}
+node(1..15).
+
+edge(1,5). edge(1,12). edge(2,11). edge(2,14). 
+edge(3,15). edge(3,13). edge(4,5). edge(4,6). 
+edge(5,7). edge(6,8). edge(7,9). edge(8,10).
+edge(9,11). edge(10,11). edge(12,13).
+
+root(1). root(2). root(3).
+\end{lstlisting}
+\end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案手法
@@ -347,19 +428,22 @@
 \begin{frame}[fragile]{有向符号化のASPコード}
 \begin{exampleblock}{}
 \begin{lstlisting}
-(1) { inForest(X,Y,t); inForest(Y,X,t) } 1 :- edge(X,Y).
+(1) { inForest(X,Y); inForest(Y,X) } 1 :- edge(X,Y).
 
-(2) :- root(R), inForest(_,R,t).
-(3) :- node(X), not root(X), not 1 { inForest(_,X,t) } 1.
+(2) :- root(R), inForest(_,R).
+(3) :- node(X), not root(X), not 1 { inForest(_,X) } 1.
 
-(4) :- node(X), not 1 { reached(X,R,t) } 1.
+(4) :- node(X), not 1 { reached(X,R) } 1.
 
-(5) reached(R,R,t) :- root(R).
-(6) reached(X,R,t) :- reached(Y,R,t), inForest(Y,X,t).
+(5) reached(R,R) :- root(R).
+(6) reached(X,R) :- reached(Y,R), inForest(Y,X).
 \end{lstlisting}
 \end{exampleblock}
 \begin{itemize}
- \item 説明
+ \item (1)で，与えられた無向グラフを有向グラフ化する．
+ \item (2)--(3)は，非閉路制約を表す．
+ \item (4)は，根付き連結制約を表す．
+ \item (5)--(6)は，到達可能性を表す．
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -405,22 +489,29 @@
 \end{itemize}\vfill
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 提案手法
+%% 提案アプローチ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{ASPに基づく配電網遷移問題ソルバーの実装 (再掲)}
- \centering
- \scalebox{0.6}{\hspace{-1zw}\input{tikz/tikz-arch-2}}
- \vfill
- \begin{enumerate}
-  \item 問題インスタンスをASPのファクト形式に変換する．
-  \item ASPファクトと配電網遷移問題を解くASP符号化を入力として，
-        提案ソルバーを用いて解集合を計算する．
-  \item 解集合を解釈して配電網遷移問題の解を得る．
- \end{enumerate}\vfill
- \begin{alertblock}{}
-  配電網遷移問題を解くASP符号化として，
-  \alert{\bf マルチショット符号化}を考案した．
+\begin{frame}{配電網遷移問題の定式化} 
+ \begin{alertblock}{配電網遷移問題}
+  \begin{align*}
+   \varphi_{\ell} = S(\boldsymbol{x}^0)  
+   \land \bigwedge_{t=0}^{\ell} C(\boldsymbol{x}^t) 
+   \land \bigwedge_{t=1}^{\ell} T(\boldsymbol{x}^{t-1}, \boldsymbol{x}^{t}) 
+   \land G(\boldsymbol{x}^\ell)  
+  \end{align*}
+\begin{align*}
+ &S: \textrm{スタート状態を表す論理式} \\
+ &C: \textrm{トポロジ制約，電流制約を表す論理式} \\
+ &T: \textrm{遷移制約を表す論理式} \\
+ &G: \textrm{ゴール状態を表す論理式}
+\end{align*}
  \end{alertblock}
+ \begin{itemize}
+  \item $\varphi_{\ell}$が\structure{\bf 充足可能}の場合，
+        ステップ長$\ell$の\structure{\bf 到達可能}な遷移系列が存在．
+  \item \structure{\bf 充足不能}の場合，ステップ長$\ell$では\structure{\bf 到達不能}．
+  \item この場合，$\ell$を増加させた論理プログラムを再構成し，繰り返し ASP システムを実行．
+\end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 提案アプローチ
@@ -431,121 +522,26 @@
  \textit{clingo} のマルチショット解法ライブラリを使用した解法を提案
 \end{alertblock}
  \vfill
- \begin{block}{シングルショット解法}
-  \begin{itemize}
-   \item 与えられたステップ長$t$の解が存在するかを判定する．
-   \item 解が見つかるまで，ステップ長$t$を増やしながらソルバーを呼び出し，
-         問題を繰り返し解く必要がある．
-   \item 各問題中の制約の大部分は共通であるため，
-         \textbf{同一の探索空間を何度も調べる}ことになり，
-         \textbf{求解効率が低下}するという問題点がある．
-  \end{itemize}
- \end{block}
-\vfill
-\begin{alertblock}{マルチショット符号化}
-\begin{itemize}
- \item 同様の探索失敗を避けるために獲得した学習節を保持することによって，
-       \textbf{無駄な探索を行うことなく}，1回の呼び出しで制約を追加・削除しながら論理プログラムを
-       連続的に解くことができる．
- \item \code{base}，\code{step(t)}，\code{check(t)}の3パートから構成される．
-\end{itemize} 
-\end{alertblock}
+   \begin{block}{シングルショット符号化}
+     \begin{itemize}
+      \item ステップ長$\ell$を増加させながら，
+            $\varphi_{\ell}$を繰り返し構成し解く．
+      \item 長所: 実装が単純である．
+      \item 短所: 学習節が再利用できない．
+      \item 短所: ASPシステムを毎回起動するオーバーヘッドが大きい．
+     \end{itemize}
+   \end{block}
+  \vfill
+    \begin{alertblock}{マルチショット符号化}
+     \begin{itemize}
+      \item $S(\boldsymbol{x}^{0})$, $C(\boldsymbol{x}^{t})$,
+            $T(\boldsymbol{x}^{t-1},\boldsymbol{x}^{t})$, $G(\boldsymbol{x}^{t})$
+            を動的に追加・削除しながら，$\varphi_{\ell}$をインクリメンタルに構成し解く．
+      \item 長所: 学習節の再利用が可能．ASPシステムの起動は1回のみ．
+      \item 短所: 現状では，デバックしにくい．
+     \end{itemize} 
+    \end{alertblock}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% baseパート
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{配電網遷移問題のASP符号化 -- \code{base}パート}
-\begin{block}{\code{base}パート}
-\begin{itemize}
- \item ソルバーの呼び出し時にのみルールの基礎化が行われる．
- \item ステップ\code{t=0}で満たすべき制約を記述する．
-\end{itemize} 
-\end{block}
-\vfill
-\begin{exampleblock}{}
-\begin{lstlisting}
-:- not closed_switch(SW,0), init_switch(SW).
-\end{lstlisting}
-\end{exampleblock}
-\begin{itemize}
- % \item \code{init_switch/1}は，入力として与えられるスタート状態
- %       における閉じたスイッチを表すアトム．
- % \item \code{closed_switch(SW,T)}は，スイッチ\code{SW}はステップ\code{T}で閉じていることを表す．
- \item ステップ\code{0}と，スタート状態の閉じたスイッチが一致することを強制する．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% step(t)パート
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{配電網遷移問題のASP符号化 -- \code{step(t)}パート}
-\begin{block}{\code{step(t)}パート}
-\begin{itemize}
- \item ステップ\code{t}が増えるたびに，追加で各ルールの基礎化が行われる．
- \item 各ステップ\code{t}において満たすべき制約を記述する．
-\end{itemize}
-\end{block}
-\vfill
-\begin{exampleblock}{遷移制約}
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-changed(SW,t) :- closed_switch(SW,t), not closed_switch(SW,t-1), t>0.
-changed(SW,t) :- closed_switch(SW,t-1), not closed_switch(SW,t), t>0.
-:- not d #sum{ 1,SW:changed(SW,t) } d, t>0.
-\end{lstlisting}
-\end{exampleblock}
-\begin{itemize}
- \item アトム\code{changed(SW,t)}は，ステップ\code{t-1}とステップ\code{t}の間で
-       スイッチ\code{SW}の状態が変化したことを意味する．
- \item 3行目のルールで，各ステップ\code{t}において，
-       変化したスイッチの数が\code{d}であることを保証している．
- \item 遷移制約の他に，トポロジ制約，電流制約が記述される．
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% check(t)パート
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{配電網遷移問題のASP符号化 -- \code{check(t)}パート}
-\begin{block}{\code{check(t)}パート}
-\begin{itemize}
- \item プログラムの終了条件を記述する．
- %\item 
-\end{itemize}
-\end{block}
-\vfill
-\begin{exampleblock}{}
-\begin{lstlisting}
-:- not closed_switch(SW,t), goal_switch(SW), query(t).
-\end{lstlisting}
-\end{exampleblock}
-\begin{itemize}
- \item ゴール状態とステップ\code{t}の閉じたスイッチ状態が対応することを意味する．
- \item \code{t}がインクリメントされると，1つ前の不要になった終了条件は，
-       \code{query(t)}の真偽を動的に操作することにより無効化される．
-\end{itemize}
-\end{frame}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 提案アプローチ
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{配電網遷移問題を解くアルゴリズム}
-%  \begin{block}{シングルショットアルゴリズム}
-%     \begin{itemize}
-%     \item 与えられたステップ長$t$の解が存在するかを判定する．
-%     \item 解が見つかるまで，ステップ長$t$を増やしながらソルバーを呼び出し，
-%           問題を繰り返し解く必要がある．
-%     \item 各問題中の制約の大部分は共通であるため，
-%       \textbf{同一の探索空間を何度も調べる}ことになり，
-%       \textbf{求解効率が低下}するという問題点がある．
-%   \end{itemize}
-%  \end{block}
-%  \vfill
-%  \begin{alertblock}{マルチショットアルゴリズム}
-%    \begin{itemize}
-%    \item ASPシステム\textit{clingo}のマルチショット解法ライブラリを使用．
-%    \item 同様の探索失敗を避けるために獲得した学習節を保持することによって，
-% 		 \textbf{無駄な探索を行うことなく}，1回の呼び出しで制約を追加・削除しながら論理プログラムを
-% 		 連続的に解くことができる．
-%   \end{itemize}
-%  \end{alertblock}
-% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 実験内容--遷移問題
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
