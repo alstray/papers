@@ -1,5 +1,34 @@
 \section{独立集合遷移問題の ASP 符号化}\label{sec:proposal}
 
+\begin{figure*}[tbp]
+  \centering
+  \begin{tabular}{ccccccc}
+    $t=0$ && $t=1$ && $t=2$ && $t=3$ \\
+    \scalebox{0.7}{\input{tikz/isrp_t0}} &
+    \lw{$\Rightarrow$} &
+    \scalebox{0.7}{\input{tikz/isrp_t1}} &
+    \lw{$\Rightarrow$} &
+    \scalebox{0.7}{\input{tikz/isrp_t2}} &
+    \lw{$\Rightarrow$} &
+    \scalebox{0.7}{\input{tikz/isrp_t3}} \\
+    スタート状態 &&&&&& ゴール状態
+  \end{tabular}
+  \caption{コード\ref{code:isrp_fact.lp}に対する遷移系列の例}
+  \label{fig:ex_isrp}
+\end{figure*}
+
+%----------------------------------------
+\lstinputlisting[float=t,caption={%
+独立集合遷移問題を表す ASP ファクトの例．},%
+captionpos=b,frame=single,label=code:isrp_fact.lp,%
+numbers=none,%
+breaklines=true,%
+columns=fullflexible,keepspaces=true,%
+xrightmargin=1zw,% 
+xleftmargin=1zw,% 
+basicstyle=\ttfamily\scriptsize]{code/isrp_fact.lp} 
+%----------------------------------------
+
 %----------------------------------------
 \lstinputlisting[float=t,caption={%
 マルチショット ASP 解法における独立集合遷移問題の ASP 符号化．},%
@@ -11,6 +40,20 @@ xrightmargin=1zw,%
 xleftmargin=1zw,% 
 basicstyle=\ttfamily\scriptsize]{code/exact1_inc.lp} 
 %----------------------------------------
+
+ISRP を表す ASP ファクトの例をコード\ref{code:isrp_fact.lp}に示す．
+\code{n/1}はグラフの頂点数，\code{e/1}は辺数，
+\code{k/1}は独立集合の要素数を表す．
+\code{node/1}は各頂点を，\code{edge/2}は各辺を表す．
+\code{staer/1}はスタート状態を表すアトムであり，
+頂点\code{X}がスタート状態で独立集合に含まれることを表す．
+同様に，\code{goal/1}はゴール状態を表す．
+
+コード\ref{code:isrp_fact.lp}で与えられるインスタンスに対する
+遷移系列の例を図\ref{fig:ex_isrp}に示す．
+$t=0$がスタート状態，$t=3$がゴール状態として与えられる．
+この例では，最短で3回の遷移により到達可能である．
+各ステップで，組合せ制約および遷移制約を満たしていることがわかる．
 
 マルチショット ASP 解法における ISRP の ASP 符号化を
 コード\ref{code:exact1.lp}に示す．
