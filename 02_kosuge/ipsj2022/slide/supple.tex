@@ -124,7 +124,7 @@
 \begin{frame}
     \frametitle{{\alldiff}制約の擬似ブール符号化(PB3)[大野 '19]}
     \begin{exampleblock}{}
-        PBの制約に加えて，各列$j$の和を表す変数$y_j$を追加を導入し以下の制約を追加する
+        PBの制約に加えて，各列$j$の和を表す変数$y_j$を導入し以下の制約を追加する.
         \begin{itemize}
             \item $p_{1j} + \ldots + p_{nj} = y_j$
             \item $y_1 + \ldots + y_d = n$
@@ -171,9 +171,9 @@
     \begin{exampleblock}{}
         $n<d$の時，0-1行列($p_{ij}$)に$n+1$行目を追加し，{\alldifferent}制約を以下のように表す．
         \begin{itemize}
-            \item $p_{i1} + \dots + p_{id} = 1$
+            \item $p_{i1} + \dots + p_{id} = 1 \; (i \in \{1,2,\ldots,n\})$
             \item $p_{(n+1)1} + \dots + p_{(n+1)d} = d-n$
-            \item $p_{1j} + \dots + p_{(n+1)d} = 1$
+            \item $p_{1j} + \dots + p_{(n+1)j} = 1 \; (j \in \{1,2,\ldots,d\})$
         \end{itemize}
         % \vspace{-3mm}
         \begin{displaymath}
