@@ -45,48 +45,22 @@
 %\session{0A0-00}%% <-- 講演ID（必須)
 
 \begin{abstract}
-%独立集合問題は，与えられた無向グラフ G と自然数 k に対して，G が要素数
-%k 以上の独立集合をもつかを判定し，もつ場合には独立集合を求める問題であ
-%る．独立集合遷移問題とは，基となる独立集合問題とその二つの実行可能解が
-%与えられたとき，一方から他方へ遷移制約を満たしつつ，実行可能解のみを経
-%由して到達できるかを判定する問題である．独立集合遷移問題は一般に
-%PSPACE 完全であることが知られている．
-%
-%Independent Set Problem (ISP) is defined as determining 
-%whether $G$ has an independent set with at least $k$ elements
-%for a given undirected graph $G$ and a natural number $k$,
-%and finding an independent set if $G$ has.
 Independent Set Reconfiguration Problem (ISRP) is defined as determining,
-for one given Independent Set Problem instance and two feasible solutions,
-whether one feasible solution can reach 
-another via only feasible solutions
-while satisfying the transition constraints. % adjacency relation
-ISRP is generally known to be PSPACE-complete.
-
-%本発表では，独立集合遷移問題に対して，解集合プログラミング(ASP)を用い
-%た解法について述べる．独立集合遷移問題を解くには，ステップ数を増やしな
-%がら複数の部分問題を繰り返し解く必要がある．しかし，各部分問題中の制約
-%の大部分は共通であるため，ASP システムが同一の探索空間を何度も調べるこ
-%とになり，求解効率が低下するという問題点がある．この問題を解決するため
-%に，マルチショット ASP 解法を利用した独立集合遷移問題の ASP 符号化を提
-%案する．提案手法の有効性を評価するために，組合せ遷移国際競技会 CoRe
-%Challenge 2022 で使われる問題集を用いた実験結果を示す．
+for a given independent set problem instance and two feasible solutions,
+whether one can be transformed into another via a sequence of feasible
+solutions. Each intermediate solution of the sequence must be
+generated from its predecessor, subject to a predefined transition
+constraint. ISRP is PSPACE-complete in general.
 %
-In this paper, we present an approach to solving ISRP
-with Answer Set Programming (ASP).
-In our approach, it is necessary to solve some subproblems repeatedly
-by increasing the length of the reconfiguration sequence.
-However, most constraints in each subproblem are common,
-so the ASP system has to search the same search space many times,
-which reduces the efficiency of the solution.
-For this issue, we propose ASP encoding of ISRP
-with a multi-shot ASP solution.
-In our experiment, this approach solved all instances of the 1st benchmark set
-in the 1st international combinatorial reconfiguration challenge.
-%To evaluate the effectiveness of our approach,
-%we suggest experimental results using a part of the benchmark set
-%in the 1st international combinatorial reconfiguration challenge.
-%CoRe Challenge 2022.
+In this paper, we describe an approach to solving ISRP
+based on Answer Set Programming (ASP).
+The resulting system reads a ISRP instance and converts it into ASP facts.
+In turn, these facts are combined with a first-order encoding for ISRP
+solving, which is subsequently solved by a general-purpose ASP system,
+in our case {\clingo}.
+To evaluate the effectiveness of our approach,
+we show some experimental results on the first
+benchmark set of CoRe Challenge 2022.
 \end{abstract}
 
 %\setcounter{page}{1}
@@ -100,3 +74,10 @@ in the 1st international combinatorial reconfiguration challenge.
 \maketitle
 
 %%
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:
+
+% LocalWords:  ISRP PSPACE CoRe

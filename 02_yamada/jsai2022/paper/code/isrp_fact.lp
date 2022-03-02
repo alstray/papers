@@ -1,4 +1,4 @@
-n(4). e(4). k(3).
+n(8). e(8). k(3).
 
 node(1). node(2). node(3). node(4).
 node(5). node(6). node(7). node(8).
