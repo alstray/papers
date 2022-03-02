@@ -72,10 +72,11 @@
 % alldifferent制約の擬似ブール符号化
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{{\alldiff}制約の擬似ブール符号化(基本PB) (\only<1>{1}\only<2>{2}/2)}
+    \frametitle{{\alldiff}制約の擬似ブール符号化(PB) (\only<1>{1}\only<2>{2}/2)}
     % {\alldiff}制約をブール基数制約で表現することができる．
     \begin{exampleblock}{}
-        $x_i \in \{ 1 \dots d \}, n \geq d$ である $\Alldiff$に対して，$p_{ij}=1 \Llra x_i=j$である$n$行$d$列の0-1行列($p_{ij}$)を導入する．
+        $\Alldiff \;, x_i \in \{ 1 \dots d \}, n \geq d$に対して，
+        $p_{ij}=1 \Llra x_i=j$である$n$行$d$列の0-1行列($p_{ij}$)を導入する．
         % \vspace{-3mm}
         \begin{displaymath}
             \begin{array}{ccccc}
@@ -104,12 +105,12 @@
             \item 各$x_i$はちょうど一つの値をとる．
             \vspace{-3mm}
                 % $$ \sum_{j=1}^{d} p_{ij}=1 \; (i \in \{1,2,\ldots,n\}) $$
-            $$ p_{i1} + \ldots + p_{id} = 1 \; (i \in \{1,2,\ldots,n\})$$
+            $$ p_{i1} + \ldots + p_{id} = 1 \qquad (i \in \{1,2,\ldots,n\})$$
             }
             \only<2>{
             \item 各列について1となるのは高々1つである. \footnote{n=dのときはちょうど1つである.}
             \vspace{-3mm}
-            $$ p_{1j} + \ldots + p_{nj} \leq 1 \; (j \in \{1,2,\ldots,d\})$$
+            $$ p_{1j} + \ldots + p_{nj} \leq 1 \qquad (j \in \{1,2,\ldots,d\})$$
             }
                 % $$ \sum_{i=1}^{n} p_{ij} \leq 1 \; (j \in \{l,l+1,\ldots,u\})$$
                 % これは$n=d$の時には等号にできる
@@ -126,7 +127,7 @@
     \begin{exampleblock}{}
         PBの制約に加えて，各列$j$の和を表す変数$y_j$を導入し以下の制約を追加する.
         \begin{itemize}
-            \item $p_{1j} + \ldots + p_{nj} = y_j$
+            \item $p_{1j} + \ldots + p_{nj} = y_j \qquad (j \in \{1,2,\ldots,d\})$
             \item $y_1 + \ldots + y_d = n$
         \end{itemize}
         % \vspace{-3mm}
@@ -171,9 +172,9 @@
     \begin{exampleblock}{}
         $n<d$の時，0-1行列($p_{ij}$)に$n+1$行目を追加し，{\alldifferent}制約を以下のように表す．
         \begin{itemize}
-            \item $p_{i1} + \dots + p_{id} = 1 \; (i \in \{1,2,\ldots,n\})$
+            \item $p_{i1} + \dots + p_{id} = 1 \qquad (i \in \{1,2,\ldots,n\})$
             \item $p_{(n+1)1} + \dots + p_{(n+1)d} = d-n$
-            \item $p_{1j} + \dots + p_{(n+1)j} = 1 \; (j \in \{1,2,\ldots,d\})$
+            \item $p_{1j} + \dots + p_{(n+1)j} = 1 \qquad (j \in \{1,2,\ldots,d\})$
         \end{itemize}
         % \vspace{-3mm}
         \begin{displaymath}
