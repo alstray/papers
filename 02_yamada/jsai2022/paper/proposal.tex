@@ -1,100 +1,119 @@
 \section{独立集合遷移問題の ASP 符号化}\label{sec:proposal}
 
-\begin{figure*}[tbp]
-  \centering
-  \begin{tabular}{ccccccc}
-    $t=0$ && $t=1$ && $t=2$ && $t=3$ \\
-    \scalebox{0.7}{\input{tikz/isrp_t0}} &
-    \lw{$\Rightarrow$} &
-    \scalebox{0.7}{\input{tikz/isrp_t1}} &
-    \lw{$\Rightarrow$} &
-    \scalebox{0.7}{\input{tikz/isrp_t2}} &
-    \lw{$\Rightarrow$} &
-    \scalebox{0.7}{\input{tikz/isrp_t3}} \\
-    スタート状態 &&&&&& ゴール状態
-  \end{tabular}
-  \caption{コード\ref{code:isrp_fact.lp}に対する遷移系列の例}
-  \label{fig:ex_isrp}
-\end{figure*}
-
 %----------------------------------------
 \lstinputlisting[float=t,caption={%
-独立集合遷移問題を表す ASP ファクトの例．},%
+独立集合遷移問題(図~\ref{fig:ex_isrp})の ASP ファクト形式},%
 captionpos=b,frame=single,label=code:isrp_fact.lp,%
 numbers=none,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
-basicstyle=\ttfamily\scriptsize]{code/isrp_fact.lp} 
+basicstyle=\ttfamily\small]{code/isrp_fact.lp} 
 %----------------------------------------
 
 %----------------------------------------
 \lstinputlisting[float=t,caption={%
-マルチショット ASP 解法における独立集合遷移問題の ASP 符号化．},%
+独立集合遷移問題の ASP 符号化},%
 captionpos=b,frame=single,label=code:exact1.lp,%
-numbers=none,%
+numbers=left,%
 breaklines=true,%
 columns=fullflexible,keepspaces=true,%
 xrightmargin=1zw,% 
 xleftmargin=1zw,% 
-basicstyle=\ttfamily\scriptsize]{code/exact1_inc.lp} 
+basicstyle=\ttfamily\small]{code/exact1_inc.lp} 
 %----------------------------------------
 
-ISRP を表す ASP ファクトの例をコード\ref{code:isrp_fact.lp}に示す．
-\code{n/1}はグラフの頂点数，\code{e/1}は辺数，
+提案解法では，まず与えられた問題インスタンスを ASP のファクト形式に変
+換した後，ASP ファクトと ISRP を解くための ASP 符号化と結合した上で，
+高速 ASP システム{\clingo}上に実装された
+組合せ遷移ソルバー\textsf{recongo}を用いて解を求める．
+%
+コード~\ref{code:isrp_fact.lp}に
+独立集合遷移問題の例(図~\ref{fig:ex_isrp})の ASP ファクト表現を示す．
+%
+アトム\code{n/1}はグラフの頂点数，\code{e/1}は辺数，
 \code{k/1}は独立集合の要素数を表す．
-\code{node/1}は各頂点を，\code{edge/2}は各辺を表す．
-\code{staer/1}はスタート状態を表すアトムであり，
-頂点\code{X}がスタート状態で独立集合に含まれることを表す．
-同様に，\code{goal/1}はゴール状態を表す．
+アトム\code{node/1}は各頂点を，\code{edge/2}は各辺を表す．
+\code{start/1}と\code{goal/1}はそれぞれスタート状態と
+ゴール状態を表すアトムである．
 
-コード\ref{code:isrp_fact.lp}で与えられるインスタンスに対する
-遷移系列の例を図\ref{fig:ex_isrp}に示す．
-$t=0$がスタート状態，$t=3$がゴール状態として与えられる．
-この例では，最短で3回の遷移により到達可能である．
-各ステップで，組合せ制約および遷移制約を満たしていることがわかる．
+コード\ref{code:exact1.lp}に独立集合遷移問題を解くための ASP 符号化を示す．
+\code{#program}文は，1つのプログラムをいくつかの
+サブプログラムに分けるための宣言子である．
+コード\ref{code:exact1.lp}のプログラムは，
+\code{base}, \code{step(t)}, \code{check(t)}の3つの
+サブプログラムから構成されている．
+アトム\code{in(X,t)}は，ステップ\code{t}で頂点\code{X}
+にトークンが配置される(すなわち，頂点\code{X}が独立集合に含まれる)
+ことを意味する．
 
-マルチショット ASP 解法における ISRP の ASP 符号化を
-コード\ref{code:exact1.lp}に示す．
-\code{#program}文は，一つのファイルをいくつかの
-サブプログラムにわける記述である．
-3行目のルールはスタート制約を表している．
-7--8行目は組合せ制約を表している．
-10--11行目は遷移制約を表している．
-15行目はゴール制約を表している．
+最初に \code{base} には，ステップ\code{t=0}で満たすべき制約を記述する．
+3行目のルールは，スタート状態とステップ\code{0}でのトークン配置が
+一致することを表している．
+次に \code{step(t)} には，
+各ステップ \code{t} において満たすべき制約を記述する．
+7行目のルールは，トークンの個数 (すなわち，独立集合の要素数) が \code{K}
+個であることを表す．
+8行目のルールは，隣接する頂点 \code{X} と \code{Y} に同時にトークンが
+置かれないことを表している．
+10行目の \code{moved_from(X,t)}は，ステップ \code{t-1} から \code{t}
+への遷移で，頂点 \code{X} にあったトークンが移動したことを意味する補助
+アトムである．
+11行目のルールは，各ステップで移動できる
+トークンはただ1つという遷移制約を表している．
+最後に，\code{check(t)} では，終了条件を記述する．
+ここでは，15行目のルールでゴール状態を表している．
+ステップを表す \code{t} がインクリメントされると，1つ前の不要になっ
+た終了条件は，\code{query(t)} の真偽を動的に操作することにより無効化
+される．
 
-コード\ref{code:exact1.lp}とは別に，
-求解に必須ではないが，探索効率を上げることを期待した
-ヒント制約を5個考案した．
+コード\ref{code:exact1.lp}のプログラムとは別に，
+求解に必須ではないが，探索効率を上げることを目的としたヒント制約4つ
+と探索ヒューリスティックス1つを考案した．
 \begin{itemize}
-  \item \code{distance1} (d1): スタート状態から$t$ステップ後において，
-    スタート状態ではトークンが配置されており，かつステップ$t$では
-    配置されていない頂点の数は高々$t$個であることを表す．
-  \item \code{distance2} (d2): ゴール状態から$t$ステップ前において，
-    ゴール状態ではトークンが配置されており，かつステップ$\ell-t$
-    では配置されていない頂点の数は高々$t$個であることを表す．
-  \item \code{token1} (t1): ステップ$t-1$で頂点\code{X}から頂点\code{Y}
-    にトークンが移動したとき，ステップ$t$で任意の頂点\code{Z}から頂点\code{X}
-    へトークンが移動することを禁止する制約である．
-    この2ステップの遷移は，ステップ$t-1$で
-    頂点\code{Z}から頂点\code{Y}へトークンを
-    移動させることで，1ステップで再現できることを利用している．
-    冗長な動きを制限するヒント制約であるため，longest では使用できない．
-  \item \code{token2} (t2): ステップ$t-1$で頂点\code{X}から頂点\code{Y}
-    にトークンが移動したとき，ステップ$t$で頂点\code{Y}から任意の頂点\code{Z}
-    へトークンが移動することを禁止する制約である．
-    この2ステップの遷移は，ステップ$t-1$で
-    頂点\code{X}から頂点\code{Z}へトークンを移動させることで，
-    1ステップで再現できることを利用している．
-    冗長な動きを制限するヒント制約であるため，longest では使用できない．
-  \item \code{heu} (h): ASP システムの{\clingo}では，変数選択
-    ヒューリスティックを調整するための構文が用意されている．
-    これを利用し，遷移系列の序盤では独立集合がなるべく極大になるようにしている．
+\item \code{distance1 (d1)}:
+  スタート状態から \code{t} ステップ後において，
+  スタート状態ではトークンが配置されており，
+  かつステップ \code{t} では配置されていない頂点の数は高々 \code{t} 個
+  であることを表す制約である．
+\item \code{distance2 (d2)}:
+  ステップ \code{t} において，
+  それより前の各ステップ \code{T} $\in\{$\code{0},\ldots,\code{t-1}$\}$
+  に対して，ゴール状態ではトークンが配置されており，かつステップ \code{T}
+  では配置されていない頂点の数は高々 \code{t-T} 個であることを表す制約
+  である．
+\item \code{token1 (t1)}:
+  ステップ \code{t-1} で頂点 \code{X} から頂点 \code{Y}
+  にトークンが移動したとき，
+  ステップ \code{t} で任意の頂点 \code{Z} から頂点 \code{X}
+  へトークンが移動することを禁止する制約である．
+  この連続する2ステップの遷移は，ステップ \code{t-1} で
+  頂点 \code{Z} から頂点 \code{Y} へトークンを移動させることで，
+  1ステップで再現できることを利用している．
+\item \code{token2 (t2)}:
+  ステップ \code{t-1} で頂点 \code{Y} から頂点 \code{X}
+  にトークンが移動したとき，
+  ステップ \code{t} で頂点 \code{X} から任意の頂点 \code{Z}
+  へトークンが移動することを禁止する制約である．
+  この連続する2ステップの遷移は，ステップ \code{t-1} で
+  頂点 \code{Y} から頂点 \code{Z} へトークンを移動させることで，
+  1ステップで再現できることを利用している．
+\item \code{heu (h)}:
+  ASP システム{\clingo}の \code{#heuristic} 文を用いて，
+  各ステップにおいて独立集合がなるべく極大になるように
+  変数選択および値割当てを行う探索ヒューリスティックスである．
 \end{itemize}
 
-longest では，遷移系列に同じ実行可能解が高々1回しか出現しない制約を加える
-必要がある．
-本研究では，「任意の2つのステップにおいて，
-独立集合に含まれる頂点がすべて同じにはならない」
-ことを表す制約を追加した．
+コード\ref{code:exact1.lp}の ASP 符号化，および，
+ヒント制約とヒューリスティックスは，
+ISRP の3つのバリエーション exsistent, shortest, longest
+を解くために使用できる．
+ただし，ヒント制約 \code{t1} と \code{t2} は冗長なトークンの動きを制限
+するため，ループのない最長経路を求める longest には使用できない．
+また，longest については，別途考案したループを禁止する制約(\code{noloop})を加える必要がある．
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
