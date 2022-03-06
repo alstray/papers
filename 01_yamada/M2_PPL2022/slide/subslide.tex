@@ -5,215 +5,152 @@
 \begin{frame}{~}
  \centering
  - 補足用 -
-\end{frame} 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%% 根付き全域森問題
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{根付き全域森問題}
- \begin{alertblock}{}
-  トポロジ制約を満たす配電網構成は，グラフと根と呼ばれる特別なノードから，
-  \alert{\bf 根付き全域森}を求める部分グラフ探索問題に帰着できる．
- \end{alertblock}
- \vfill
- \begin{block}{根付き全域森 (Spanning Rooted Forest) [川原・湊 '12]}
-  グラフ$G=(V,E)$と，
-  \textbf{根}と呼ばれる$V$上のノードが与えられたとき，
-  $G$上の根付き全域森とは，以下の条件を満たす$G$の部分グラフ$G'=(V,E'),\ E' \subseteq E$である．
-  \begin{enumerate}
-   \item $G'$はサイクルを持たない． (\alert{\bf 非閉路制約})
-   \item $G'$の各連結成分は，ちょうど1つの根を含む． (\alert{\bf 根付き連結制約})
-  \end{enumerate}
- \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 根付き全域森問題の例
+%% 解法の流れ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{根付き全域森問題の例}
-  \begin{columns}
-    \begin{column}{0.45\textwidth}\centering
-      \begin{exampleblock}{入力例}
-	\centering
-	\input{tikz/tikz-input}
-      \end{exampleblock}
-    \end{column}
-    \begin{column}{0.05\textwidth}\centering
-      $\Rightarrow$
-    \end{column}
-    \begin{column}{0.45\textwidth}\centering
-      \begin{exampleblock}{解の例}
-        \centering
-        \input{tikz/tikz-out}
-      \end{exampleblock}
-    \end{column}
-  \end{columns}
-  \vfill
+\begin{frame}{ASPを用いた配電網遷移問題の解法の流れ}
+ \centering\vfill
+ \scalebox{0.6}{\hspace{-1zw}\input{tikz/tikz-arch-1}}
+ \vfill
+ \begin{enumerate}
+  \item 問題インスタンスをASPのファクト形式に変換する．
+  \item ASPファクトと配電網遷移問題を解くASP符号化を入力として，
+        ASPシステムを用いて解集合を計算する．
+  \item 解集合を解釈して配電網遷移問題の解を得る．
+ \end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの構文}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  \begin{alertblock}{}\centering
+    ASPの言語は論理プログラムをベースとしている~\footnotemark．
+  \end{alertblock}\vfill
   \begin{itemize}
-  \item \structure{\bf 配電網とグラフの対応} \\
-	 \begin{center}
+  \item \structure{\bf 論理プログラム}とは，以下の\structure{\bf ルール}の有限集合である．
+    \begin{center}
       \begin{minipage}[c]{0.7\textwidth}
-	   \begin{block}{}
-		\centering
-		\begin{tabular}{c|ccc}
-		配電網 & セクション & スイッチ & 変電所 \\
-		\hline
-		グラフ & ノード & 辺 & 根
-		\end{tabular}
-	   \end{block}
+        \begin{block}{}\centering \vskip -1em
+         \begin{align*}
+         \underbrace{a_0}_{\text{ヘッド}} \quad\text{\code{:-}}\quad
+         \underbrace{a_1 \text{\code{,}}\ldots\text{\code{,}} a_m \text{\code{,}}%
+         \ \text{\code{not}}~ a_{m+1} \text{\code{,}}\ldots\text{\code{,}} \text{\code{not}}~a_n
+         \text{\code{.}}}_{\text{ボディ}}
+         \end{align*}
+        \end{block}        
       \end{minipage}
-	 \end{center}\vfill
-   \item \structure{\bf 配電網問題のトポロジ制約}
-		 \begin{itemize}
-		  \item 停電(変電所と結ばれないセクション)
-		  \item 短絡(供給経路上のループ，複数の変電所と結ばれるセクション)
-		 \end{itemize}
+   \end{center}\vfill
+    $0 \leq m \leq n$ であり，各 $a_i$ はアトム，
+    \code{not}は\structure{\bf デフォルトの否定}，\\
+    ``\code{,}''は連言(AND)を表す．
+        % ``\code{:-}''の左辺を\structure{\bf ヘッド}，
+		% 右辺を\structure{\bf ボディ}と呼ぶ．
+  \item \alert{\bf 直感的な意味}は，
+    「$a_1,\ldots,a_m$がすべて成り立ち，
+    $a_{m+1},\ldots,a_n$のそれぞれが成り立たないならば，
+    $a_0$が成り立つ」である．
+  \end{itemize}
+  \footnotetext{本発表では標準論理プログラムを単に論理プログラムと呼ぶ．}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの拡張構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの構文}
+\begin{itemize}
+   \item ボディが空のルールを\structure{\bf ファクト}と呼び，``\code{:-}''は省略できる．
+         \begin{align*}
+          \underbrace{a_0}_{\text{ヘッド}}\!\text{\code{.}}
+         \end{align*}\vfill
+  \item ヘッドが空のルールを\structure{\bf 一貫性制約}と呼ぶ．
+        \begin{align*}
+         \text{\code{:-}}\quad\underbrace{a_1 \text{\code{,}}\ldots\text{\code{,}} a_m \text{\code{,}}%
+         \ \text{\code{not}}~ a_{m+1} \text{\code{,}}\ldots\text{\code{,}} \text{\code{not}}~a_n
+         \text{\code{.}}}_{\text{ボディ}}
+        \end{align*}
+        ボディのリテラル($a_i$あるいは\ \code{not} $a_i$)の連言(AND)が成り立たないことを表す．
+        % 例えば，\redunderline{`` \code{:-} $a_1$\code{,} \code{not}~$a_{2}$ ''} は，\\
+        % 「$a_1$が成り立つならば，$a_2$が成り立つ」を意味する．
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ASPの拡張構文
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ASPの拡張構文}
+\begin{alertblock}{}\centering
+  組合せ問題を解くための便利な構文が用意されている．
+\end{alertblock}
+\begin{itemize}
+ \item \structure{\bf 選択子}
+   \begin{center}
+     \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}
+   \end{center}
+   アトム集合 $\{a_1,\dots,a_n\}$
+   の任意の部分集合が成り立つことを意味する．
+       \vfill
+ \item \structure{\bf 個数制約}
+   \begin{center}
+     $lb$\ \code{\{}$a_1$\code{;}\ldots\code{;}$a_n$\code{\}}\ $ub$
+   \end{center}
+   $a_1,\dots,a_n$ のうち，
+   $lb$個以上，$ub$個以下が成り立つことを意味する．
+ % \item \structure{\bf 重み付き個数制約}
+ %   \begin{center}
+ %     $lb$ \code{\#sum\{} $w_1$\code{:}$a_1$\code{;}\ldots\code{;}$w_n$\code{:}$a_n$ \code{\}} $ub$
+ %   \end{center}
+ %   $a_1,\dots,a_n$のうち，
+ %   成り立つアトムの重み和が$lb$以上，$ub$以下になることを意味する．
+\end{itemize}
+\end{frame} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験概要--配電網問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験概要}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化:}
+    \begin{itemize}
+     \item 基本符号化
+     \item 改良符号化
+     \item 有向符号化
+    \end{itemize}
+  \item \structure{\bf ベンチマーク問題:} 全85問
+    \begin{itemize}
+    \item DNET\footnote{https://github.com/takemaru/dnet}%
+      で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
+      16個，36個，468個)
+    \item \textit{Graph Coloring and its Generalizations}
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
+      グラフ彩色問題をベースに，独自に生成した 82問 
+      \footnote{各問題に対し，全ノードのうち1/5個をランダムに変電所として与えた．}\\
+      (20 $\leq$ 辺数 $\leq$ 49,629)
+    \end{itemize}
+  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+  \item \structure{\bf 制限時間:} 3600秒/問
+  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
   \end{itemize}
 \end{frame}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 配電網問題の例
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{配電網問題の例}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 辺の数の表
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験結果: 解けた問題数による比較}
  
-%  \begin{block}{配電網問題}
-%   与えられた配電網$D=(S,SW)$から，以下の制約を満たす
-%   配電網の構成(スイッチの開閉状態$X$)が存在するかどうかを判定する問題．
-% %  \vspace{-0.5em}
-%  \begin{itemize}\small
-%   \item $X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}$ (\textbf{トポロジ制約})
-%   \item $J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \quad J_i \leq J^{max} 
-%         \quad (\forall s_{i}\in S)\qquad\qquad\qquad\qquad\quad~~$ (\textbf{電流制約})
-%  \end{itemize}
-%  \end{block}
-%   \begin{columns}
-%     \begin{column}{0.45\textwidth}\centering
-%       \begin{exampleblock}{入力例}
-% 	\centering
-% 	\scalebox{0.3}{\input{tikz/tikz-test-input}}
-%       \end{exampleblock}
-%     \end{column}
-%     \begin{column}{0.05\textwidth}\centering
-%       $\Rightarrow$
-%     \end{column}
-%     \begin{column}{0.45\textwidth}\centering
-%       \begin{exampleblock}{解の例}
-%         \centering
-%         \scalebox{0.3}{\input{tikz/tikz-test-output}}
-%       \end{exampleblock}
-%     \end{column}
-%   \end{columns}
-% \end{frame}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 辺の数の表
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{実験結果：解けた問題数による比較}
- 
-% %\begin{textblock*}{\linewidth}(10pt, 30pt)
-% \begin{table}[t]
-%  \centering
-%  \input{table/table}
-% \end{table}\vfill
+\begin{textblock*}{\linewidth}(10pt, 30pt)
+\begin{table}[t]
+ \input{table/table}
+\end{table}\vfill
 
-% \begin{itemize}
-%  \item 有向符号化は，ベンチマーク問題85問中，\textbf{84問}を解いている．
-%  \item 大規模な問題に対しても有向符号化は，優位性を示した．
-% \end{itemize}\vfill
-% %\end{textblock*}
-% \end{frame}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 配電網遷移問題の例
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{配電網遷移問題の例(1/4)}
-%  \vfill
-%  \begin{figure}[t]
-%   \centering
-%   \scalebox{0.65}{\input{tikz/tikz-test-core-0}}
-%   \vspace{-0.1cm}
-%   \caption*{\structure{$\mathbf{t=0}$ \textbf{(スタート状態)}}}
-%  \end{figure}
-% \end{frame}
-% %
-% \begin{frame}{配電網遷移問題の例(2/4)}
-%   \vfill
-%  \begin{figure}[t]
-%   \centering
-%   \scalebox{0.65}{\input{tikz/tikz-test-core-1}}
-%   \vspace{-0.1cm}
-%   \caption*{\structure{$\mathbf{t=1}$}}
-%  \end{figure}
-% \end{frame}
-% %
-% \begin{frame}{配電網遷移問題の例(3/4)}
-%   \vfill
-%  \begin{figure}[t]
-%   \centering\hspace{-0.1cm}
-%   \scalebox{0.65}{\input{tikz/tikz-test-core-2}}
-%   \vspace{-0.1cm}
-%   \caption*{\structure{$\mathbf{t=2}$}}
-%  \end{figure}
-% \end{frame}
-% %
-% \begin{frame}{配電網遷移問題の例(4/4)}
-%   \vfill
-%  \begin{figure}[t]
-%   \centering\hspace{-0.1cm}
-%   \scalebox{0.65}{\input{tikz/tikz-test-core-3}}
-%   \vspace{-0.1cm}
-%   \caption*{\structure{$\mathbf{t=3}$ \textbf{(ゴール状態)}}}
-%  \end{figure}
-% \end{frame}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 卒業研究
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{配電網問題のASP符号化(卒業研究)}
-%    %\scalebox{0.9}{\centering\input{arch}}
-%    \begin{block}{根付き全域森問題の2種類のASP符号化を考案}
-%      \begin{itemize}
-%      \item \alert{\bf 基本符号化}
-%        \begin{itemize}
-%        \item 根付き全域森問題の制約を，\textbf{ASPのルール7個}で簡潔に記述
-%        \end{itemize}
-%      \item \alert{\bf 改良符号化}
-%        \begin{itemize}
-%        \item ASPシステムは，変数を含む論理プログラムを，変数を含まない
-%          論理プログラムに\textbf{基礎化}したのち解集合を計算する．
-%        \item 根付き連結制約をASPの個数制約で表現することにより，
-%          \textbf{基礎化後のルール数を少なく抑える}よう工夫されている．
-%        \item これにより，改良符号化は大規模な問題への有効性が期待できる．
-%        \end{itemize}
-%      \end{itemize}
-%    \end{block}
-%  \begin{itemize}
-%   \renewcommand{\thefootnote}{\fnsymbol{footnote}}
-%   \setcounter{footnote}{1}
-%   \item \textit{DNET}\footnote{https://github.com/takemaru/dnet}，
-%         および，\textit{Graph Coloring and its Generalizations}
-%         \footnote{https://mat.tepper.cmu.edu/COLOR04/}%
-%         の問題をベースに独自に生成した配電網問題を用いて評価実験を行った.
-%   \item 結果として，改良符号化は，基本符号化と比較して，より多くの問題を高速に解いた.
-%  \end{itemize}
-% \end{frame}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 電気制約
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{電気制約の効率的な実装}
-%  \begin{itemize}
-%   \item \alert{\bf 電気制約}は，送電する電流$\cdot$電圧の適正範囲を保証する制約．
-%   \begin{itemize}
-%    \item 供給経路の各区間で許容電流を超えない．
-%    \item 電気抵抗による電圧降下が許容範囲を超えない．
-%    \item etc.
-%   \end{itemize}
-%   \item 電流と電圧が影響し合う\structure{\bf 実数ドメイン上の制約}によって表される．
-%   \item 実数ドメイン上の制約は，純粋なASPのみで扱うのは\alert{\bf 困難}．
-% 		\begin{itemize}
-% 		 \item \structure{\bf 方針1：} 簡易的な電流の電気制約について実装する．
-% 		 \item \structure{\bf 方針2：} ASPMT技術により，背景理論ソルバーと連携して厳密に\\
-%                \hspace{4zw}\!電流・電圧の制約を実装する．
-% 		\end{itemize}
-%  \end{itemize}
-% \end{frame}
+\begin{itemize}
+ \item 有向符号化は，ベンチマーク問題85問中，\textbf{84問}を解いている．
+ \item 大規模な問題に対しても有向符号化は，優位性を示した．
+ \item 有向符号化で解けなかったグラフは，\textit{leighton graph}と呼ばれる
+       グラフから生成したものであった．
+\end{itemize}\vfill
+\end{textblock*}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 電流制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -242,7 +179,7 @@
  \end{itemize}\vfill
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 電流制約
+%% 電圧制約
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{電圧制約}
 \begin{block}{電圧制約}\small
