@@ -370,6 +370,35 @@ root(1). root(2). root(3).
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 実験概要--配電網問題
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{実験概要}
+  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+  \setcounter{footnote}{1}
+  \begin{itemize}
+  \item \structure{\bf 比較するASP符号化:}
+    \begin{itemize}
+     \item 基本符号化
+     \item 改良符号化
+     \item 有向符号化
+    \end{itemize}
+  \item \structure{\bf ベンチマーク問題:} 全85問
+    \begin{itemize}
+    \item DNET\footnote{https://github.com/takemaru/dnet}%
+      で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
+      16個，36個，468個)
+    \item \textit{Graph Coloring and its Generalizations}
+      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
+      グラフ彩色問題をベースに，独自に生成した 82問 
+      \footnote{各問題に対し，全ノードのうち1/5個をランダムに変電所として与えた．}\\
+      (20 $\leq$ 辺数 $\leq$ 49,629)
+    \end{itemize}
+  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
+  \item \structure{\bf 制限時間:} 3600秒/問
+  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% カクタスプロット
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験結果：カクタスプロット}
@@ -394,7 +423,7 @@ root(1). root(2). root(3).
   \begin{itemize}
   \item 配電網問題の変数集合
     $\boldsymbol{x} = \{x_1,x_2,\ldots,x_n\}$
-    に対して，ステップ$t\geq 0$での各変数の値を表す変数集合
+    に対して，ステップ$t~\geq 0$での各変数の値を表す変数集合
     $\boldsymbol{x}^{t} = \{x_1^t,x_2^t,\ldots,x_n^t\}$を導入．
   \item スタート状態から$\ell$ステップ遷移した後の各変数の値
     $\boldsymbol{x}^{\ell}$が，ゴール状態を満足するかを判定するため，
@@ -435,7 +464,7 @@ root(1). root(2). root(3).
          ステップ長$\ell$の\structure{\bf 到達可能}な遷移系列が存在．
    \item $\varphi_{\ell}$が\structure{\bf 充足不能}の場合，
          ステップ長$\ell$では\structure{\bf 到達不能}．
-   \item 充足不能の場合，$\ell$を増加させた論理プログラムを再構成し，
+   \item 到達不能の場合，$\ell$を増加させた論理プログラムを再構成し，
          繰り返し ASP システムを実行．
   \end{itemize}
 \end{frame}

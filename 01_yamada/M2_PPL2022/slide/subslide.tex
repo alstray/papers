@@ -105,35 +105,6 @@
 \end{itemize}
 \end{frame} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 実験概要--配電網問題
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{実験概要}
-  \renewcommand{\thefootnote}{\fnsymbol{footnote}}
-  \setcounter{footnote}{1}
-  \begin{itemize}
-  \item \structure{\bf 比較するASP符号化:}
-    \begin{itemize}
-     \item 基本符号化
-     \item 改良符号化
-     \item 有向符号化
-    \end{itemize}
-  \item \structure{\bf ベンチマーク問題:} 全85問
-    \begin{itemize}
-    \item DNET\footnote{https://github.com/takemaru/dnet}%
-      で公開されている配電網問題 3問 \\ (トポロジ制約のみ，スイッチ数:
-      16個，36個，468個)
-    \item \textit{Graph Coloring and its Generalizations}
-      \footnote{https://mat.tepper.cmu.edu/COLOR04/}で公開されている \\
-      グラフ彩色問題をベースに，独自に生成した 82問 
-      \footnote{各問題に対し，全ノードのうち1/5個をランダムに変電所として与えた．}\\
-      (20 $\leq$ 辺数 $\leq$ 49,629)
-    \end{itemize}
-  \item \structure{\bf ASPシステム:} \textit{clingo-5.4.0} $+$ \textit{trendy}
-  \item \structure{\bf 制限時間:} 3600秒/問
-  \item \structure{\bf 実験環境:} Mac mini，3.2GHz Intel Core i7，64GBメモリ
-  \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 辺の数の表
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{実験結果: 解けた問題数による比較}
