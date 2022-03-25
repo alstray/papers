@@ -80,17 +80,17 @@ ASPシステムと実験環境は上で示したものと同じである．
  \centering
  \caption{全解列挙の結果}
  \label{table:enum}
-\begin{tabular}[t]{c|c|c|c}
+\begin{tabular}[t]{c|c|r|r}
  \noalign{\hrule height 1pt}
- 問題名 & $J_i^{max}$ & 総CPU時間 & 総数 \\
+ 問題名 & $J_i^{max}$ & \multicolumn{1}{|c}{総CPU時間} & \multicolumn{1}{|c}{総数} \\
  \noalign{\hrule height 1pt}
  %%%%%%%%
- %test & 200 & 0.008s & UNSAT \\
- test & 250 & 0.026s & 45 \\
- & 300 & 0.060s & 114 \\
- & 400 & 0.009s & 279* \\ \hline
- %baran32 & 300 & 0.013s & UNSAT \\
- baran32 & 350 & 0.116s & 51127* \\ \hline
+ %test & 200 & 0.008 & UNSAT \\
+ test & 250 & 0.026 & 45 \\
+ & 300 & 0.060 & 114 \\
+ & 400 & 0.009 & 279* \\ \hline
+ %baran32 & 300 & 0.013 & UNSAT \\
+ baran32 & 350 & 0.116 & 50751* \\ \hline
  fukui-tepco & 300 & TO~(5日) & 358億+  \\
  \noalign{\hrule height 1pt}
 \end{tabular}
