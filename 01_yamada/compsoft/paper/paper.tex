@@ -1,26 +1,85 @@
-\documentclass[japanese,dvipdfmx]{jssst_ppl} %% 日本語 (default)
-% \documentclass[english]{jssst_ppl} %% English
-% \documentclass[japanese,draft]{jssst_ppl} %% You can use the draft option
+% Sample file for the use of compsoft style file.
+%
+\documentclass{compsoft}
+% \documentclass[L]{compsoft}
+% \documentclass[S]{compsoft}
+% \documentclass[S,L]{compsoft}
+% \documentclass[K]{compsoft}
+% \documentclass[K,L]{compsoft}
+% \documentclass[U]{compsoft}
+% \documentclass[U,L]{compsoft}
 
+% Preamble
+%
+% 「コンピュータソフトウェア」誌に掲載される論文の場合，次で
+% 巻数，号数，開始ページ，終了ページを指定する．
+\volNoPp{29}{1}{78}{84}
+
+% ワークショップによる推薦論文の場合，ワークショップ名を指定する．
+% \suisen{ワークショップ名}
+
+% 特集の場合，特集のタイトルを与える．
+% \tokushu{特集のタイトル}
+
+% 大会論文の場合，\taikai で開催年を指定する．ここで指定した年から
+% 大会の回数は計算される．
+% \taikai{2009}
+
+% ここに，使用するパッケージを列挙する．
+\usepackage[dvips]{graphics}
+
+% ユーザが定義したマクロなどはここに置く．ただし学会誌のスタイルの
+% 再定義は原則として避けること．
 \input{macro}
 
-\title{解集合プログラミングを用いた配電網問題の解法}
-\author{山田 健太郎$^1$，湊 真一$^2$，田村 直之$^3$，番原 睦則$^1$}
-\inst{%
-$^1$ 名古屋大学大学院情報学研究科\\
-\texttt{\{yken66,banbara\}@nagoya-u.jp}
-\medskip\par%所属の区切り
-$^2$ 京都大学大学院情報学研究科\\
-\texttt{minato@i.kyoto-u.ac.jp}
-\medskip\par%所属の区切り
-$^3$ 神戸大学情報基盤センター\\
-\texttt{tamura@kobe-u.ac.jp}
-}
 \begin{document}
+
+% 論文のタイトル
+\title{解集合プログラミングを用いた配電網問題の解法}
+
+% 著者
+% 和文論文の場合，姓と名の間には半角スペースを入れ，
+% 複数の著者の間は全角スペースで区切る
+
+
+\author{山田 健太郎　湊 真一　田村 直之　番原 睦則
+%
+% ここにタイトル英訳 (英文の場合は和訳) を書く．
+%
+\ejtitle{Solving Power Distribution Network Problems with Answer Set Programming.}
+%
+% ここに著者英文表記 (英文の場合は和文表記) および
+% 所属 (和文および英文) を書く．
+% 複数著者の所属はまとめてよい．
+%
+\shozoku{Kentaro Yamada, Mutsunori Banbara}{名古屋大学大学院情報学研究科}%
+{Dept.\ of Information Engineering, Graduate School of Informatics, Nagoya University}
+\shozoku{Shin-ichi Minato}{京都大学大学院情報学研究科}%
+{Dept.\ of Communications and Computers Engineering, Graduate School of Informatics, Kyoto University}
+\shozoku{Naoyuki Tamura}{神戸大学情報基盤センター}%
+{Information Science and Technology Center, Kobe University}
+%
+% 出典情報は \shutten とすれば出力される．
+%\shutten
+%
+% 受付年月日，記事カテゴリなどは自動的に生成される．
+%\uketsuke{2017}{1}{10}
+%
+% その他，脚注に入れるものがあれば，\note に記述する．
+%\note{脚注に入れる内容}
+}
+
+%
+% 和文アブストラクト
+\Jabstract{%
+\input{abstract}}
+%
+% 英文アブストラクト（本サンプルの原論文にはなし）
+\Eabstract{
+\input{abstract_eng}
+}
+%
 \maketitle
-\begin{abstract}
-\input{abstract}
-\end{abstract}
 
 \input{introduction}
 \input{problem}
@@ -33,11 +92,25 @@ $^3$ 神戸大学情報基盤センター\\
 \bibliographystyle{jplain}
 \bibliography{bachelor,aisat}    % 参考文献リスト
 
-\end{document}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{choshashoukai}
 
+%% 経歴???
+\chosha{上田和紀}
+{1978年東京大学工学部計数工学科卒．
+1986年同大学大学院情報工学博士課程修了．
+工学博士．1983年NEC入社．
+1985年〜1992年 (財) 新世代コンピュータ技術開発機構出向．
+1993年より早稲田大学理工学部情報学科．
+現在，同理工学術院情報理工学科教授．
+プログラミング言語，並行・並列計算，高性能検証などの研究および
+システム開発に従事．
+第7回日本IBM科学賞，日本ソフトウェア科学会第4，5回論文賞など受賞．
+2004〜2007年度本誌編集委員長．}
+
+\end{choshashoukai}
+
+\end{document}
 %%% Local Variables:
 %%% mode: japanese-latex
-%%% TeX-master: t
+%%% TeX-master: master
 %%% End:
-

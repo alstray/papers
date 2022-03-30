@@ -1,0 +1,116 @@
+# コンピュータソフトウェア投稿メモ
+
+## 論文種別
+研究論文
+
+## 査読種別
+通常論文
+
+## 募集論文
+一般論文
+
+## 会員の別
+会員投稿
+
+## 題目
+解集合プログラミングを用いた配電網問題の解法
+Solving Power Distribution Network Problems with Answer Set Programming
+
+## ページ数
+13
+
+## 概要
+
+配電網の効率的な構成および制御はスマートグリッドや災害時の停電復旧など
+を支える重要な研究課題である．
+配電網問題は，供給経路に関するトポロジ制約と，電流・電圧に関する電気制
+約を満たす配電網の構成(スイッチの開閉状態)を求める問題である．
+配電網遷移問題は，配電網問題とその2つの実行可能解が与えられたとき，一
+方の解から他方の解へ，遷移制約を満たしつつ実行可能解のみを経由して到達
+できるかを判定する問題である．
+本論文では，解集合プログラミング(ASP)を用いた配電網問題の解法および配
+電網遷移問題への拡張について述べる．提案解法では，まず与えられた問題イ
+ンスタンスを ASP のファクト形式に変換した後，そのファクトと配電網(遷移)問
+題を解くための ASP 符号化を結合した上で，高速 ASP システムを用いて解を
+求める．提案解法の評価として，実用規模の問題を含む問題集を用いた実験結
+果について述べる．
+
+Power Distribution Network Problem (PDNP) can be generally 
+defined as determining the configuration of power distribution network,
+Power Distribution Network Reconfiguration Problem (PDNRP) can be
+defined as, for a given PDNP instance and two feasible configurations,
+determining the reachability from one configuration to another one
+while satisfying the transition constraints.
+This paper focuses on searching the shortest path of PDNRPs.
+
+In this paper, we propose an approach to solving PDNPs and PDNRPs
+based on Answer Set Programming (ASP).
+In our approach, at first, a problem instance is converted into 
+a set of ASP facts. 
+Then, the facts combined with ASP encoding
+for PDNP/PDNRP solving can be solved by using ASP systems,
+in our case clingo.
+
+To evaluate the effectiveness of our approach, we conduct experiments
+using 1000 benchmark instances based on
+fukui-tepco, which is a practical PDNP instance of DNET.
+
+## 著者全員の情報
+
+### 氏名
+山田 健太郎
+### ふりがな
+やまだ けんたろう
+### 所属
+名古屋大学 大学院情報学研究科
+### 電話番号
+090-8561-5908
+### 電子メールアドレス
+yken66@nagoya-u.jp
+### 会員番号
+なし
+
+### 氏名
+湊 真一
+### ふりがな
+みなと しんいち
+### 所属
+京都大学 大学院情報学研究科
+### 電話番号
+???
+### 電子メールアドレス
+minato@i.kyoto-u.ac.jp
+### 会員番号
+???
+
+### 氏名
+田村 直之
+### ふりがな
+たむら なおゆき
+### 所属
+神戸大学 情報基盤センター
+### 電話番号
+???
+### 電子メールアドレス
+tamura@kobe-u.ac.jp
+### 会員番号
+???
+
+### 氏名
+番原 睦則
+### ふりがな
+ばんばら むつのり
+### 所属
+名古屋大学 大学院情報学研究科
+### 電話番号
+???
+### 電子メールアドレス
+banbara@nagoya-u.jp
+### 会員番号
+???
+
+### 確認事項
+本論文と内容的に重なりがある論文で，査読中のものはない．
+
+### 投稿年月日
+2022年 X月 X日

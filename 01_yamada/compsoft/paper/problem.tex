@@ -13,13 +13,17 @@ $I_{i}$は各セクション$s_{i}\in S$の電流，
 $J^{max}$はセクションにおける許容電流を表し，
 ともに入力として与えられる．
 % 
-\begin{eqnarray}
-& X ~\textrm{によって定まる配電網構成に停電と短絡が発生しない}   \label{topology}\\
+\begin{multline}
+ X ~\textrm{によって定まる配電網構成に} \\
+ \textrm{停電と短絡が発生しない}   \label{topology} 
+\end{multline}
+\begin{multline}
 % & J_i = \displaystyle\sum_{j\in S_i^{down}} I_j \qquad (\forall s_{i}\in S)\nonumber\\
 % & J_i \leq J_{i}^{max} \qquad (\forall s_{i}\in S)\label{electrical}
-& J_i = \displaystyle\sum_{j\in S_i^{down}} I_j, \qquad J_i \leq J^{max}
+J_i = \displaystyle\sum_{j\in S_i^{down}} I_j,
+ \quad J_i \leq J^{max}
   \qquad (\forall s_{i}\in S)\label{electrical}
-\end{eqnarray}
+\end{multline}
 %
 
 制約~(\ref{topology})は\textbf{トポロジ制約}と呼ばれる．
@@ -55,7 +59,7 @@ $J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[tb]
  \centering
- \scalebox{0.6}{\input{tikz/tikz-test-input}}
+ \scalebox{0.5}{\input{tikz/tikz-test-input}}
   \caption{配電網問題の例}
   \label{fig:test-input}
 \end{figure}
@@ -71,7 +75,7 @@ $J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{figure}[tb]
  \centering
- \scalebox{0.6}{\input{tikz/tikz-test-output}}
+ \scalebox{0.5}{\input{tikz/tikz-test-output}}
  \caption{配電網問題(図\ref{fig:test-input})の解の一例}
  \label{fig:test-output}
 \end{figure}
@@ -80,7 +84,7 @@ $J_{i}$はセクション$s_{i}$およびその下流の電流の総和を表し
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{figure}[tbp]
   \centering
-  \scalebox{0.8}{\input{tikz/tikz-test-netsuki-output}}
+  \scalebox{0.7}{\hspace{2zw}\input{tikz/tikz-test-netsuki-output}}
   \caption{配電網問題の解(図\ref{fig:test-output})に対応する根付き全域森}
   \label{fig:test-netsuki-output}
 \end{figure}  
@@ -98,12 +102,14 @@ DNET
 %
 図\ref{fig:test-output}に，この配電網問題の解の一例を示す．
 閉じたスイッチは，
-\[X=\{sw_{1},sw_{2},sw_{4},sw_{5},sw_{7},sw_{8},sw_{9},%
-sw_{10},sw_{11},sw_{12},sw_{13},sw_{15}\}\]
+\begin{multline*}
+ X=\{sw_{1},sw_{2},sw_{4},sw_{5},sw_{7},sw_{8},sw_{9}, \\
+ sw_{10},sw_{11},sw_{12},sw_{13},sw_{15}\}  
+\end{multline*}
 となる．
-変電所$s_{a}$から電力の供給を受けるセクションの端点を赤色で，
-変電所$s_{b}$からを青色で，
-変電所$s_{c}$からを黄色で表している．
+変電所$s_{a}$から電力の供給を受けるセクションの端点を濃い灰色で，
+変電所$s_{b}$からを灰色で，
+変電所$s_{c}$からを斜線で表している．
 トポロジ制約を満たし，停電と短絡が発生しないことがわかる．
 図\ref{fig:test-output}の配電網問題の解に対応する根付き全域森を
 図\ref{fig:test-netsuki-output}に示す．

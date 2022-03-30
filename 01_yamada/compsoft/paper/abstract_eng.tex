@@ -1,0 +1,24 @@
+Power Distribution Network Problem (PDNP) can be generally 
+defined as determining the configuration of power distribution network,
+Power Distribution Network Reconfiguration Problem (PDNRP) can be
+defined as, for a given PDNP instance and two feasible configurations,
+determining the reachability from one configuration to another one
+while satisfying the transition constraints.
+This paper focuses on searching the shortest path of PDNRPs.
+%
+In this paper, we propose an approach to solving PDNPs and PDNRPs
+based on Answer Set Programming (ASP).
+In our approach, at first, a problem instance is converted into 
+a set of ASP facts. 
+Then, the facts combined with ASP encoding
+for PDNP/PDNRP solving can be solved by using ASP systems,
+in our case \textit{clingo}.
+%
+To evaluate the effectiveness of our approach, we conduct experiments
+using 1000 benchmark instances based on
+\textsf{fukui-tepco}, which is a practical PDNP instance of DNET.
+
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: "paper"
+%%% End:
